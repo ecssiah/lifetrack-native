@@ -7,13 +7,13 @@ import rootReducer from './src/reducers'
 
 const store = createStore(rootReducer);
 
+import FocusesScreen from './src/components/FocusesScreen';
+
 export default class App extends React.Component {
   render() {
     return (
       <Provider store={store}>
-        <View>
-          <Text>Hello!</Text>
-        </View>
+        <FocusesScreen />
       </Provider>
     );
   }
