@@ -1,41 +1,43 @@
 import { StyleSheet, Dimensions } from 'react-native';
 
-export const dimension = {
+export const Screen = {
   h: Dimensions.get('window').height,
   w: Dimensions.get('window').width,
 };
   
-export const colors  = {
-  primary: '#22b674',
+export const Colors  = {
+  background: '#b0b7c1',
+  text: '#000000',
+  primary: '#000000',
   secondary: '#254b5a',
   tertiary: '#5da6a7',
 };
 
-export const padding = {
+export const Padding = {
   sm: 10,
   md: 20,
   lg: 30,
   xl: 40,
 };
 
-export const fonts = {
+export const Fonts = {
   primary: 'Arial',
   sm: 12,
   md: 18,
   lg: 28,
 };
 
-const baseStyles = {
+const BaseStyles = {
   container: {
-    backgroundColor: colors.secondary,
-    width: dimension.w, 
-    height: dimension.h,
-    paddingHorizontal: padding.sm,
-    paddingVertical: padding.lg,
+    backgroundColor: Colors.background,
+    width: Screen.w, 
+    height: Screen.h,
+    paddingHorizontal: Padding.sm,
+    paddingVertical: Padding.lg,
   },
 };
 
 
 export default function createStyles(overrides = {}) {
-  return StyleSheet.create({...baseStyles, ...overrides})
+  return StyleSheet.create({...BaseStyles, ...overrides})
 }

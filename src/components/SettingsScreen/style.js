@@ -8,3 +8,4 @@ const styles = createStyles({
 });
 
 export default styles;
+

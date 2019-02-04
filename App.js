@@ -5,15 +5,15 @@ import { createStore } from 'redux';
 
 import rootReducer from './src/reducers'
 
-const store = createStore(rootReducer);
+import MainNavigator from './src/containers/MainNavigator';
 
-import FocusesScreen from './src/components/FocusesScreen';
+const store = createStore(rootReducer);
 
 export default class App extends React.Component {
   render() {
     return (
       <Provider store={store}>
-        <FocusesScreen />
+        <MainNavigator />
       </Provider>
     );
   }
