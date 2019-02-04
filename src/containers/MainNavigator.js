@@ -6,12 +6,12 @@ import StatsScreen from '../components/StatsScreen';
 import SettingsScreen from '../components/SettingsScreen';
 
 const MainNavigator = createBottomTabNavigator({
-  Focuses: {
-    screen: FocusesScreen
-  },
   Stats: {
     screen: StatsScreen
   }, 
+  Focuses: {
+    screen: FocusesScreen
+  },
   Settings: {
     screen: SettingsScreen
   },

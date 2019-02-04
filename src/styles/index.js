@@ -1,11 +1,15 @@
-import { StyleSheet, Dimensions } from 'react-native';
+import { StyleSheet, Platform, Dimensions } from 'react-native';
 
 export const Screen = {
   h: Dimensions.get('window').height,
   w: Dimensions.get('window').width,
 };
-  
+
+export const STATUSBAR_HEIGHT = Platform.OS === 'ios' ? 20 : StatusBar.currentHeight;
+export const APPBAR_HEIGHT = Platform.OS === 'ios' ? 44 : 56;  
+
 export const Colors  = {
+  statusBar: '#343434',
   background: '#b0b7c1',
   text: '#000000',
   primary: '#000000',
@@ -29,11 +33,17 @@ export const Fonts = {
 
 const BaseStyles = {
   container: {
+    flex: 1,
+  },
+  statusBar: {
+    backgroundColor: Colors.statusBar,
+    width: Screen.w,
+    height: 20,
+  },
+  screen: {
     backgroundColor: Colors.background,
-    width: Screen.w, 
+    width: Screen.w,
     height: Screen.h,
-    paddingHorizontal: Padding.sm,
-    paddingVertical: Padding.lg,
   },
 };
 

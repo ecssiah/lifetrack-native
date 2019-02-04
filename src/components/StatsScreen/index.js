@@ -5,7 +5,7 @@ import styles from './style';
 class StatsScreen extends React.Component {
   render() {
     return (
-      <View style={styles.container}>
+      <View style={styles.screen}>
         <Text style={styles.section}>Stats Screen</Text>
       </View>
     );
