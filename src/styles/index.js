@@ -9,12 +9,9 @@ export const STATUSBAR_HEIGHT = Platform.OS === 'ios' ? 20 : StatusBar.currentHe
 export const APPBAR_HEIGHT = Platform.OS === 'ios' ? 44 : 56;  
 
 export const Colors  = {
-  statusBar: '#343434',
-  background: '#b0b7c1',
+  primary: '#343434',
+  secondary: '#aeaeae',
   text: '#000000',
-  primary: '#000000',
-  secondary: '#254b5a',
-  tertiary: '#5da6a7',
 };
 
 export const Padding = {
@@ -36,12 +33,12 @@ const BaseStyles = {
     flex: 1,
   },
   statusBar: {
-    backgroundColor: Colors.statusBar,
+    backgroundColor: Colors.primary,
     width: Screen.w,
     height: 20,
   },
   screen: {
-    backgroundColor: Colors.background,
+    backgroundColor: "#ffffff",
     width: Screen.w,
     height: Screen.h,
   },
