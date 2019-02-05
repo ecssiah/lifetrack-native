@@ -13,6 +13,15 @@ import SettingsScreen from '../components/SettingsScreen';
 
 import { Colors } from '../styles';
 
+const StatsStack = createStackNavigator(
+  {
+    Stats: StatsScreen,
+  },
+  {
+    headerMode: 'none',
+  },
+);
+
 const FocusStack = createStackNavigator(
   {
     Focuses: FocusesScreen,
@@ -21,17 +30,22 @@ const FocusStack = createStackNavigator(
   {
     headerMode: 'none',
   },
-)
+);
+
+const SettingsStack = createStackNavigator(
+  {
+    Settings: SettingsScreen,
+  },
+  {
+    headerMode: 'none',
+  },
+);
 
 const MainNavigator = createBottomTabNavigator(
   {
-    Stats: {
-      screen: StatsScreen
-    },
+    Stats: StatsStack,
     Focuses: FocusStack, 
-    Settings: {
-      screen: SettingsScreen
-    },
+    Settings: SettingsStack,
   },
   {
     initialRouteName: 'Focuses',
