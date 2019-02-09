@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>AD_UNIT_ID_FOR_BANNER_TEST</key>
+	<string>ca-app-pub-3940256099942544/2934735716</string>
+	<key>AD_UNIT_ID_FOR_INTERSTITIAL_TEST</key>
+	<string>ca-app-pub-3940256099942544/4411468910</string>
+	<key>CLIENT_ID</key>
+	<string>396651915566-qi8jhlj49ma4dr24fvoosdemk2l0vff9.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.396651915566-qi8jhlj49ma4dr24fvoosdemk2l0vff9</string>
+	<key>API_KEY</key>
+	<string>AIzaSyCkRyefK2zsyvuf3HCEV5t26V9Yg4CnO9c</string>
+	<key>GCM_SENDER_ID</key>
+	<string>396651915566</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>gauge.structures.LifeTrack</string>
+	<key>PROJECT_ID</key>
+	<string>lifetrack-27cd1</string>
+	<key>STORAGE_BUCKET</key>
+	<string>lifetrack-27cd1.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<true></true>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<false></false>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:396651915566:ios:33b8511762258c5e</string>
+	<key>DATABASE_URL</key>
+	<string>https://lifetrack-27cd1.firebaseio.com</string>
+</dict>
+</plist>

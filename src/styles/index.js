@@ -31,6 +31,8 @@ export const Fonts = {
 const BaseStyles = {
   container: {
     flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   statusBar: {
     backgroundColor: Colors.primary,
@@ -38,12 +40,10 @@ const BaseStyles = {
     height: 20,
   },
   screen: {
-    backgroundColor: "#ffffff",
-    width: Screen.w,
-    height: Screen.h,
+    backgroundColor: 'white',
+    flex: 1,
   },
 };
-
 
 export default function createStyles(overrides = {}) {
   return StyleSheet.create({...BaseStyles, ...overrides})
