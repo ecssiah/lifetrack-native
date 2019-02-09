@@ -6,9 +6,9 @@ import {
   createBottomTabNavigator, 
   createAppContainer 
 } from "react-navigation";
-import firebase from 'firebase';
 
 import SplashScreen from '../components/SplashScreen';
+import LoginScreen from '../components/LoginScreen';
 import FocusScreen from '../components/FocusScreen';
 import FocusesScreen from '../components/FocusesScreen';
 import StatsScreen from '../components/StatsScreen';
@@ -18,7 +18,7 @@ import { Colors } from '../styles';
 
 const AuthStack = createStackNavigator(
   {
-    Splash: SplashScreen,
+    Login: LoginScreen,
   },
   {
     headerMode: 'none',
@@ -90,12 +90,13 @@ const AppNavigator = createBottomTabNavigator(
 
 const AppSwitch = createSwitchNavigator(
   {
-    Loading: SplashScreen,
+    Splash: SplashScreen,
     Auth: AuthStack,
     App: AppNavigator,
   },
   {
     headerMode: 'none',
+    initialRouteName: 'Splash',
   },
 )
 

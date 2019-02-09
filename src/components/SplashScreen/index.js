@@ -9,9 +9,9 @@ class SplashScreen extends React.Component {
 
     firebaseApp.auth().onAuthStateChanged(function(user) {
       if (user) {
-        props.navigation.navigate('Focuses');
+        props.navigation.navigate('App');
       } else {
-        props.navigation.navigate('Settings');
+        props.navigation.navigate('Auth');
       }
     });
   }
