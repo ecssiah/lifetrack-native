@@ -24,7 +24,6 @@ class SignInScreen extends React.Component {
     });
 
     this.setState({
-      email: '',
       password: '',
     });
   }

@@ -5,10 +5,12 @@ import { firebaseApp } from '../../config';
 
 class SettingsScreen extends React.Component {
 
-  logoutUser() {
-    firebaseApp.auth().signOut();
+  logoutUser = () => {
+    firebaseApp.auth().signOut().then(() => {
+      console.warn("User logged out");
 
-    this.props.navigation.navigate('Login');
+      this.props.navigation.navigate('Login');
+    });
   }
 
   render() {
@@ -17,7 +19,7 @@ class SettingsScreen extends React.Component {
         <Text style={styles.section}>Settings Screen</Text>
 
         <Button
-          onPress={() => this.logoutUser() }
+          onPress={this.logoutUser}
           title="Logout"
           color="#841584"
         />

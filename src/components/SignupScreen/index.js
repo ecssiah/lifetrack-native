@@ -24,7 +24,6 @@ class SignUpScreen extends React.Component {
     });
 
     this.setState({
-      email: '',
       password: '',
     });
   }
