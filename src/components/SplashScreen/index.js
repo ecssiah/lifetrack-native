@@ -1,5 +1,5 @@
 import React from 'react';
-import { firebaseApp } from '../../config';
+import { auth } from '../../config';
 import { View, Text } from 'react-native';
 import styles from './style';
 
@@ -7,7 +7,7 @@ class SplashScreen extends React.Component {
   constructor(props) {
     super(props);
 
-    firebaseApp.auth().onAuthStateChanged(user => {
+    auth.onAuthStateChanged(user => {
       if (user) {
         props.navigation.navigate('App');
       } else {

@@ -1,4 +1,5 @@
-import Firebase from 'firebase';
+const firebase = require("firebase");
+require("firebase/firestore");
 
 const config = {
   apiKey: "AIzaSyBtklAJ3LniqGDapAvQ5NoPUN58TwNpjYQ",
@@ -9,4 +10,7 @@ const config = {
   messagingSenderId: "396651915566",
 };
 
-export const firebaseApp = Firebase.initializeApp(config);
+firebase.initializeApp(config);
+
+export const auth = firebase.auth();
+export const db = firebase.firestore();

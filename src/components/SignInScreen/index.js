@@ -1,7 +1,7 @@
 import React from 'react';
 import { Button, View, Text, TextInput } from 'react-native';
 import styles from './style';
-import { firebaseApp } from '../../config';
+import { auth } from '../../config';
 
 class SignInScreen extends React.Component {
   constructor(props) {
@@ -14,7 +14,7 @@ class SignInScreen extends React.Component {
   }
 
   onPressSignIn = () => {
-    firebaseApp.auth().signInWithEmailAndPassword(
+    auth.signInWithEmailAndPassword(
       this.state.email, this.state.password
     ).catch(error => {
       const errorCode = error.code;

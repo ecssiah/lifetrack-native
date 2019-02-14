@@ -1,7 +1,7 @@
 import React from 'react';
 import { Button, View, Text, TextInput } from 'react-native';
 import styles from './style';
-import { firebaseApp } from '../../config';
+import { auth, db } from '../../config';
 
 class SignUpScreen extends React.Component {
   constructor(props) {
@@ -14,9 +14,15 @@ class SignUpScreen extends React.Component {
   }
 
   onPressSignUp = () => {
-    firebaseApp.auth().createUserWithEmailAndPassword(
+    auth.createUserWithEmailAndPassword(
       this.state.email, this.state.password
-    ).catch(error => {
+    ).then(cred => {
+      db.collection('users').doc(cred.user.uid).set({
+        focuses: "Focus Placeholder",
+      }).then(() => {
+        console.warn("All happened safely."); 
+      });
+    }).catch(error => {
       const errorCode = error.code;
       const errorMessage = error.message;
 
