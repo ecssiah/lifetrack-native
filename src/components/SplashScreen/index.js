@@ -1,7 +1,7 @@
 import React from 'react';
+import { firebaseApp } from '../../config';
 import { View, Text } from 'react-native';
 import styles from './style';
-import { firebaseApp } from '../../config';
 
 class SplashScreen extends React.Component {
   constructor(props) {

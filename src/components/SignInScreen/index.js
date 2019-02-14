@@ -20,7 +20,7 @@ class SignInScreen extends React.Component {
       const errorCode = error.code;
       const errorMessage = error.message;
 
-      console.log("error " + errorCode + ": " + errorMessage);
+      console.warn("error " + errorCode + ": " + errorMessage);
     });
 
     this.setState({
@@ -37,7 +37,7 @@ class SignInScreen extends React.Component {
         </Text>
 
         <TextInput
-          style={{height: 40, width: 120, borderColor: 'gray', borderWidth: 1}}
+          style={{height: 40, width: 240, borderColor: 'gray', borderWidth: 1}}
           onChangeText={email => this.setState({email})}
           value={this.state.email}
         />
@@ -48,13 +48,13 @@ class SignInScreen extends React.Component {
 
         <TextInput
           secureTextEntry={true}
-          style={{height: 40, width: 120, borderColor: 'gray', borderWidth: 1}}
+          style={{height: 40, width: 240, borderColor: 'gray', borderWidth: 1}}
           onChangeText={password => this.setState({password})}
           value={this.state.password}
         />
 
         <Button
-          onPress={this.onPressEmail}
+          onPress={this.onPressSignIn}
           title="SignIn"
           color="#841584"
         />

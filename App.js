@@ -11,7 +11,6 @@ const styles = createStyles();
 
 const store = createStore(rootReducer);
 
-
 class App extends React.Component {
   render() {
     return (

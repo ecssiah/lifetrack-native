@@ -20,7 +20,7 @@ class SignUpScreen extends React.Component {
       const errorCode = error.code;
       const errorMessage = error.message;
 
-      console.log("error " + errorCode + ": " + errorMessage);
+      console.warn("error " + errorCode + ": " + errorMessage);
     });
 
     this.setState({
@@ -39,7 +39,7 @@ class SignUpScreen extends React.Component {
         </Text>
 
         <TextInput
-          style={{height: 40, width: 120, borderColor: 'gray', borderWidth: 1}}
+          style={{height: 40, width: 240, borderColor: 'gray', borderWidth: 1}}
           onChangeText={email => this.setState({email})}
           value={this.state.email}
         />
@@ -52,7 +52,7 @@ class SignUpScreen extends React.Component {
 
         <TextInput
           secureTextEntry={true}
-          style={{height: 40, width: 120, borderColor: 'gray', borderWidth: 1}}
+          style={{height: 40, width: 240, borderColor: 'gray', borderWidth: 1}}
           onChangeText={password => this.setState({password})}
           value={this.state.password}
         />
