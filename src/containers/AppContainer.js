@@ -8,9 +8,12 @@ import {
 } from "react-navigation";
 
 import SplashScreen from '../components/SplashScreen';
+
 import LoginScreen from '../components/LoginScreen';
-import FocusScreen from '../components/FocusScreen';
+import SignupScreen from '../components/SignupScreen';
+
 import FocusesScreen from '../components/FocusesScreen';
+import FocusScreen from '../components/FocusScreen';
 import StatsScreen from '../components/StatsScreen';
 import SettingsScreen from '../components/SettingsScreen';
 
@@ -19,6 +22,7 @@ import { Colors } from '../styles';
 const AuthStack = createStackNavigator(
   {
     Login: LoginScreen,
+    Signup: SignupScreen,
   },
   {
     headerMode: 'none',

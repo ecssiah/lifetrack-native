@@ -3,7 +3,7 @@ import { Button, View, Text, TextInput } from 'react-native';
 import styles from './style';
 import { firebaseApp } from '../../config';
 
-class LoginScreen extends React.Component {
+class SignupScreen extends React.Component {
   constructor(props) {
     super(props);
 
@@ -13,10 +13,10 @@ class LoginScreen extends React.Component {
     };
   }
 
-  onPressLogin = () => {
+  onPressSignup = () => {
     firebaseApp.auth().createUserWithEmailAndPassword(
       this.state.email, this.state.password
-    ) .catch(error => {
+    ).catch(error => {
       const errorCode = error.code;
       const errorMessage = error.message;
 
@@ -40,7 +40,7 @@ class LoginScreen extends React.Component {
 
         <TextInput
           style={{height: 40, width: 120, borderColor: 'gray', borderWidth: 1}}
-          onChangeText={username => this.setState({email})}
+          onChangeText={email => this.setState({email})}
           value={this.state.email}
         />
 
@@ -58,14 +58,8 @@ class LoginScreen extends React.Component {
         />
 
         <Button
-          onPress={this.onPressEmail}
-          title="Login"
-          color="#841584"
-        />
-
-        <Button
-          onPress={ () => this.props.navigation.navigate('Signup') }
-          title="Signup"
+          onPress={this.onPressSignup}
+          title="Sign Up"
           color="#841584"
         />
       </View>
@@ -73,4 +67,4 @@ class LoginScreen extends React.Component {
   }
 }
 
-export default LoginScreen;
+export default SignupScreen;
