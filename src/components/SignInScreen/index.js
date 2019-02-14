@@ -3,7 +3,7 @@ import { Button, View, Text, TextInput } from 'react-native';
 import styles from './style';
 import { firebaseApp } from '../../config';
 
-class LoginScreen extends React.Component {
+class SignInScreen extends React.Component {
   constructor(props) {
     super(props);
 
@@ -13,10 +13,10 @@ class LoginScreen extends React.Component {
     };
   }
 
-  onPressLogin = () => {
-    firebaseApp.auth().createUserWithEmailAndPassword(
+  onPressSignIn = () => {
+    firebaseApp.auth().signInWithEmailAndPassword(
       this.state.email, this.state.password
-    ) .catch(error => {
+    ).catch(error => {
       const errorCode = error.code;
       const errorMessage = error.message;
 
@@ -32,21 +32,17 @@ class LoginScreen extends React.Component {
   render() {
     return (
       <View style={styles.container}>
-        <Text
-          style={styles.section}
-        >
+        <Text style={styles.section} >
           Email
         </Text>
 
         <TextInput
           style={{height: 40, width: 120, borderColor: 'gray', borderWidth: 1}}
-          onChangeText={username => this.setState({email})}
+          onChangeText={email => this.setState({email})}
           value={this.state.email}
         />
 
-        <Text
-          style={styles.section}
-        >
+        <Text style={styles.section} >
           Password
         </Text>
 
@@ -59,13 +55,13 @@ class LoginScreen extends React.Component {
 
         <Button
           onPress={this.onPressEmail}
-          title="Login"
+          title="SignIn"
           color="#841584"
         />
 
         <Button
-          onPress={ () => this.props.navigation.navigate('Signup') }
-          title="Signup"
+          onPress={ () => this.props.navigation.navigate('SignUp') }
+          title="SignUp"
           color="#841584"
         />
       </View>
@@ -73,4 +69,4 @@ class LoginScreen extends React.Component {
   }
 }
 
-export default LoginScreen;
+export default SignInScreen;

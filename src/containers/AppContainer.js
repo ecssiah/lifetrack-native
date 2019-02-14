@@ -9,8 +9,8 @@ import {
 
 import SplashScreen from '../components/SplashScreen';
 
-import LoginScreen from '../components/LoginScreen';
-import SignupScreen from '../components/SignupScreen';
+import SignInScreen from '../components/SignInScreen';
+import SignUpScreen from '../components/SignUpScreen';
 
 import FocusesScreen from '../components/FocusesScreen';
 import FocusScreen from '../components/FocusScreen';
@@ -21,11 +21,12 @@ import { Colors } from '../styles';
 
 const AuthStack = createStackNavigator(
   {
-    Login: LoginScreen,
-    Signup: SignupScreen,
+    SignIn: SignInScreen,
+    SignUp: SignUpScreen,
   },
   {
     headerMode: 'none',
+    initialRouteName: 'SignIn',
   },
 );
 
@@ -35,6 +36,7 @@ const StatsStack = createStackNavigator(
   },
   {
     headerMode: 'none',
+    initialRouteName: 'Stats',
   },
 );
 
@@ -45,6 +47,7 @@ const FocusStack = createStackNavigator(
   },
   {
     headerMode: 'none',
+    initialRouteName: 'Focuses',
   },
 );
 
@@ -54,6 +57,7 @@ const SettingsStack = createStackNavigator(
   },
   {
     headerMode: 'none',
+    initialRouteName: 'Settings',
   },
 );
 
@@ -64,16 +68,16 @@ const AppNavigator = createBottomTabNavigator(
     Settings: SettingsStack,
   },
   {
-    defaultNavigationOptions: ({ navigation }) => ({
-      initialRouteName: 'Focuses',
-      tabBarOptions: {
-        activeTintColor: '#ffffff',
-        inactiveTintColor: '#777777',
-        showLabel: false,
-        style: {
-          backgroundColor: Colors.primary,
-        },
+    initialRouteName: 'Focuses',
+    tabBarOptions: {
+      activeTintColor: 'white',
+      inactiveTintColor: '#777777',
+      showLabel: false,
+      style: {
+        backgroundColor: Colors.primary,
       },
+    },
+    defaultNavigationOptions: ({ navigation }) => ({
       tabBarIcon: ({ focused, horizontal, tintColor }) => {
         const { routeName } = navigation.state;
         let iconName;
