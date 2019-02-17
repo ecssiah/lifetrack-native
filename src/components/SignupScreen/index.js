@@ -1,7 +1,7 @@
 import React from 'react';
 import { Button, View, Text, TextInput } from 'react-native';
-import styles from './style';
 import { auth, db } from '../../config';
+import styles from './style';
 
 class SignUpScreen extends React.Component {
   constructor(props) {
@@ -19,8 +19,6 @@ class SignUpScreen extends React.Component {
     ).then(cred => {
       db.collection('users').doc(cred.user.uid).set({
         focuses: "Focus Placeholder",
-      }).then(() => {
-        console.warn("All happened safely."); 
       });
     }).catch(error => {
       const errorCode = error.code;
@@ -37,11 +35,9 @@ class SignUpScreen extends React.Component {
   render() {
     return (
       <View style={styles.container}>
-        <Text
-          style={styles.section}
-        >
+        <Text style={styles.section}>
           Email
-        </Text>
+        </Text> 
 
         <TextInput
           style={{height: 40, width: 240, borderColor: 'gray', borderWidth: 1}}
@@ -49,9 +45,7 @@ class SignUpScreen extends React.Component {
           value={this.state.email}
         />
 
-        <Text
-          style={styles.section}
-        >
+        <Text style={styles.section}>
           Password
         </Text>
 

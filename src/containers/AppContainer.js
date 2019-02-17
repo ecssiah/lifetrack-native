@@ -6,18 +6,15 @@ import {
   createBottomTabNavigator, 
   createAppContainer 
 } from "react-navigation";
+import { Colors } from '../styles';
 
 import SplashScreen from '../components/SplashScreen';
-
 import SignInScreen from '../components/SignInScreen';
 import SignUpScreen from '../components/SignUpScreen';
-
 import FocusesScreen from '../components/FocusesScreen';
 import FocusScreen from '../components/FocusScreen';
 import StatsScreen from '../components/StatsScreen';
 import SettingsScreen from '../components/SettingsScreen';
-
-import { Colors } from '../styles';
 
 const AuthStack = createStackNavigator(
   {
