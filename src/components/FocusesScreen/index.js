@@ -2,8 +2,20 @@ import React from 'react';
 import { View, Text, Button } from 'react-native';
 import styles from './style';
 import { auth, db } from '../../config';
+import { Colors } from '../../styles';
 
 class FocusesScreen extends React.Component {
+  static navigationOptions = {
+    title: 'Focuses',
+    // headerStyle: {
+    //   backgroundColor: Colors.primary,
+    // },
+    // headerTintColor: 'white',
+    // headerTitleStyle: {
+    //   fontWeight: 'bold',
+    // },
+  };
+
   addFocus = () => {
     db.doc('focuses/focus1').set({
       name: 'Focus 1',
@@ -32,8 +44,6 @@ class FocusesScreen extends React.Component {
   render() {
     return (
       <View style={styles.screen}>
-        <Text style={styles.section}>Focuses Screen</Text>
-
         <Button
           onPress={this.addFocus}
           title="Add Focus"

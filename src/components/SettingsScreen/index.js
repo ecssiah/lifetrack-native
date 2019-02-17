@@ -4,6 +4,9 @@ import styles from './style';
 import { auth } from '../../config';
 
 class SettingsScreen extends React.Component {
+  static navigationOptions = {
+    title: 'Settings',
+  };
 
   logoutUser = () => {
     auth.signOut().then(() => {
@@ -14,8 +17,6 @@ class SettingsScreen extends React.Component {
   render() {
     return (
       <View style={styles.screen}>
-        <Text style={styles.section}>Settings Screen</Text>
-
         <Button
           onPress={this.logoutUser}
           title="Logout"

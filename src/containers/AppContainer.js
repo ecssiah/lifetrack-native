@@ -22,8 +22,8 @@ const AuthStack = createStackNavigator(
     SignUp: SignUpScreen,
   },
   {
-    headerMode: 'none',
     initialRouteName: 'SignIn',
+    headerMode: 'none',
   },
 );
 
@@ -32,8 +32,16 @@ const StatsStack = createStackNavigator(
     Stats: StatsScreen,
   },
   {
-    headerMode: 'none',
     initialRouteName: 'Stats',
+    defaultNavigationOptions: {
+      headerStyle: {
+        backgroundColor: Colors.primary,
+      },
+      headerTintColor: 'white',
+      headerTitleStyle: {
+        fontWeight: 'bold',
+      },
+    },
   },
 );
 
@@ -43,8 +51,16 @@ const FocusStack = createStackNavigator(
     Focus: FocusScreen,
   },
   {
-    headerMode: 'none',
     initialRouteName: 'Focuses',
+    defaultNavigationOptions: {
+      headerStyle: {
+        backgroundColor: Colors.primary,
+      },
+      headerTintColor: 'white',
+      headerTitleStyle: {
+        fontWeight: 'bold',
+      },
+    },
   },
 );
 
@@ -53,8 +69,16 @@ const SettingsStack = createStackNavigator(
     Settings: SettingsScreen,
   },
   {
-    headerMode: 'none',
     initialRouteName: 'Settings',
+    defaultNavigationOptions: {
+      headerStyle: {
+        backgroundColor: Colors.primary,
+      },
+      headerTintColor: 'white',
+      headerTitleStyle: {
+        fontWeight: 'bold',
+      },
+    },
   },
 );
 
@@ -100,7 +124,6 @@ const AppSwitch = createSwitchNavigator(
     App: AppNavigator,
   },
   {
-    headerMode: 'none',
     initialRouteName: 'Splash',
   },
 )
