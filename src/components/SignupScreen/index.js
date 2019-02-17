@@ -18,7 +18,7 @@ class SignUpScreen extends React.Component {
       this.state.email, this.state.password
     ).then(cred => {
       db.collection('users').doc(cred.user.uid).set({
-        focuses: "Focus Placeholder",
+        user: 'test',
       });
     }).catch(error => {
       const errorCode = error.code;
