@@ -1,53 +1,71 @@
 import React from 'react';
-import { View, Text, Button } from 'react-native';
+import Icon from 'react-native-vector-icons/Ionicons';
+import { Button, Text, View, FlatList, SectionList } from 'react-native';
 import styles from './style';
 import { auth, db } from '../../config';
-import { Colors } from '../../styles';
+
+import FocusItem from '../FocusItem';
 
 class FocusesScreen extends React.Component {
-  static navigationOptions = {
-    title: 'Focuses',
-    // headerStyle: {
-    //   backgroundColor: Colors.primary,
-    // },
-    // headerTintColor: 'white',
-    // headerTitleStyle: {
-    //   fontWeight: 'bold',
-    // },
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      focuses: [],
+    };
   };
 
-  addFocus = () => {
-    db.doc('focuses/focus1').set({
-      name: 'Focus 1',
-      category: 'Test Category 1',
-      level: 1,
-      experience: 22.2,
-    }).then(() => {
-      console.warn("First focus written");
+  static navigationOptions = ({ navigation }) => ({
+    title: 'Focuses',
+    headerRight: (
+      <Icon
+        name='ios-add' size={35} color='#ffffff' 
+        onPress={ () => navigation.navigate('FocusAdd') }
+        style={{ 
+          paddingRight: 18, 
+        }}
+      />
+    ),
+  });
+
+  loadFocuses = () => {
+    let newFocuses = [];
+
+    db.collection('focuses').where(
+      'userId', '==', auth.currentUser.uid
+    ).get(
+    ).then(snapshot => {
+      snapshot.forEach(doc => {
+        newFocuses = newFocuses.concat({
+          name: doc.get('name'),
+          category: doc.get('category'),
+          level: doc.get('level'),
+          experience: doc.get('experience'),
+          userId: doc.get('userId'),
+        });
+
+        this.setState({
+          focuses: newFocuses,
+        });
+      });
     }).catch(err => {
       console.error(err);
     });
-
-    db.doc('focuses/focus2').set({
-      name: 'Focus 2',
-      category: 'Test Category 2',
-      level: 2,
-      experience: 44.4,
-    }).then(() => {
-      console.warn("Second focus written");
-    }).catch(err => {
-      console.error(err);
-    });
-
   };
 
   render() {
     return (
       <View style={styles.screen}>
         <Button
-          onPress={this.addFocus}
-          title="Add Focus"
-          color="#841584"
+          title='Load Focuses'
+          onPress={this.loadFocuses}
+          color='#3467dd'
+        />
+
+        <FlatList
+          data={this.state.focuses}
+          keyExtractor={(item, index) => item.name + index}
+          renderItem={({item}) => <FocusItem focus={item} />}
         />
       </View>
     );

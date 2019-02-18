@@ -1,5 +1,5 @@
 import React from "react";
-import Ionicons from 'react-native-vector-icons/Ionicons';
+import Icon from 'react-native-vector-icons/Ionicons';
 import { 
   createSwitchNavigator,
   createStackNavigator, 
@@ -12,6 +12,7 @@ import SplashScreen from '../components/SplashScreen';
 import SignInScreen from '../components/SignInScreen';
 import SignUpScreen from '../components/SignUpScreen';
 import FocusesScreen from '../components/FocusesScreen';
+import FocusAddScreen from '../components/FocusAddScreen';
 import FocusScreen from '../components/FocusScreen';
 import StatsScreen from '../components/StatsScreen';
 import SettingsScreen from '../components/SettingsScreen';
@@ -48,6 +49,7 @@ const StatsStack = createStackNavigator(
 const FocusStack = createStackNavigator(
   {
     Focuses: FocusesScreen,
+    FocusAdd: FocusAddScreen,
     Focus: FocusScreen,
   },
   {
@@ -111,7 +113,7 @@ const AppNavigator = createBottomTabNavigator(
           iconName = 'ios-podium';
         }
 
-        return <Ionicons name={iconName} size={35} color={tintColor} />;
+        return <Icon name={iconName} size={35} color={tintColor} />;
       },
     }),
   },
