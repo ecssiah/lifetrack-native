@@ -24,15 +24,13 @@ class FocusAddScreen extends React.Component {
   };
 
   addFocus = () => {
-    db.doc('focuses/' + this.state.name).set({
+    db.collection('focuses').add({
       userId: auth.currentUser.uid,
       name: this.state.name,
       category: this.state.category,
       level: 0,
       experience: 0.0,
     }).then(() => {
-      console.warn("Focus added: " + this.state.name);
-
       this.props.navigation.navigate('Focuses');
     }).catch(err => {
       console.error(err);

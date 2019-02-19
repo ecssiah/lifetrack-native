@@ -10,6 +10,8 @@ class FocusesScreen extends React.Component {
   constructor(props) {
     super(props);
 
+    props.navigation.addListener('willFocus', this.loadFocuses);
+
     this.state = {
       focuses: [],
     };
@@ -36,12 +38,13 @@ class FocusesScreen extends React.Component {
     ).get(
     ).then(snapshot => {
       snapshot.forEach(doc => {
-        newFocuses = newFocuses.concat({
+        newFocuses.push({
+          userId: doc.get('userId'),
+          id: doc.id,
           name: doc.get('name'),
           category: doc.get('category'),
           level: doc.get('level'),
           experience: doc.get('experience'),
-          userId: doc.get('userId'),
         });
 
         this.setState({
@@ -56,12 +59,6 @@ class FocusesScreen extends React.Component {
   render() {
     return (
       <View style={styles.screen}>
-        <Button
-          title='Load Focuses'
-          onPress={this.loadFocuses}
-          color='#3467dd'
-        />
-
         <FlatList
           data={this.state.focuses}
           keyExtractor={(item, index) => item.name + index}

@@ -1,14 +1,21 @@
 import React from 'react';
-import { View, Text } from 'react-native';
+import { TouchableOpacity, Text } from 'react-native';
 import styles from './style';
 
 class FocusItem extends React.Component {
+  selectFocus = name => {
+    console.warn(name);
+  }
+
   render() {
     return (
-      <View style={styles.focusContainer}>
+      <TouchableOpacity
+        style={styles.focusContainer}
+        onPress={() => this.selectFocus(this.props.focus.id)}
+      >
         <Text style={styles.focusItem}>{this.props.focus.name}</Text>
         <Text style={styles.focusItem}>{this.props.focus.category}</Text>
-      </View>
+      </TouchableOpacity>
     );
   }
 }
