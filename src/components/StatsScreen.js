@@ -1,6 +1,8 @@
 import React from 'react';
 import { View, Text } from 'react-native';
-import styles from './style';
+import createStyles from '../styles';
+
+const styles = createStyles();
 
 class StatsScreen extends React.Component {
   static navigationOptions = {

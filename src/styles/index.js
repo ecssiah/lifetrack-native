@@ -43,6 +43,10 @@ const BaseStyles = {
     backgroundColor: 'white',
     flex: 1,
   },
+  section: {
+    fontSize: Fonts.md,
+    color: Colors.text,
+  },
 };
 
 export default function createStyles(overrides = {}) {

@@ -1,14 +1,21 @@
 import React from 'react';
 import { View, Text, Button } from 'react-native';
-import styles from './style';
-import { auth } from '../../config';
+import { auth } from '../config';
+import createStyles, { Fonts, Colors } from '../styles'; 
+
+const styles = createStyles({
+  section: {
+    fontSize: Fonts.md,
+    color: Colors.text,
+  },
+});
 
 class SettingsScreen extends React.Component {
   static navigationOptions = {
     title: 'Settings',
   };
 
-  logoutUser = () => {
+  _logoutUser = () => {
     auth.signOut().then(() => {
       this.props.navigation.navigate('Login');
     });
@@ -18,7 +25,7 @@ class SettingsScreen extends React.Component {
     return (
       <View style={styles.screen}>
         <Button
-          onPress={this.logoutUser}
+          onPress={this._logoutUser}
           title="Logout"
           color="#841584"
         />

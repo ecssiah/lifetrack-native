@@ -1,9 +1,11 @@
 import React from 'react';
 import { Button, View, Text, TextInput } from 'react-native';
-import styles from './style';
-import { auth } from '../../config';
+import { auth, db } from '../config';
+import createStyles from '../styles';
 
-class SignInScreen extends React.Component {
+const styles = createStyles();
+
+class SignUpScreen extends React.Component {
   constructor(props) {
     super(props);
 
@@ -13,10 +15,14 @@ class SignInScreen extends React.Component {
     };
   }
 
-  onPressSignIn = () => {
-    auth.signInWithEmailAndPassword(
+  _onPressSignUp = () => {
+    auth.createUserWithEmailAndPassword(
       this.state.email, this.state.password
-    ).catch(error => {
+    ).then(cred => {
+      db.collection('users').doc(cred.user.uid).set({
+        user: cred.user.email,
+      });
+    }).catch(error => {
       const errorCode = error.code;
       const errorMessage = error.message;
 
@@ -31,9 +37,9 @@ class SignInScreen extends React.Component {
   render() {
     return (
       <View style={styles.container}>
-        <Text style={styles.section} >
+        <Text style={styles.section}>
           Email
-        </Text>
+        </Text> 
 
         <TextInput
           style={{height: 40, width: 240, borderColor: 'gray', borderWidth: 1}}
@@ -41,7 +47,7 @@ class SignInScreen extends React.Component {
           value={this.state.email}
         />
 
-        <Text style={styles.section} >
+        <Text style={styles.section}>
           Password
         </Text>
 
@@ -53,14 +59,8 @@ class SignInScreen extends React.Component {
         />
 
         <Button
-          onPress={this.onPressSignIn}
-          title="SignIn"
-          color="#841584"
-        />
-
-        <Button
-          onPress={ () => this.props.navigation.navigate('SignUp') }
-          title="SignUp"
+          onPress={this._onPressSignUp}
+          title="Sign Up"
           color="#841584"
         />
       </View>
@@ -68,4 +68,4 @@ class SignInScreen extends React.Component {
   }
 }
 
-export default SignInScreen;
+export default SignUpScreen;

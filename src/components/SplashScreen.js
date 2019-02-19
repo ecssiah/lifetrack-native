@@ -1,7 +1,20 @@
 import React from 'react';
-import { auth } from '../../config';
+import { auth } from '../config';
 import { View, Text } from 'react-native';
-import styles from './style';
+import createStyles, { Colors } from '../styles';
+
+const styles = createStyles({
+  splashContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: Colors.primary,
+  },
+  splashTitle: {
+    fontSize: 62,
+    color: Colors.secondary,
+  },
+});
 
 class SplashScreen extends React.Component {
   constructor(props) {

@@ -1,7 +1,9 @@
 import React from 'react';
 import { View, Text, TextInput, Button } from 'react-native';
-import styles from './style';
-import { auth, db } from '../../config';
+import { auth, db } from '../config';
+import createStyles from '../styles';
+
+const styles = createStyles();
 
 class FocusAddScreen extends React.Component {
   constructor(props) {
@@ -17,13 +19,7 @@ class FocusAddScreen extends React.Component {
     title: 'Add Focus',
   });
 
-  componentDidMount() {
-    this.props.navigation.setParams({
-      addFocus: this.addFocus,
-    });
-  };
-
-  addFocus = () => {
+  _addFocus = () => {
     db.collection('focuses').add({
       userId: auth.currentUser.uid,
       name: this.state.name,
@@ -61,7 +57,7 @@ class FocusAddScreen extends React.Component {
         />
 
         <Button
-          onPress={this.addFocus}
+          onPress={this._addFocus}
           title="Add Focus"
           color="#841584"
         />

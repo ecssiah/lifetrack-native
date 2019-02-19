@@ -1,16 +1,18 @@
 import React from 'react';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { Button, Text, View, FlatList, SectionList } from 'react-native';
-import styles from './style';
-import { auth, db } from '../../config';
+import { auth, db } from '../config';
+import createStyles from '../styles';
 
-import FocusItem from '../FocusItem';
+import FocusItem from './FocusItem';
+
+const styles = createStyles();
 
 class FocusesScreen extends React.Component {
   constructor(props) {
     super(props);
 
-    props.navigation.addListener('willFocus', this.loadFocuses);
+    props.navigation.addListener('willFocus', this._loadFocuses);
 
     this.state = {
       focuses: [],
@@ -30,17 +32,17 @@ class FocusesScreen extends React.Component {
     ),
   });
 
-  loadFocuses = () => {
-    let newFocuses = [];
+  _loadFocuses = () => {
+    let focuses = [];
 
     db.collection('focuses').where(
       'userId', '==', auth.currentUser.uid
     ).get(
     ).then(snapshot => {
       snapshot.forEach(doc => {
-        newFocuses.push({
-          userId: doc.get('userId'),
+        focuses.push({
           id: doc.id,
+          userId: doc.get('userId'),
           name: doc.get('name'),
           category: doc.get('category'),
           level: doc.get('level'),
@@ -48,7 +50,7 @@ class FocusesScreen extends React.Component {
         });
 
         this.setState({
-          focuses: newFocuses,
+          focuses,
         });
       });
     }).catch(err => {
@@ -56,13 +58,27 @@ class FocusesScreen extends React.Component {
     });
   };
 
+  _renderSeparator = () => {
+    return (
+      <View
+        style={{
+          height: 1,
+          backgroundColor: "#CED0CE",
+          marginLeft: "4%", 
+          marginRight: "4%",
+        }}
+      />
+    );
+  };
+
   render() {
     return (
       <View style={styles.screen}>
         <FlatList
           data={this.state.focuses}
-          keyExtractor={(item, index) => item.name + index}
+          keyExtractor={(item, index) => item.id}
           renderItem={({item}) => <FocusItem focus={item} />}
+          ItemSeparatorComponent={this._renderSeparator}
         />
       </View>
     );

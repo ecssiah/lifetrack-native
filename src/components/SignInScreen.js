@@ -1,9 +1,11 @@
 import React from 'react';
 import { Button, View, Text, TextInput } from 'react-native';
-import { auth, db } from '../../config';
-import styles from './style';
+import { auth } from '../config';
+import createStyles from '../styles';
 
-class SignUpScreen extends React.Component {
+const styles = createStyles();
+
+class SignInScreen extends React.Component {
   constructor(props) {
     super(props);
 
@@ -13,14 +15,10 @@ class SignUpScreen extends React.Component {
     };
   }
 
-  onPressSignUp = () => {
-    auth.createUserWithEmailAndPassword(
+  _onPressSignIn = () => {
+    auth.signInWithEmailAndPassword(
       this.state.email, this.state.password
-    ).then(cred => {
-      db.collection('users').doc(cred.user.uid).set({
-        user: 'test',
-      });
-    }).catch(error => {
+    ).catch(error => {
       const errorCode = error.code;
       const errorMessage = error.message;
 
@@ -35,9 +33,9 @@ class SignUpScreen extends React.Component {
   render() {
     return (
       <View style={styles.container}>
-        <Text style={styles.section}>
+        <Text style={styles.section} >
           Email
-        </Text> 
+        </Text>
 
         <TextInput
           style={{height: 40, width: 240, borderColor: 'gray', borderWidth: 1}}
@@ -45,7 +43,7 @@ class SignUpScreen extends React.Component {
           value={this.state.email}
         />
 
-        <Text style={styles.section}>
+        <Text style={styles.section} >
           Password
         </Text>
 
@@ -57,8 +55,14 @@ class SignUpScreen extends React.Component {
         />
 
         <Button
-          onPress={this.onPressSignUp}
-          title="Sign Up"
+          onPress={this._onPressSignIn}
+          title="SignIn"
+          color="#841584"
+        />
+
+        <Button
+          onPress={ () => this.props.navigation.navigate('SignUp') }
+          title="SignUp"
           color="#841584"
         />
       </View>
@@ -66,4 +70,4 @@ class SignUpScreen extends React.Component {
   }
 }
 
-export default SignUpScreen;
+export default SignInScreen;
