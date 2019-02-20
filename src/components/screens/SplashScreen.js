@@ -1,7 +1,7 @@
 import React from 'react';
-import { auth } from '../config';
+import { auth } from '../../config';
 import { View, Text } from 'react-native';
-import createStyles, { Colors } from '../styles';
+import createStyles, { Colors } from '../../styles';
 
 const styles = createStyles({
   splashContainer: {

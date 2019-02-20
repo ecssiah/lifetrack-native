@@ -1,10 +1,10 @@
 import React from 'react';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { Button, Text, View, FlatList, SectionList } from 'react-native';
-import { auth, db } from '../config';
-import createStyles from '../styles';
+import { auth, db } from '../../config';
+import createStyles from '../../styles';
 
-import FocusItem from './FocusItem';
+import FocusItem from '../FocusItem';
 
 const styles = createStyles();
 

@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, TextInput, Button } from 'react-native';
-import { auth, db } from '../config';
-import createStyles from '../styles';
+import { auth, db } from '../../config';
+import createStyles from '../../styles';
 
 const styles = createStyles();
 

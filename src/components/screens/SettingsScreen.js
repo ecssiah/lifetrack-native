@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, Button } from 'react-native';
-import { auth } from '../config';
-import createStyles, { Fonts, Colors } from '../styles'; 
+import { auth } from '../../config';
+import createStyles, { Fonts, Colors } from '../../styles'; 
 
 const styles = createStyles({
   section: {

@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text } from 'react-native';
-import createStyles from '../styles';
+import createStyles from '../../styles';
 
 const styles = createStyles();
 
