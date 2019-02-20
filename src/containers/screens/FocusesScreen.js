@@ -2,6 +2,8 @@ import React from 'react';
 import { connect } from 'react-redux';
 import Icon from 'react-native-vector-icons/Ionicons';
 
+import { selectFocus } from '../../actions/SelectionActions';
+
 import FocusList from '../../components/FocusList';
 
 class FocusesScreen extends React.Component {
@@ -19,6 +21,7 @@ class FocusesScreen extends React.Component {
   });
 
   _selectFocus = id => {
+    this.props.selectFocus(id);
     this.props.navigation.navigate('Focus');
   };
 
@@ -37,7 +40,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-
+  selectFocus: id => dispatch(selectFocus(id)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(FocusesScreen);

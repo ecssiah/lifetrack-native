@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { auth, db } from '../../config';
 import { View, Text } from 'react-native';
-import { setFocuses } from '../../actions/FocusActions';
+import { setFocuses } from '../../actions/FocusesActions';
 import createStyles, { Colors } from '../../styles';
 
 const styles = createStyles({
