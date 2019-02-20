@@ -8,14 +8,14 @@ import {
 } from "react-navigation";
 import { Colors } from '../styles';
 
-import SplashScreen from '../components/screens/SplashScreen';
-import SignInScreen from '../components/screens/SignInScreen';
-import SignUpScreen from '../components/screens/SignUpScreen';
-import FocusesScreen from '../components/screens/FocusesScreen';
-import FocusAddScreen from '../components/screens/FocusAddScreen';
-import FocusScreen from '../components/screens/FocusScreen';
-import StatsScreen from '../components/screens/StatsScreen';
-import SettingsScreen from '../components/screens/SettingsScreen';
+import SplashScreen from './screens/SplashScreen';
+import SignInScreen from './screens/SignInScreen';
+import SignUpScreen from './screens/SignUpScreen';
+import FocusesScreen from './screens/FocusesScreen';
+import FocusAddScreen from './screens/FocusAddScreen';
+import FocusScreen from './screens/FocusScreen';
+import StatsScreen from './screens/StatsScreen';
+import SettingsScreen from './screens/SettingsScreen';
 
 const AuthStack = createStackNavigator(
   {

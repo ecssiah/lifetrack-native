@@ -1,8 +1,10 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { auth, db } from '../../config';
+import { setFocuses } from '../../actions/FocusActions';
 
-import FocusList from '../FocusList';
+import FocusList from '../../components/FocusList';
 
 class FocusesScreen extends React.Component {
   constructor(props) {
@@ -48,6 +50,8 @@ class FocusesScreen extends React.Component {
         this.setState({
           focuses,
         });
+
+        this.props.setFocuses(focuses);
       });
     }).catch(err => {
       console.error(err);
@@ -61,11 +65,19 @@ class FocusesScreen extends React.Component {
   render() {
     return (
       <FocusList
-        focuses={this.state.focuses}
+        focuses={this.props.focuses}
         selectFocus={this._selectFocus}
       />
     );
   }
 }
 
-export default FocusesScreen;
+const mapStateToProps = state => ({
+  focuses: state.focuses,
+});
+
+const mapDispatchToProps = dispatch => ({
+  setFocuses: focuses => dispatch(setFocuses(focuses)),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(FocusesScreen);
