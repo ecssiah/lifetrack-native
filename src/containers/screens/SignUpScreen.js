@@ -12,25 +12,31 @@ class SignUpScreen extends React.Component {
     this.state = {
       email: '',
       password: '',
+      confirm: '',
     };
   }
 
   _onPressSignUp = () => {
-    auth.createUserWithEmailAndPassword(
-      this.state.email, this.state.password
-    ).then(cred => {
-      db.collection('users').doc(cred.user.uid).set({
-        user: cred.user.email,
-      });
-    }).catch(error => {
-      const errorCode = error.code;
-      const errorMessage = error.message;
+    if (this.state.password === this.state.confirm) {
+      auth.createUserWithEmailAndPassword(
+        this.state.email, this.state.password
+      ).then(cred => {
+        db.collection('users').doc(cred.user.uid).set({
+          user: cred.user.email,
+        });
+      }).catch(error => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
 
-      console.warn("error " + errorCode + ": " + errorMessage);
-    });
+        console.warn("error " + errorCode + ": " + errorMessage);
+      });
+    } else {
+      console.warn("Password confirmation does not match");
+    }
 
     this.setState({
       password: '',
+      confirm: '',
     });
   }
 
@@ -56,6 +62,17 @@ class SignUpScreen extends React.Component {
           style={{height: 40, width: 240, borderColor: 'gray', borderWidth: 1}}
           onChangeText={password => this.setState({password})}
           value={this.state.password}
+        />
+
+        <Text style={styles.section}>
+          Confirm Password
+        </Text>
+
+        <TextInput
+          secureTextEntry={true}
+          style={{height: 40, width: 240, borderColor: 'gray', borderWidth: 1}}
+          onChangeText={confirm => this.setState({confirm})}
+          value={this.state.confirm}
         />
 
         <Button

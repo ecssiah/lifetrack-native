@@ -37,7 +37,7 @@ class FocusScreen extends React.Component {
 
   render() {
     return (
-      <View style={styles.screen}>
+      <View style={styles.container}>
         <FocusTitle name={this.state.focus.name} />
         <FocusTimer />
         <FocusButton />
