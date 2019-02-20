@@ -1,6 +1,8 @@
 import React from 'react';
-import { auth } from '../../config';
+import { connect } from 'react-redux';
+import { auth, db } from '../../config';
 import { View, Text } from 'react-native';
+import { setFocuses } from '../../actions/FocusActions';
 import createStyles, { Colors } from '../../styles';
 
 const styles = createStyles({
@@ -22,12 +24,37 @@ class SplashScreen extends React.Component {
 
     auth.onAuthStateChanged(user => {
       if (user) {
+        this._loadFocuses();
         props.navigation.navigate('App');
       } else {
         props.navigation.navigate('Auth');
       }
     });
   }
+
+  _loadFocuses = () => {
+    let focuses = [];
+
+    db.collection('focuses').where(
+      'userId', '==', auth.currentUser.uid
+    ).get(
+    ).then(snapshot => {
+      snapshot.forEach(doc => {
+        focuses.push({
+          id: doc.id,
+          userId: doc.get('userId'),
+          name: doc.get('name'),
+          category: doc.get('category'),
+          level: doc.get('level'),
+          experience: doc.get('experience'),
+        });
+
+        this.props.setFocuses(focuses);
+      });
+    }).catch(err => {
+      console.error(err);
+    });
+  };
 
   render() {
     return (
@@ -38,4 +65,12 @@ class SplashScreen extends React.Component {
   }
 }
 
-export default SplashScreen;
+const mapStateToProps = state => ({
+
+});
+
+const mapDispatchToProps = dispatch => ({
+  setFocuses: focuses => dispatch(setFocuses(focuses)),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(SplashScreen);

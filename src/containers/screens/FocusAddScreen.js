@@ -1,6 +1,8 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import { View, Text, TextInput, Button } from 'react-native';
 import { auth, db } from '../../config';
+import { addFocus } from '../../actions/FocusActions';
 import createStyles from '../../styles';
 
 const styles = createStyles();
@@ -20,13 +22,22 @@ class FocusAddScreen extends React.Component {
   });
 
   _addFocus = () => {
-    db.collection('focuses').add({
+    const focus = {
       userId: auth.currentUser.uid,
       name: this.state.name,
       category: this.state.category,
       level: 0,
       experience: 0.0,
-    }).then(() => {
+    };
+
+    db.collection('focuses').add(
+      focus
+    ).then(doc => {
+      this.props.addFocus({
+        id: doc.id, 
+        ...focus
+      });
+
       this.props.navigation.navigate('Focuses');
     }).catch(err => {
       console.error(err);
@@ -66,4 +77,12 @@ class FocusAddScreen extends React.Component {
   }
 }
 
-export default FocusAddScreen;
+const mapStateToProps = state => ({
+
+});
+
+const mapDispatchToProps = dispatch => ({
+  addFocus: focus => dispatch(addFocus(focus)),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(FocusAddScreen);
