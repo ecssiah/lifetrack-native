@@ -3,7 +3,7 @@ import { FlatList, View } from 'react-native';
 
 import FocusItem from './FocusItem';
 
-class FocusList extends React.Component {
+class FocusList extends React.PureComponent {
   _renderSeparator = () => {
     return (
       <View
