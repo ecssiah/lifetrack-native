@@ -15,8 +15,8 @@ const styles = createStyles({
 });
 
 class FocusItem extends React.PureComponent {
-  _selectFocus = name => {
-    console.warn(name);
+  _selectFocus = id => {
+    this.props.selectFocus(id);
   }
 
   render() {

@@ -1,12 +1,8 @@
 import React from 'react';
 import Icon from 'react-native-vector-icons/Ionicons';
-import { Button, Text, View, FlatList, SectionList } from 'react-native';
 import { auth, db } from '../../config';
-import createStyles from '../../styles';
 
-import FocusItem from '../FocusItem';
-
-const styles = createStyles();
+import FocusList from '../FocusList';
 
 class FocusesScreen extends React.Component {
   constructor(props) {
@@ -58,29 +54,16 @@ class FocusesScreen extends React.Component {
     });
   };
 
-  _renderSeparator = () => {
-    return (
-      <View
-        style={{
-          height: 1,
-          backgroundColor: "#CED0CE",
-          marginLeft: "4%", 
-          marginRight: "4%",
-        }}
-      />
-    );
+  _selectFocus = id => {
+    this.props.navigation.navigate('Focus');
   };
 
   render() {
     return (
-      <View style={styles.screen}>
-        <FlatList
-          data={this.state.focuses}
-          keyExtractor={(item, index) => item.id}
-          renderItem={({item}) => <FocusItem focus={item} />}
-          ItemSeparatorComponent={this._renderSeparator}
-        />
-      </View>
+      <FocusList
+        focuses={this.state.focuses}
+        selectFocus={this._selectFocus}
+      />
     );
   }
 }

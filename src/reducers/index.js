@@ -1,9 +1,9 @@
 import { combineReducers } from 'redux';
 
-function reducer1(state = [], action) {
+function focuses(state = [], action) {
   return state;
 }
 
 export default combineReducers({
-  reducer1,
+  focuses,
 });
