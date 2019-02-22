@@ -25,9 +25,9 @@ class SignUpScreen extends React.Component {
       ).then(cred => {
         const settings = {
           userId: cred.user.uid,
-          workPeriod: 20,
-          workGoal: 12,
-          breakPeriod: 2,  
+          workPeriod: 1,
+          workGoal: 2,
+          breakPeriod: 1,  
         };
 
         db.collection('settings').add(settings);

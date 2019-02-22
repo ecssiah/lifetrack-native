@@ -1,10 +1,17 @@
 import React from 'react';
 import { Text, View } from 'react-native';
+import createStyles from '../styles';
 
-class FocusTitle extends React.Component {
+const styles = createStyles({
+  focusTitle: {
+    fontSize: 60,
+  },
+});
+
+class FocusTitle extends React.PureComponent {
   render() {
     return (
-      <Text>
+      <Text style={styles.focusTitle}>
         {this.props.name}
       </Text>
     );

@@ -23,7 +23,6 @@ class FocusItem extends React.PureComponent {
       >
         <Text style={styles.focusItem}>{this.props.focus.name}</Text>
         <Text style={styles.focusItem}>{this.props.focus.category}</Text>
-        <View style={{ backgroundColor: 'black', height: 0.5, }} />
       </TouchableOpacity>
     );
   }

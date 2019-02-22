@@ -55,13 +55,13 @@ class SplashScreen extends React.Component {
   };
 
   _loadFocuses = () => {
-    let focuses = [];
+    let focuses = {};
 
     db.collection('focuses').where(
       'userId', '==', auth.currentUser.uid
     ).get().then(snapshot => {
       snapshot.forEach(doc => {
-        focuses.push({
+        focuses[doc.id] = {
           id: doc.id,
           userId: doc.get('userId'),
           name: doc.get('name'),
@@ -70,7 +70,7 @@ class SplashScreen extends React.Component {
           periods: doc.get('periods'),
           level: doc.get('level'),
           experience: doc.get('experience'),
-        });
+        };
       });
 
       this.props.setFocuses(focuses);

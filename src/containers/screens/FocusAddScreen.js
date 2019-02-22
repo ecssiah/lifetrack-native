@@ -23,6 +23,7 @@ class FocusAddScreen extends React.Component {
 
   _addFocus = () => {
     const focus = {
+      id: null,
       userId: auth.currentUser.uid,
       name: this.state.name,
       category: this.state.category,
@@ -35,11 +36,7 @@ class FocusAddScreen extends React.Component {
     db.collection('focuses').add(
       focus
     ).then(doc => {
-      this.props.addFocus({
-        id: doc.id, 
-        ...focus
-      });
-
+      this.props.addFocus(doc.id, { id: doc.id, ...focus });
       this.props.navigation.navigate('Focuses');
     }).catch(err => {
       console.error(err);
@@ -84,7 +81,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  addFocus: focus => dispatch(addFocus(focus)),
+  addFocus: (id, focus) => dispatch(addFocus(id, focus)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(FocusAddScreen);

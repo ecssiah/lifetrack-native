@@ -1,15 +1,15 @@
 import React from 'react';
-import { Text } from 'react-native';
+import { Text, TouchableOpacity } from 'react-native';
 import createStyles from '../styles';
 
 const styles = createStyles({
   working: {
-    fontSize: 62,
+    fontSize: 120,
     color: '#0011dd',
   },
   break: {
-    fontSize: 62,
-    color: '#dd1100',
+    fontSize: 120,
+    color: '#227755',
   },
 });
 
@@ -25,9 +25,13 @@ class FocusTimer extends React.PureComponent {
     const displayTime = `${displayMinutes}:${displaySeconds}`;
 
     return (
-      <Text style={timerStyle}>
-        {displayTime}
-      </Text>
+      <TouchableOpacity
+        onPress={this.props.onClickStart} 
+      >
+        <Text style={timerStyle}>
+          {displayTime}
+        </Text>
+      </TouchableOpacity>
     );
   }
 }

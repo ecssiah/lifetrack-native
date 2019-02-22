@@ -23,15 +23,15 @@ class FocusList extends React.PureComponent {
   render() {
     return (
       <FlatList
-        data={this.props.focuses}
-        keyExtractor={(item, index) => item.id}
+        data={Object.values(this.props.focuses)}
+        keyExtractor={item => item.id}
+        ItemSeparatorComponent={this._renderSeparator}
         renderItem={({item}) => 
           <FocusItem 
             focus={item} 
             selectFocus={this.props.selectFocus} 
           />
         }
-        ItemSeparatorComponent={this._renderSeparator}
       />
     );
   };
