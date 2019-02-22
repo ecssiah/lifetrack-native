@@ -1,11 +1,13 @@
 import { combineReducers } from 'redux';
 
-import selectionReducer from './SelectionReducer';
 import focusesReducer from './FocusesReducer';
+import focusIDReducer from './FocusIDReducer';
+import settingsReducer from './SettingsReducer';
 
 const RootReducer = combineReducers({
-  selection: selectionReducer,
   focuses: focusesReducer,
+  focusID: focusIDReducer,
+  settings: settingsReducer,
 });
 
 export default RootReducer;

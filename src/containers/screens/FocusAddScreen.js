@@ -26,6 +26,8 @@ class FocusAddScreen extends React.Component {
       userId: auth.currentUser.uid,
       name: this.state.name,
       category: this.state.category,
+      time: this.props.settings.workPeriod,
+      periods: 0,
       level: 0,
       experience: 0.0,
     };
@@ -78,7 +80,7 @@ class FocusAddScreen extends React.Component {
 }
 
 const mapStateToProps = state => ({
-
+  settings: state.settings,
 });
 
 const mapDispatchToProps = dispatch => ({

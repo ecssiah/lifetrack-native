@@ -1,7 +1,9 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import { Button, View, Text, TextInput } from 'react-native';
-import { auth } from '../../config';
+import { auth, db } from '../../config';
 import createStyles from '../../styles';
+import { loadSettings } from '../../actions/SettingsActions';
 
 const styles = createStyles();
 
@@ -18,7 +20,26 @@ class SignInScreen extends React.Component {
   _onPressSignIn = () => {
     auth.signInWithEmailAndPassword(
       this.state.email, this.state.password
-    ).catch(error => {
+    ).then(cred => {
+      db.collection('settings').where(
+        'userId', '==', cred.user.uid
+      ).get().then(snapshot => {
+        let settings;
+
+        snapshot.forEach(doc => {
+          settings = {
+            userId: doc.get('userId'),
+            workGoal: doc.get('workGoal'),
+            workPeriod: doc.get('workPeriod'),
+            breakPeriod: doc.get('breakPeriod'),
+          };
+        });
+
+        this.props.loadSettings(settings);
+      }).catch(err => {
+        console.error(err);
+      });
+    }).catch(error => {
       const errorCode = error.code;
       const errorMessage = error.message;
 
@@ -70,4 +91,12 @@ class SignInScreen extends React.Component {
   }
 }
 
-export default SignInScreen;
+const mapStateToProps = state => ({
+
+});
+
+const mapDispatchToProps = dispatch => ({
+  loadSettings: settings => dispatch(loadSettings(settings)), 
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(SignInScreen);

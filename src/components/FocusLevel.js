@@ -1,12 +1,12 @@
 import React from 'react';
-import { View } from 'react-native';
+import { View, Text } from 'react-native';
 
-class FocusLevel extends React.Component {
+class FocusLevel extends React.PureComponent {
   render() {
     return (
-      <View>
-
-      </View>
+      <Text>
+        {this.props.level}
+      </Text>
     );
   }
 }

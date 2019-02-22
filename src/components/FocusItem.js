@@ -15,15 +15,11 @@ const styles = createStyles({
 });
 
 class FocusItem extends React.PureComponent {
-  _selectFocus = id => {
-    this.props.selectFocus(id);
-  }
-
   render() {
     return (
       <TouchableOpacity
         style={styles.focusContainer}
-        onPress={() => this._selectFocus(this.props.focus.id)}
+        onPress={() => this.props.selectFocus(this.props.focus.id)}
       >
         <Text style={styles.focusItem}>{this.props.focus.name}</Text>
         <Text style={styles.focusItem}>{this.props.focus.category}</Text>

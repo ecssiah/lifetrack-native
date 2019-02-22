@@ -1,7 +1,9 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import { Button, View, Text, TextInput } from 'react-native';
 import { auth, db } from '../../config';
 import createStyles from '../../styles';
+import { loadSettings } from '../../actions/SettingsActions';
 
 const styles = createStyles();
 
@@ -21,9 +23,16 @@ class SignUpScreen extends React.Component {
       auth.createUserWithEmailAndPassword(
         this.state.email, this.state.password
       ).then(cred => {
-        db.collection('users').doc(cred.user.uid).set({
-          user: cred.user.email,
-        });
+        const settings = {
+          userId: cred.user.uid,
+          workPeriod: 20,
+          workGoal: 12,
+          breakPeriod: 2,  
+        };
+
+        db.collection('settings').add(settings);
+
+        this.props.loadSettings(settings);
       }).catch(error => {
         const errorCode = error.code;
         const errorMessage = error.message;
@@ -85,4 +94,12 @@ class SignUpScreen extends React.Component {
   }
 }
 
-export default SignUpScreen;
+const mapStateToProps = state => ({
+
+});
+
+const mapDispatchToProps = dispatch => ({
+  loadSettings: settings => dispatch(loadSettings(settings)),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(SignUpScreen);
