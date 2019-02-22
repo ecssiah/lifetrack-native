@@ -116,7 +116,7 @@ class FocusScreen extends React.Component {
       <View style={styles.container}>
         <FocusTitle name={this.state.focus.name} />
         <FocusTimer 
-          active={this.state.timerActive} 
+          active={this.state.working} 
           time={this.state.focus.time} 
         />
         <FocusButton 
