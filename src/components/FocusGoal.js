@@ -1,6 +1,6 @@
 import React from 'react';
 import { Text, TouchableOpacity, ProgressViewIOS, View } from 'react-native';
-import createStyles from '../styles';
+import createStyles, { Colors } from '../styles';
 
 const styles = createStyles({
   goalContainer: {
@@ -28,11 +28,12 @@ class FocusGoal extends React.PureComponent {
         style={styles.goalContainer}
       >
         <Text style={styles.goalHeading}>
-          Goal:
+          Goal: {this.props.goal}
         </Text>
 
         <ProgressViewIOS
           progress={this.props.periods / this.props.goal}
+          progressTintColor={Colors.primary}
           style={styles.goalProgress}
         />
       </TouchableOpacity>

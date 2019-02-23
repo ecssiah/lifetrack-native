@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, ProgressViewIOS } from 'react-native';
-import createStyles from '../styles';
+import createStyles, { Colors } from '../styles';
 
 const styles = createStyles({
   experienceContainer: {
@@ -21,6 +21,7 @@ class FocusExperience extends React.PureComponent {
       <View style={styles.experienceContainer} >
         <ProgressViewIOS
           progress={this.props.experience / 100.0}
+          progressTintColor={Colors.primary}
           style={styles.experienceProgress}
         />
       </View>

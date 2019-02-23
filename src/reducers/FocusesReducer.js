@@ -5,11 +5,12 @@ import {
   UPDATE_EXPERIENCE, 
   RESET_PERIODS
 } from "../actions/FocusesActions";
-import { SECOND, EXPERIENCE_PER_SECOND } from "./FocusIDReducer";
+
+export const SECOND = 1 / 60.0;
+export const EXPERIENCE_PER_SECOND = 40 / 60.0;
 
 function focusesReducer(state = {}, action) {
-  let newState;
-  let targetFocus;
+  let newState = {};
 
   switch (action.type) {
     case ADD_FOCUS:

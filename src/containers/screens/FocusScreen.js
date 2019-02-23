@@ -5,11 +5,13 @@ import createStyles from '../../styles';
 import { 
   setTime, updateTime, updatePeriods, updateExperience, resetPeriods 
 } from '../../actions/FocusesActions';
-import { SECOND } from '../../reducers/FocusIDReducer';
+import {
+  setWorking, setTimerActive, setTimer
+} from '../../actions/FocusActions';
+import { SECOND } from '../../reducers/FocusesReducer';
 
 import FocusTitle from '../../components/FocusTitle';
 import FocusTimer from '../../components/FocusTimer';
-import FocusButton from '../../components/FocusButton';
 import FocusGoal from '../../components/FocusGoal';
 import FocusLevel from '../../components/FocusLevel';
 import FocusExperience from '../../components/FocusExperience';
@@ -19,46 +21,27 @@ const styles = createStyles();
 class FocusScreen extends React.Component {
   constructor(props) {
     super(props);
-
-    this.state = {
-      working: true,
-      timer: null,
-      timerActive: false,
-      buttonText: 'Start',
-    };
-  }
-
-  _onClickStart = () => {
-    this._handleStartEvent();
   };
 
-  _handleStartEvent = () => {
-    if (this.state.timerActive) {
-      clearInterval(this.state.timer);
+  _onActivate = () => {
+    this._handleActivateEvent();
+  };
 
-      if (this.state.working) {
-        this.setState({
-          ...this.state,
-          timerActive: false,
-          buttonText: 'Start',
-        });
-      } else {
-        this.props.setTime(this.props.focusID, this.props.settings.workPeriod);
-
-        this.setState({
-          ...this.state,
-          working: true,
-          timerActive: true,
-          buttonText: 'Start',
-        });
+  _handleActivateEvent = () => {
+    if (this.props.focus.timerActive) {
+      if (!this.props.focus.working) {
+        this.props.setTime(
+          this.props.focus.id, this.props.settings.workPeriod
+        );
       }
+
+      this.props.setWorking(true);
+      this.props.setTimerActive(false);
+
+      clearInterval(this.props.focus.timer);
     } else {
-      this.setState({
-        ...this.state,
-        timerActive: true,
-        timer: setInterval(this._onFocusTimerUpdate, 1000),
-        buttonText: this.state.working ? 'Pause' : 'Skip',
-      });
+      this.props.setTimerActive(true);
+      this.props.setTimer(setInterval(this._onFocusTimerUpdate, 1000));
     }
   };
 
@@ -67,59 +50,58 @@ class FocusScreen extends React.Component {
   };
   
   _updateFocusTimer = () => {
-    if (this.props.focuses[this.props.focusID].time >= SECOND) {
-      this.props.updateTime(this.props.focusID);
+    if (this.props.focuses[this.props.focus.id].time >= SECOND) {
+      this.props.updateTime(this.props.focus.id);
 
-      if (this.state.working) {
-        this.props.updateExperience(this.props.focusID);
+      if (this.props.focus.working) {
+        this.props.updateExperience(this.props.focus.id);
       }
+
     } else {
-      clearInterval(this.state.timer);
+      clearInterval(this.props.focus.timer);
 
-      if (this.state.working) {
-        this.props.updatePeriods(this.props.focusID);
-        this.props.setTime(this.props.focusID, this.props.settings.breakPeriod);
+      if (this.props.focus.working) {
+        this.props.updatePeriods(this.props.focus.id);
+        this.props.setTime(
+          this.props.focus.id, this.props.settings.breakPeriod
+        );
       } else {
-        this.props.setTime(this.props.focusID, this.props.settings.workPeriod);
+        this.props.setTime(
+          this.props.focus.id, this.props.settings.workPeriod
+        );
       }
 
-      this.setState({
-        working: !this.state.working,
-        timerActive: false,
-        buttonText: 'Start',
-      });
+      this.props.setWorking(!this.props.focus.working);
+      this.props.setTimerActive(false);
     }
   };
 
   _onClickGoal = () => {
-    this.props.resetPeriods(this.props.focusID);
+    this.props.resetPeriods(this.props.focus.id);
   };
 
   render() {
     return (
       <View style={styles.container}>
         <FocusTitle 
-          name={this.props.focuses[this.props.focusID].name} 
+          name={this.props.focuses[this.props.focus.id].name} 
         />
         <FocusTimer 
-          active={this.state.working} 
-          time={this.props.focuses[this.props.focusID].time} 
-          onClickStart={this._onClickStart}
-        />
-        <FocusButton 
-          text={this.state.buttonText} 
-          onClickStart={this._onClickStart} 
+          active={this.props.focus.timerActive}
+          working={this.props.focus.working} 
+          time={this.props.focuses[this.props.focus.id].time} 
+          onActivate={this._onActivate}
         />
         <FocusGoal 
-          periods={this.props.focuses[this.props.focusID].periods} 
+          periods={this.props.focuses[this.props.focus.id].periods} 
           goal={this.props.settings.workGoal} 
           onClickGoal={this._onClickGoal}
         />
         <FocusLevel 
-          level={this.props.focuses[this.props.focusID].level} 
+          level={this.props.focuses[this.props.focus.id].level} 
         />
         <FocusExperience 
-          experience={this.props.focuses[this.props.focusID].experience} 
+          experience={this.props.focuses[this.props.focus.id].experience} 
         />
       </View>
     );
@@ -127,12 +109,15 @@ class FocusScreen extends React.Component {
 }
 
 const mapStateToProps = state => ({
-  focusID: state.focusID,
+  focus: state.focus,
   focuses: state.focuses,
   settings: state.settings,
 });
 
 const mapDispatchToProps = dispatch => ({
+  setWorking: working => dispatch(setWorking(working)),
+  setTimerActive: timerActive => dispatch(setTimerActive(timerActive)), 
+  setTimer: timer => dispatch(setTimer(timer)),
   setTime: (id, time) => dispatch(setTime(id, time)),
   updateTime: id => dispatch(updateTime(id)),
   updatePeriods: id => dispatch(updatePeriods(id)), 
