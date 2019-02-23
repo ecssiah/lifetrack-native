@@ -1,10 +1,13 @@
-export const ADD_FOCUS = 'focus:add-focus';
-export const SET_FOCUSES = 'focus:set-focuses';
-export const SET_TIME = 'focus:set-time';
-export const UPDATE_TIME = 'focus:update-time';
-export const UPDATE_PERIODS = 'focus:update-periods';
-export const RESET_PERIODS = 'focus:reset-periods';
-export const UPDATE_EXPERIENCE = 'focus:update-experience';
+export const ADD_FOCUS = 'focuses:add-focus';
+export const SET_FOCUSES = 'focuses:set-focuses';
+export const SET_TIME = 'focuses:set-time';
+export const UPDATE_TIME = 'focuses:update-time';
+export const UPDATE_PERIODS = 'focuses:update-periods';
+export const RESET_PERIODS = 'focuses:reset-periods';
+export const UPDATE_EXPERIENCE = 'focuses:update-experience';
+export const SET_WORKING = 'focuses:set-working';
+export const SET_TIMER_ACTIVE = 'focuses:set-timer-active';
+export const SET_TIMER = 'focuses:set-timer';
 
 export function addFocus(focus) {
   return {
@@ -53,5 +56,29 @@ export function updateExperience(id) {
   return {
     type: UPDATE_EXPERIENCE,
     id,
+  };
+};
+
+export function setWorking(id, working) {
+  return {
+    type: SET_WORKING,
+    id,
+    working,
+  };
+};
+
+export function setTimerActive(id, timerActive) {
+  return {
+    type: SET_TIMER_ACTIVE,
+    id,
+    timerActive,
+  };
+};
+
+export function setTimer(id, timer) {
+  return {
+    type: SET_TIMER,
+    id,
+    timer,
   };
 };

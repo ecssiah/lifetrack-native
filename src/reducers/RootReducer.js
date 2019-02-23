@@ -6,7 +6,7 @@ import settingsReducer from './SettingsReducer';
 
 const RootReducer = combineReducers({
   focuses: focusesReducer,
-  focus: focusReducer,
+  focusId: focusReducer,
   settings: settingsReducer,
 });
 

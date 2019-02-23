@@ -62,7 +62,7 @@ class SplashScreen extends React.Component {
     ).get().then(snapshot => {
       snapshot.forEach(doc => {
         focuses[doc.id] = {
-          id: doc.id,
+          id: doc.get('id'),
           userId: doc.get('userId'),
           name: doc.get('name'),
           category: doc.get('category'),
@@ -70,6 +70,9 @@ class SplashScreen extends React.Component {
           periods: doc.get('periods'),
           level: doc.get('level'),
           experience: doc.get('experience'),
+          working: doc.get('working'),
+          timerActive: doc.get('timerActive'),
+          timer: doc.get('timer'),
         };
       });
 

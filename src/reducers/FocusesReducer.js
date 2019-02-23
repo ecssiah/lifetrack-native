@@ -3,7 +3,8 @@ import {
   UPDATE_PERIODS, 
   SET_TIME, UPDATE_TIME, 
   UPDATE_EXPERIENCE, 
-  RESET_PERIODS
+  RESET_PERIODS,
+  SET_WORKING, SET_TIMER_ACTIVE, SET_TIMER
 } from "../actions/FocusesActions";
 
 export const SECOND = 1 / 60.0;
@@ -53,6 +54,21 @@ function focusesReducer(state = {}, action) {
 
       newState[action.id].level = level;
       newState[action.id].experience = experience;
+
+      return newState;
+    case SET_WORKING:
+      newState = Object.assign({}, state);
+      newState[action.id].working = action.working;
+
+      return newState;
+    case SET_TIMER_ACTIVE:
+      newState = Object.assign({}, state);
+      newState[action.id].timerActive = action.timerActive;
+
+      return newState;
+    case SET_TIMER:
+      newState = Object.assign({}, state);
+      newState[action.id].timer = action.timer;
 
       return newState;
     default:
