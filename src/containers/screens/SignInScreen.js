@@ -5,7 +5,14 @@ import { auth, db } from '../../config';
 import createStyles from '../../styles';
 import { loadSettings } from '../../actions/SettingsActions';
 
-const styles = createStyles();
+const styles = createStyles({
+  signInInput: {
+    width: 240, 
+    height: 40, 
+    borderWidth: 1,
+    borderColor: 'gray', 
+  },
+});
 
 class SignInScreen extends React.Component {
   constructor(props) {
@@ -63,7 +70,8 @@ class SignInScreen extends React.Component {
         </Text>
 
         <TextInput
-          style={{height: 40, width: 240, borderColor: 'gray', borderWidth: 1}}
+          style={styles.signInInput}
+          textAlign='center'
           onChangeText={email => this.setState({email})}
           value={this.state.email}
         />
@@ -74,7 +82,8 @@ class SignInScreen extends React.Component {
 
         <TextInput
           secureTextEntry={true}
-          style={{height: 40, width: 240, borderColor: 'gray', borderWidth: 1}}
+          textAlign='center'
+          style={styles.signInInput}
           onChangeText={password => this.setState({password})}
           value={this.state.password}
         />

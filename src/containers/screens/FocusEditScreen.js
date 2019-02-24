@@ -22,8 +22,12 @@ class FocusEditScreen extends React.Component {
     title: 'Edit Focus',
   });
 
-  _editFocus = () => {
-    const docRef = db.collection('focuses').doc();
+  componentWillUnmount() {
+    console.warn("Unmounting Focus Edit");
+  }
+
+  _updateFocus = () => {
+    const docRef = db.collection('focuses').doc(this.props.focus.id);
 
     const focus = {
       id: docRef.id,
@@ -39,9 +43,9 @@ class FocusEditScreen extends React.Component {
       timer: null,
     };
 
-    docRef.set(focus).then(doc => {
+    db.collection('focuses').doc(this.props.focus.id).set(focus).then(doc => {
       this.props.addFocus(focus);
-      this.props.navigation.navigate('Focuses');
+      this.props.navigation.navigate('Focus');
     }).catch(err => {
       console.error(err);
     });
@@ -54,6 +58,7 @@ class FocusEditScreen extends React.Component {
 
         <TextInput
           style={styles.focusInput}
+          textAlign='center'
           onChangeText={() => console.warn("name")}
           value="name"
         />
@@ -62,6 +67,7 @@ class FocusEditScreen extends React.Component {
 
         <TextInput
           style={styles.focusInput}
+          textAlign='center'
           onChangeText={() => console.warn("category")}
           value="category"
         />
@@ -76,6 +82,8 @@ class FocusEditScreen extends React.Component {
 }
 
 const mapStateToProps = state => ({
+  focus: state.focus,
+  focuses: state.focuses,
 });
 
 const mapDispatchToProps = dispatch => ({

@@ -1,10 +1,8 @@
 import { 
   SET_FOCUSES, ADD_FOCUS, 
-  UPDATE_PERIODS, 
-  SET_TIME, UPDATE_TIME, 
-  UPDATE_EXPERIENCE, 
-  RESET_PERIODS,
-  SET_WORKING, SET_ACTIVE, SET_TIMER, UPDATE_WORK_PERIODS, UPDATE_BREAK_PERIODS
+  SET_NAME, SET_TIME, SET_WORKING, SET_ACTIVE, SET_TIMER, 
+  UPDATE_TIME, UPDATE_PERIODS, UPDATE_EXPERIENCE, RESET_PERIODS,
+  UPDATE_WORK_PERIODS, UPDATE_BREAK_PERIODS
 } from "../actions/FocusesActions";
 
 export const SECOND = 1 / 60.0;
@@ -20,29 +18,12 @@ function focusesReducer(state = {}, action) {
       newState[action.focus.id] = action.focus;
 
       return newState;
+    case SET_NAME:
+      newState[action.focus.id] = action.name;
+
+      return newState;
     case SET_TIME:
       newState[action.id].time = action.time;
-
-      return newState;
-    case UPDATE_TIME:
-      newState[action.id].time -= SECOND;
-
-      return newState;
-    case UPDATE_PERIODS:
-      newState[action.id].periods += 1;
-
-      return newState;
-    case RESET_PERIODS:
-      newState[action.id].periods = 0;
-
-      return newState;
-    case UPDATE_EXPERIENCE:
-      newState[action.id].experience += EXPERIENCE_PER_SECOND;
-
-      if (newState[action.id].experience >= 100) {
-        newState[action.id].level += 1;
-        newState[action.id].experience = 0;
-      }
 
       return newState;
     case SET_WORKING:
@@ -55,6 +36,27 @@ function focusesReducer(state = {}, action) {
       return newState;
     case SET_TIMER:
       newState[action.id].timer = action.timer;
+
+      return newState;
+    case UPDATE_TIME:
+      newState[action.id].time -= SECOND;
+
+      return newState;
+    case UPDATE_PERIODS:
+      newState[action.id].periods += 1;
+
+      return newState;
+    case UPDATE_EXPERIENCE:
+      newState[action.id].experience += EXPERIENCE_PER_SECOND;
+
+      if (newState[action.id].experience >= 100) {
+        newState[action.id].level += 1;
+        newState[action.id].experience = 0;
+      }
+
+      return newState;
+    case RESET_PERIODS:
+      newState[action.id].periods = 0;
 
       return newState;
     case UPDATE_WORK_PERIODS:

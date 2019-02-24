@@ -60,6 +60,7 @@ class FocusAddScreen extends React.Component {
 
         <TextInput
           style={styles.focusInput}
+          textAlign='center'
           onChangeText={name => this.setState({name})}
           value={this.state.name}
         />
@@ -68,6 +69,7 @@ class FocusAddScreen extends React.Component {
 
         <TextInput
           style={styles.focusInput}
+          textAlign='center'
           onChangeText={category => this.setState({category})}
           value={this.state.category}
         />
