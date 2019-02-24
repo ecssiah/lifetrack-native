@@ -6,7 +6,7 @@ export const UPDATE_PERIODS = 'focuses:update-periods';
 export const RESET_PERIODS = 'focuses:reset-periods';
 export const UPDATE_EXPERIENCE = 'focuses:update-experience';
 export const SET_WORKING = 'focuses:set-working';
-export const SET_TIMER_ACTIVE = 'focuses:set-timer-active';
+export const SET_ACTIVE = 'focuses:set-active';
 export const SET_TIMER = 'focuses:set-timer';
 
 export function addFocus(focus) {
@@ -67,11 +67,11 @@ export function setWorking(id, working) {
   };
 };
 
-export function setTimerActive(id, timerActive) {
+export function setActive(id, active) {
   return {
-    type: SET_TIMER_ACTIVE,
+    type: SET_ACTIVE,
     id,
-    timerActive,
+    active,
   };
 };
 

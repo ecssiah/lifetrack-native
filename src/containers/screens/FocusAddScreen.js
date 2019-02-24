@@ -5,7 +5,14 @@ import { auth, db } from '../../config';
 import { addFocus } from '../../actions/FocusesActions';
 import createStyles from '../../styles';
 
-const styles = createStyles();
+const styles = createStyles({
+  focusInput: {
+    width: 240, 
+    height: 40, 
+    borderWidth: 1,
+    borderColor: 'gray', 
+  },
+});
 
 class FocusAddScreen extends React.Component {
   constructor(props) {
@@ -38,9 +45,7 @@ class FocusAddScreen extends React.Component {
       timer: null,
     };
 
-    docRef.set(
-      focus
-    ).then(doc => {
+    docRef.set(focus).then(doc => {
       this.props.addFocus(focus);
       this.props.navigation.navigate('Focuses');
     }).catch(err => {
@@ -51,22 +56,18 @@ class FocusAddScreen extends React.Component {
   render() {
     return (
       <View style={styles.container}>
-        <Text style={styles.section} >
-          Name
-        </Text>
+        <Text style={styles.section} >Name</Text>
 
         <TextInput
-          style={{height: 40, width: 240, borderColor: 'gray', borderWidth: 1}}
+          style={styles.focusInput}
           onChangeText={name => this.setState({name})}
           value={this.state.name}
         />
 
-        <Text style={styles.section} >
-          Category
-        </Text>
+        <Text style={styles.section} >Category</Text>
 
         <TextInput
-          style={{height: 40, width: 240, borderColor: 'gray', borderWidth: 1}}
+          style={styles.focusInput}
           onChangeText={category => this.setState({category})}
           value={this.state.category}
         />
@@ -74,7 +75,6 @@ class FocusAddScreen extends React.Component {
         <Button
           onPress={this._addFocus}
           title="Add Focus"
-          color="#841584"
         />
       </View>
     );

@@ -1,10 +1,10 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { View, Text } from 'react-native';
+import { View } from 'react-native';
 import createStyles from '../../styles';
 import { 
   setTime, updateTime, updatePeriods, updateExperience, resetPeriods,
-  setWorking, setTimerActive, setTimer
+  setWorking, setActive, setTimer
 } from '../../actions/FocusesActions';
 import { SECOND } from '../../reducers/FocusesReducer';
 
@@ -17,10 +17,6 @@ import FocusExperience from '../../components/FocusExperience';
 const styles = createStyles();
 
 class FocusScreen extends React.Component {
-  constructor(props) {
-    super(props);
-  };
-
   _onActivate = () => {
     this._handleActivateEvent();
   };
@@ -30,17 +26,15 @@ class FocusScreen extends React.Component {
 
     if (focus.timerActive) {
       if (!focus.working) {
-        this.props.setTime(
-          this.props.focus.id, this.props.settings.workPeriod
-        );
+        this.props.setTime(this.props.focus.id, this.props.settings.workPeriod);
       }
 
       this.props.setWorking(this.props.focus.id, true);
-      this.props.setTimerActive(this.props.focus.id, false);
+      this.props.setActive(this.props.focus.id, false);
 
       clearInterval(focus.timer);
     } else {
-      this.props.setTimerActive(this.props.focus.id, true);
+      this.props.setActive(this.props.focus.id, true);
       this.props.setTimer(
         this.props.focus.id, setInterval(this._onFocusTimerUpdate, 1000)
       );
@@ -75,7 +69,7 @@ class FocusScreen extends React.Component {
       }
 
       this.props.setWorking(this.props.focus.id, !focus.working);
-      this.props.setTimerActive(this.props.focus.id, false);
+      this.props.setActive(this.props.focus.id, false);
     }
   };
 
@@ -92,7 +86,7 @@ class FocusScreen extends React.Component {
           name={focus.name} 
         />
         <FocusTimer 
-          active={focus.timerActive}
+          active={focus.active}
           working={focus.working} 
           time={focus.time} 
           onActivate={this._onActivate}
@@ -121,7 +115,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   setWorking: (id, working) => dispatch(setWorking(id, working)),
-  setTimerActive: (id, timerActive) => dispatch(setTimerActive(id, timerActive)), 
+  setActive: (id, active) => dispatch(setActive(id, active)), 
   setTimer: (id, timer) => dispatch(setTimer(id, timer)),
   setTime: (id, time) => dispatch(setTime(id, time)),
   updateTime: id => dispatch(updateTime(id)),

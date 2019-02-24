@@ -4,7 +4,7 @@ import {
   SET_TIME, UPDATE_TIME, 
   UPDATE_EXPERIENCE, 
   RESET_PERIODS,
-  SET_WORKING, SET_TIMER_ACTIVE, SET_TIMER
+  SET_WORKING, SET_ACTIVE, SET_TIMER
 } from "../actions/FocusesActions";
 
 export const SECOND = 1 / 60.0;
@@ -49,8 +49,8 @@ function focusesReducer(state = {}, action) {
       newState[action.id].working = action.working;
 
       return newState;
-    case SET_TIMER_ACTIVE:
-      newState[action.id].timerActive = action.timerActive;
+    case SET_ACTIVE:
+      newState[action.id].active = action.active;
 
       return newState;
     case SET_TIMER:
