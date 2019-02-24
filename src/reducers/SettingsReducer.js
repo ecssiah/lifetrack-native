@@ -1,11 +1,27 @@
-import { LOAD_SETTINGS } from "../actions/SettingsActions";
+import { 
+  LOAD_SETTINGS, SET_WORK_PERIOD, SET_WORK_GOAL, SET_BREAK_PERIOD 
+} from "../actions/SettingsActions";
 
 function settingsReducer(state = {}, action) {
+  let newState = {...state};
+
   switch (action.type) {
     case LOAD_SETTINGS:
       return action.settings;
+    case SET_WORK_PERIOD:
+      newState.workPeriod = action.period;
+
+      return newState;
+    case SET_WORK_GOAL:
+      newState.workGoal = action.goal;
+
+      return newState;
+    case SET_BREAK_PERIOD:
+      newState.breakPeriod = action.period;
+
+      return newState;
     default:
-      return state;
+      return newState;
   }
 };
 

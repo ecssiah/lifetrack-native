@@ -1,12 +1,13 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { View } from 'react-native';
-import createStyles from '../../styles';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 import { 
   setTime, updateTime, updatePeriods, updateExperience, resetPeriods,
   setWorking, setActive, setTimer
 } from '../../actions/FocusesActions';
 import { SECOND } from '../../reducers/FocusesReducer';
+import createStyles from '../../styles';
 
 import FocusTitle from '../../components/FocusTitle';
 import FocusTimer from '../../components/FocusTimer';
@@ -17,14 +18,23 @@ import FocusExperience from '../../components/FocusExperience';
 const styles = createStyles();
 
 class FocusScreen extends React.Component {
-  _onActivate = () => {
-    this._handleActivateEvent();
-  };
+  static navigationOptions = ({ navigation }) => ({
+    title: 'Focus',
+    headerRight: (
+      <Ionicons
+        name='md-create' size={26} color='#ffffff' 
+        onPress={ () => navigation.navigate('FocusEdit') }
+        style={{ 
+          paddingRight: 16, 
+        }}
+      />
+    ),
+  });
 
-  _handleActivateEvent = () => {
+  _onActivate = () => {
     const focus = this.props.focuses[this.props.focus.id];
 
-    if (focus.timerActive) {
+    if (focus.active) {
       if (!focus.working) {
         this.props.setTime(this.props.focus.id, this.props.settings.workPeriod);
       }
@@ -36,16 +46,16 @@ class FocusScreen extends React.Component {
     } else {
       this.props.setActive(this.props.focus.id, true);
       this.props.setTimer(
-        this.props.focus.id, setInterval(this._onFocusTimerUpdate, 1000)
+        this.props.focus.id, setInterval(this._updateTimer, 1000)
       );
     }
   };
 
-  _onFocusTimerUpdate = () => {
-    this._updateFocusTimer();
+  _onClickGoal = () => {
+    this.props.resetPeriods(this.props.focus.id);
   };
-  
-  _updateFocusTimer = () => {
+
+  _updateTimer = () => {
     const focus = this.props.focuses[this.props.focus.id];
 
     if (focus.time >= SECOND) {
@@ -71,10 +81,6 @@ class FocusScreen extends React.Component {
       this.props.setWorking(this.props.focus.id, !focus.working);
       this.props.setActive(this.props.focus.id, false);
     }
-  };
-
-  _onClickGoal = () => {
-    this.props.resetPeriods(this.props.focus.id);
   };
 
   render() {

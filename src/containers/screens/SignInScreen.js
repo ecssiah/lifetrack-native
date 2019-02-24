@@ -17,6 +17,10 @@ class SignInScreen extends React.Component {
     };
   }
 
+  static navigationOptions = ({ navigation }) => ({
+    title: 'Sign In',
+  });
+
   _onPressSignIn = () => {
     auth.signInWithEmailAndPassword(
       this.state.email, this.state.password
@@ -77,13 +81,13 @@ class SignInScreen extends React.Component {
 
         <Button
           onPress={this._onPressSignIn}
-          title="SignIn"
+          title="Sign In"
           color="#841584"
         />
 
         <Button
           onPress={ () => this.props.navigation.navigate('SignUp') }
-          title="SignUp"
+          title="Sign Up"
           color="#841584"
         />
       </View>

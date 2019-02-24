@@ -18,6 +18,10 @@ class SignUpScreen extends React.Component {
     };
   }
 
+  static navigationOptions = ({ navigation }) => ({
+    title: 'Sign Up',
+  });
+
   _onPressSignUp = () => {
     if (this.state.password === this.state.confirm) {
       auth.createUserWithEmailAndPassword(

@@ -5,7 +5,7 @@ import createStyles from '../styles';
 const styles = createStyles({
   working: {
     fontSize: 140,
-    color: '#0011dd',
+    color: '#0022ee',
   },
   paused: {
     fontSize: 140,
@@ -42,9 +42,7 @@ class FocusTimer extends React.PureComponent {
 
   render() {
     return (
-      <TouchableOpacity
-        onPress={this.props.onActivate} 
-      >
+      <TouchableOpacity onPress={this.props.onActivate} >
         <Text style={this._getTimerStyle()}>
           {this._getDisplayTime()}
         </Text>

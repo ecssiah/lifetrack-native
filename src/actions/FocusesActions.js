@@ -8,6 +8,8 @@ export const UPDATE_EXPERIENCE = 'focuses:update-experience';
 export const SET_WORKING = 'focuses:set-working';
 export const SET_ACTIVE = 'focuses:set-active';
 export const SET_TIMER = 'focuses:set-timer';
+export const UPDATE_WORK_PERIODS = 'focuses:update-work-periods';
+export const UPDATE_BREAK_PERIODS = 'focuses:update-break-periods';
 
 export function addFocus(focus) {
   return {
@@ -80,5 +82,19 @@ export function setTimer(id, timer) {
     type: SET_TIMER,
     id,
     timer,
+  };
+};
+
+export function updateWorkPeriods(period) {
+  return {
+    type: UPDATE_WORK_PERIODS,
+    period,
+  };
+};
+
+export function updateBreakPeriods(period) {
+  return {
+    type: UPDATE_BREAK_PERIODS,
+    period,
   };
 };

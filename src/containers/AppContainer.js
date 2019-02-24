@@ -13,6 +13,7 @@ import SignInScreen from './screens/SignInScreen';
 import SignUpScreen from './screens/SignUpScreen';
 import FocusesScreen from './screens/FocusesScreen';
 import FocusAddScreen from './screens/FocusAddScreen';
+import FocusEditScreen from './screens/FocusEditScreen';
 import FocusScreen from './screens/FocusScreen';
 import StatsScreen from './screens/StatsScreen';
 import SettingsScreen from './screens/SettingsScreen';
@@ -24,7 +25,17 @@ const AuthStack = createStackNavigator(
   },
   {
     initialRouteName: 'SignIn',
-    headerMode: 'none',
+    defaultNavigationOptions: {
+      headerStyle: {
+        backgroundColor: Colors.primary,
+      },
+      headerTitleStyle: {
+        fontSize: 26,
+        fontWeight: 'bold',
+      },
+      headerTintColor: 'white',
+      headerBackTitle: null,
+    },
   },
 );
 
@@ -39,7 +50,9 @@ const StatsStack = createStackNavigator(
         backgroundColor: Colors.primary,
       },
       headerTintColor: 'white',
+      headerBackTitle: null,
       headerTitleStyle: {
+        fontSize: 26,
         fontWeight: 'bold',
       },
     },
@@ -50,6 +63,7 @@ const FocusStack = createStackNavigator(
   {
     Focuses: FocusesScreen,
     FocusAdd: FocusAddScreen,
+    FocusEdit: FocusEditScreen,
     Focus: FocusScreen,
   },
   {
@@ -59,7 +73,9 @@ const FocusStack = createStackNavigator(
         backgroundColor: Colors.primary,
       },
       headerTintColor: 'white',
+      headerBackTitle: null,
       headerTitleStyle: {
+        fontSize: 26,
         fontWeight: 'bold',
       },
     },
@@ -78,6 +94,7 @@ const SettingsStack = createStackNavigator(
       },
       headerTintColor: 'white',
       headerTitleStyle: {
+        fontSize: 26,
         fontWeight: 'bold',
       },
     },
@@ -128,7 +145,6 @@ const AppSwitch = createSwitchNavigator(
   {
     initialRouteName: 'Splash',
   },
-)
-
+);
 
 export default createAppContainer(AppSwitch);
