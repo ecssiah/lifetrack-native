@@ -9,7 +9,7 @@ const styles = createStyles({
   focusAddContainer: {
     flex: 1,
     alignItems: 'center',
-    paddingTop: '10%',
+    marginTop: '8%',
   },
   focusInput: {
     width: 240, 

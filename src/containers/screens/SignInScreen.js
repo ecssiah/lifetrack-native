@@ -9,7 +9,7 @@ const styles = createStyles({
   signInContainer: {
     flex: 1,
     alignItems: 'center',
-    paddingTop: '10%',
+    marginTop: '8%',
   },
   signInInput: {
     width: 240, 
