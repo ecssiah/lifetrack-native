@@ -5,6 +5,11 @@ import { auth, db } from '../../config';
 import createStyles from '../../styles';
 
 const styles = createStyles({
+  focusEditContainer: {
+    flex: 1,
+    alignItems: 'center',
+    paddingTop: '10%',
+  },
   focusInput: {
     width: 240, 
     height: 40, 
@@ -53,14 +58,15 @@ class FocusEditScreen extends React.Component {
 
   render() {
     return (
-      <View style={styles.container}>
+      <View style={styles.focusEditContainer}>
         <Text style={styles.section} >Name</Text>
 
         <TextInput
           style={styles.focusInput}
           textAlign='center'
+          keyboardAppearance='dark'
           onChangeText={() => console.warn("name")}
-          value="name"
+          value=''
         />
 
         <Text style={styles.section} >Category</Text>
@@ -68,8 +74,9 @@ class FocusEditScreen extends React.Component {
         <TextInput
           style={styles.focusInput}
           textAlign='center'
+          keyboardAppearance='dark'
           onChangeText={() => console.warn("category")}
-          value="category"
+          value=''
         />
 
         <Button

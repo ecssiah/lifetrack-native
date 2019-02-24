@@ -6,6 +6,11 @@ import { addFocus } from '../../actions/FocusesActions';
 import createStyles from '../../styles';
 
 const styles = createStyles({
+  focusAddContainer: {
+    flex: 1,
+    alignItems: 'center',
+    paddingTop: '10%',
+  },
   focusInput: {
     width: 240, 
     height: 40, 
@@ -55,12 +60,13 @@ class FocusAddScreen extends React.Component {
 
   render() {
     return (
-      <View style={styles.container}>
+      <View style={styles.focusAddContainer}>
         <Text style={styles.section} >Name</Text>
 
         <TextInput
           style={styles.focusInput}
           textAlign='center'
+          keyboardAppearance='dark'
           onChangeText={name => this.setState({name})}
           value={this.state.name}
         />
@@ -70,6 +76,7 @@ class FocusAddScreen extends React.Component {
         <TextInput
           style={styles.focusInput}
           textAlign='center'
+          keyboardAppearance='dark'
           onChangeText={category => this.setState({category})}
           value={this.state.category}
         />

@@ -34,11 +34,6 @@ const BaseStyles = {
     justifyContent: 'center',
     alignItems: 'center',
   },
-  statusBar: {
-    backgroundColor: Colors.primary,
-    width: Screen.w,
-    height: 20,
-  },
   screen: {
     backgroundColor: 'white',
     flex: 1,
@@ -46,6 +41,11 @@ const BaseStyles = {
   section: {
     fontSize: Fonts.md,
     color: Colors.text,
+  },
+  statusBar: {
+    backgroundColor: Colors.primary,
+    width: Screen.w,
+    height: 20,
   },
 };
 

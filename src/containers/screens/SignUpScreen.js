@@ -6,6 +6,11 @@ import createStyles from '../../styles';
 import { loadSettings } from '../../actions/SettingsActions';
 
 const styles = createStyles({
+  signUpContainer: {
+    flex: 1,
+    alignItems: 'center',
+    paddingTop: '10%',
+  },
   signUpInput: {
     width: 240, 
     height: 40, 
@@ -62,7 +67,7 @@ class SignUpScreen extends React.Component {
 
   render() {
     return (
-      <View style={styles.container}>
+      <View style={styles.signUpContainer}>
         <Text style={styles.section}>
           Email
         </Text> 
@@ -70,6 +75,8 @@ class SignUpScreen extends React.Component {
         <TextInput
           style={styles.signUpInput}
           textAlign='center'
+          keyboardType='email-address'
+          keyboardAppearance='dark'
           onChangeText={email => this.setState({email})}
           value={this.state.email}
         />
@@ -82,6 +89,7 @@ class SignUpScreen extends React.Component {
           secureTextEntry={true}
           style={styles.signUpInput}
           textAlign='center'
+          keyboardAppearance='dark'
           onChangeText={password => this.setState({password})}
           value={this.state.password}
         />
@@ -94,6 +102,7 @@ class SignUpScreen extends React.Component {
           secureTextEntry={true}
           style={styles.signUpInput}
           textAlign='center'
+          keyboardAppearance='dark'
           onChangeText={confirm => this.setState({confirm})}
           value={this.state.confirm}
         />

@@ -6,6 +6,11 @@ import createStyles from '../../styles';
 import { loadSettings } from '../../actions/SettingsActions';
 
 const styles = createStyles({
+  signInContainer: {
+    flex: 1,
+    alignItems: 'center',
+    paddingTop: '10%',
+  },
   signInInput: {
     width: 240, 
     height: 40, 
@@ -35,7 +40,7 @@ class SignInScreen extends React.Component {
       db.collection('settings').where(
         'userId', '==', cred.user.uid
       ).get().then(snapshot => {
-        let settings;
+        let settings = {};
 
         snapshot.forEach(doc => {
           settings = {
@@ -64,7 +69,7 @@ class SignInScreen extends React.Component {
 
   render() {
     return (
-      <View style={styles.container}>
+      <View style={styles.signInContainer}>
         <Text style={styles.section} >
           Email
         </Text>
@@ -72,6 +77,8 @@ class SignInScreen extends React.Component {
         <TextInput
           style={styles.signInInput}
           textAlign='center'
+          keyboardType='email-address'
+          keyboardAppearance='dark'
           onChangeText={email => this.setState({email})}
           value={this.state.email}
         />
@@ -83,6 +90,7 @@ class SignInScreen extends React.Component {
         <TextInput
           secureTextEntry={true}
           textAlign='center'
+          keyboardAppearance='dark'
           style={styles.signInInput}
           onChangeText={password => this.setState({password})}
           value={this.state.password}
