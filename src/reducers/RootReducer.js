@@ -1,12 +1,12 @@
 import { combineReducers } from 'redux';
 
-import focusesReducer from './FocusesReducer';
 import focusReducer from './FocusReducer';
+import focusesReducer from './FocusesReducer';
 import settingsReducer from './SettingsReducer';
 
 const RootReducer = combineReducers({
+  focus: focusReducer,
   focuses: focusesReducer,
-  focusId: focusReducer,
   settings: settingsReducer,
 });
 

@@ -2,12 +2,16 @@ import {
   SET_ID
 } from "../actions/FocusActions";
 
-function focusReducer(state = null, action) {
+function focusReducer(state = {}, action) {
+  let newState = {...state};
+
   switch (action.type) {
     case SET_ID:
-      return action.id;
+      newState.id = action.id;
+
+      return newState;
     default:
-      return state;
+      return newState;
   }
 };
 

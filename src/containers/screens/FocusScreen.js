@@ -26,20 +26,24 @@ class FocusScreen extends React.Component {
   };
 
   _handleActivateEvent = () => {
-    if (this.props.focuses[this.props.focusId].timerActive) {
-      if (!this.props.focuses[this.props.focusId].working) {
+    const focus = this.props.focuses[this.props.focus.id];
+
+    if (focus.timerActive) {
+      if (!focus.working) {
         this.props.setTime(
-          this.props.focusId, this.props.settings.workPeriod
+          this.props.focus.id, this.props.settings.workPeriod
         );
       }
 
-      this.props.setWorking(this.props.focusId, true);
-      this.props.setTimerActive(this.props.focusId, false);
+      this.props.setWorking(this.props.focus.id, true);
+      this.props.setTimerActive(this.props.focus.id, false);
 
-      clearInterval(this.props.focuses[this.props.focusId].timer);
+      clearInterval(focus.timer);
     } else {
-      this.props.setTimerActive(this.props.focusId, true);
-      this.props.setTimer(this.props.focusId, setInterval(this._onFocusTimerUpdate, 1000));
+      this.props.setTimerActive(this.props.focus.id, true);
+      this.props.setTimer(
+        this.props.focus.id, setInterval(this._onFocusTimerUpdate, 1000)
+      );
     }
   };
 
@@ -48,58 +52,61 @@ class FocusScreen extends React.Component {
   };
   
   _updateFocusTimer = () => {
-    if (this.props.focuses[this.props.focusId].time >= SECOND) {
-      this.props.updateTime(this.props.focusId);
+    const focus = this.props.focuses[this.props.focus.id];
 
-      if (this.props.focuses[this.props.focusId].working) {
-        this.props.updateExperience(this.props.focusId);
+    if (focus.time >= SECOND) {
+      this.props.updateTime(this.props.focus.id);
+
+      if (focus.working) {
+        this.props.updateExperience(this.props.focus.id);
       }
-
     } else {
-      clearInterval(this.props.focuses[this.props.focusId].timer);
+      clearInterval(focus.timer);
 
-      if (this.props.focuses[this.props.focusId].working) {
-        this.props.updatePeriods(this.props.focusId);
+      if (focus.working) {
+        this.props.updatePeriods(this.props.focus.id);
         this.props.setTime(
-          this.props.focusId, this.props.settings.breakPeriod
+          this.props.focus.id, this.props.settings.breakPeriod
         );
       } else {
         this.props.setTime(
-          this.props.focusId, this.props.settings.workPeriod
+          this.props.focus.id, this.props.settings.workPeriod
         );
       }
 
-      this.props.setWorking(this.props.focusId, !this.props.focuses[this.props.focusId].working);
-      this.props.setTimerActive(this.props.focusId, false);
+      this.props.setWorking(this.props.focus.id, !focus.working);
+      this.props.setTimerActive(this.props.focus.id, false);
     }
   };
 
   _onClickGoal = () => {
-    this.props.resetPeriods(this.props.focusId);
+    this.props.resetPeriods(this.props.focus.id);
   };
 
   render() {
+    const focus = this.props.focuses[this.props.focus.id];
+
     return (
       <View style={styles.container}>
         <FocusTitle 
-          name={this.props.focuses[this.props.focusId].name} 
+          name={focus.name} 
         />
         <FocusTimer 
-          active={this.props.focuses[this.props.focusId].timerActive}
-          working={this.props.focuses[this.props.focusId].working} 
-          time={this.props.focuses[this.props.focusId].time} 
+          active={focus.timerActive}
+          working={focus.working} 
+          time={focus.time} 
           onActivate={this._onActivate}
         />
         <FocusGoal 
-          periods={this.props.focuses[this.props.focusId].periods} 
+          periods={focus.periods} 
           goal={this.props.settings.workGoal} 
           onClickGoal={this._onClickGoal}
         />
         <FocusLevel 
-          level={this.props.focuses[this.props.focusId].level} 
+          level={focus.level} 
         />
         <FocusExperience 
-          experience={this.props.focuses[this.props.focusId].experience} 
+          experience={focus.experience} 
         />
       </View>
     );
@@ -107,7 +114,7 @@ class FocusScreen extends React.Component {
 }
 
 const mapStateToProps = state => ({
-  focusId: state.focusId,
+  focus: state.focus,
   focuses: state.focuses,
   settings: state.settings,
 });

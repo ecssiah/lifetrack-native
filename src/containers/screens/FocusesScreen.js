@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import Icon from 'react-native-vector-icons/Ionicons';
 
-import { setID } from '../../actions/FocusActions';
+import { setId } from '../../actions/FocusActions';
 
 import FocusList from '../../components/FocusList';
 
@@ -21,7 +21,7 @@ class FocusesScreen extends React.Component {
   });
 
   _selectFocus = id => {
-    this.props.setID(id);
+    this.props.setId(id);
     this.props.navigation.navigate('Focus');
   };
 
@@ -40,7 +40,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  setID: id => dispatch(setID(id)),
+  setId: id => dispatch(setId(id)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(FocusesScreen);

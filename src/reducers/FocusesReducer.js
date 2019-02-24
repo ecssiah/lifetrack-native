@@ -11,68 +11,54 @@ export const SECOND = 1 / 60.0;
 export const EXPERIENCE_PER_SECOND = 40 / 60.0;
 
 function focusesReducer(state = {}, action) {
-  let newState = {};
+  let newState = {...state};
 
   switch (action.type) {
-    case ADD_FOCUS:
-      newState = Object.assign({}, state);
-      newState[action.id] = action.focus;
-
-      return newState;
     case SET_FOCUSES:
       return action.focuses;
+    case ADD_FOCUS:
+      newState[action.focus.id] = action.focus;
+
+      return newState;
     case SET_TIME:
-      newState = Object.assign({}, state);
       newState[action.id].time = action.time;
 
       return newState;
     case UPDATE_TIME:
-      newState = Object.assign({}, state);
       newState[action.id].time -= SECOND;
 
       return newState;
     case UPDATE_PERIODS:
-      newState = Object.assign({}, state);
       newState[action.id].periods += 1;
 
       return newState;
     case RESET_PERIODS:
-      newState = Object.assign({}, state);
       newState[action.id].periods = 0;
 
       return newState;
     case UPDATE_EXPERIENCE:
-      newState = Object.assign({}, state);
+      newState[action.id].experience += EXPERIENCE_PER_SECOND;
 
-      let level = newState[action.id].level;
-      let experience = newState[action.id].experience + EXPERIENCE_PER_SECOND;
-
-      if (experience >= 100) {
-        level += 1;
-        experience = 0;
+      if (newState[action.id].experience >= 100) {
+        newState[action.id].level += 1;
+        newState[action.id].experience = 0;
       }
-
-      newState[action.id].level = level;
-      newState[action.id].experience = experience;
 
       return newState;
     case SET_WORKING:
-      newState = Object.assign({}, state);
       newState[action.id].working = action.working;
 
       return newState;
     case SET_TIMER_ACTIVE:
-      newState = Object.assign({}, state);
       newState[action.id].timerActive = action.timerActive;
 
       return newState;
     case SET_TIMER:
-      newState = Object.assign({}, state);
       newState[action.id].timer = action.timer;
 
       return newState;
     default:
-      return state; 
+      return newState; 
   }
 };
 
