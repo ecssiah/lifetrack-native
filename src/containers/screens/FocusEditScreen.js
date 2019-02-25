@@ -46,8 +46,8 @@ class FocusEditScreen extends React.Component {
 
     this.state = {
       isVisible: false,
-      selectedAttr: '',
-      selectedValue: 1,
+      value: 1,
+      attr: null,
       name: null,
       category: null,
     };
@@ -65,19 +65,18 @@ class FocusEditScreen extends React.Component {
   };
 
   _selectSetting = attr => {
-    let selectedValue;
-    const selectedAttr = attr;
+    let value;
     const focus = this.props.focuses[this.props.focus.id];
 
-    switch (selectedAttr) {
+    switch (attr) {
       case WORK_PERIOD:
-        selectedValue = focus.workPeriod;
+        value = focus.workPeriod.toString();
         break;
       case WORK_GOAL:
-        selectedValue = focus.workGoal;
+        value = focus.workGoal.toString();
         break;
       case BREAK_PERIOD:
-        selectedValue = focus.breakPeriod;
+        value = focus.breakPeriod.toString();
         break;
       default:
         console.error('invalid focus attribute');
@@ -85,27 +84,29 @@ class FocusEditScreen extends React.Component {
 
     this.setState({
       isVisible: true,
-      selectedAttr,
-      selectedValue,
+      attr,
+      value,
+    }, () => {
+      console.debug(this.state);
     });
   };
 
   _onValueChange = value => {
     this.setState({
-      selectedValue: value,
+      value,
     });
   };
 
   _onConfirm = () => {
-    switch (this.state.selectedAttr) {
+    switch (this.state.attr) {
       case WORK_PERIOD:
-        this.props.setWorkPeriod(this.props.focus.id, this.state.selectedValue);
+        this.props.setWorkPeriod(this.props.focus.id, this.state.value);
         break;
       case WORK_GOAL:
-        this.props.setWorkGoal(this.props.focus.id, this.state.selectedValue);
+        this.props.setWorkGoal(this.props.focus.id, this.state.value);
         break;
       case BREAK_PERIOD:
-        this.props.setBreakPeriod(this.props.focus.id, this.state.selectedValue);
+        this.props.setBreakPeriod(this.props.focus.id, this.state.value);
         break;
       default:
         console.error('invalid focus attribute');
@@ -204,11 +205,6 @@ class FocusEditScreen extends React.Component {
           </Text> 
         </TouchableOpacity>
 
-        <Button
-          onPress={this._editFocus}
-          title='Edit Focus'
-        />
-
         <Modal 
           isVisible={this.state.isVisible}
           onBackdropPress={() => this.setState({ isVisible: false })}
@@ -219,7 +215,7 @@ class FocusEditScreen extends React.Component {
         >
           <View style={styles.focusEditPickerContainer} >
             <Picker
-              selectedValue={this.state.selectedValue}
+              selectedValue={this.state.value}
               onValueChange={(value, index) => this._onValueChange(value)}
               style={{
                 height: '70%',
