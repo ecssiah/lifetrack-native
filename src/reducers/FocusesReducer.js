@@ -21,7 +21,7 @@ function focusesReducer(state = {}, action) {
       return newState;
     case SET_NAME:
       newState[action.id].name = action.name;
-      
+
       return newState;
     case SET_CATEGORY:
       newState[action.id].category = action.category;
@@ -45,6 +45,10 @@ function focusesReducer(state = {}, action) {
       return newState;
     case SET_WORK_PERIOD:
       newState[action.id].workPeriod = action.period;
+
+      if (newState[action.id].working) {
+        newState[action.id].time = action.period;
+      }
 
       return newState;
     case SET_WORK_GOAL:

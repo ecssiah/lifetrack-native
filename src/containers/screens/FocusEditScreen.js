@@ -86,8 +86,6 @@ class FocusEditScreen extends React.Component {
       isVisible: true,
       attr,
       value,
-    }, () => {
-      console.debug(this.state);
     });
   };
 
@@ -98,15 +96,17 @@ class FocusEditScreen extends React.Component {
   };
 
   _onConfirm = () => {
+    console.debug(this.state);
+
     switch (this.state.attr) {
       case WORK_PERIOD:
-        this.props.setWorkPeriod(this.props.focus.id, this.state.value);
+        this.props.setWorkPeriod(this.props.focus.id, parseInt(this.state.value));
         break;
       case WORK_GOAL:
-        this.props.setWorkGoal(this.props.focus.id, this.state.value);
+        this.props.setWorkGoal(this.props.focus.id, parseInt(this.state.value));
         break;
       case BREAK_PERIOD:
-        this.props.setBreakPeriod(this.props.focus.id, this.state.value);
+        this.props.setBreakPeriod(this.props.focus.id, parseInt(this.state.value));
         break;
       default:
         console.error('invalid focus attribute');
@@ -157,7 +157,7 @@ class FocusEditScreen extends React.Component {
   };
 
   _onSetCategory = () => {
-    console.debug('set category');
+    this.props.setCategory(this.props.focus.id, this.state.category);
   };
 
   render() {
