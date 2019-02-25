@@ -4,13 +4,16 @@ import {
   Button, Modal, Picker, Text, TouchableOpacity, View 
 } from 'react-native';
 import { auth } from '../../config';
-import {
-  updateWorkPeriods, updateBreakPeriods
-} from '../../actions/FocusesActions';
 import { 
-  setWorkPeriod, setWorkGoal, setBreakPeriod 
+  WORK_PERIOD, WORK_GOAL, BREAK_PERIOD,
+} from '../../constants/Focus';
+import { 
+  setGlobalWorkPeriod, setGlobalWorkGoal, setGlobalBreakPeriod, 
 } from '../../actions/SettingsActions';
-import createStyles, { Fonts, Colors } from '../../styles'; 
+import {
+  updateWorkPeriods, updateBreakPeriods,
+} from '../../actions/FocusesActions';
+import createStyles from '../../styles'; 
 
 const styles = createStyles({
   settingsItem: {
@@ -27,7 +30,7 @@ class SettingsScreen extends React.Component {
     super(props);
 
     this.state = {
-      currentSetting: '',
+      currentSetting: null,
       modalVisible: false,
     };
   };
@@ -57,14 +60,18 @@ class SettingsScreen extends React.Component {
   };
 
   _onValueChange = value => {
-    if (this.state.currentSetting === 'workPeriod') {
-      this.props.setWorkPeriod(value);
-      this.props.updateWorkPeriods(value);
-    } else if (this.state.currentSetting === 'workGoal') {
-      this.props.setWorkGoal(value);
-    } else if (this.state.currentSetting === 'breakPeriod') {
-      this.props.setBreakPeriod(value);
-      this.props.updateBreakPeriods(value);
+    switch (this.state.currentSetting) {
+      case WORK_PERIOD:
+        this.props.setGlobalWorkPeriod(value);
+        break;
+      case WORK_GOAL:
+        this.props.setGlobalWorkGoal(value);
+        break;
+      case BREAK_PERIOD:
+        this.props.setGlobalBreakPeriod(value);
+        break;
+      default:
+        console.error('invalid setting attribute');
     }
 
     this._closeModal();
@@ -74,12 +81,15 @@ class SettingsScreen extends React.Component {
     // doesn't change when prop.settings updates
     // initial picker value is set before modal is loaded
 
-    if (this.state.currentSetting === 'workPeriod') {
-      return this.props.settings.workPeriod;
-    } else if (this.state.currentSetting === 'workGoal') {
-      return this.props.settings.workGoal;
-    } else if (this.state.currentSetting === 'breakPeriod') {
-      return this.props.settings.breakPeriod;
+    switch (this.state.currentSetting) {
+      case WORK_PERIOD:
+        return this.props.settings.workPeriod;
+      case WORK_GOAL:
+        return this.props.settings.workGoal;
+      case BREAK_PERIOD:
+        return this.props.settings.breakPeriod;
+      default:
+        return 1;
     }
   };  
 
@@ -91,17 +101,17 @@ class SettingsScreen extends React.Component {
           onPress={this._logoutUser}
         />
 
-        <TouchableOpacity onPress={() => this._selectSetting("workPeriod")}>
+        <TouchableOpacity onPress={() => this._selectSetting(WORK_PERIOD)}>
           <Text style={styles.settingsItem}>
             Work Period: {this.props.settings.workPeriod}
           </Text> 
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => this._selectSetting("workGoal")}>
+        <TouchableOpacity onPress={() => this._selectSetting(WORK_GOAL)}>
           <Text style={styles.settingsItem}>
             Work Goal: {this.props.settings.workGoal}
           </Text> 
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => this._selectSetting("breakPeriod")}>
+        <TouchableOpacity onPress={() => this._selectSetting(BREAK_PERIOD)}>
           <Text style={styles.settingsItem}>
             Break Period: {this.props.settings.breakPeriod}
           </Text> 
@@ -140,11 +150,11 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
+  setGlobalWorkPeriod: period => dispatch(setGlobalWorkPeriod(period)),
+  setGlobalWorkGoal: goal => dispatch(setGlobalWorkGoal(goal)),
+  setGlobalBreakPeriod: period => dispatch(setGlobalBreakPeriod(period)),
   updateWorkPeriods: period => dispatch(updateWorkPeriods(period)),
   updateBreakPeriods: period => dispatch(updateBreakPeriods(period)),
-  setWorkPeriod: period => dispatch(setWorkPeriod(period)),
-  setWorkGoal: goal => dispatch(setWorkGoal(goal)),
-  setBreakPeriod: period => dispatch(setBreakPeriod(period)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(SettingsScreen);

@@ -25,7 +25,7 @@ class FocusScreen extends React.Component {
         name='md-create' size={26} color='#ffffff' 
         onPress={ () => navigation.navigate('FocusEdit') }
         style={{ 
-          paddingRight: 16, 
+          marginRight: 16, 
         }}
       />
     ),
@@ -36,7 +36,7 @@ class FocusScreen extends React.Component {
 
     if (focus.active) {
       if (!focus.working) {
-        this.props.setTime(this.props.focus.id, this.props.settings.workPeriod);
+        this.props.setTime(this.props.focus.id, focus.workPeriod);
       }
 
       this.props.setWorking(this.props.focus.id, true);
@@ -70,11 +70,11 @@ class FocusScreen extends React.Component {
       if (focus.working) {
         this.props.updatePeriods(this.props.focus.id);
         this.props.setTime(
-          this.props.focus.id, this.props.settings.breakPeriod
+          this.props.focus.id, focus.breakPeriod
         );
       } else {
         this.props.setTime(
-          this.props.focus.id, this.props.settings.workPeriod
+          this.props.focus.id, focus.workPeriod
         );
       }
 
@@ -99,7 +99,7 @@ class FocusScreen extends React.Component {
         />
         <FocusGoal 
           periods={focus.periods} 
-          goal={this.props.settings.workGoal} 
+          goal={focus.workGoal} 
           onClickGoal={this._onClickGoal}
         />
         <FocusLevel 

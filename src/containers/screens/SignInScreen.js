@@ -45,8 +45,8 @@ class SignInScreen extends React.Component {
         snapshot.forEach(doc => {
           settings = {
             userId: doc.get('userId'),
-            workGoal: doc.get('workGoal'),
             workPeriod: doc.get('workPeriod'),
+            workGoal: doc.get('workGoal'),
             breakPeriod: doc.get('breakPeriod'),
           };
         });

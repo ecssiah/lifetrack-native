@@ -1,7 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import Ionicon from 'react-native-vector-icons/Ionicons';
-
 import { setId } from '../../actions/FocusActions';
 
 import FocusList from '../../components/FocusList';
@@ -14,7 +13,7 @@ class FocusesScreen extends React.Component {
         name='ios-add' size={38} color='#ffffff' 
         onPress={ () => navigation.navigate('FocusAdd') }
         style={{ 
-          paddingRight: 18, 
+          marginRight: 18, 
         }}
       />
     ),

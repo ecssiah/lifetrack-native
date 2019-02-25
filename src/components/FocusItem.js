@@ -6,7 +6,7 @@ const styles = createStyles({
   focusContainer: {
     alignItems: 'center',
     justifyContent: 'center',
-    padding: 10,
+    margin: 10,
   },
   focusItem: {
     fontSize: Fonts.md,

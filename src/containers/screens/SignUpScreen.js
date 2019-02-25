@@ -4,6 +4,9 @@ import { Button, View, Text, TextInput } from 'react-native';
 import { auth, db } from '../../config';
 import createStyles from '../../styles';
 import { loadSettings } from '../../actions/SettingsActions';
+import { 
+  DEFAULT_WORK_PERIOD, DEFAULT_WORK_GOAL, DEFAULT_BREAK_PERIOD 
+} from '../../constants/Focus';
 
 const styles = createStyles({
   signUpContainer: {
@@ -41,9 +44,9 @@ class SignUpScreen extends React.Component {
       ).then(cred => {
         const settings = {
           userId: cred.user.uid,
-          workPeriod: 1,
-          workGoal: 2,
-          breakPeriod: 1,  
+          workPeriod: DEFAULT_WORK_PERIOD,
+          workGoal: DEFAULT_WORK_GOAL,
+          breakPeriod: DEFAULT_BREAK_PERIOD,
         };
 
         db.collection('settings').add(settings);

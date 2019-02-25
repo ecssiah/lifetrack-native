@@ -4,6 +4,9 @@ import { View, Text, TextInput, Button } from 'react-native';
 import { auth, db } from '../../config';
 import { addFocus } from '../../actions/FocusesActions';
 import createStyles from '../../styles';
+import { 
+  DEFAULT_WORK_PERIOD, DEFAULT_WORK_GOAL, DEFAULT_BREAK_PERIOD 
+} from '../../constants/Focus';
 
 const styles = createStyles({
   focusAddContainer: {
@@ -11,7 +14,7 @@ const styles = createStyles({
     alignItems: 'center',
     marginTop: '8%',
   },
-  focusInput: {
+  focusAddInput: {
     width: 240, 
     height: 40, 
     borderWidth: 1,
@@ -24,8 +27,8 @@ class FocusAddScreen extends React.Component {
     super(props);
 
     this.state = {
-      name: '',
-      category: '',
+      name: null,
+      category: null,
     };
   }
 
@@ -41,10 +44,13 @@ class FocusAddScreen extends React.Component {
       userId: auth.currentUser.uid,
       name: this.state.name,
       category: this.state.category,
-      time: this.props.settings.workPeriod,
+      time: DEFAULT_WORK_PERIOD,
       periods: 0,
       level: 0,
       experience: 0.0,
+      workPeriod: DEFAULT_WORK_PERIOD,
+      workGoal: DEFAULT_WORK_GOAL,
+      breakPeriod: DEFAULT_BREAK_PERIOD,
       working: true,
       timerActive: false,
       timer: null,
@@ -64,9 +70,10 @@ class FocusAddScreen extends React.Component {
         <Text style={styles.section} >Name</Text>
 
         <TextInput
-          style={styles.focusInput}
+          style={styles.focusAddInput}
           textAlign='center'
           keyboardAppearance='dark'
+          returnKeyType='done'
           onChangeText={name => this.setState({name})}
           value={this.state.name}
         />
@@ -74,9 +81,10 @@ class FocusAddScreen extends React.Component {
         <Text style={styles.section} >Category</Text>
 
         <TextInput
-          style={styles.focusInput}
+          style={styles.focusAddInput}
           textAlign='center'
           keyboardAppearance='dark'
+          returnKeyType='done'
           onChangeText={category => this.setState({category})}
           value={this.state.category}
         />

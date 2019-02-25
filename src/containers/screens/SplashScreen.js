@@ -42,8 +42,8 @@ class SplashScreen extends React.Component {
       snapshot.forEach(doc => {
         settings = {
           userId: doc.get('userId'),
-          workGoal: doc.get('workGoal'),
           workPeriod: doc.get('workPeriod'),
+          workGoal: doc.get('workGoal'),
           breakPeriod: doc.get('breakPeriod'),
         };
       });
@@ -69,6 +69,9 @@ class SplashScreen extends React.Component {
           time: doc.get('time'),
           periods: doc.get('periods'),
           level: doc.get('level'),
+          workPeriod: doc.get('workPeriod'),
+          workGoal: doc.get('workGoal'),
+          breakPeriod: doc.get('breakPeriod'),
           experience: doc.get('experience'),
           working: doc.get('working'),
           timerActive: doc.get('timerActive'),

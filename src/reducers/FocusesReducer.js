@@ -1,6 +1,7 @@
 import { 
   SET_FOCUSES, ADD_FOCUS, 
-  SET_NAME, SET_TIME, SET_WORKING, SET_ACTIVE, SET_TIMER, 
+  SET_NAME, SET_CATEGORY, SET_TIME, SET_WORKING, SET_ACTIVE, SET_TIMER, 
+  SET_WORK_PERIOD, SET_WORK_GOAL, SET_BREAK_PERIOD,
   UPDATE_TIME, UPDATE_PERIODS, UPDATE_EXPERIENCE, RESET_PERIODS,
   UPDATE_WORK_PERIODS, UPDATE_BREAK_PERIODS
 } from "../actions/FocusesActions";
@@ -19,7 +20,11 @@ function focusesReducer(state = {}, action) {
 
       return newState;
     case SET_NAME:
-      newState[action.focus.id] = action.name;
+      newState[action.id].name = action.name;
+      
+      return newState;
+    case SET_CATEGORY:
+      newState[action.id].category = action.category;
 
       return newState;
     case SET_TIME:
@@ -36,6 +41,18 @@ function focusesReducer(state = {}, action) {
       return newState;
     case SET_TIMER:
       newState[action.id].timer = action.timer;
+
+      return newState;
+    case SET_WORK_PERIOD:
+      newState[action.id].workPeriod = action.period;
+
+      return newState;
+    case SET_WORK_GOAL:
+      newState[action.id].workGoal = action.goal;
+
+      return newState;
+    case SET_BREAK_PERIOD:
+      newState[action.id].breakPeriod = action.period;
 
       return newState;
     case UPDATE_TIME:
