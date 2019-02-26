@@ -84,6 +84,7 @@ class FocusScreen extends React.Component {
   };
 
   render() {
+    console.debug(this.props.settings);
     const focus = this.props.focuses[this.props.focus.id];
 
     return (

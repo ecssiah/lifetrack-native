@@ -16,9 +16,6 @@ export const UPDATE_PERIODS = 'focuses:update-periods';
 export const UPDATE_EXPERIENCE = 'focuses:update-experience';
 export const RESET_PERIODS = 'focuses:reset-periods';
 
-export const UPDATE_WORK_PERIODS = 'focuses:update-work-periods';
-export const UPDATE_BREAK_PERIODS = 'focuses:update-break-periods';
-
 export function setFocuses(focuses) {
   return {
     type: SET_FOCUSES,
@@ -130,19 +127,5 @@ export function resetPeriods(id) {
   return {
     type: RESET_PERIODS,
     id,
-  };
-};
-
-export function updateWorkPeriods(period) {
-  return {
-    type: UPDATE_WORK_PERIODS,
-    period,
-  };
-};
-
-export function updateBreakPeriods(period) {
-  return {
-    type: UPDATE_BREAK_PERIODS,
-    period,
   };
 };

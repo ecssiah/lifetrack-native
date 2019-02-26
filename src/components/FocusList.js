@@ -13,7 +13,7 @@ const styles = createStyles({
   },
 });
 
-class FocusList extends React.PureComponent {
+class FocusList extends React.Component {
   _renderSeparator = () => {
     return (
       <View style={styles.separator} />

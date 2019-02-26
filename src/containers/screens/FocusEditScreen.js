@@ -45,7 +45,7 @@ class FocusEditScreen extends React.Component {
     super(props);
 
     this.state = {
-      isVisible: false,
+      modalVisible: false,
       value: 1,
       attr: null,
       name: null,
@@ -83,7 +83,7 @@ class FocusEditScreen extends React.Component {
     }
 
     this.setState({
-      isVisible: true,
+      modalVisible: true,
       attr,
       value,
     });
@@ -96,8 +96,6 @@ class FocusEditScreen extends React.Component {
   };
 
   _onConfirm = () => {
-    console.debug(this.state);
-
     switch (this.state.attr) {
       case WORK_PERIOD:
         this.props.setWorkPeriod(this.props.focus.id, parseInt(this.state.value));
@@ -113,13 +111,13 @@ class FocusEditScreen extends React.Component {
     }
 
     this.setState({
-      isVisible: false,
+      modalVisible: false,
     });
   };
 
   _onCancel = () => {
     this.setState({
-      isVisible: false,
+      modalVisible: false,
     });
   };
 
@@ -206,8 +204,8 @@ class FocusEditScreen extends React.Component {
         </TouchableOpacity>
 
         <Modal 
-          isVisible={this.state.isVisible}
-          onBackdropPress={() => this.setState({ isVisible: false })}
+          isVisible={this.state.modalVisible}
+          onBackdropPress={() => this.setState({ modalVisible: false })}
           style={{
             justifyContent: 'center',
             alignItems: 'center',

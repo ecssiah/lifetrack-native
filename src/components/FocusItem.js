@@ -14,7 +14,7 @@ const styles = createStyles({
   },
 });
 
-class FocusItem extends React.PureComponent {
+class FocusItem extends React.Component {
   render() {
     return (
       <TouchableOpacity

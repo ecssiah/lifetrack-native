@@ -1,18 +1,16 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { 
-  Button, Modal, Picker, Text, TouchableOpacity, View 
+  Button, Picker, Text, TouchableOpacity, View 
 } from 'react-native';
+import Modal from 'react-native-modal';
 import { auth } from '../../config';
 import { 
   WORK_PERIOD, WORK_GOAL, BREAK_PERIOD,
 } from '../../constants/Focus';
 import { 
-  setGlobalWorkPeriod, setGlobalWorkGoal, setGlobalBreakPeriod, 
+  setDefaultWorkPeriod, setDefaultWorkGoal, setDefaultBreakPeriod, 
 } from '../../actions/SettingsActions';
-import {
-  updateWorkPeriods, updateBreakPeriods,
-} from '../../actions/FocusesActions';
 import createStyles from '../../styles'; 
 
 const styles = createStyles({
@@ -23,6 +21,15 @@ const styles = createStyles({
     width: 260,
     height: 120,
   },
+  settingsPickerContainer: {
+    height: '50%',
+    width: '86%',
+    alignItems: 'center',
+    borderRadius: 10,
+    borderWidth: 2,
+    borderColor: '#e0e0e0',
+    backgroundColor: 'white',
+  },
 });
 
 class SettingsScreen extends React.Component {
@@ -30,8 +37,9 @@ class SettingsScreen extends React.Component {
     super(props);
 
     this.state = {
-      currentSetting: null,
       modalVisible: false,
+      attr: null,
+      value: null,
     };
   };
 
@@ -45,53 +53,61 @@ class SettingsScreen extends React.Component {
     });
   };
 
-  _selectSetting = setting => {
-    this.setState({
-      currentSetting: setting,
-      modalVisible: true,
-    });
-  };
+  _selectSetting = attr => {
+    let value;
 
-  _closeModal = () => {
+    switch (attr) {
+      case WORK_PERIOD:
+        value = this.props.settings.workPeriod.toString();
+        break;
+      case WORK_GOAL:
+        value = this.props.settings.workGoal.toString();
+        break;
+      case BREAK_PERIOD:
+        value = this.props.settings.breakPeriod.toString();
+        break;
+      default:
+        console.error('invalid focus attribute');
+    }
+
     this.setState({
-      currentSetting: '',
-      modalVisible: false,
+      modalVisible: true,
+      attr,
+      value,
     });
   };
 
   _onValueChange = value => {
-    switch (this.state.currentSetting) {
-      case WORK_PERIOD:
-        this.props.setGlobalWorkPeriod(value);
-        break;
-      case WORK_GOAL:
-        this.props.setGlobalWorkGoal(value);
-        break;
-      case BREAK_PERIOD:
-        this.props.setGlobalBreakPeriod(value);
-        break;
-      default:
-        console.error('invalid setting attribute');
-    }
-
-    this._closeModal();
+    this.setState({
+      value,
+    });
   };
 
-  _getCurrentSettingValue() {
-    // doesn't change when prop.settings updates
-    // initial picker value is set before modal is loaded
-
-    switch (this.state.currentSetting) {
+  _onConfirm = () => {
+    switch (this.state.attr) {
       case WORK_PERIOD:
-        return this.props.settings.workPeriod;
+        this.props.setDefaultWorkPeriod(parseInt(this.state.value));
+        break;
       case WORK_GOAL:
-        return this.props.settings.workGoal;
+        this.props.setDefaultWorkGoal(parseInt(this.state.value));
+        break;
       case BREAK_PERIOD:
-        return this.props.settings.breakPeriod;
+        this.props.setDefaultBreakPeriod(parseInt(this.state.value));
+        break;
       default:
-        return 1;
+        console.error('invalid focus attribute');
     }
-  };  
+
+    this.setState({
+      modalVisible: false,
+    });
+  };
+
+  _onCancel = () => {
+    this.setState({
+      modalVisible: false,
+    });
+  };
 
   render() {
     return (
@@ -117,16 +133,22 @@ class SettingsScreen extends React.Component {
           </Text> 
         </TouchableOpacity>
         
-        <Modal
-          animationType="slide"
-          transparent={false}
-          visible={this.state.modalVisible} 
+        <Modal 
+          isVisible={this.state.modalVisible}
+          onBackdropPress={() => this.setState({ modalVisible: false })}
+          style={{
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}
         >
-          <View style={styles.container} >
+          <View style={styles.settingsPickerContainer} >
             <Picker
-              style={styles.settingsPicker}
-              selectedValue={this._getCurrentSettingValue()}
+              selectedValue={this.state.value}
               onValueChange={(value, index) => this._onValueChange(value)}
+              style={{
+                height: '70%',
+                width: '80%',
+              }}
             >
               {
                 Array(40).fill().map((_, i) => 
@@ -138,6 +160,16 @@ class SettingsScreen extends React.Component {
                 )
               }
             </Picker>
+
+            <Button
+              title='Confirm'
+              onPress={this._onConfirm}             
+            />
+
+            <Button
+              title='Cancel'
+              onPress={this._onCancel}             
+            />
           </View>
         </Modal>
       </View>
@@ -150,11 +182,9 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  setGlobalWorkPeriod: period => dispatch(setGlobalWorkPeriod(period)),
-  setGlobalWorkGoal: goal => dispatch(setGlobalWorkGoal(goal)),
-  setGlobalBreakPeriod: period => dispatch(setGlobalBreakPeriod(period)),
-  updateWorkPeriods: period => dispatch(updateWorkPeriods(period)),
-  updateBreakPeriods: period => dispatch(updateBreakPeriods(period)),
+  setDefaultWorkPeriod: period => dispatch(setDefaultWorkPeriod(period)),
+  setDefaultWorkGoal: goal => dispatch(setDefaultWorkGoal(goal)),
+  setDefaultBreakPeriod: period => dispatch(setDefaultBreakPeriod(period)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(SettingsScreen);
