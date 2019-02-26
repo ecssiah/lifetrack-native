@@ -5,14 +5,17 @@ import createStyles from '../styles';
 const styles = createStyles({
   working: {
     fontSize: 140,
+    textAlign: 'center',
     color: '#0022ee',
   },
   paused: {
     fontSize: 140,
+    textAlign: 'center',
     color: '#990033',
   },
   break: {
     fontSize: 140,
+    textAlign: 'center',
     color: '#227755',
   },
 });

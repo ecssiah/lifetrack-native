@@ -37,7 +37,7 @@ class SettingsScreen extends React.Component {
     super(props);
 
     this.state = {
-      modalVisible: false,
+      modalShow: false,
       attr: null,
       value: null,
     };
@@ -71,7 +71,7 @@ class SettingsScreen extends React.Component {
     }
 
     this.setState({
-      modalVisible: true,
+      modalShow: true,
       attr,
       value,
     });
@@ -99,13 +99,13 @@ class SettingsScreen extends React.Component {
     }
 
     this.setState({
-      modalVisible: false,
+      modalShow: false,
     });
   };
 
   _onCancel = () => {
     this.setState({
-      modalVisible: false,
+      modalShow: false,
     });
   };
 
@@ -134,8 +134,8 @@ class SettingsScreen extends React.Component {
         </TouchableOpacity>
         
         <Modal 
-          isVisible={this.state.modalVisible}
-          onBackdropPress={() => this.setState({ modalVisible: false })}
+          isVisible={this.state.modalShow}
+          onBackdropPress={() => this.setState({ modalShow: false })}
           style={{
             justifyContent: 'center',
             alignItems: 'center',

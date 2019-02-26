@@ -1,5 +1,6 @@
 export const SET_FOCUSES = 'focuses:set-focuses';
 export const ADD_FOCUS = 'focuses:add-focus';
+export const DELETE_FOCUS = 'focuses:delete-focus';
 
 export const SET_NAME = 'focuses:set-name';
 export const SET_CATEGORY = 'focuses:set-category';
@@ -27,6 +28,13 @@ export function addFocus(focus) {
   return {
     type: ADD_FOCUS,
     focus,
+  };
+};
+
+export function deleteFocus(id) {
+  return {
+    type: DELETE_FOCUS,
+    id,
   };
 };
 

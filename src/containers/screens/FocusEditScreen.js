@@ -1,10 +1,12 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { db } from '../../config';
 import { 
   View, Text, TextInput, Button, Picker, TouchableOpacity 
 } from 'react-native';
 import Modal from 'react-native-modal';
 import { 
+  deleteFocus,
   setName, setCategory,
   setWorkPeriod, setWorkGoal, setBreakPeriod,
 } from '../../actions/FocusesActions';
@@ -15,24 +17,56 @@ import {
 import createStyles from '../../styles';
 
 const styles = createStyles({
-  focusEditItem: {
+  editItem: {
     fontSize: 32, 
   },
-  focusEditContainer: {
+  editContainer: {
     flex: 1,
     alignItems: 'center',
     marginTop: '8%',
   },
-  focusEditInput: {
+  editModal: {
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  editModalContainer: {
+    height: '50%',
+    width: '86%',
+    alignItems: 'center',
+    borderRadius: 10,
+    borderWidth: 2,
+    borderColor: '#e0e0e0',
+    backgroundColor: 'white',
+  },
+  editPicker: {
+    height: '70%',
+    width: '80%',
+  },
+  editInput: {
     width: 240, 
     height: 40, 
     borderWidth: 1,
     borderColor: 'gray', 
   },
-  focusEditPickerContainer: {
-    height: '50%',
+  editDelete: {
+    fontSize: 22,
+    textAlign: 'center',
+    color: 'red',
+  },
+  deleteModal: {
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  deleteModalText: {
+    textAlign: 'center',
+    fontSize: 24,
+  },
+  deleteModalContainer: {
+    height: '28%',
     width: '86%',
     alignItems: 'center',
+    justifyContent: 'center',
+    padding: 8,
     borderRadius: 10,
     borderWidth: 2,
     borderColor: '#e0e0e0',
@@ -45,7 +79,8 @@ class FocusEditScreen extends React.Component {
     super(props);
 
     this.state = {
-      modalVisible: false,
+      editModalShow: false,
+      deleteModalShow: false,
       value: 1,
       attr: null,
       name: null,
@@ -83,7 +118,7 @@ class FocusEditScreen extends React.Component {
     }
 
     this.setState({
-      modalVisible: true,
+      editModalShow: true,
       attr,
       value,
     });
@@ -95,29 +130,60 @@ class FocusEditScreen extends React.Component {
     });
   };
 
-  _onConfirm = () => {
+  _onEditConfirm = () => {
     switch (this.state.attr) {
       case WORK_PERIOD:
-        this.props.setWorkPeriod(this.props.focus.id, parseInt(this.state.value));
+        this.props.setWorkPeriod(
+          this.props.focus.id, parseInt(this.state.value)
+        );
         break;
       case WORK_GOAL:
-        this.props.setWorkGoal(this.props.focus.id, parseInt(this.state.value));
+        this.props.setWorkGoal(
+          this.props.focus.id, parseInt(this.state.value)
+        );
         break;
       case BREAK_PERIOD:
-        this.props.setBreakPeriod(this.props.focus.id, parseInt(this.state.value));
+        this.props.setBreakPeriod(
+          this.props.focus.id, parseInt(this.state.value)
+        );
         break;
       default:
         console.error('invalid focus attribute');
     }
 
     this.setState({
-      modalVisible: false,
+      editModalShow: false,
     });
   };
 
-  _onCancel = () => {
+  _onEditCancel = () => {
     this.setState({
-      modalVisible: false,
+      editModalShow: false,
+    });
+  };
+
+  _onClickDelete = () => {
+    this.setState({
+      deleteModalShow: true,
+    });
+  };
+
+  _onDeleteConfirm = () => {
+    db.collection('focuses').doc(this.props.focus.id).delete().then(() => {
+      this.props.deleteFocus(this.props.focus.id);
+      this.props.navigation.navigate('Focuses');
+    }).catch(err => {
+      console.error(err);
+    }); 
+
+    this.setState({
+      deleteModalShow: false,
+    });
+  };
+
+  _onDeleteCancel = () => {
+    this.setState({
+      deleteModalShow: false,
     });
   };
 
@@ -161,89 +227,117 @@ class FocusEditScreen extends React.Component {
   render() {
     const focus = this.props.focuses[this.props.focus.id];
 
-    return (
-      <View style={styles.focusEditContainer}>
-        <Text style={styles.section} >Name</Text>
+    if (focus) {
+      return (
+        <View style={styles.editContainer}>
+          <Text style={styles.section} >Name</Text>
+          <TextInput
+            style={styles.editInput}
+            textAlign='center'
+            keyboardAppearance='dark'
+            onChangeText={name => this.setState({name})}
+            onSubmitEditing={this._onSetName}
+            returnKeyType='done'
+            value={this.state.name}
+          />
 
-        <TextInput
-          style={styles.focusEditInput}
-          textAlign='center'
-          keyboardAppearance='dark'
-          onChangeText={name => this.setState({name})}
-          onSubmitEditing={this._onSetName}
-          returnKeyType='done'
-          value={this.state.name}
-        />
+          <Text style={styles.section} >Category</Text>
+          <TextInput
+            style={styles.editInput}
+            textAlign='center'
+            keyboardAppearance='dark'
+            returnKeyType='done'
+            onChangeText={category => this.setState({category})}
+            onSubmitEditing={this._onSetCategory}
+            value={this.state.category}
+          />
 
-        <Text style={styles.section} >Category</Text>
+          <TouchableOpacity onPress={() => this._selectSetting(WORK_PERIOD)}>
+            <Text style={styles.editItem}>
+              Work Period: {focus.workPeriod}
+            </Text> 
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => this._selectSetting(WORK_GOAL)}>
+            <Text style={styles.editItem}>
+              Work Goal: {focus.workGoal}
+            </Text> 
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => this._selectSetting(BREAK_PERIOD)}>
+            <Text style={styles.editItem}>
+              Break Period: {focus.breakPeriod}
+            </Text> 
+          </TouchableOpacity>
 
-        <TextInput
-          style={styles.focusEditInput}
-          textAlign='center'
-          keyboardAppearance='dark'
-          returnKeyType='done'
-          onChangeText={category => this.setState({category})}
-          onSubmitEditing={this._onSetCategory}
-          value={this.state.category}
-        />
+          <TouchableOpacity
+            onPress={this._onClickDelete}
+          >
+            <Text style={styles.editDelete} >
+              Delete
+            </Text>
+          </TouchableOpacity>
 
-        <TouchableOpacity onPress={() => this._selectSetting(WORK_PERIOD)}>
-          <Text style={styles.focusEditItem}>
-            Work Period: {focus.workPeriod}
-          </Text> 
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => this._selectSetting(WORK_GOAL)}>
-          <Text style={styles.focusEditItem}>
-            Work Goal: {focus.workGoal}
-          </Text> 
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => this._selectSetting(BREAK_PERIOD)}>
-          <Text style={styles.focusEditItem}>
-            Break Period: {focus.breakPeriod}
-          </Text> 
-        </TouchableOpacity>
+          <Modal 
+            isVisible={this.state.editModalShow}
+            onBackdropPress={() => this.setState({ editModalShow: false })}
+            style={styles.editModal}
+          >
+            <View style={styles.editModalContainer} >
+              <Picker
+                selectedValue={this.state.value}
+                onValueChange={(value, index) => this._onValueChange(value)}
+                style={styles.editPicker}
+              >
+                {
+                  Array(40).fill().map((_, i) => 
+                    <Picker.Item 
+                      key={i} 
+                      label={(i + 1).toString()} 
+                      value={(i + 1).toString()} 
+                    />
+                  )
+                }
+              </Picker>
 
-        <Modal 
-          isVisible={this.state.modalVisible}
-          onBackdropPress={() => this.setState({ modalVisible: false })}
-          style={{
-            justifyContent: 'center',
-            alignItems: 'center',
-          }}
-        >
-          <View style={styles.focusEditPickerContainer} >
-            <Picker
-              selectedValue={this.state.value}
-              onValueChange={(value, index) => this._onValueChange(value)}
-              style={{
-                height: '70%',
-                width: '80%',
-              }}
-            >
-              {
-                Array(40).fill().map((_, i) => 
-                  <Picker.Item 
-                    key={i} 
-                    label={(i + 1).toString()} 
-                    value={(i + 1).toString()} 
-                  />
-                )
-              }
-            </Picker>
+              <Button
+                title='Confirm'
+                onPress={this._onEditConfirm}             
+              />
 
-            <Button
-              title='Confirm'
-              onPress={this._onConfirm}             
-            />
+              <Button
+                title='Cancel'
+                onPress={this._onEditCancel}             
+              />
+            </View>
+          </Modal>
 
-            <Button
-              title='Cancel'
-              onPress={this._onCancel}             
-            />
-          </View>
-        </Modal>
-      </View>
-    );
+
+          <Modal
+            isVisible={this.state.deleteModalShow}
+            onBackdropPress={() => this.setState({deleteModalShow: false}) } 
+            style={styles.deleteModal}
+          >
+            <View style={styles.deleteModalContainer} >
+              <Text style={styles.deleteModalText}>
+                Are you sure you want to delete this focus?
+              </Text>
+
+              <Button
+                title='Confirm'
+                onPress={this._onDeleteConfirm}             
+              />
+
+              <Button
+                title='Cancel'
+                onPress={this._onDeleteCancel}             
+              />
+            </View>
+          </Modal>
+
+        </View>
+      );
+    } else {
+      return null;
+    }
   }
 }
 
@@ -253,6 +347,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
+  deleteFocus: id => dispatch(deleteFocus(id)),
   setName: (id, name) => dispatch(setName(id, name)),
   setCategory: (id, category) => dispatch(setCategory(id, category)),
   setWorkPeriod: (id, period) => dispatch(setWorkPeriod(id, period)),

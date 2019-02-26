@@ -84,33 +84,36 @@ class FocusScreen extends React.Component {
   };
 
   render() {
-    console.debug(this.props.settings);
     const focus = this.props.focuses[this.props.focus.id];
 
-    return (
-      <View style={styles.container}>
-        <FocusTitle 
-          name={focus.name} 
-        />
-        <FocusTimer 
-          active={focus.active}
-          working={focus.working} 
-          time={focus.time} 
-          onActivate={this._onActivate}
-        />
-        <FocusGoal 
-          periods={focus.periods} 
-          goal={focus.workGoal} 
-          onClickGoal={this._onClickGoal}
-        />
-        <FocusLevel 
-          level={focus.level} 
-        />
-        <FocusExperience 
-          experience={focus.experience} 
-        />
-      </View>
-    );
+    if (focus) {
+      return (
+        <View style={styles.container}>
+          <FocusTitle 
+            name={focus.name} 
+          />
+          <FocusTimer 
+            active={focus.active}
+            working={focus.working} 
+            time={focus.time} 
+            onActivate={this._onActivate}
+          />
+          <FocusGoal 
+            periods={focus.periods} 
+            goal={focus.workGoal} 
+            onClickGoal={this._onClickGoal}
+          />
+          <FocusLevel 
+            level={focus.level} 
+          />
+          <FocusExperience 
+            experience={focus.experience} 
+          />
+        </View>
+      );
+    } else {
+      return null;
+    }
   }
 }
 

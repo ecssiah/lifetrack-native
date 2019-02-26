@@ -1,5 +1,5 @@
 import { 
-  SET_FOCUSES, ADD_FOCUS, 
+  SET_FOCUSES, ADD_FOCUS, DELETE_FOCUS, 
   SET_NAME, SET_CATEGORY, SET_TIME, SET_WORKING, SET_ACTIVE, SET_TIMER, 
   SET_WORK_PERIOD, SET_WORK_GOAL, SET_BREAK_PERIOD,
   UPDATE_TIME, UPDATE_PERIODS, UPDATE_EXPERIENCE, RESET_PERIODS,
@@ -16,6 +16,11 @@ function focusesReducer(state = {}, action) {
       return action.focuses;
     case ADD_FOCUS:
       newState[action.focus.id] = action.focus;
+
+      return newState;
+    case DELETE_FOCUS:
+      clearInterval(newState[action.id].timer);
+      delete newState[action.id];
 
       return newState;
     case SET_NAME:

@@ -73,6 +73,7 @@ class FocusAddScreen extends React.Component {
           style={styles.focusAddInput}
           textAlign='center'
           keyboardAppearance='dark'
+          maxLength={24}
           returnKeyType='done'
           onChangeText={name => this.setState({name})}
           value={this.state.name}
@@ -84,6 +85,7 @@ class FocusAddScreen extends React.Component {
           style={styles.focusAddInput}
           textAlign='center'
           keyboardAppearance='dark'
+          maxLength={24}
           returnKeyType='done'
           onChangeText={category => this.setState({category})}
           value={this.state.category}
