@@ -133,73 +133,40 @@ class SettingsScreen extends React.Component {
           </Text> 
         </TouchableOpacity>
 
-        <Modal
-          transparent={true}
-          visible={this.state.modalShow} 
+        <LTModal 
+          show={this.state.modalShow}
+          onPressBackdrop={this._onCancel}
         >
-          <TouchableHighlight 
-            onPress={() => { this.setState({modalShow: false}) }}
+          <Picker
+            selectedValue={this.state.value}
+            onValueChange={(value, index) => this._onValueChange(value)}
             style={{
-              flex: 1,
-              flexDirection: 'column',
-              justifyContent: 'center',
-              alignItems: 'center',
-              backgroundColor: '#00000080',
+              height: '70%',
+              width: '80%',
             }}
           >
-            <TouchableHighlight 
-              style={{
-                justifyContent: 'center',
-                alignItems: 'center',
-                width: '86%',
-                height: '56%',
-                padding: 20,
-                borderWidth: 2,
-                borderRadius: 10,
-                borderColor: '#dedede',
-                backgroundColor: '#ffffff',
-              }}
-            >
-              <View 
-                style={{
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  width: '100%',
-                  height: '100%',
-                }}
-              >
-                <Picker
-                  selectedValue={this.state.value}
-                  onValueChange={(value, index) => this._onValueChange(value)}
-                  style={{
-                    height: '70%',
-                    width: '80%',
-                  }}
-                >
-                  {
-                    Array(40).fill().map((_, i) => 
-                      <Picker.Item 
-                        key={i} 
-                        label={(i + 1).toString()} 
-                        value={(i + 1).toString()} 
-                      />
-                    )
-                  }
-                </Picker>
-
-                <Button
-                  title='Confirm'
-                  onPress={this._onConfirm}             
+            {
+              Array(40).fill().map((_, i) => 
+                <Picker.Item 
+                  key={i} 
+                  label={(i + 1).toString()} 
+                  value={(i + 1).toString()} 
                 />
+              )
+            }
+          </Picker>
 
-                <Button
-                  title='Cancel'
-                  onPress={this._onCancel}             
-                />
-              </View>
-            </TouchableHighlight>
-          </TouchableHighlight>
-        </Modal>
+          <Button
+            title='Confirm'
+            onPress={this._onConfirm}             
+          />
+
+          <Button
+            title='Cancel'
+            onPress={this._onCancel}             
+          />
+
+        </LTModal>
       </View>
     );
   };

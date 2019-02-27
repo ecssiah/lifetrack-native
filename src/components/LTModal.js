@@ -1,31 +1,15 @@
 import React from 'react';
-import { Modal, TouchableHighlight } from 'react-native';
+import { Modal, TouchableHighlight, View } from 'react-native';
 
 class LTModal extends React.Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      show: false,
-    };
-  };
-
-  componentDidUpdate(prevProps) {
-    if (prevProps.show !== this.props.show) {
-      this.setState({
-        show: this.props.show,
-      });
-    }
-  };
-
   render() {
     return (
       <Modal
         transparent={true}
-        visible={this.state.show} 
+        visible={this.props.show} 
       >
         <TouchableHighlight 
-          onPress={() => { this.setState({show: false}) }}
+          onPress={this.props.onPressBackdrop}
           style={{
             flex: 1,
             flexDirection: 'column',
