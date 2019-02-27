@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, ProgressViewIOS } from 'react-native';
+import { View, ProgressViewIOS } from 'react-native';
 import createStyles, { Colors } from '../styles';
 
 const styles = createStyles({

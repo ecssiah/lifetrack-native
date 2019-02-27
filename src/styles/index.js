@@ -11,7 +11,6 @@ export const APPBAR_HEIGHT = Platform.OS === 'ios' ? 44 : 56;
 export const Colors  = {
   primary: '#343434',
   secondary: '#aeaeae',
-  text: '#000000',
 };
 
 export const Padding = {
@@ -31,21 +30,16 @@ export const Fonts = {
 const BaseStyles = {
   container: {
     flex: 1,
-    justifyContent: 'center',
     alignItems: 'center',
+    justifyContent: 'center',
   },
   screen: {
-    backgroundColor: 'white',
     flex: 1,
+    backgroundColor: 'white',
   },
   section: {
+    color: 'white',
     fontSize: Fonts.md,
-    color: Colors.text,
-  },
-  statusBar: {
-    backgroundColor: Colors.primary,
-    width: Screen.w,
-    height: 20,
   },
 };
 

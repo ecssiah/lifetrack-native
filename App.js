@@ -1,24 +1,24 @@
 import React from 'react';
-import { View, StatusBar } from 'react-native';
 import { Provider } from 'react-redux';
-import { createStore } from 'redux';
-import createStyles from './src/styles';
+import { createStore, applyMiddleware } from 'redux';
+import createSagaMiddleware from 'redux-saga';
+
+import AppStatusBar from './src/components/AppStatusBar';
+import AppContainer from './src/containers/AppContainer';
 import RootReducer from './src/reducers/RootReducer';
 
-import AppContainer from './src/containers/AppContainer';
+const sagaMiddleware = createSagaMiddleware();
 
-const styles = createStyles();
-
-const store = createStore(RootReducer);
+const store = createStore(
+  RootReducer, 
+  applyMiddleware(sagaMiddleware)
+);
 
 class App extends React.Component {
   render() {
     return (
       <Provider store={store}>
-        <View style={styles.statusBar}>
-          <StatusBar barStyle="light-content" />
-        </View>
-
+        <AppStatusBar />
         <AppContainer />
       </Provider>
     );
