@@ -4,7 +4,6 @@ import { db } from '../../config';
 import { 
   View, Text, TextInput, Button, Picker, TouchableOpacity 
 } from 'react-native';
-import Modal from 'react-native-modal';
 import { 
   deleteFocus,
   setName, setCategory,
@@ -171,7 +170,7 @@ class FocusEditScreen extends React.Component {
   _onDeleteConfirm = () => {
     db.collection('focuses').doc(this.props.focus.id).delete().then(() => {
       this.props.deleteFocus(this.props.focus.id);
-      this.props.navigation.navigate('Focuses');
+      this.props.navigation.navigate('Focuses', );
     }).catch(err => {
       console.error(err);
     }); 
@@ -276,63 +275,6 @@ class FocusEditScreen extends React.Component {
             </Text>
           </TouchableOpacity>
 
-          <Modal 
-            isVisible={this.state.editModalShow}
-            onBackdropPress={() => this.setState({ editModalShow: false })}
-            style={styles.editModal}
-          >
-            <View style={styles.editModalContainer} >
-              <Picker
-                selectedValue={this.state.value}
-                onValueChange={(value, index) => this._onValueChange(value)}
-                style={styles.editPicker}
-              >
-                {
-                  Array(40).fill().map((_, i) => 
-                    <Picker.Item 
-                      key={i} 
-                      label={(i + 1).toString()} 
-                      value={(i + 1).toString()} 
-                    />
-                  )
-                }
-              </Picker>
-
-              <Button
-                title='Confirm'
-                onPress={this._onEditConfirm}             
-              />
-
-              <Button
-                title='Cancel'
-                onPress={this._onEditCancel}             
-              />
-            </View>
-          </Modal>
-
-
-          <Modal
-            isVisible={this.state.deleteModalShow}
-            onBackdropPress={() => this.setState({deleteModalShow: false}) } 
-            style={styles.deleteModal}
-          >
-            <View style={styles.deleteModalContainer} >
-              <Text style={styles.deleteModalText}>
-                Are you sure you want to delete this focus?
-              </Text>
-
-              <Button
-                title='Confirm'
-                onPress={this._onDeleteConfirm}             
-              />
-
-              <Button
-                title='Cancel'
-                onPress={this._onDeleteCancel}             
-              />
-            </View>
-          </Modal>
-
         </View>
       );
     } else {
@@ -356,3 +298,62 @@ const mapDispatchToProps = dispatch => ({
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(FocusEditScreen);
+
+/*
+<Modal 
+  isVisible={this.state.editModalShow}
+  onBackdropPress={() => this.setState({ editModalShow: false })}
+  style={styles.editModal}
+>
+  <View style={styles.editModalContainer} >
+    <Picker
+      selectedValue={this.state.value}
+      onValueChange={(value, index) => this._onValueChange(value)}
+      style={styles.editPicker}
+    >
+      {
+        Array(40).fill().map((_, i) => 
+          <Picker.Item 
+            key={i} 
+            label={(i + 1).toString()} 
+            value={(i + 1).toString()} 
+          />
+        )
+      }
+    </Picker>
+
+    <Button
+      title='Confirm'
+      onPress={this._onEditConfirm}             
+    />
+
+    <Button
+      title='Cancel'
+      onPress={this._onEditCancel}             
+    />
+  </View>
+</Modal>
+
+
+<Modal
+  isVisible={this.state.deleteModalShow}
+  onBackdropPress={() => this.setState({deleteModalShow: false}) } 
+  style={styles.deleteModal}
+>
+  <View style={styles.deleteModalContainer} >
+    <Text style={styles.deleteModalText}>
+      Are you sure you want to delete this focus?
+    </Text>
+
+    <Button
+      title='Confirm'
+      onPress={this._onDeleteConfirm}             
+    />
+
+    <Button
+      title='Cancel'
+      onPress={this._onDeleteCancel}             
+    />
+  </View>
+</Modal>
+*/

@@ -1,9 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { 
-  Button, Picker, Text, TouchableOpacity, View 
+  Button, Modal, Picker, Text, TouchableOpacity, TouchableHighlight, View 
 } from 'react-native';
-import Modal from 'react-native-modal';
 import { auth } from '../../config';
 import { 
   WORK_PERIOD, WORK_GOAL, BREAK_PERIOD,
@@ -12,6 +11,7 @@ import {
   setDefaultWorkPeriod, setDefaultWorkGoal, setDefaultBreakPeriod, 
 } from '../../actions/SettingsActions';
 import createStyles from '../../styles'; 
+import LTModal from '../../components/LTModal';
 
 const styles = createStyles({
   settingsItem: {
@@ -132,50 +132,78 @@ class SettingsScreen extends React.Component {
             Break Period: {this.props.settings.breakPeriod}
           </Text> 
         </TouchableOpacity>
-        
-        <Modal 
-          isVisible={this.state.modalShow}
-          onBackdropPress={() => this.setState({ modalShow: false })}
-          style={{
-            justifyContent: 'center',
-            alignItems: 'center',
-          }}
+
+        <Modal
+          transparent={true}
+          visible={this.state.modalShow} 
         >
-          <View style={styles.settingsPickerContainer} >
-            <Picker
-              selectedValue={this.state.value}
-              onValueChange={(value, index) => this._onValueChange(value)}
+          <TouchableHighlight 
+            onPress={() => { this.setState({modalShow: false}) }}
+            style={{
+              flex: 1,
+              flexDirection: 'column',
+              justifyContent: 'center',
+              alignItems: 'center',
+              backgroundColor: '#00000080',
+            }}
+          >
+            <TouchableHighlight 
               style={{
-                height: '70%',
-                width: '80%',
+                justifyContent: 'center',
+                alignItems: 'center',
+                width: '86%',
+                height: '56%',
+                padding: 20,
+                borderWidth: 2,
+                borderRadius: 10,
+                borderColor: '#dedede',
+                backgroundColor: '#ffffff',
               }}
             >
-              {
-                Array(40).fill().map((_, i) => 
-                  <Picker.Item 
-                    key={i} 
-                    label={(i + 1).toString()} 
-                    value={(i + 1).toString()} 
-                  />
-                )
-              }
-            </Picker>
+              <View 
+                style={{
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  width: '100%',
+                  height: '100%',
+                }}
+              >
+                <Picker
+                  selectedValue={this.state.value}
+                  onValueChange={(value, index) => this._onValueChange(value)}
+                  style={{
+                    height: '70%',
+                    width: '80%',
+                  }}
+                >
+                  {
+                    Array(40).fill().map((_, i) => 
+                      <Picker.Item 
+                        key={i} 
+                        label={(i + 1).toString()} 
+                        value={(i + 1).toString()} 
+                      />
+                    )
+                  }
+                </Picker>
 
-            <Button
-              title='Confirm'
-              onPress={this._onConfirm}             
-            />
+                <Button
+                  title='Confirm'
+                  onPress={this._onConfirm}             
+                />
 
-            <Button
-              title='Cancel'
-              onPress={this._onCancel}             
-            />
-          </View>
+                <Button
+                  title='Cancel'
+                  onPress={this._onCancel}             
+                />
+              </View>
+            </TouchableHighlight>
+          </TouchableHighlight>
         </Modal>
       </View>
     );
-  }
-}
+  };
+};
 
 const mapStateToProps = state => ({
   settings: state.settings,

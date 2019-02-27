@@ -10,7 +10,7 @@ const styles = createStyles({
   },
 });
 
-class AppStatusBar extends React.PureComponent {
+class LTStatusBar extends React.PureComponent {
   render() {
     return (
       <View style={styles.statusBar}>
@@ -20,4 +20,4 @@ class AppStatusBar extends React.PureComponent {
   };
 };
 
-export default AppStatusBar;
+export default LTStatusBar;
