@@ -12,7 +12,6 @@ import createStyles from '../../styles';
 import FocusTitle from '../../components/FocusTitle';
 import FocusTimer from '../../components/FocusTimer';
 import FocusGoal from '../../components/FocusGoal';
-import FocusLevel from '../../components/FocusLevel';
 import FocusExperience from '../../components/FocusExperience';
 
 const styles = createStyles();
@@ -20,6 +19,15 @@ const styles = createStyles();
 class FocusScreen extends React.Component {
   static navigationOptions = ({ navigation }) => ({
     title: 'Focus',
+    headerLeft: (
+      <Ionicons
+        name='ios-arrow-back' size={32} color='#ffffff'
+        onPress={ () => navigation.goBack() }
+        style={{
+          marginLeft: 16,
+        }}
+      />
+    ),
     headerRight: (
       <Ionicons
         name='md-create' size={26} color='#ffffff' 
@@ -103,10 +111,8 @@ class FocusScreen extends React.Component {
             goal={focus.workGoal} 
             onClickGoal={this._onClickGoal}
           />
-          <FocusLevel 
-            level={focus.level} 
-          />
           <FocusExperience 
+            level={focus.level}
             experience={focus.experience} 
           />
         </View>

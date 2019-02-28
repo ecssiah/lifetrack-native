@@ -1,6 +1,6 @@
-export const WORK_PERIOD = 'focus:workPeriod';
-export const WORK_GOAL = 'focus:workGoal';
-export const BREAK_PERIOD = 'focus:breakPeriod';
+export const WORK_PERIOD = 'Work Period';
+export const WORK_GOAL = 'Work Goal';
+export const BREAK_PERIOD = 'Break Period';
 
 export const DEFAULT_WORK_PERIOD = 1;
 export const DEFAULT_WORK_GOAL = 4;

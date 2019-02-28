@@ -2,7 +2,7 @@ import React from 'react';
 import { 
   TouchableHighlight, TouchableOpacity, Text, View, ProgressViewIOS 
 } from 'react-native';
-import createStyles, { Fonts, Colors } from '../styles'; 
+import createStyles, { Colors } from '../styles'; 
 
 const styles = createStyles({
   focusContainer: {
@@ -18,11 +18,12 @@ const styles = createStyles({
     flexDirection: 'row',
     justifyContent: 'flex-start',
     alignItems: 'center',
-    fontSize: Fonts.md,
+    fontSize: 20,
     color: Colors.text,
   },
   focusLevel: {
-    fontSize: Fonts.md,
+    fontSize: 20,
+    alignItems: 'center',
     marginRight: 10,
   },
   focusItemRight: {

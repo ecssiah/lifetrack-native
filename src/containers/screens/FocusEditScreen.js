@@ -4,6 +4,7 @@ import { db } from '../../config';
 import { 
   View, Text, TextInput, Button, Picker, TouchableOpacity 
 } from 'react-native';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 import {
   addCategory,
 } from '../../actions/CategoriesActions';
@@ -21,33 +22,9 @@ import createStyles, { Colors } from '../../styles';
 import LTModal from '../../components/LTModal';
 
 const styles = createStyles({
-  editText: {
-    fontSize: 24,
-    margin: 4,
-  },
-  editNameFocus: {
-    margin: 8,
-    padding: 8,
-    fontSize: 32, 
-    borderColor: Colors.primary,
-    borderWidth: 1,
-    borderRadius: 6,
-    backgroundColor: '#e0e0e0',
-  },
-  editNameBlur: {
-    margin: 8,
-    padding: 9,
-    fontSize: 32, 
-    backgroundColor: 'white',
-  },
   editContainer: {
-    flex: 1,
     alignItems: 'center',
     marginTop: '8%',
-  },
-  editModal: {
-    justifyContent: 'center',
-    alignItems: 'center',
   },
   editModalContainer: {
     height: '50%',
@@ -58,9 +35,41 @@ const styles = createStyles({
     borderColor: '#e0e0e0',
     backgroundColor: 'white',
   },
-  editPicker: {
+  editText: {
+    fontSize: 24,
+    margin: 4,
+  },
+  editNameInputFocus: {
+    color: '#222262',
+    fontSize: 36, 
+    fontWeight: 'bold',
+    borderColor: Colors.primary,
+    borderWidth: 1,
+    borderRadius: 6,
+    backgroundColor: '#ededed',
+    margin: 8,
+    paddingVertical: 8,
+    paddingHorizontal: 14,
+  },
+  editNameInputBlur: {
+    fontSize: 36, 
+    fontWeight: 'bold',
+    paddingVertical: 9,
+    paddingHorizontal: 15,
+    backgroundColor: 'white',
+    margin: 8,
+  },
+  editModal: {
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  editModalText: {
+    fontSize: 24,
+  },
+  editModalPicker: {
     height: '70%',
     width: '80%',
+    marginBottom: -32,
   },
   editInput: {
     width: 240, 
@@ -68,39 +77,55 @@ const styles = createStyles({
     fontSize: 22,
   },
   editDelete: {
-    fontSize: 22,
+    fontSize: 26,
     textAlign: 'center',
     color: 'red',
     margin: 16,
   },
-  deleteModal: {
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  deleteModalText: {
-    textAlign: 'center',
-    fontSize: 24,
-  },
-  deleteModalContainer: {
-    height: '28%',
+  categoryModalContainer: {
+    height: '46%',
     width: '86%',
     alignItems: 'center',
     justifyContent: 'center',
-    padding: 8,
     borderRadius: 10,
     borderWidth: 2,
     borderColor: '#e0e0e0',
     backgroundColor: 'white',
   },
   categoryText: {
-    margin: 4,
     fontSize: 24,
+    marginBottom: 4,
   },
-  focusEditTextInput: {
-    width: 240, 
+  categoryModalText: {
+    fontSize: 24, 
+    marginBottom: 4,
+  },
+  categoryModalInput: {
+    width: 272,
     height: 40, 
     borderWidth: 1,
+    borderRadius: 10,
     borderColor: 'gray', 
+  },
+  categoryModalPicker: {
+    height: '70%',
+    width: '80%',
+    marginBottom: -32,
+  },
+  deleteModalContainer: {
+    height: '28%',
+    width: '86%',
+    alignItems: 'center',
+    borderRadius: 10,
+    borderWidth: 2,
+    borderColor: '#e0e0e0',
+    backgroundColor: 'white',
+  },
+  deleteModalText: {
+    fontSize: 24,
+    textAlign: 'center', 
+    marginHorizontal: 4,
+    marginBottom: 20, 
   },
 });
 
@@ -111,18 +136,27 @@ class FocusEditScreen extends React.Component {
     this.state = {
       value: 1,
       attr: null,
+      newCategory: null,
       name: props.focuses[props.focus.id].name,
       category: props.focuses[props.focus.id].category,
-      newCategory: null,
+      editNameInputStyle: styles.editNameInputBlur,
       categoryModalShow: false,
       editModalShow: false,
       deleteModalShow: false,
-      editInputStyle: styles.editNameBlur,
     };
   };
 
   static navigationOptions = ({ navigation }) => ({
     title: 'Edit Focus',
+    headerLeft: (
+      <Ionicons
+        name='ios-arrow-back' size={32} color='#ffffff'
+        onPress={ () => navigation.goBack() }
+        style={{
+          marginLeft: 16,
+        }}
+      />
+    ),
   });
 
   _selectSetting = attr => {
@@ -248,13 +282,13 @@ class FocusEditScreen extends React.Component {
 
   _onEditInputFocus = () => {
     this.setState({
-      editInputStyle: styles.editNameFocus,
+      editNameInputStyle: styles.editNameInputFocus,
     });
   };
 
   _onEditInputBlur = () => {
     this.setState({
-      editInputStyle: styles.editNameBlur,
+      editNameInputStyle: styles.editNameInputBlur,
     });
   };
 
@@ -302,35 +336,35 @@ class FocusEditScreen extends React.Component {
       return (
         <View style={styles.editContainer}>
           <TextInput
-            style={this.state.editInputStyle}
+            style={this.state.editNameInputStyle}
+            selectionColor={Colors.primary}
             value={this.state.name}
             textAlign='center'
-            keyboardAppearance='dark'
             returnKeyType='done'
+            keyboardAppearance='dark'
             onChangeText={name => this.setState({name})}
             onSubmitEditing={this._onSetName}
             onBlur={this._onEditInputBlur}
             onFocus={this._onEditInputFocus}
           />
 
-          <TouchableOpacity
-            onPress={this._onClickCategory} 
-          >
+          <TouchableOpacity onPress={this._onClickCategory} >
             <Text style={styles.categoryText}>
               Category: {this.state.category}
             </Text>  
           </TouchableOpacity>
 
           <LTModal
+            style={styles.categoryModalContainer}
             show={this.state.categoryModalShow} 
             onPressBackdrop={this._onCategoryCancel}
           >
-            <Text style={{fontSize: 24}}>
-              Create New Category:
+            <Text style={styles.categoryModalText}>
+              New Category:
             </Text>
 
             <TextInput
-              style={styles.focusEditTextInput}
+              style={styles.categoryModalInput}
               textAlign='center'
               keyboardAppearance='dark'
               maxLength={24}
@@ -340,13 +374,9 @@ class FocusEditScreen extends React.Component {
             />
 
             <Picker
+              style={styles.categoryModalPicker}
               selectedValue={this.state.category}
               onValueChange={(value, index) => this._onCategoryChange(value)}
-              style={{
-                height: '70%',
-                width: '80%',
-                marginBottom: 10,
-              }}
             >
               {
                 this.props.categories.types.map((category, idx) => 
@@ -381,26 +411,25 @@ class FocusEditScreen extends React.Component {
             </Text> 
           </TouchableOpacity>
 
-          <TouchableOpacity
-            onPress={this._onClickDelete}
-          >
+          <TouchableOpacity onPress={this._onClickDelete} >
             <Text style={styles.editDelete} >
               Delete
             </Text>
           </TouchableOpacity>
 
           <LTModal
+            style={styles.editModalContainer}
             show={this.state.editModalShow}
             onPressBackdrop={this._onEditCancel}
           >
+            <Text style={styles.editModalText}>
+              {this.state.attr}
+            </Text>
+
             <Picker
               selectedValue={this.state.value}
               onValueChange={(value, index) => this._onValueChange(value)}
-              style={{
-                height: '70%',
-                width: '80%',
-                marginBottom: 10,
-              }}
+              style={styles.editModalPicker}
             >
               {
                 Array(40).fill().map((_, i) => 
@@ -425,12 +454,12 @@ class FocusEditScreen extends React.Component {
           </LTModal>
 
           <LTModal
+            style={styles.deleteModalContainer}
             show={this.state.deleteModalShow}
             onPressBackdrop={this._onDeleteCancel} 
-            height={'34%'}
           >
-            <Text style={{marginBottom: 20, textAlign: 'center', fontSize: 24, }}>
-              Are you sure you want to permanently delete this focus?
+            <Text style={styles.deleteModalText}>
+              Are you sure you want to delete this focus?
             </Text>
               
             <Button

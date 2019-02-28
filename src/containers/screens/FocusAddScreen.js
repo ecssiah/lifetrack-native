@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { View, Text, TextInput, Button, Picker, TouchableOpacity } from 'react-native';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 import { auth, db } from '../../config';
 import { addCategory } from '../../actions/CategoriesActions';
 import { addFocus } from '../../actions/FocusesActions';
@@ -40,6 +41,15 @@ class FocusAddScreen extends React.Component {
 
   static navigationOptions = ({ navigation }) => ({
     title: 'Add Focus',
+    headerLeft: (
+      <Ionicons
+        name='ios-arrow-back' size={32} color='#ffffff'
+        onPress={ () => navigation.goBack() }
+        style={{
+          marginLeft: 16,
+        }}
+      />
+    ),
   });
 
   _addFocus = () => {

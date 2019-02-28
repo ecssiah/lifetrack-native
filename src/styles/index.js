@@ -13,18 +13,9 @@ export const Colors  = {
   secondary: '#aeaeae',
 };
 
-export const Padding = {
-  sm: 10,
-  md: 20,
-  lg: 30,
-  xl: 40,
-};
-
 export const Fonts = {
   primary: 'Arial',
-  sm: 12,
-  md: 18,
-  lg: 28,
+  timer: 'ArialMT',
 };
 
 const BaseStyles = {
@@ -39,7 +30,7 @@ const BaseStyles = {
   },
   section: {
     color: 'black',
-    fontSize: Fonts.md,
+    fontSize: 18,
   },
 };
 

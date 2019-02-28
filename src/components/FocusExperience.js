@@ -1,13 +1,19 @@
 import React from 'react';
-import { View, ProgressViewIOS } from 'react-native';
+import { Text, View, ProgressViewIOS } from 'react-native';
 import createStyles, { Colors } from '../styles';
 
 const styles = createStyles({
   experienceContainer: {
     width: '80%',
   },
+  experienceLevel: {
+    alignSelf: 'center',
+    marginVertical: 10,
+    fontSize: 32,
+  },
   experienceProgress: {
-    width: '100%',
+    paddingHorizontal: 20,
+    marginVertical: 10,
     transform: [
       { scaleX: 1.0 }, 
       { scaleY: 10.0 },
@@ -18,11 +24,15 @@ const styles = createStyles({
 class FocusExperience extends React.PureComponent {
   render() {
     return (
-      <View style={styles.experienceContainer} >
+      <View style={styles.experienceContainer}>
+        <Text style={styles.experienceLevel}>
+          {"Level: " + this.props.level}
+        </Text>
+
         <ProgressViewIOS
-          progress={this.props.experience / 100.0}
-          progressTintColor={Colors.primary}
           style={styles.experienceProgress}
+          progressTintColor={Colors.primary}
+          progress={this.props.experience / 100.0}
         />
       </View>
     );

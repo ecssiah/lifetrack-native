@@ -60,11 +60,36 @@ class SignUpScreen extends React.Component {
         db.collection('categories').doc(cred.user.uid).set(categories);
 
         this.props.setCategories(categories);
-      }).catch(error => {
-        const errorCode = error.code;
-        const errorMessage = error.message;
 
-        console.warn("error " + errorCode + ": " + errorMessage);
+        // const stats = {
+        //   today: {
+        //     untracked: 12.4,
+        //     focus1_ID: 8.2,
+        //     focus2_ID: 2.3,
+        //     focus3_ID: 0.0,
+        //   },
+        //   date1: {
+        //     untracked: 12.4,
+        //     focus1_ID: 8.2,
+        //     focus2_ID: 2.3,
+        //     focus3_ID: 0.0,
+        //   },
+        //   date2: {
+        //     untracked: 12.4,
+        //     focus1_ID: 8.2,
+        //     focus2_ID: 2.3,
+        //     focus3_ID: 0.0,
+        //   },
+        // };
+
+        // db.collection('stats').doc(cred.user.uid).set(stats);
+
+        // this.props.setStats(stats);
+      }).catch(err => {
+        const errorCode = err.code;
+        const errorMessage = err.message;
+
+        console.warn(errorCode + ": " + errorMessage);
       });
     } else {
       console.warn("Password confirmation does not match");

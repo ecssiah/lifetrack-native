@@ -40,11 +40,7 @@ class LTModal extends React.Component {
         >
           <TouchableHighlight 
             activeOpacity={1}
-            style={{
-              ...styles.modalBackdropMask,
-              width: this.props.width,
-              height: this.props.height,
-            }}
+            style={this.props.style}
           >
             <View style={styles.modalContent} >
               {this.props.children}

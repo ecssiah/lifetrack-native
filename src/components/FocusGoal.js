@@ -8,11 +8,12 @@ const styles = createStyles({
   },
   goalHeading: {
     alignSelf: 'center',
-    margin: 10,
+    marginVertical: 10,
     fontSize: 32,
   },
   goalProgress: {
     width: '100%',
+    marginVertical: 10,
     transform: [
       { scaleX: 1.0 }, 
       { scaleY: 10.0 },
@@ -24,17 +25,17 @@ class FocusGoal extends React.PureComponent {
   render() {
     return (
       <TouchableOpacity
-        onPress={this.props.onClickGoal}
         style={styles.goalContainer}
+        onPress={this.props.onClickGoal}
       >
         <Text style={styles.goalHeading}>
           Goal: {this.props.goal}
         </Text>
 
         <ProgressViewIOS
-          progress={this.props.periods / this.props.goal}
-          progressTintColor={Colors.primary}
           style={styles.goalProgress}
+          progressTintColor={Colors.primary}
+          progress={this.props.periods / this.props.goal}
         />
       </TouchableOpacity>
     );
