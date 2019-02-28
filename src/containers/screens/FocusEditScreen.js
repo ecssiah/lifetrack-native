@@ -14,6 +14,7 @@ import {
   DEFAULT_WORK_PERIOD, DEFAULT_WORK_GOAL, DEFAULT_BREAK_PERIOD, 
 } from '../../constants/Focus';
 import createStyles from '../../styles';
+
 import LTModal from '../../components/LTModal';
 
 const styles = createStyles({
@@ -79,12 +80,12 @@ class FocusEditScreen extends React.Component {
     super(props);
 
     this.state = {
-      editModalShow: false,
-      deleteModalShow: false,
       value: 1,
       attr: null,
       name: null,
       category: null,
+      editModalShow: false,
+      deleteModalShow: false,
     };
   };
 
@@ -233,23 +234,23 @@ class FocusEditScreen extends React.Component {
           <Text style={styles.section} >Name</Text>
           <TextInput
             style={styles.editInput}
+            value={this.state.name}
             textAlign='center'
             keyboardAppearance='dark'
+            returnKeyType='done'
             onChangeText={name => this.setState({name})}
             onSubmitEditing={this._onSetName}
-            returnKeyType='done'
-            value={this.state.name}
           />
 
           <Text style={styles.section} >Category</Text>
           <TextInput
             style={styles.editInput}
+            value={this.state.category}
             textAlign='center'
             keyboardAppearance='dark'
             returnKeyType='done'
             onChangeText={category => this.setState({category})}
             onSubmitEditing={this._onSetCategory}
-            value={this.state.category}
           />
 
           <TouchableOpacity onPress={() => this._selectSetting(WORK_PERIOD)}>

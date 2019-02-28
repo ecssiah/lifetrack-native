@@ -5,7 +5,7 @@ import createStyles from '../styles';
 import FocusItem from './FocusItem';
 
 const styles = createStyles({
-  separator: {
+  focusSeparator: {
     height: 1,
     backgroundColor: '#ced0ce',
     marginHorizontal: '3%',
@@ -13,11 +13,14 @@ const styles = createStyles({
 });
 
 class FocusList extends React.Component {
-  _renderSeparator = () => {
-    return (
-      <View style={styles.separator} />
-    );
-  };
+  _renderSeparator = () => <View style={styles.focusSeparator} />;
+
+  _renderItem = item => (
+    <FocusItem 
+      focus={item} 
+      selectFocus={this.props.selectFocus} 
+    />
+  );
 
   render() {
     return (
@@ -25,12 +28,7 @@ class FocusList extends React.Component {
         data={Object.values(this.props.focuses)}
         keyExtractor={item => item.id}
         ItemSeparatorComponent={this._renderSeparator}
-        renderItem={({item}) => 
-          <FocusItem 
-            focus={item} 
-            selectFocus={this.props.selectFocus} 
-          />
-        }
+        renderItem={({item}) => this._renderItem(item)}
       />
     );
   };

@@ -59,7 +59,7 @@ class SplashScreen extends React.Component {
 
     db.collection('focuses').where(
       'userId', '==', auth.currentUser.uid
-    ).get().then(snapshot => {
+    ).orderBy('name').get().then(snapshot => {
       snapshot.forEach(doc => {
         focuses[doc.id] = {
           id: doc.get('id'),
