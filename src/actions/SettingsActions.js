@@ -1,32 +1,32 @@
-export const LOAD_SETTINGS = 'settings:load-settings';
-export const SET_GLOBAL_WORK_PERIOD = 'settings:set-global-work-period';
-export const SET_GLOBAL_WORK_GOAL = 'settings:set-global-work-goal';
-export const SET_GLOBAL_BREAK_PERIOD = 'settings:set-global-break-period';
+export const SET_SETTINGS = 'settings:set-settings';
+export const SET_DEFAULT_WORK_PERIOD = 'settings:set-global-work-period';
+export const SET_DEFAULT_WORK_GOAL = 'settings:set-global-work-goal';
+export const SET_DEFAULT_BREAK_PERIOD = 'settings:set-global-break-period';
 
-export function loadSettings(settings) {
+export function setSettings(settings) {
   return {
-    type: LOAD_SETTINGS,
+    type: SET_SETTINGS,
     settings,
   };
 };
 
 export function setDefaultWorkPeriod(period) {
   return {
-    type: SET_GLOBAL_WORK_PERIOD,
+    type: SET_DEFAULT_WORK_PERIOD,
     period,
   };
 };
 
 export function setDefaultWorkGoal(goal) {
   return {
-    type: SET_GLOBAL_WORK_GOAL,
+    type: SET_DEFAULT_WORK_GOAL,
     goal,
   };
 };
 
 export function setDefaultBreakPeriod(period) {
   return {
-    type: SET_GLOBAL_BREAK_PERIOD,
+    type: SET_DEFAULT_BREAK_PERIOD,
     period,
   };
 };

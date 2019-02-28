@@ -48,7 +48,7 @@ export function setName(id, name) {
 
 export function setCategory(id, category) {
   return {
-    type: SET_NAME,
+    type: SET_CATEGORY,
     id,
     category,
   };

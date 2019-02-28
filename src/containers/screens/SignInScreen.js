@@ -3,7 +3,8 @@ import { connect } from 'react-redux';
 import { Button, View, Text, TextInput } from 'react-native';
 import { auth, db } from '../../config';
 import createStyles from '../../styles';
-import { loadSettings } from '../../actions/SettingsActions';
+import { setSettings } from '../../actions/SettingsActions';
+import { setCategories } from '../../actions/CategoriesActions';
 
 const styles = createStyles({
   signInContainer: {
@@ -37,29 +38,28 @@ class SignInScreen extends React.Component {
     auth.signInWithEmailAndPassword(
       this.state.email, this.state.password
     ).then(cred => {
-      db.collection('settings').where(
-        'userId', '==', cred.user.uid
-      ).get().then(snapshot => {
-        let settings = {};
+      db.collection('settings').doc(cred.user.uid).get().then(doc => {
+        const settings = {
+          workPeriod: doc.get('workPeriod'),
+          workGoal: doc.get('workGoal'),
+          breakPeriod: doc.get('breakPeriod'),
+        };
 
-        snapshot.forEach(doc => {
-          settings = {
-            userId: doc.get('userId'),
-            workPeriod: doc.get('workPeriod'),
-            workGoal: doc.get('workGoal'),
-            breakPeriod: doc.get('breakPeriod'),
-          };
-        });
+        this.props.setSettings(settings);
 
-        this.props.loadSettings(settings);
+        const categories = {
+          types: doc.get('types'),
+        };
+
+        this.props.setCategories(categories);
       }).catch(err => {
         console.error(err);
       });
-    }).catch(error => {
-      const errorCode = error.code;
-      const errorMessage = error.message;
+    }).catch(err => {
+      const errorCode = err.code;
+      const errorMessage = err.message;
 
-      console.warn("error " + errorCode + ": " + errorMessage);
+      console.warn(errorCode + ": " + errorMessage);
     });
 
     this.setState({
@@ -117,7 +117,8 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  loadSettings: settings => dispatch(loadSettings(settings)), 
+  setSettings: settings => dispatch(setSettings(settings)), 
+  setCategories: categories => dispatch(setCategories(categories)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(SignInScreen);

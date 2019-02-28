@@ -3,7 +3,8 @@ import { connect } from 'react-redux';
 import { Button, View, Text, TextInput } from 'react-native';
 import { auth, db } from '../../config';
 import createStyles from '../../styles';
-import { loadSettings } from '../../actions/SettingsActions';
+import { setSettings } from '../../actions/SettingsActions';
+import { setCategories } from '../../actions/CategoriesActions';
 import { 
   DEFAULT_WORK_PERIOD, DEFAULT_WORK_GOAL, DEFAULT_BREAK_PERIOD 
 } from '../../constants/Focus';
@@ -43,15 +44,22 @@ class SignUpScreen extends React.Component {
         this.state.email, this.state.password
       ).then(cred => {
         const settings = {
-          userId: cred.user.uid,
           workPeriod: DEFAULT_WORK_PERIOD,
           workGoal: DEFAULT_WORK_GOAL,
           breakPeriod: DEFAULT_BREAK_PERIOD,
         };
 
-        db.collection('settings').add(settings);
+        db.collection('settings').doc(cred.user.uid).set(settings);
 
-        this.props.loadSettings(settings);
+        this.props.setSettings(settings);
+
+        const categories = {
+          types: ['General'],
+        };
+
+        db.collection('categories').doc(cred.user.uid).set(categories);
+
+        this.props.setCategories(categories);
       }).catch(error => {
         const errorCode = error.code;
         const errorMessage = error.message;
@@ -125,7 +133,8 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  loadSettings: settings => dispatch(loadSettings(settings)),
+  setSettings: settings => dispatch(setSettings(settings)),
+  setCategories: categories => dispatch(setCategories(categories)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(SignUpScreen);

@@ -1,9 +1,12 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { View, Text, TextInput, Button } from 'react-native';
+import { View, Text, TextInput, Button, Picker, TouchableOpacity } from 'react-native';
 import { auth, db } from '../../config';
+import { addCategory } from '../../actions/CategoriesActions';
 import { addFocus } from '../../actions/FocusesActions';
 import createStyles from '../../styles';
+
+import LTModal from '../../components/LTModal';
 
 const styles = createStyles({
   focusAddContainer: {
@@ -11,11 +14,15 @@ const styles = createStyles({
     alignItems: 'center',
     marginTop: '8%',
   },
-  focusAddInput: {
+  focusAddTextInput: {
     width: 240, 
     height: 40, 
     borderWidth: 1,
     borderColor: 'gray', 
+  },
+  categoryText: {
+    margin: 10,
+    fontSize: 24,
   },
 });
 
@@ -25,7 +32,9 @@ class FocusAddScreen extends React.Component {
 
     this.state = {
       name: null,
-      category: null,
+      newCategory: null,
+      category: props.categories.types[0],
+      categoryModalShow: false,
     };
   }
 
@@ -61,13 +70,43 @@ class FocusAddScreen extends React.Component {
     });
   };
 
+  _onClickCategory = () => {
+    this.setState({
+      categoryModalShow: true, 
+      newCategory: '',
+    });
+  };
+
+  _onCategoryChange = category => {
+    this.setState({
+      category,
+    });
+  };
+
+  _onCategoryConfirm = () => {
+    let newState = { categoryModalShow: false };
+
+    if (this.state.newCategory !== '') {
+      newState.category = this.state.newCategory;
+      this.props.addCategory(this.state.newCategory);
+    }
+
+    this.setState(newState);
+  };
+
+  _onCategoryCancel = () => {
+    this.setState({
+      categoryModalShow: false,
+    });
+  };
+
   render() {
     return (
       <View style={styles.focusAddContainer}>
         <Text style={styles.section} >Name</Text>
 
         <TextInput
-          style={styles.focusAddInput}
+          style={styles.focusAddTextInput}
           textAlign='center'
           keyboardAppearance='dark'
           maxLength={24}
@@ -76,17 +115,57 @@ class FocusAddScreen extends React.Component {
           value={this.state.name}
         />
 
-        <Text style={styles.section} >Category</Text>
+        <TouchableOpacity
+          onPress={this._onClickCategory} 
+        >
+          <Text style={styles.categoryText}>
+            Category: {this.state.category}
+          </Text>  
+        </TouchableOpacity>
 
-        <TextInput
-          style={styles.focusAddInput}
-          textAlign='center'
-          keyboardAppearance='dark'
-          maxLength={24}
-          returnKeyType='done'
-          onChangeText={category => this.setState({category})}
-          value={this.state.category}
-        />
+        <LTModal
+          show={this.state.categoryModalShow} 
+          onPressBackdrop={this._onCategoryCancel}
+        >
+          <Text style={{fontSize: 24}}>
+            Create New Category:
+          </Text>
+
+          <TextInput
+            style={styles.focusAddTextInput}
+            textAlign='center'
+            keyboardAppearance='dark'
+            maxLength={24}
+            returnKeyType='done'
+            onChangeText={newCategory => this.setState({newCategory})}
+            value={this.state.newCategory}
+          />
+
+          <Picker
+            selectedValue={this.state.category}
+            onValueChange={(value, index) => this._onCategoryChange(value)}
+            style={{
+              height: '70%',
+              width: '80%',
+              marginBottom: 10,
+            }}
+          >
+            {
+              this.props.categories.types.map((category, idx) => 
+                <Picker.Item 
+                  key={idx} 
+                  label={category} 
+                  value={category}
+                />
+              )
+            }
+          </Picker>
+
+          <Button
+            title='Done'
+            onPress={this._onCategoryConfirm}
+          />
+        </LTModal>
 
         <Button
           onPress={this._addFocus}
@@ -98,10 +177,12 @@ class FocusAddScreen extends React.Component {
 }
 
 const mapStateToProps = state => ({
+  categories: state.categories,
   settings: state.settings,
 });
 
 const mapDispatchToProps = dispatch => ({
+  addCategory: category => dispatch(addCategory(category)),
   addFocus: focus => dispatch(addFocus(focus)),
 });
 

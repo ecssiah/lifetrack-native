@@ -4,6 +4,9 @@ import { db } from '../../config';
 import { 
   View, Text, TextInput, Button, Picker, TouchableOpacity 
 } from 'react-native';
+import {
+  addCategory,
+} from '../../actions/CategoriesActions';
 import { 
   deleteFocus,
   setName, setCategory,
@@ -73,6 +76,16 @@ const styles = createStyles({
     borderColor: '#e0e0e0',
     backgroundColor: 'white',
   },
+  categoryText: {
+    margin: 10,
+    fontSize: 24,
+  },
+  focusEditTextInput: {
+    width: 240, 
+    height: 40, 
+    borderWidth: 1,
+    borderColor: 'gray', 
+  },
 });
 
 class FocusEditScreen extends React.Component {
@@ -82,8 +95,10 @@ class FocusEditScreen extends React.Component {
     this.state = {
       value: 1,
       attr: null,
-      name: null,
-      category: null,
+      name: props.focuses[props.focus.id].name,
+      category: props.focuses[props.focus.id].category,
+      newCategory: null,
+      categoryModalShow: false,
       editModalShow: false,
       deleteModalShow: false,
     };
@@ -92,13 +107,6 @@ class FocusEditScreen extends React.Component {
   static navigationOptions = ({ navigation }) => ({
     title: 'Edit Focus',
   });
-
-  componentDidMount() {
-    this.setState({
-      name: this.props.focuses[this.props.focus.id].name,
-      category: this.props.focuses[this.props.focus.id].category,
-    });
-  };
 
   _selectSetting = attr => {
     let value;
@@ -221,8 +229,41 @@ class FocusEditScreen extends React.Component {
     this.props.setName(this.props.focus.id, this.state.name);
   };
 
-  _onSetCategory = () => {
-    this.props.setCategory(this.props.focus.id, this.state.category);
+  _onClickCategory = () => {
+    this.setState({
+      categoryModalShow: true, 
+      newCategory: '',
+    });
+  };
+
+  _onCategoryChange = category => {
+    this.setState({
+      category,
+    });
+  };
+
+  _onCategoryConfirm = () => {
+    let category;
+
+    if (this.state.newCategory !== '') {
+      category = this.state.newCategory;
+      this.props.addCategory(this.state.newCategory);
+    } else {
+      category = this.state.category;
+    }
+
+    this.props.setCategory(this.props.focus.id, category);
+
+    this.setState({
+      category: category,
+      categoryModalShow: false,
+    });
+  };
+
+  _onCategoryCancel = () => {
+    this.setState({
+      categoryModalShow: false,
+    });
   };
 
   render() {
@@ -242,16 +283,57 @@ class FocusEditScreen extends React.Component {
             onSubmitEditing={this._onSetName}
           />
 
-          <Text style={styles.section} >Category</Text>
-          <TextInput
-            style={styles.editInput}
-            value={this.state.category}
-            textAlign='center'
-            keyboardAppearance='dark'
-            returnKeyType='done'
-            onChangeText={category => this.setState({category})}
-            onSubmitEditing={this._onSetCategory}
-          />
+          <TouchableOpacity
+            onPress={this._onClickCategory} 
+          >
+            <Text style={styles.categoryText}>
+              Category: {this.state.category}
+            </Text>  
+          </TouchableOpacity>
+
+          <LTModal
+            show={this.state.categoryModalShow} 
+            onPressBackdrop={this._onCategoryCancel}
+          >
+            <Text style={{fontSize: 24}}>
+              Create New Category:
+            </Text>
+
+            <TextInput
+              style={styles.focusEditTextInput}
+              textAlign='center'
+              keyboardAppearance='dark'
+              maxLength={24}
+              returnKeyType='done'
+              onChangeText={newCategory => this.setState({newCategory})}
+              value={this.state.newCategory}
+            />
+
+            <Picker
+              selectedValue={this.state.category}
+              onValueChange={(value, index) => this._onCategoryChange(value)}
+              style={{
+                height: '70%',
+                width: '80%',
+                marginBottom: 10,
+              }}
+            >
+              {
+                this.props.categories.types.map((category, idx) => 
+                  <Picker.Item 
+                    key={idx} 
+                    label={category} 
+                    value={category}
+                  />
+                )
+              }
+            </Picker>
+
+            <Button
+              title='Done'
+              onPress={this._onCategoryConfirm}
+            />
+          </LTModal>
 
           <TouchableOpacity onPress={() => this._selectSetting(WORK_PERIOD)}>
             <Text style={styles.editItem}>
@@ -340,11 +422,13 @@ class FocusEditScreen extends React.Component {
 }
 
 const mapStateToProps = state => ({
+  categories: state.categories,
   focus: state.focus,
   focuses: state.focuses,
 });
 
 const mapDispatchToProps = dispatch => ({
+  addCategory: category => dispatch(addCategory(category)),
   deleteFocus: id => dispatch(deleteFocus(id)),
   setName: (id, name) => dispatch(setName(id, name)),
   setCategory: (id, category) => dispatch(setCategory(id, category)),
@@ -354,62 +438,3 @@ const mapDispatchToProps = dispatch => ({
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(FocusEditScreen);
-
-/*
-<Modal 
-  isVisible={this.state.editModalShow}
-  onBackdropPress={() => this.setState({ editModalShow: false })}
-  style={styles.editModal}
->
-  <View style={styles.editModalContainer} >
-    <Picker
-      selectedValue={this.state.value}
-      onValueChange={(value, index) => this._onValueChange(value)}
-      style={styles.editPicker}
-    >
-      {
-        Array(40).fill().map((_, i) => 
-          <Picker.Item 
-            key={i} 
-            label={(i + 1).toString()} 
-            value={(i + 1).toString()} 
-          />
-        )
-      }
-    </Picker>
-
-    <Button
-      title='Confirm'
-      onPress={this._onEditConfirm}             
-    />
-
-    <Button
-      title='Cancel'
-      onPress={this._onEditCancel}             
-    />
-  </View>
-</Modal>
-
-
-<Modal
-  isVisible={this.state.deleteModalShow}
-  onBackdropPress={() => this.setState({deleteModalShow: false}) } 
-  style={styles.deleteModal}
->
-  <View style={styles.deleteModalContainer} >
-    <Text style={styles.deleteModalText}>
-      Are you sure you want to delete this focus?
-    </Text>
-
-    <Button
-      title='Confirm'
-      onPress={this._onDeleteConfirm}             
-    />
-
-    <Button
-      title='Cancel'
-      onPress={this._onDeleteCancel}             
-    />
-  </View>
-</Modal>
-*/

@@ -38,7 +38,7 @@ const BaseStyles = {
     backgroundColor: 'white',
   },
   section: {
-    color: 'white',
+    color: 'black',
     fontSize: Fonts.md,
   },
 };

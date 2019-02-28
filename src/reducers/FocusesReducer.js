@@ -29,7 +29,7 @@ function focusesReducer(state = {}, action) {
       return newState;
     case SET_CATEGORY:
       newState[action.id].category = action.category;
-
+      
       return newState;
     case SET_TIME:
       newState[action.id].time = action.time;
