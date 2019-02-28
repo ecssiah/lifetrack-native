@@ -47,6 +47,7 @@ class SettingsScreen extends React.Component {
     title: 'Settings',
   };
 
+  // TODO: Clear active intervals/timers when logging out
   _logoutUser = () => {
     auth.signOut().then(() => {
       this.props.navigation.navigate('Login');
