@@ -14,6 +14,7 @@ import {
   DEFAULT_WORK_PERIOD, DEFAULT_WORK_GOAL, DEFAULT_BREAK_PERIOD, 
 } from '../../constants/Focus';
 import createStyles from '../../styles';
+import LTModal from '../../components/LTModal';
 
 const styles = createStyles({
   editItem: {
@@ -275,6 +276,60 @@ class FocusEditScreen extends React.Component {
             </Text>
           </TouchableOpacity>
 
+          <LTModal
+            show={this.state.editModalShow}
+            onPressBackdrop={this._onEditCancel}
+          >
+            <Picker
+              selectedValue={this.state.value}
+              onValueChange={(value, index) => this._onValueChange(value)}
+              style={{
+                height: '70%',
+                width: '80%',
+                marginBottom: 10,
+              }}
+            >
+              {
+                Array(40).fill().map((_, i) => 
+                  <Picker.Item 
+                    key={i} 
+                    label={(i + 1).toString()} 
+                    value={(i + 1).toString()} 
+                  />
+                )
+              }
+            </Picker>
+
+            <Button
+              title='Confirm'
+              onPress={this._onEditConfirm}             
+            />
+
+            <Button
+              title='Cancel'
+              onPress={this._onEditCancel}             
+            />
+          </LTModal>
+
+          <LTModal
+            show={this.state.deleteModalShow}
+            onPressBackdrop={this._onDeleteCancel} 
+            height={'34%'}
+          >
+            <Text style={{marginBottom: 20, textAlign: 'center', fontSize: 24, }}>
+              Are you sure you want to permanently delete this focus?
+            </Text>
+              
+            <Button
+              title='Confirm'
+              onPress={this._onDeleteConfirm}             
+            />
+
+            <Button
+              title='Cancel'
+              onPress={this._onDeleteCancel}             
+            />
+          </LTModal>
         </View>
       );
     } else {

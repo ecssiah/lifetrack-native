@@ -4,9 +4,6 @@ import { View, Text, TextInput, Button } from 'react-native';
 import { auth, db } from '../../config';
 import { addFocus } from '../../actions/FocusesActions';
 import createStyles from '../../styles';
-import { 
-  DEFAULT_WORK_PERIOD, DEFAULT_WORK_GOAL, DEFAULT_BREAK_PERIOD 
-} from '../../constants/Focus';
 
 const styles = createStyles({
   focusAddContainer: {

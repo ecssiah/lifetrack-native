@@ -119,17 +119,17 @@ class SettingsScreen extends React.Component {
 
         <TouchableOpacity onPress={() => this._selectSetting(WORK_PERIOD)}>
           <Text style={styles.settingsItem}>
-            Work Period: {this.props.settings.workPeriod}
+            Default Work Period: {this.props.settings.workPeriod}
           </Text> 
         </TouchableOpacity>
         <TouchableOpacity onPress={() => this._selectSetting(WORK_GOAL)}>
           <Text style={styles.settingsItem}>
-            Work Goal: {this.props.settings.workGoal}
+            Default Work Goal: {this.props.settings.workGoal}
           </Text> 
         </TouchableOpacity>
         <TouchableOpacity onPress={() => this._selectSetting(BREAK_PERIOD)}>
           <Text style={styles.settingsItem}>
-            Break Period: {this.props.settings.breakPeriod}
+            Default Break Period: {this.props.settings.breakPeriod}
           </Text> 
         </TouchableOpacity>
 
@@ -143,6 +143,7 @@ class SettingsScreen extends React.Component {
             style={{
               height: '70%',
               width: '80%',
+              marginBottom: 10,
             }}
           >
             {

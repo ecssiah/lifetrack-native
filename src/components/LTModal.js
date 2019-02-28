@@ -23,9 +23,9 @@ class LTModal extends React.Component {
             style={{
               justifyContent: 'center',
               alignItems: 'center',
-              width: '86%',
-              height: '56%',
-              padding: 20,
+              width: this.props.width,
+              height: this.props.height,
+              padding: 12,
               borderWidth: 2,
               borderRadius: 10,
               borderColor: '#dedede',
@@ -47,6 +47,11 @@ class LTModal extends React.Component {
       </Modal>
     );
   };
+};
+
+LTModal.defaultProps = {
+  width: '86%',
+  height: '49%',
 };
 
 export default LTModal;
