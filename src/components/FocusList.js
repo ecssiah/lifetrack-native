@@ -7,9 +7,8 @@ import FocusItem from './FocusItem';
 const styles = createStyles({
   separator: {
     height: 1,
-    backgroundColor: "#CED0CE",
-    marginLeft: "4%", 
-    marginRight: "4%",
+    backgroundColor: '#ced0ce',
+    marginHorizontal: '3%',
   },
 });
 
