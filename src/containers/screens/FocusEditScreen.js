@@ -16,13 +16,29 @@ import {
   WORK_PERIOD, WORK_GOAL, BREAK_PERIOD,
   DEFAULT_WORK_PERIOD, DEFAULT_WORK_GOAL, DEFAULT_BREAK_PERIOD, 
 } from '../../constants/Focus';
-import createStyles from '../../styles';
+import createStyles, { Colors } from '../../styles';
 
 import LTModal from '../../components/LTModal';
 
 const styles = createStyles({
-  editItem: {
+  editText: {
+    fontSize: 24,
+    margin: 4,
+  },
+  editNameFocus: {
+    margin: 8,
+    padding: 8,
     fontSize: 32, 
+    borderColor: Colors.primary,
+    borderWidth: 1,
+    borderRadius: 6,
+    backgroundColor: '#e0e0e0',
+  },
+  editNameBlur: {
+    margin: 8,
+    padding: 9,
+    fontSize: 32, 
+    backgroundColor: 'white',
   },
   editContainer: {
     flex: 1,
@@ -49,13 +65,13 @@ const styles = createStyles({
   editInput: {
     width: 240, 
     height: 40, 
-    borderWidth: 1,
-    borderColor: 'gray', 
+    fontSize: 22,
   },
   editDelete: {
     fontSize: 22,
     textAlign: 'center',
     color: 'red',
+    margin: 16,
   },
   deleteModal: {
     justifyContent: 'center',
@@ -77,7 +93,7 @@ const styles = createStyles({
     backgroundColor: 'white',
   },
   categoryText: {
-    margin: 10,
+    margin: 4,
     fontSize: 24,
   },
   focusEditTextInput: {
@@ -101,6 +117,7 @@ class FocusEditScreen extends React.Component {
       categoryModalShow: false,
       editModalShow: false,
       deleteModalShow: false,
+      editInputStyle: styles.editNameBlur,
     };
   };
 
@@ -229,6 +246,18 @@ class FocusEditScreen extends React.Component {
     this.props.setName(this.props.focus.id, this.state.name);
   };
 
+  _onEditInputFocus = () => {
+    this.setState({
+      editInputStyle: styles.editNameFocus,
+    });
+  };
+
+  _onEditInputBlur = () => {
+    this.setState({
+      editInputStyle: styles.editNameBlur,
+    });
+  };
+
   _onClickCategory = () => {
     this.setState({
       categoryModalShow: true, 
@@ -272,15 +301,16 @@ class FocusEditScreen extends React.Component {
     if (focus) {
       return (
         <View style={styles.editContainer}>
-          <Text style={styles.section} >Name</Text>
           <TextInput
-            style={styles.editInput}
+            style={this.state.editInputStyle}
             value={this.state.name}
             textAlign='center'
             keyboardAppearance='dark'
             returnKeyType='done'
             onChangeText={name => this.setState({name})}
             onSubmitEditing={this._onSetName}
+            onBlur={this._onEditInputBlur}
+            onFocus={this._onEditInputFocus}
           />
 
           <TouchableOpacity
@@ -336,17 +366,17 @@ class FocusEditScreen extends React.Component {
           </LTModal>
 
           <TouchableOpacity onPress={() => this._selectSetting(WORK_PERIOD)}>
-            <Text style={styles.editItem}>
+            <Text style={styles.editText}>
               Work Period: {focus.workPeriod}
             </Text> 
           </TouchableOpacity>
           <TouchableOpacity onPress={() => this._selectSetting(WORK_GOAL)}>
-            <Text style={styles.editItem}>
+            <Text style={styles.editText}>
               Work Goal: {focus.workGoal}
             </Text> 
           </TouchableOpacity>
           <TouchableOpacity onPress={() => this._selectSetting(BREAK_PERIOD)}>
-            <Text style={styles.editItem}>
+            <Text style={styles.editText}>
               Break Period: {focus.breakPeriod}
             </Text> 
           </TouchableOpacity>
