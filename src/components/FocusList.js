@@ -1,7 +1,8 @@
 import React from 'react';
-import { FlatList, View } from 'react-native';
+import { FlatList, SectionList, View } from 'react-native';
 import createStyles from '../styles';
 
+import FocusHeader from './FocusHeader';
 import FocusItem from './FocusItem';
 
 const styles = createStyles({
@@ -13,7 +14,9 @@ const styles = createStyles({
 });
 
 class FocusList extends React.Component {
-  _renderSeparator = () => <View style={styles.focusSeparator} />;
+  _renderSeparator = () => (
+    <View style={styles.focusSeparator} />
+  );
 
   _renderItem = item => (
     <FocusItem 
@@ -22,13 +25,20 @@ class FocusList extends React.Component {
     />
   );
 
+  _renderSectionHeader = title => (
+    <FocusHeader title={title} />   
+  ); 
+
   render() {
     return (
-      <FlatList
-        data={Object.values(this.props.focuses)}
+      <SectionList
+        sections={this.props.sections}
         keyExtractor={item => item.id}
         ItemSeparatorComponent={this._renderSeparator}
-        renderItem={({item}) => this._renderItem(item)}
+        renderItem={({item}) => this._renderItem(item) }
+        renderSectionHeader={({section: {title}}) => {
+          return this._renderSectionHeader(title);
+        }}
       />
     );
   };

@@ -24,10 +24,34 @@ class FocusesScreen extends React.Component {
     this.props.navigation.navigate('Focus');
   };
 
+  _getSectionData = () => {
+    if (this.props.categories.types) {
+      let listData = [];
+      let focusArray = Object.values(this.props.focuses);
+      
+      this.props.categories.types.forEach(category => {
+        let data = focusArray.filter(focus => {
+          return focus.category === category;
+        });
+
+        let section = {
+          title: category,
+          data: data,
+        };
+
+        listData.push(section);
+      });
+
+      return listData;
+    }
+
+    return [];
+  };
+
   render() {
     return (
       <FocusList
-        focuses={this.props.focuses}
+        sections={this._getSectionData()}
         selectFocus={this._selectFocus}
       />
     );
@@ -36,6 +60,7 @@ class FocusesScreen extends React.Component {
 
 const mapStateToProps = state => ({
   focuses: state.focuses,
+  categories: state.categories,
 });
 
 const mapDispatchToProps = dispatch => ({
