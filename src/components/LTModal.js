@@ -1,5 +1,31 @@
 import React from 'react';
 import { Modal, TouchableHighlight, View } from 'react-native';
+import createStyles from '../styles';
+
+const styles = createStyles({
+  modalBackdrop: {
+    flex: 1,
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#00000080',
+  },
+  modalBackdropMask: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 12,
+    borderWidth: 2,
+    borderRadius: 10,
+    borderColor: '#dedede',
+    backgroundColor: '#ffffff',
+  },
+  modalContent: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: '100%',
+    height: '100%',
+  },
+});
 
 class LTModal extends React.Component {
   render() {
@@ -10,36 +36,17 @@ class LTModal extends React.Component {
       >
         <TouchableHighlight 
           onPress={this.props.onPressBackdrop}
-          style={{
-            flex: 1,
-            flexDirection: 'column',
-            justifyContent: 'center',
-            alignItems: 'center',
-            backgroundColor: '#00000080',
-          }}
+          style={styles.modalBackdrop}
         >
           <TouchableHighlight 
             activeOpacity={1}
             style={{
-              justifyContent: 'center',
-              alignItems: 'center',
+              ...styles.modalBackdropMask,
               width: this.props.width,
               height: this.props.height,
-              padding: 12,
-              borderWidth: 2,
-              borderRadius: 10,
-              borderColor: '#dedede',
-              backgroundColor: '#ffffff',
             }}
           >
-            <View 
-              style={{
-                justifyContent: 'center',
-                alignItems: 'center',
-                width: '100%',
-                height: '100%',
-              }}
-            >
+            <View style={styles.modalContent} >
               {this.props.children}
             </View>
           </TouchableHighlight>
