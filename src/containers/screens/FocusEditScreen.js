@@ -303,19 +303,30 @@ class FocusEditScreen extends React.Component {
   };
 
   _onCategoryConfirm = () => {
-    let category;
+    let categoryName;
 
     if (this.state.newCategory !== '') {
-      category = this.state.newCategory;
-      this.props.addCategory(this.state.newCategory);
+      categoryName = this.state.newCategory;
+
+      const category = {
+        name: categoryName,
+        show: true,
+      };
+
+      const catRef = db.collection('categories').doc(auth.currentUser.uid);
+      catRef.update({
+        list: firebase.firestore.FieldValue.arrayUnion(category),
+      });
+
+      this.props.addCategory(category);
     } else {
-      category = this.state.category;
+      categoryName = this.state.category;
     }
 
-    this.props.setCategory(this.props.focus.id, category);
+    this.props.setCategory(this.props.focus.id, categoryName);
 
     this.setState({
-      category: category,
+      category: categoryName,
       categoryModalShow: false,
     });
   };
@@ -376,11 +387,11 @@ class FocusEditScreen extends React.Component {
               onValueChange={(value, index) => this._onCategoryChange(value)}
             >
               {
-                this.props.categories.types.map((category, idx) => 
+                this.props.categories.map((category, idx) => 
                   <Picker.Item 
                     key={idx} 
-                    label={category} 
-                    value={category}
+                    label={category.name} 
+                    value={category.name}
                   />
                 )
               }
