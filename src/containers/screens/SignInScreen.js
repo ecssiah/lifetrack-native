@@ -47,9 +47,7 @@ class SignInScreen extends React.Component {
 
         this.props.setSettings(settings);
 
-        const categories = {
-          types: doc.get('types'),
-        };
+        const categories = doc.get('list');
 
         this.props.setCategories(categories);
       }).catch(err => {

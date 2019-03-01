@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { View, Text, TextInput, Button, Picker, TouchableOpacity } from 'react-native';
 import { auth, db } from '../../config';
+import firebase from 'firebase';
 import { addCategory } from '../../actions/CategoriesActions';
 import { addFocus } from '../../actions/FocusesActions';
 import createStyles from '../../styles';
@@ -60,7 +61,7 @@ class FocusAddScreen extends React.Component {
     this.state = {
       name: null,
       newCategory: null,
-      category: props.categories.types[0],
+      category: props.categories[0].name,
       categoryModalShow: false,
     };
   }
@@ -122,7 +123,18 @@ class FocusAddScreen extends React.Component {
 
     if (this.state.newCategory !== '') {
       newState.category = this.state.newCategory;
-      this.props.addCategory(this.state.newCategory);
+
+      const category = {
+        name: this.state.newCategory,
+        show: true,
+      };
+
+      const catRef = db.collection('categories').doc(auth.currentUser.uid);
+      catRef.update({
+        list: firebase.firestore.FieldValue.arrayUnion(category),
+      });
+
+      this.props.addCategory(category);
     }
 
     this.setState(newState);
@@ -182,11 +194,11 @@ class FocusAddScreen extends React.Component {
             onValueChange={value => this._onCategoryChange(value)}
           >
             {
-              this.props.categories.types.map((category, idx) => 
+              this.props.categories.map((category, idx) => 
                 <Picker.Item 
                   key={idx} 
-                  label={category} 
-                  value={category}
+                  label={category.name} 
+                  value={category.name}
                 />
               )
             }

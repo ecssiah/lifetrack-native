@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { setId } from '../../actions/FocusActions';
+import { toggleCategoryShow } from '../../actions/CategoriesActions';
 
 import LTIcon from '../../components/LTIcon';
 import FocusList from '../../components/FocusList';
@@ -19,6 +20,7 @@ class FocusesScreen extends React.Component {
   });
 
   _selectCategory = category => {
+    this.props.toggleCategoryShow(category);
   };
 
   _selectFocus = id => {
@@ -30,15 +32,19 @@ class FocusesScreen extends React.Component {
     let sectionData = [];
     let focusArray = Object.values(this.props.focuses);
     
-    this.props.categories.types.forEach(title => {
-      const data = focusArray.filter(focus => {
-        return focus.category === title;
-      }).sort((a, b) => {
-        return a.name.localeCompare(b.name);
-      });
+    this.props.categories.forEach(category => {
+      let data = [];
 
-      const section = {
-        title,
+      if (category.show) {
+        data = focusArray.filter(focus => {
+          return focus.category === category.name;
+        }).sort((a, b) => {
+          return a.name.localeCompare(b.name);
+        });
+      }
+
+      let section = {
+        title: category.name,
         data,
       };
 
@@ -66,6 +72,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   setId: id => dispatch(setId(id)),
+  toggleCategoryShow: name => dispatch(toggleCategoryShow(name)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(FocusesScreen);

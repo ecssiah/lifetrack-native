@@ -42,9 +42,7 @@ class SplashScreen extends React.Component {
 
           const categoriesDoc = values[1];
 
-          const categories = {
-            types: categoriesDoc.get('types'),
-          };
+          const categories = categoriesDoc.get('list');
 
           this.props.setCategories(categories);
 

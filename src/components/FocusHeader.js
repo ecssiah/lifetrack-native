@@ -1,6 +1,6 @@
 import React from 'react';
 import { 
-  Text, View 
+  Text, TouchableOpacity, View 
 } from 'react-native';
 import createStyles from '../styles'; 
 
@@ -23,11 +23,16 @@ const styles = createStyles({
 class FocusHeader extends React.Component {
   render() {
     return (
-      <View style={styles.focusHeaderContainer}>
-        <Text style={styles.focusHeaderText}>
-          {this.props.title}
-        </Text>
-      </View>
+      <TouchableOpacity 
+        activeOpacity={0.9} 
+        onPress={() => this.props.selectCategory(this.props.title)}
+      >
+        <View style={styles.focusHeaderContainer}>
+          <Text style={styles.focusHeaderText}>
+            {this.props.title}
+          </Text>
+        </View>
+      </TouchableOpacity>
     );
   }
 }

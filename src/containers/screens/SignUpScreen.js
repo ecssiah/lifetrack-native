@@ -54,12 +54,14 @@ class SignUpScreen extends React.Component {
         this.props.setSettings(settings);
 
         const categories = {
-          types: ['General'],
+          list: [
+            { name: 'General', show: true },
+          ],
         };
 
         db.collection('categories').doc(cred.user.uid).set(categories);
 
-        this.props.setCategories(categories);
+        this.props.setCategories(categories.list);
 
         // const stats = {
         //   today: {

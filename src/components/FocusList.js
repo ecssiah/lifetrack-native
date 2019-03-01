@@ -28,6 +28,7 @@ class FocusList extends React.Component {
   _renderHeader = section => (
     <FocusHeader 
       title={section.title} 
+      selectCategory={this.props.selectCategory}
     />
   ); 
 
