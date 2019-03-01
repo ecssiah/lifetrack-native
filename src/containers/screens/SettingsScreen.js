@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { 
-  Button, Modal, Picker, Text, TouchableOpacity, TouchableHighlight, View 
+  Button, Picker, Text, TouchableOpacity, TouchableHighlight, View 
 } from 'react-native';
 import { auth } from '../../config';
 import { 
@@ -10,18 +10,16 @@ import {
 import { 
   setDefaultWorkPeriod, setDefaultWorkGoal, setDefaultBreakPeriod, 
 } from '../../actions/SettingsActions';
-import createStyles from '../../styles'; 
+import createStyles, { Colors } from '../../styles'; 
+
 import LTModal from '../../components/LTModal';
+import SettingList from '../../components/SettingList';
 
 const styles = createStyles({
-  settingsItem: {
-    fontSize: 32, 
+  settingsContainer: {
+    flex: 1,
   },
-  settingsPicker: {
-    width: 260,
-    height: 120,
-  },
-  settingsPickerContainer: {
+  settingsModalContainer: {
     height: '50%',
     width: '86%',
     alignItems: 'center',
@@ -29,6 +27,23 @@ const styles = createStyles({
     borderWidth: 2,
     borderColor: '#e0e0e0',
     backgroundColor: 'white',
+  },
+  settingsLogout: {
+    fontSize: 28,
+    textAlign: 'center',
+    margin: 6,
+  },
+  settingsItem: {
+    fontSize: 32, 
+  },
+  settingsModalText: {
+    fontSize: 24, 
+    marginBottom: 4,
+  },
+  settingsModalPicker: {
+    height: '70%',
+    width: '80%',
+    marginBottom: -32,
   },
 });
 
@@ -38,7 +53,7 @@ class SettingsScreen extends React.Component {
 
     this.state = {
       modalShow: false,
-      attr: null,
+      setting: null,
       value: null,
     };
   };
@@ -47,17 +62,23 @@ class SettingsScreen extends React.Component {
     title: 'Settings',
   };
 
-  // TODO: Clear active intervals/timers when logging out
   _logoutUser = () => {
+    for (const key in this.props.focuses) {
+      clearInterval(this.props.focuses[key]);
+    }
+
     auth.signOut().then(() => {
       this.props.navigation.navigate('Login');
     });
   };
 
-  _selectSetting = attr => {
+  _selectSetting = setting => {
     let value;
 
-    switch (attr) {
+    switch (setting) {
+      case 'Logout':
+        this._logoutUser();
+        return;
       case WORK_PERIOD:
         value = this.props.settings.workPeriod.toString();
         break;
@@ -68,12 +89,12 @@ class SettingsScreen extends React.Component {
         value = this.props.settings.breakPeriod.toString();
         break;
       default:
-        console.error('invalid focus attribute');
+        console.error('Invalid setting: ' + setting);
     }
 
     this.setState({
       modalShow: true,
-      attr,
+      setting,
       value,
     });
   };
@@ -85,7 +106,7 @@ class SettingsScreen extends React.Component {
   };
 
   _onConfirm = () => {
-    switch (this.state.attr) {
+    switch (this.state.setting) {
       case WORK_PERIOD:
         this.props.setDefaultWorkPeriod(parseInt(this.state.value));
         break;
@@ -110,42 +131,63 @@ class SettingsScreen extends React.Component {
     });
   };
 
+  _renderLogout = ({ item, index, section: { title, data } }) => {
+    return (
+      <TouchableOpacity 
+        key={index} 
+        onPress={() => this._selectSetting('Logout')}
+      >
+        <Text style={styles.settingsLogout}>
+          {item.name}
+        </Text>
+      </TouchableOpacity> 
+    );
+  };
+
+  _getSectionData = () => {
+    let sectionData = [];
+
+    sectionData.push({
+      title: '',
+      data: [
+        { name: 'Logout', value: ''},
+      ], 
+      renderItem: this._renderLogout,
+    });
+
+    sectionData.push({
+      title: 'Default',
+      data: [ 
+        { name: WORK_PERIOD, value: this.props.settings.workPeriod },
+        { name: WORK_GOAL, value: this.props.settings.workGoal },
+        { name: BREAK_PERIOD, value: this.props.settings.breakPeriod },
+      ],
+    });
+
+    return sectionData;
+  };
+
   render() {
     return (
-      <View style={styles.container}>
-        <Button
-          title="Logout"
-          onPress={this._logoutUser}
+      <View style={styles.settingsContainer}>
+        <SettingList
+          sections={this._getSectionData()} 
+          selectSetting={this._selectSetting}
         />
 
-        <TouchableOpacity onPress={() => this._selectSetting(WORK_PERIOD)}>
-          <Text style={styles.settingsItem}>
-            Default Work Period: {this.props.settings.workPeriod}
-          </Text> 
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => this._selectSetting(WORK_GOAL)}>
-          <Text style={styles.settingsItem}>
-            Default Work Goal: {this.props.settings.workGoal}
-          </Text> 
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => this._selectSetting(BREAK_PERIOD)}>
-          <Text style={styles.settingsItem}>
-            Default Break Period: {this.props.settings.breakPeriod}
-          </Text> 
-        </TouchableOpacity>
-
         <LTModal 
+          style={styles.settingsModalContainer}
           show={this.state.modalShow}
           onPressBackdrop={this._onCancel}
         >
+          <Text style={styles.settingsModalText}>
+            {this.state.setting}
+          </Text>
+
           <Picker
+            style={styles.settingsModalPicker}
             selectedValue={this.state.value}
             onValueChange={(value, index) => this._onValueChange(value)}
-            style={{
-              height: '70%',
-              width: '80%',
-              marginBottom: 10,
-            }}
           >
             {
               Array(40).fill().map((_, i) => 
@@ -167,7 +209,6 @@ class SettingsScreen extends React.Component {
             title='Cancel'
             onPress={this._onCancel}             
           />
-
         </LTModal>
       </View>
     );
@@ -175,6 +216,7 @@ class SettingsScreen extends React.Component {
 };
 
 const mapStateToProps = state => ({
+  focuses: state.focuses,
   settings: state.settings,
 });
 

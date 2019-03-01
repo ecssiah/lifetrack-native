@@ -1,7 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { View } from 'react-native';
-import Ionicons from 'react-native-vector-icons/Ionicons';
 import { 
   setTime, updateTime, updatePeriods, updateExperience, resetPeriods,
   setWorking, setActive, setTimer
@@ -13,6 +12,7 @@ import FocusTitle from '../../components/FocusTitle';
 import FocusTimer from '../../components/FocusTimer';
 import FocusGoal from '../../components/FocusGoal';
 import FocusExperience from '../../components/FocusExperience';
+import LTIcon from '../../components/LTIcon';
 
 const styles = createStyles();
 
@@ -20,21 +20,17 @@ class FocusScreen extends React.Component {
   static navigationOptions = ({ navigation }) => ({
     title: 'Focus',
     headerLeft: (
-      <Ionicons
-        name='ios-arrow-back' size={32} color='#ffffff'
-        onPress={ () => navigation.goBack() }
-        style={{
-          marginLeft: 16,
-        }}
+      <LTIcon
+        type='ios-arrow-back'
+        size={32}
+        onPress={() => navigation.goBack()}
       />
     ),
     headerRight: (
-      <Ionicons
-        name='md-create' size={26} color='#ffffff' 
-        onPress={ () => navigation.navigate('FocusEdit') }
-        style={{ 
-          marginRight: 16, 
-        }}
+      <LTIcon
+        type='md-create'
+        size={26}
+        onPress={() => navigation.navigate('FocusEdit')}
       />
     ),
   });

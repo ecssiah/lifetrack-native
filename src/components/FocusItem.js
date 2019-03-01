@@ -21,19 +21,20 @@ const styles = createStyles({
     fontSize: 20,
     color: Colors.text,
   },
-  focusLevel: {
-    fontSize: 20,
-    alignItems: 'center',
-    marginRight: 10,
-  },
   focusItemRight: {
     flex: 1,
     flexDirection: 'row',
     justifyContent: 'flex-end',
     alignItems: 'center',
   },
+  focusLevel: {
+    fontSize: 20,
+    alignItems: 'center',
+    marginRight: 10,
+  },
   focusProgress: {
     width: 80,
+    marginTop: 1,
     transform: [
       { scaleX: 1.0 }, 
       { scaleY: 6.0 },

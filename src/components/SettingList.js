@@ -2,31 +2,31 @@ import React from 'react';
 import { SectionList, View } from 'react-native';
 import createStyles from '../styles';
 
-import FocusHeader from './FocusHeader';
-import FocusItem from './FocusItem';
+import SettingItem from './SettingItem';
+import SettingHeader from './SettingHeader';
 
 const styles = createStyles({
-  focusSeparator: {
+  settingSeparator: {
     height: 1,
     backgroundColor: '#ced0ce',
     marginHorizontal: '3%',
   },
 });
 
-class FocusList extends React.Component {
+class SettingList extends React.Component {
   _renderSeparator = () => (
-    <View style={styles.focusSeparator} />
+    <View style={styles.settingSeparator} />
   );
 
   _renderItem = item => (
-    <FocusItem 
-      focus={item} 
-      selectFocus={this.props.selectFocus} 
+    <SettingItem 
+      setting={item} 
+      selectSetting={this.props.selectSetting} 
     />
   );
 
   _renderHeader = section => (
-    <FocusHeader 
+    <SettingHeader 
       title={section.title} 
     />
   ); 
@@ -35,13 +35,13 @@ class FocusList extends React.Component {
     return (
       <SectionList
         sections={this.props.sections}
-        keyExtractor={item => item.id}
-        ItemSeparatorComponent={this._renderSeparator}
+        keyExtractor={(item, index) => item.name + index}
         renderItem={({item}) => this._renderItem(item)}
         renderSectionHeader={({section}) => this._renderHeader(section)}
+        ItemSeparatorComponent={this._renderSeparator}
       />
     );
   };
 };
 
-export default FocusList;
+export default SettingList;

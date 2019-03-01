@@ -5,14 +5,14 @@ import {
 import createStyles from '../styles'; 
 
 const styles = createStyles({
-  focusHeaderContainer: {
+  settingsHeaderContainer: {
     backgroundColor: '#666666',
     borderTopWidth: 1,
     borderTopColor: '#777777',
     borderBottomWidth: 1,
     borderBottomColor: '#555555',
   },
-  focusHeaderText: {
+  settingsHeaderText: {
     color: 'white',
     fontSize: 18,
     marginLeft: 4,
@@ -20,11 +20,11 @@ const styles = createStyles({
   },
 });
 
-class FocusHeader extends React.Component {
+class SettingsHeader extends React.Component {
   render() {
     return (
-      <View style={styles.focusHeaderContainer}>
-        <Text style={styles.focusHeaderText}>
+      <View style={styles.settingsHeaderContainer}>
+        <Text style={styles.settingsHeaderText}>
           {this.props.title}
         </Text>
       </View>
@@ -32,4 +32,4 @@ class FocusHeader extends React.Component {
   }
 }
 
-export default FocusHeader;
+export default SettingsHeader;

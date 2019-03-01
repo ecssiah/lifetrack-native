@@ -4,7 +4,6 @@ import { db } from '../../config';
 import { 
   View, Text, TextInput, Button, Picker, TouchableOpacity 
 } from 'react-native';
-import Ionicons from 'react-native-vector-icons/Ionicons';
 import {
   addCategory,
 } from '../../actions/CategoriesActions';
@@ -20,6 +19,7 @@ import {
 import createStyles, { Colors } from '../../styles';
 
 import LTModal from '../../components/LTModal';
+import LTIcon from '../../components/LTIcon';
 
 const styles = createStyles({
   editContainer: {
@@ -40,7 +40,6 @@ const styles = createStyles({
     margin: 4,
   },
   editNameInputFocus: {
-    color: '#222262',
     fontSize: 36, 
     fontWeight: 'bold',
     borderColor: Colors.primary,
@@ -135,7 +134,7 @@ class FocusEditScreen extends React.Component {
 
     this.state = {
       value: 1,
-      attr: null,
+      setting: null,
       newCategory: null,
       name: props.focuses[props.focus.id].name,
       category: props.focuses[props.focus.id].category,
@@ -149,21 +148,19 @@ class FocusEditScreen extends React.Component {
   static navigationOptions = ({ navigation }) => ({
     title: 'Edit Focus',
     headerLeft: (
-      <Ionicons
-        name='ios-arrow-back' size={32} color='#ffffff'
-        onPress={ () => navigation.goBack() }
-        style={{
-          marginLeft: 16,
-        }}
+      <LTIcon
+        type='ios-arrow-back'
+        size={32}
+        onPress={() => navigation.goBack()}
       />
     ),
   });
 
-  _selectSetting = attr => {
+  _selectSetting = setting => {
     let value;
     const focus = this.props.focuses[this.props.focus.id];
 
-    switch (attr) {
+    switch (setting) {
       case WORK_PERIOD:
         value = focus.workPeriod.toString();
         break;
@@ -179,7 +176,7 @@ class FocusEditScreen extends React.Component {
 
     this.setState({
       editModalShow: true,
-      attr,
+      setting,
       value,
     });
   };
@@ -191,7 +188,7 @@ class FocusEditScreen extends React.Component {
   };
 
   _onEditConfirm = () => {
-    switch (this.state.attr) {
+    switch (this.state.setting) {
       case WORK_PERIOD:
         this.props.setWorkPeriod(
           this.props.focus.id, parseInt(this.state.value)
@@ -423,7 +420,7 @@ class FocusEditScreen extends React.Component {
             onPressBackdrop={this._onEditCancel}
           >
             <Text style={styles.editModalText}>
-              {this.state.attr}
+              {this.state.setting}
             </Text>
 
             <Picker

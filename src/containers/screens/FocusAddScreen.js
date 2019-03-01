@@ -1,29 +1,55 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { View, Text, TextInput, Button, Picker, TouchableOpacity } from 'react-native';
-import Ionicons from 'react-native-vector-icons/Ionicons';
 import { auth, db } from '../../config';
 import { addCategory } from '../../actions/CategoriesActions';
 import { addFocus } from '../../actions/FocusesActions';
 import createStyles from '../../styles';
 
+import LTIcon from '../../components/LTIcon';
 import LTModal from '../../components/LTModal';
 
 const styles = createStyles({
-  focusAddContainer: {
+  addContainer: {
     flex: 1,
     alignItems: 'center',
     marginTop: '8%',
   },
-  focusAddTextInput: {
+  addTextInput: {
     width: 240, 
     height: 40, 
     borderWidth: 1,
     borderColor: 'gray', 
   },
+  categoryModalContainer: {
+    height: '46%',
+    width: '86%',
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 10,
+    borderWidth: 2,
+    borderColor: '#e0e0e0',
+    backgroundColor: 'white',
+  },
   categoryText: {
     margin: 10,
     fontSize: 24,
+  },
+  categoryModalText: {
+    fontSize: 24, 
+    marginBottom: 4,
+  },
+  categoryModalInput: {
+    width: 272,
+    height: 40, 
+    borderWidth: 1,
+    borderRadius: 10,
+    borderColor: 'gray', 
+  },
+  categoryModalPicker: {
+    height: '70%',
+    width: '80%',
+    marginBottom: -32,
   },
 });
 
@@ -42,12 +68,10 @@ class FocusAddScreen extends React.Component {
   static navigationOptions = ({ navigation }) => ({
     title: 'Add Focus',
     headerLeft: (
-      <Ionicons
-        name='ios-arrow-back' size={32} color='#ffffff'
-        onPress={ () => navigation.goBack() }
-        style={{
-          marginLeft: 16,
-        }}
+      <LTIcon
+        type='ios-arrow-back'
+        size={32}
+        onPress={() => navigation.goBack()}
       />
     ),
   });
@@ -112,11 +136,11 @@ class FocusAddScreen extends React.Component {
 
   render() {
     return (
-      <View style={styles.focusAddContainer}>
+      <View style={styles.addContainer}>
         <Text style={styles.section} >Name</Text>
 
         <TextInput
-          style={styles.focusAddTextInput}
+          style={styles.addTextInput}
           textAlign='center'
           keyboardAppearance='dark'
           maxLength={24}
@@ -134,15 +158,16 @@ class FocusAddScreen extends React.Component {
         </TouchableOpacity>
 
         <LTModal
+          style={styles.categoryModalContainer}
           show={this.state.categoryModalShow} 
           onPressBackdrop={this._onCategoryCancel}
         >
-          <Text style={{fontSize: 24}}>
-            Create New Category:
+          <Text style={styles.categoryModalText}>
+            New Category:
           </Text>
 
           <TextInput
-            style={styles.focusAddTextInput}
+            style={styles.categoryModalInput}
             textAlign='center'
             keyboardAppearance='dark'
             maxLength={24}
@@ -152,13 +177,9 @@ class FocusAddScreen extends React.Component {
           />
 
           <Picker
+            style={styles.categoryModalPicker}
             selectedValue={this.state.category}
-            onValueChange={(value, index) => this._onCategoryChange(value)}
-            style={{
-              height: '70%',
-              width: '80%',
-              marginBottom: 10,
-            }}
+            onValueChange={value => this._onCategoryChange(value)}
           >
             {
               this.props.categories.types.map((category, idx) => 
