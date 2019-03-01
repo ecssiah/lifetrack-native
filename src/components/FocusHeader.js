@@ -7,6 +7,10 @@ import createStyles from '../styles';
 const styles = createStyles({
   focusHeaderContainer: {
     backgroundColor: '#666666',
+    borderTopWidth: 1,
+    borderTopColor: '#777777',
+    borderBottomWidth: 1,
+    borderBottomColor: '#555555',
   },
   focusHeaderText: {
     color: 'white',

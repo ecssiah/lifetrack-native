@@ -25,27 +25,29 @@ class FocusesScreen extends React.Component {
   };
 
   _getSectionData = () => {
-    if (this.props.categories.types) {
-      let listData = [];
-      let focusArray = Object.values(this.props.focuses);
-      
-      this.props.categories.types.forEach(category => {
-        let data = focusArray.filter(focus => {
-          return focus.category === category;
-        });
-
-        let section = {
-          title: category,
-          data: data,
-        };
-
-        listData.push(section);
-      });
-
-      return listData;
+    if (this.props.categories.types === undefined) {
+      return [];
     }
 
-    return [];
+    let sectionData = [];
+    let focusArray = Object.values(this.props.focuses);
+    
+    this.props.categories.types.forEach(title => {
+      const data = focusArray.filter(focus => {
+        return focus.category === title;
+      }).sort((a, b) => {
+        return a.name.localeCompare(b.name);
+      });
+
+      const section = {
+        title,
+        data,
+      };
+
+      sectionData.push(section);
+    });
+
+    return sectionData;
   };
 
   render() {

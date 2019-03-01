@@ -25,8 +25,10 @@ class FocusList extends React.Component {
     />
   );
 
-  _renderSectionHeader = title => (
-    <FocusHeader title={title} />   
+  _renderSectionHeader = section => (
+    <FocusHeader 
+      title={section.title} 
+    />
   ); 
 
   render() {
@@ -35,10 +37,8 @@ class FocusList extends React.Component {
         sections={this.props.sections}
         keyExtractor={item => item.id}
         ItemSeparatorComponent={this._renderSeparator}
-        renderItem={({item}) => this._renderItem(item) }
-        renderSectionHeader={({section: {title}}) => {
-          return this._renderSectionHeader(title);
-        }}
+        renderItem={({item}) => this._renderItem(item)}
+        renderSectionHeader={({section}) => this._renderSectionHeader(section)}
       />
     );
   };
