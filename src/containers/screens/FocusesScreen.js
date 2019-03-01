@@ -6,6 +6,7 @@ import LTIcon from '../../components/LTIcon';
 import FocusList from '../../components/FocusList';
 
 class FocusesScreen extends React.Component {
+
   static navigationOptions = ({ navigation }) => ({
     title: 'Focuses',
     headerRight: (
@@ -17,16 +18,15 @@ class FocusesScreen extends React.Component {
     ),
   });
 
+  _selectCategory = category => {
+  };
+
   _selectFocus = id => {
     this.props.setId(id);
     this.props.navigation.navigate('Focus');
   };
 
   _getSectionData = () => {
-    if (this.props.categories.types === undefined) {
-      return [];
-    }
-
     let sectionData = [];
     let focusArray = Object.values(this.props.focuses);
     
@@ -52,6 +52,7 @@ class FocusesScreen extends React.Component {
     return (
       <FocusList
         sections={this._getSectionData()}
+        selectCategory={this._selectCategory}
         selectFocus={this._selectFocus}
       />
     );

@@ -228,7 +228,7 @@ class FocusEditScreen extends React.Component {
   _onDeleteConfirm = () => {
     db.collection('focuses').doc(this.props.focus.id).delete().then(() => {
       this.props.deleteFocus(this.props.focus.id);
-      this.props.navigation.navigate('Focuses', );
+      this.props.navigation.navigate('Focuses');
     }).catch(err => {
       console.error(err);
     }); 

@@ -25,10 +25,57 @@ class SplashScreen extends React.Component {
   componentDidMount() {
     auth.onAuthStateChanged(user => {
       if (user) {
-        this._loadSettings();
-        this._loadCategories();
-        this._loadFocuses();
-        this.props.navigation.navigate('App');
+        Promise.all([
+          this._loadSettings(),
+          this._loadCategories(),
+          this._loadFocuses()
+        ]).then(values => {
+          const settingsDoc = values[0];
+
+          const settings = {
+            workPeriod: settingsDoc.get('workPeriod'),
+            workGoal: settingsDoc.get('workGoal'),
+            breakPeriod: settingsDoc.get('breakPeriod'),
+          };
+
+          this.props.setSettings(settings);
+
+          const categoriesDoc = values[1];
+
+          const categories = {
+            types: categoriesDoc.get('types'),
+          };
+
+          this.props.setCategories(categories);
+
+          let focuses = {};
+          const focusesSnapshot = values[2];
+
+          focusesSnapshot.forEach(doc => {
+            focuses[doc.id] = {
+              id: doc.get('id'),
+              userId: doc.get('userId'),
+              name: doc.get('name'),
+              category: doc.get('category'),
+              time: doc.get('time'),
+              periods: doc.get('periods'),
+              level: doc.get('level'),
+              workPeriod: doc.get('workPeriod'),
+              workGoal: doc.get('workGoal'),
+              breakPeriod: doc.get('breakPeriod'),
+              experience: doc.get('experience'),
+              working: doc.get('working'),
+              timerActive: doc.get('timerActive'),
+              timer: doc.get('timer'),
+            };
+          });
+
+          this.props.setFocuses(focuses);
+
+          this.props.navigation.navigate('App');
+        }).catch(err => {
+          console.error(err);
+        });
       } else {
         this.props.navigation.navigate('Auth');
       }
@@ -36,62 +83,19 @@ class SplashScreen extends React.Component {
   };
 
   _loadSettings = () => {
-    db.collection('settings').doc(auth.currentUser.uid).get().then(doc => {
-      const settings = {
-        workPeriod: doc.get('workPeriod'),
-        workGoal: doc.get('workGoal'),
-        breakPeriod: doc.get('breakPeriod'),
-      };
-
-      this.props.setSettings(settings);
-    }).catch(err => {
-      console.error(err);
-    });
+    return db.collection('settings').doc(auth.currentUser.uid).get();
   };
 
   _loadCategories = () => {
-    db.collection('categories').doc(auth.currentUser.uid).get().then(doc => {
-      const categories = {
-        types: doc.get('types'),
-      };
-
-      this.props.setCategories(categories);
-    }).catch(err => {
-      console.error(err);
-    });
+    return db.collection('categories').doc(auth.currentUser.uid).get();
   };
 
   _loadFocuses = () => {
-    let focuses = {};
-
-    db.collection('focuses').where(
+    const focusPromise = db.collection('focuses').where(
       'userId', '==', auth.currentUser.uid
-    ).orderBy(
-      'name'
-    ).get().then(snapshot => {
-      snapshot.forEach(doc => {
-        focuses[doc.id] = {
-          id: doc.get('id'),
-          userId: doc.get('userId'),
-          name: doc.get('name'),
-          category: doc.get('category'),
-          time: doc.get('time'),
-          periods: doc.get('periods'),
-          level: doc.get('level'),
-          workPeriod: doc.get('workPeriod'),
-          workGoal: doc.get('workGoal'),
-          breakPeriod: doc.get('breakPeriod'),
-          experience: doc.get('experience'),
-          working: doc.get('working'),
-          timerActive: doc.get('timerActive'),
-          timer: doc.get('timer'),
-        };
-      });
+    ).orderBy('name').get();
 
-      this.props.setFocuses(focuses);
-    }).catch(err => {
-      console.error(err);
-    });
+    return focusPromise;
   };
 
   render() {

@@ -29,7 +29,7 @@ const styles = createStyles({
     backgroundColor: 'white',
   },
   settingsLogout: {
-    fontSize: 28,
+    fontSize: 32,
     textAlign: 'center',
     margin: 6,
   },
