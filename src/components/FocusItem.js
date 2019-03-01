@@ -10,11 +10,11 @@ const styles = createStyles({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    marginHorizontal: 16,
+    marginHorizontal: 12,
     marginVertical: 10,
   },
   focusItemLeft: {
-    flex: 1,
+    flex: 2,
     flexDirection: 'row',
     justifyContent: 'flex-start',
     alignItems: 'center',
@@ -29,6 +29,7 @@ const styles = createStyles({
   },
   focusLevel: {
     fontSize: 20,
+    textAlign: 'center',
     alignItems: 'center',
     marginRight: 10,
   },
@@ -46,6 +47,7 @@ class FocusItem extends React.Component {
   render() {
     return (
       <TouchableOpacity
+        activeOpacity={0.7}
         style={styles.focusContainer}
         onPress={() => this.props.selectFocus(this.props.focus.id)}
       >

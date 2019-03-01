@@ -20,11 +20,12 @@ import createStyles, { Colors } from '../../styles';
 
 import LTModal from '../../components/LTModal';
 import LTIcon from '../../components/LTIcon';
+import SettingItem from '../../components/SettingItem';
+import SettingList from '../../components/SettingList';
 
 const styles = createStyles({
   editContainer: {
-    alignItems: 'center',
-    marginTop: '8%',
+    flex: 1,
   },
   editModalContainer: {
     height: '50%',
@@ -39,24 +40,28 @@ const styles = createStyles({
     fontSize: 24,
     margin: 4,
   },
-  editNameInputFocus: {
-    fontSize: 36, 
-    fontWeight: 'bold',
-    borderColor: Colors.primary,
-    borderWidth: 1,
-    borderRadius: 6,
-    backgroundColor: '#ededed',
-    margin: 8,
-    paddingVertical: 8,
-    paddingHorizontal: 14,
-  },
   editNameInputBlur: {
     fontSize: 36, 
     fontWeight: 'bold',
+    borderColor: 'black',
+    color: 'black',
+    backgroundColor: 'white',
+    borderWidth: 0,
+    margin: 8,
     paddingVertical: 9,
     paddingHorizontal: 15,
+  },
+  editNameInputFocus: {
+    fontSize: 36, 
+    fontWeight: 'bold',
+    borderColor: 'black',
+    color: 'black',
     backgroundColor: 'white',
+    borderWidth: 1,
+    borderRadius: 6,
     margin: 8,
+    paddingVertical: 8,
+    paddingHorizontal: 14,
   },
   editModal: {
     justifyContent: 'center',
@@ -337,30 +342,128 @@ class FocusEditScreen extends React.Component {
     });
   };
 
+  _selectSetting = setting => {
+    let value;
+    const focus = this.props.focuses[this.props.focus.id];
+
+    switch (setting) {
+      case 'Category':
+        value = focus.category;
+        break;
+      case WORK_PERIOD:
+        value = focus.workPeriod.toString();
+        break;
+      case WORK_GOAL:
+        value = focus.workGoal.toString();
+        break;
+      case BREAK_PERIOD:
+        value = focus.breakPeriod.toString();
+        break;
+      default:
+        console.error('invalid focus attribute');
+    }
+
+    this.setState({
+      editModalShow: true,
+      setting,
+      value,
+    });
+  };
+
+  _renderName = ({ item, index, section: { title, data } }) => {
+    return (
+      <TextInput
+        style={this.state.editNameInputStyle}
+        selectionColor={Colors.primary}
+        value={this.state.name}
+        textAlign='center'
+        returnKeyType='done'
+        keyboardAppearance='dark'
+        onChangeText={name => this.setState({name})}
+        onSubmitEditing={this._onSetName}
+        onBlur={this._onEditInputBlur}
+        onFocus={this._onEditInputFocus}
+      />
+    );
+  };
+
+  _renderCategory = ({ item, index, section: { title, data} }) => {
+    return (
+      <SettingItem 
+        setting={item} 
+        selectSetting={this._onClickCategory} 
+      />
+    );
+  };
+
+  _renderDelete = ({ item, index, section: { title, data } }) => {
+    return (
+      <TouchableOpacity 
+        key={index} 
+        onPress={this._onClickDelete}
+      >
+        <Text style={styles.editDelete}>
+          {item.name}
+        </Text>
+      </TouchableOpacity> 
+    );
+  };
+
+  _getSectionData = () => {
+    let sectionData = [];
+    const focus = this.props.focuses[this.props.focus.id];
+
+    sectionData.push({
+      title: '',
+      data: [
+        { name: '', value: focus.name },
+      ],
+      renderItem: this._renderName,
+    });
+
+    sectionData.push({
+      title: '',
+      data: [ 
+        { name: 'Category', value: focus.category },
+      ],
+      renderItem: this._renderCategory,
+    });
+
+    sectionData.push({
+      title: '',
+      data: [ 
+        { name: WORK_PERIOD, value: focus.workPeriod },
+        { name: WORK_GOAL, value: focus.workGoal },
+        { name: BREAK_PERIOD, value: focus.breakPeriod },
+      ],
+    });
+
+    sectionData.push({
+      title: '',
+      data: [
+        { name: 'Delete', value: '' },
+      ],
+      renderItem: this._renderDelete,
+    })
+
+    sectionData.push({
+      title: '',
+      data: [],
+    });
+
+    return sectionData;
+  };
+
   render() {
     const focus = this.props.focuses[this.props.focus.id];
 
     if (focus) {
       return (
         <View style={styles.editContainer}>
-          <TextInput
-            style={this.state.editNameInputStyle}
-            selectionColor={Colors.primary}
-            value={this.state.name}
-            textAlign='center'
-            returnKeyType='done'
-            keyboardAppearance='dark'
-            onChangeText={name => this.setState({name})}
-            onSubmitEditing={this._onSetName}
-            onBlur={this._onEditInputBlur}
-            onFocus={this._onEditInputFocus}
+          <SettingList
+            sections={this._getSectionData()} 
+            selectSetting={this._selectSetting}
           />
-
-          <TouchableOpacity onPress={this._onClickCategory} >
-            <Text style={styles.categoryText}>
-              Category: {this.state.category}
-            </Text>  
-          </TouchableOpacity>
 
           <LTModal
             style={styles.categoryModalContainer}
@@ -402,28 +505,6 @@ class FocusEditScreen extends React.Component {
               onPress={this._onCategoryConfirm}
             />
           </LTModal>
-
-          <TouchableOpacity onPress={() => this._selectSetting(WORK_PERIOD)}>
-            <Text style={styles.editText}>
-              Work Period: {focus.workPeriod}
-            </Text> 
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => this._selectSetting(WORK_GOAL)}>
-            <Text style={styles.editText}>
-              Work Goal: {focus.workGoal}
-            </Text> 
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => this._selectSetting(BREAK_PERIOD)}>
-            <Text style={styles.editText}>
-              Break Period: {focus.breakPeriod}
-            </Text> 
-          </TouchableOpacity>
-
-          <TouchableOpacity onPress={this._onClickDelete} >
-            <Text style={styles.editDelete} >
-              Delete
-            </Text>
-          </TouchableOpacity>
 
           <LTModal
             style={styles.editModalContainer}

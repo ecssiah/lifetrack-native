@@ -45,6 +45,7 @@ class FocusesScreen extends React.Component {
 
       let section = {
         title: category.name,
+        show: category.show,
         data,
       };
 

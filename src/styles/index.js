@@ -15,7 +15,7 @@ export const Colors  = {
 
 export const Fonts = {
   primary: 'Arial',
-  timer: 'ArialMT',
+  timer: 'Helvetica Neue',
 };
 
 const BaseStyles = {

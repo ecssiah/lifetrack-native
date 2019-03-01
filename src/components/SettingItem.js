@@ -43,6 +43,7 @@ class SettingItem extends React.Component {
   render() {
     return (
       <TouchableOpacity
+        activeOpacity={0.7}
         style={styles.settingContainer}
         onPress={() => this.props.selectSetting(this.props.setting.name)}
       >

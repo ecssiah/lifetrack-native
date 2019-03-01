@@ -2,7 +2,7 @@ import React from 'react';
 import { Text, TouchableOpacity } from 'react-native';
 import createStyles, { Fonts } from '../styles';
 
-const fontSize = 136;
+const fontSize = 140;
 
 const styles = createStyles({
   working: {
