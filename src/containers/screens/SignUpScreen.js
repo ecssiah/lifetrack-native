@@ -55,7 +55,7 @@ class SignUpScreen extends React.Component {
 
         const categories = {
           list: [
-            { name: 'General', show: true },
+            { name: 'Uncategorized', show: true },
           ],
         };
 

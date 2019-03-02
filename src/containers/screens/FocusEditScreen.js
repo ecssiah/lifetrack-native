@@ -323,8 +323,7 @@ class FocusEditScreen extends React.Component {
         show: true,
       };
 
-      const catRef = db.collection('categories').doc(auth.currentUser.uid);
-      catRef.update({
+      db.collection('categories').doc(auth.currentUser.uid).update({
         list: firebase.firestore.FieldValue.arrayUnion(category),
       });
 
@@ -343,6 +342,7 @@ class FocusEditScreen extends React.Component {
 
   _onCategoryCancel = () => {
     this.setState({
+      category: this.props.focuses[this.props.focus.id].category,
       categoryModalShow: false,
     });
   };

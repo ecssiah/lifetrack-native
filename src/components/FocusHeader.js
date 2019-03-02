@@ -6,11 +6,11 @@ import createStyles from '../styles';
 
 const styles = createStyles({
   focusHeaderContainerActive: {
-    backgroundColor: '#666666',
+    backgroundColor: '#777777',
     borderTopWidth: 1,
-    borderTopColor: '#777777',
+    borderTopColor: '#888888',
     borderBottomWidth: 1,
-    borderBottomColor: '#555555',
+    borderBottomColor: '#666666',
   },
   focusHeaderContainerInactive: {
     backgroundColor: '#505050',
@@ -26,7 +26,7 @@ const styles = createStyles({
     marginVertical: 2,
   },
   focusHeaderTextInactive: {
-    color: '#b0b0b0',
+    color: '#a0a0a0',
     fontSize: 18,
     marginLeft: 4,
     marginVertical: 2,

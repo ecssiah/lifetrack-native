@@ -3,7 +3,8 @@ import { connect } from 'react-redux';
 import { 
   Button, Picker, Text, TouchableOpacity, TouchableHighlight, View 
 } from 'react-native';
-import { auth } from '../../config';
+import { auth, db } from '../../config';
+import firebase from 'firebase';
 import { 
   WORK_PERIOD, WORK_GOAL, BREAK_PERIOD,
 } from '../../constants/Focus';
@@ -33,6 +34,12 @@ const styles = createStyles({
     textAlign: 'center',
     margin: 6,
   },
+  settingsCategory: {
+    fontSize: 20,
+    alignItems: 'center',
+    marginHorizontal: 16,
+    marginVertical: 10,
+  },
   settingsItem: {
     fontSize: 32, 
   },
@@ -45,6 +52,21 @@ const styles = createStyles({
     width: '80%',
     marginBottom: -32,
   },
+  deleteModalContainer: {
+    height: '28%',
+    width: '86%',
+    alignItems: 'center',
+    borderRadius: 10,
+    borderWidth: 2,
+    borderColor: '#e0e0e0',
+    backgroundColor: 'white',
+  },
+  deleteModalText: {
+    fontSize: 24,
+    textAlign: 'center', 
+    marginHorizontal: 4,
+    marginBottom: 20, 
+  },
 });
 
 class SettingsScreen extends React.Component {
@@ -53,8 +75,10 @@ class SettingsScreen extends React.Component {
 
     this.state = {
       modalShow: false,
+      deleteModalShow: false,
       setting: null,
       value: null,
+      category: null,
     };
   };
 
@@ -131,6 +155,33 @@ class SettingsScreen extends React.Component {
     });
   };
 
+  _selectCategory = category => {
+    this.setState({
+      category: category,
+      deleteModalShow: true,
+    });
+  };
+
+  _onDeleteConfirm = () => {
+    db.collection('categories').doc(auth.currentUser.uid).update({
+      list: firebase.firestore.FieldValue.arrayRemove(this.state.category),
+    }).then(() => {
+      // 
+    }).catch(err => {
+      console.error(err);
+    }); 
+
+    this.setState({
+      deleteModalShow: false,
+    });
+  };
+
+  _onDeleteCancel = () => {
+    this.setState({
+      deleteModalShow: false,
+    });
+  };
+
   _renderLogout = ({ item, index, section: { title, data } }) => {
     return (
       <TouchableOpacity 
@@ -138,6 +189,19 @@ class SettingsScreen extends React.Component {
         onPress={() => this._selectSetting('Logout')}
       >
         <Text style={styles.settingsLogout}>
+          {item.name}
+        </Text>
+      </TouchableOpacity> 
+    );
+  };
+
+  _renderCategory = ({ item, index, section: { title, data } }) => {
+    return (
+      <TouchableOpacity 
+        key={index} 
+        onPress={() => this._selectCategory(item.name)}
+      >
+        <Text style={styles.settingsCategory}>
           {item.name}
         </Text>
       </TouchableOpacity> 
@@ -162,6 +226,14 @@ class SettingsScreen extends React.Component {
         { name: WORK_GOAL, value: this.props.settings.workGoal },
         { name: BREAK_PERIOD, value: this.props.settings.breakPeriod },
       ],
+    });
+
+    sectionData.push({
+      title: 'Categories',
+      data: this.props.categories.map(category => {
+        return { name: category.name, value: '' };
+      }),
+      renderItem: this._renderCategory,
     });
 
     return sectionData;
@@ -210,13 +282,35 @@ class SettingsScreen extends React.Component {
             onPress={this._onCancel}             
           />
         </LTModal>
+
+        <LTModal
+          style={styles.deleteModalContainer}
+          show={this.state.deleteModalShow}
+          onPressBackdrop={this._onDeleteCancel} 
+        >
+          <Text style={styles.deleteModalText}>
+            Do you want to delete {this.state.category}? 
+          </Text>
+            
+          <Button
+            title='Confirm'
+            onPress={this._onDeleteConfirm}             
+          />
+
+          <Button
+            title='Cancel'
+            onPress={this._onDeleteCancel}             
+          />
+        </LTModal>
       </View>
     );
   };
 };
 
 const mapStateToProps = state => ({
+  focus: state.focus,
   focuses: state.focuses,
+  categories: state.categories,
   settings: state.settings,
 });
 

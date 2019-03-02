@@ -135,7 +135,7 @@ class FocusesScreen extends React.Component {
   _getSectionData = () => {
     let sectionData = [];
     let focusArray = Object.values(this.props.focuses);
-    
+
     this.props.categories.forEach(category => {
       let data = [];
 
@@ -149,8 +149,8 @@ class FocusesScreen extends React.Component {
 
       let section = {
         title: category.name,
-        show: category.show,
         data,
+        show: category.show,
       };
 
       sectionData.push(section);
