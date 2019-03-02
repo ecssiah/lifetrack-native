@@ -15,6 +15,7 @@ import createStyles, { Colors } from '../../styles';
 
 import LTModal from '../../components/LTModal';
 import SettingList from '../../components/SettingList';
+import LTConfirm from '../../components/LTConfirm';
 
 const styles = createStyles({
   settingsContainer: {
@@ -23,11 +24,6 @@ const styles = createStyles({
   settingsModalContainer: {
     height: '50%',
     width: '86%',
-    alignItems: 'center',
-    borderRadius: 10,
-    borderWidth: 2,
-    borderColor: '#e0e0e0',
-    backgroundColor: 'white',
   },
   settingsLogout: {
     fontSize: 32,
@@ -50,18 +46,12 @@ const styles = createStyles({
   settingsModalPicker: {
     height: '70%',
     width: '80%',
-    marginBottom: -32,
   },
-  deleteModalContainer: {
+  editDeleteModalContainer: {
     height: '28%',
     width: '86%',
-    alignItems: 'center',
-    borderRadius: 10,
-    borderWidth: 2,
-    borderColor: '#e0e0e0',
-    backgroundColor: 'white',
   },
-  deleteModalText: {
+  editDeleteModalText: {
     fontSize: 24,
     textAlign: 'center', 
     marginHorizontal: 4,
@@ -75,7 +65,7 @@ class SettingsScreen extends React.Component {
 
     this.state = {
       modalShow: false,
-      deleteModalShow: false,
+      editDeleteModalShow: false,
       setting: null,
       value: null,
       category: null,
@@ -96,7 +86,7 @@ class SettingsScreen extends React.Component {
     });
   };
 
-  _selectSetting = setting => {
+  _onSettingSelect = setting => {
     let value;
 
     switch (setting) {
@@ -158,7 +148,7 @@ class SettingsScreen extends React.Component {
   _selectCategory = category => {
     this.setState({
       category: category,
-      deleteModalShow: true,
+      editDeleteModalShow: true,
     });
   };
 
@@ -172,13 +162,13 @@ class SettingsScreen extends React.Component {
     }); 
 
     this.setState({
-      deleteModalShow: false,
+      editDeleteModalShow: false,
     });
   };
 
   _onDeleteCancel = () => {
     this.setState({
-      deleteModalShow: false,
+      editDeleteModalShow: false,
     });
   };
 
@@ -186,7 +176,7 @@ class SettingsScreen extends React.Component {
     return (
       <TouchableOpacity 
         key={index} 
-        onPress={() => this._selectSetting('Logout')}
+        onPress={() => this._onSettingSelect('Logout')}
       >
         <Text style={styles.settingsLogout}>
           {item.name}
@@ -244,7 +234,7 @@ class SettingsScreen extends React.Component {
       <View style={styles.settingsContainer}>
         <SettingList
           sections={this._getSectionData()} 
-          selectSetting={this._selectSetting}
+          onSettingSelect={this._onSettingSelect}
         />
 
         <LTModal 
@@ -272,34 +262,24 @@ class SettingsScreen extends React.Component {
             }
           </Picker>
 
-          <Button
-            title='Confirm'
-            onPress={this._onConfirm}             
-          />
-
-          <Button
-            title='Cancel'
-            onPress={this._onCancel}             
+          <LTConfirm
+            onPressLeft={this._onConfirm}
+            onPressRight={this._onCancel}
           />
         </LTModal>
 
         <LTModal
-          style={styles.deleteModalContainer}
-          show={this.state.deleteModalShow}
+          style={styles.editDeleteModalContainer}
+          show={this.state.editDeleteModalShow}
           onPressBackdrop={this._onDeleteCancel} 
         >
-          <Text style={styles.deleteModalText}>
+          <Text style={styles.editDeleteModalText}>
             Do you want to delete {this.state.category}? 
           </Text>
             
-          <Button
-            title='Confirm'
-            onPress={this._onDeleteConfirm}             
-          />
-
-          <Button
-            title='Cancel'
-            onPress={this._onDeleteCancel}             
+          <LTConfirm
+            onPressLeft={this._onDeleteConfirm}
+            onPressRight={this._onDeleteCancel}
           />
         </LTModal>
       </View>

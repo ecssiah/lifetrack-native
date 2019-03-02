@@ -11,13 +11,11 @@ const styles = createStyles({
     backgroundColor: '#00000080',
   },
   modalBackdropMask: {
-    justifyContent: 'center',
     alignItems: 'center',
-    padding: 12,
-    borderWidth: 2,
     borderRadius: 10,
-    borderColor: '#dedede',
-    backgroundColor: '#ffffff',
+    borderWidth: 2,
+    borderColor: '#dddddd',
+    backgroundColor: 'white',
   },
   modalContent: {
     justifyContent: 'center',
@@ -28,6 +26,11 @@ const styles = createStyles({
 });
 
 class LTModal extends React.Component {
+  static defaultProps = {
+    width: '86%',
+    height: '49%',
+  };
+
   render() {
     return (
       <Modal
@@ -35,12 +38,12 @@ class LTModal extends React.Component {
         visible={this.props.show} 
       >
         <TouchableHighlight 
-          onPress={this.props.onPressBackdrop}
           style={styles.modalBackdrop}
+          onPress={this.props.onPressBackdrop}
         >
           <TouchableHighlight 
+            style={[styles.modalBackdropMask, this.props.style]}
             activeOpacity={1}
-            style={this.props.style}
           >
             <View style={styles.modalContent} >
               {this.props.children}
@@ -50,11 +53,6 @@ class LTModal extends React.Component {
       </Modal>
     );
   };
-};
-
-LTModal.defaultProps = {
-  width: '86%',
-  height: '49%',
 };
 
 export default LTModal;

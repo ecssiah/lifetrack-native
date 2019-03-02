@@ -11,6 +11,7 @@ import createStyles from '../../styles';
 import LTIcon from '../../components/LTIcon';
 import LTModal from '../../components/LTModal';
 import FocusList from '../../components/FocusList';
+import LTConfirm from '../../components/LTConfirm';
 
 const styles = createStyles({
   addContainer: {
@@ -19,11 +20,6 @@ const styles = createStyles({
   addModalContainer: {
     height: '56%',
     width: '86%',
-    alignItems: 'center',
-    borderRadius: 10,
-    borderWidth: 2,
-    borderColor: '#e0e0e0',
-    backgroundColor: 'white',
   },
   addNameModalInput: {
     width: 272,
@@ -56,7 +52,6 @@ const styles = createStyles({
   addCategoryModalPicker: {
     height: '70%',
     width: '80%',
-    marginBottom: -58,
   },
   addFocusText: {
     fontSize: 22,
@@ -89,6 +84,38 @@ class FocusesScreen extends React.Component {
       />
     ),
   });
+
+  _addFocus = category => {
+    const docRef = db.collection('focuses').doc();
+
+    const focus = {
+      id: docRef.id,
+      userId: auth.currentUser.uid,
+      name: this.state.newFocus,
+      category: category,
+      level: 0,
+      experience: 0.0,
+      time: this.props.settings.workPeriod,
+      workPeriod: this.props.settings.workPeriod,
+      periods: 0,
+      workGoal: this.props.settings.workGoal,
+      breakPeriod: this.props.settings.breakPeriod,
+      working: true,
+      timerActive: false,
+      timer: null,
+    };
+
+    this.setState({
+      newFocus: '',
+      newCategory: '',
+    });
+
+    docRef.set(focus).then(doc => {
+      this.props.addFocus(focus);
+    }).catch(err => {
+      console.error(err);
+    });
+  };
 
   _onAddConfirm = () => {
     let categoryName;
@@ -159,38 +186,6 @@ class FocusesScreen extends React.Component {
     return sectionData;
   };
 
-  _addFocus = category => {
-    const docRef = db.collection('focuses').doc();
-
-    const focus = {
-      id: docRef.id,
-      userId: auth.currentUser.uid,
-      name: this.state.newFocus,
-      category: category,
-      level: 0,
-      experience: 0.0,
-      time: this.props.settings.workPeriod,
-      workPeriod: this.props.settings.workPeriod,
-      periods: 0,
-      workGoal: this.props.settings.workGoal,
-      breakPeriod: this.props.settings.breakPeriod,
-      working: true,
-      timerActive: false,
-      timer: null,
-    };
-
-    this.setState({
-      newFocus: '',
-      newCategory: '',
-    });
-
-    docRef.set(focus).then(doc => {
-      this.props.addFocus(focus);
-    }).catch(err => {
-      console.error(err);
-    });
-  };
-
   _onAddCancel = () => {
     this.setState({
       newFocus: '',
@@ -207,6 +202,18 @@ class FocusesScreen extends React.Component {
     this.setState({
       category,
     });
+  };
+
+  _getCategoryItems = () => {
+    return (
+      this.props.categories.map((category, idx) => 
+        <Picker.Item 
+          key={idx} 
+          label={category.name} 
+          value={category.name}
+        />
+      )
+    );
   };
 
   render() {
@@ -250,32 +257,13 @@ class FocusesScreen extends React.Component {
             selectedValue={this.state.category}
             onValueChange={value => this._onCategoryChange(value)}
           >
-            {
-              this.props.categories.map((category, idx) => 
-                <Picker.Item 
-                  key={idx} 
-                  label={category.name} 
-                  value={category.name}
-                />
-              )
-            }
+            {this._getCategoryItems()}
           </Picker>
 
-          <TouchableOpacity
-            onPress={this._onAddConfirm}
-          >
-            <Text style={styles.addFocusText}>
-              Add Focus
-            </Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            onPress={this._onAddCancel}
-          >
-            <Text style={styles.addFocusText}>
-              Cancel
-            </Text>
-          </TouchableOpacity>
+          <LTConfirm
+            onPressLeft={this._onAddConfirm}
+            onPressRight={this._onAddCancel}
+          />
         </LTModal>
       </View>
     );

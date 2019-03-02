@@ -21,7 +21,7 @@ class SettingList extends React.Component {
   _renderItem = item => (
     <SettingItem 
       setting={item} 
-      selectSetting={this.props.selectSetting} 
+      onSettingSelect={this.props.onSettingSelect} 
     />
   );
 

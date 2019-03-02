@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { db, auth } from '../../config';
+import firebase from 'firebase';
 import { 
   View, Text, TextInput, Button, Picker, TouchableOpacity 
 } from 'react-native';
@@ -22,23 +23,11 @@ import LTModal from '../../components/LTModal';
 import LTIcon from '../../components/LTIcon';
 import SettingItem from '../../components/SettingItem';
 import SettingList from '../../components/SettingList';
+import LTConfirm from '../../components/LTConfirm';
 
 const styles = createStyles({
   editContainer: {
     flex: 1,
-  },
-  editModalContainer: {
-    height: '50%',
-    width: '86%',
-    alignItems: 'center',
-    borderRadius: 10,
-    borderWidth: 2,
-    borderColor: '#e0e0e0',
-    backgroundColor: 'white',
-  },
-  editText: {
-    fontSize: 24,
-    margin: 4,
   },
   editNameInputBlur: {
     fontSize: 36, 
@@ -63,48 +52,32 @@ const styles = createStyles({
     paddingVertical: 8,
     paddingHorizontal: 14,
   },
-  editModal: {
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  editModalText: {
-    fontSize: 24,
-  },
-  editModalPicker: {
-    height: '70%',
-    width: '80%',
-    marginBottom: -32,
-  },
-  editInput: {
-    width: 240, 
-    height: 40, 
-    fontSize: 22,
-  },
-  editDelete: {
+  editDeleteText: {
     fontSize: 26,
     textAlign: 'center',
     color: 'red',
     margin: 16,
   },
-  categoryModalContainer: {
+  editSettingModalContainer: {
+    height: '50%',
+    width: '86%',
+  },
+  editSettingModalTitle: {
+    fontSize: 24,
+  },
+  editSettingModalPicker: {
+    height: '70%',
+    width: '80%',
+  },
+  editSettingModalButton: {
+    fontSize: 18,
+    color: 'blue',
+  },
+  editCategoryModalContainer: {
     height: '46%',
     width: '86%',
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderRadius: 10,
-    borderWidth: 2,
-    borderColor: '#e0e0e0',
-    backgroundColor: 'white',
   },
-  categoryText: {
-    fontSize: 24,
-    marginBottom: 4,
-  },
-  categoryModalText: {
-    fontSize: 24, 
-    marginBottom: 4,
-  },
-  categoryModalInput: {
+  editCategoryModalInput: {
     width: 272,
     height: 40, 
     fontSize: 20,
@@ -112,29 +85,28 @@ const styles = createStyles({
     borderRadius: 10,
     borderColor: 'gray', 
   },
-  categoryModalPicker: {
-    height: '70%',
-    width: '80%',
-    marginBottom: -32,
+  editCategoryModalPicker: {
+    flex: 2,
+    height: 60,
+    width: 110,
   },
-  newCategoryText: {
-    fontSize: 22,
+  editCategoryModalButton: {
+    fontSize: 18,
     color: 'blue',
   },
-  deleteModalContainer: {
+  editDeleteModalContainer: {
     height: '28%',
     width: '86%',
-    alignItems: 'center',
-    borderRadius: 10,
-    borderWidth: 2,
-    borderColor: '#e0e0e0',
-    backgroundColor: 'white',
   },
-  deleteModalText: {
+  editDeleteModalText: {
     fontSize: 24,
     textAlign: 'center', 
     marginHorizontal: 4,
     marginBottom: 20, 
+  },
+  editDeleteModalButton: {
+    fontSize: 18,
+    color: 'blue',
   },
 });
 
@@ -143,15 +115,15 @@ class FocusEditScreen extends React.Component {
     super(props);
 
     this.state = {
-      value: 1,
-      setting: null,
-      newCategory: null,
       name: props.focuses[props.focus.id].name,
-      category: props.focuses[props.focus.id].category,
+      categoryName: props.focuses[props.focus.id].category,
+      newCategoryName: '',
+      settingName: '',
+      settingValue: 1,
+      editCategoryModalShow: false,
+      editSettingModalShow: false,
+      editDeleteModalShow: false,
       editNameInputStyle: styles.editNameInputBlur,
-      categoryModalShow: false,
-      editModalShow: false,
-      deleteModalShow: false,
     };
   };
 
@@ -166,124 +138,7 @@ class FocusEditScreen extends React.Component {
     ),
   });
 
-  _selectSetting = setting => {
-    let value;
-    const focus = this.props.focuses[this.props.focus.id];
-
-    switch (setting) {
-      case WORK_PERIOD:
-        value = focus.workPeriod.toString();
-        break;
-      case WORK_GOAL:
-        value = focus.workGoal.toString();
-        break;
-      case BREAK_PERIOD:
-        value = focus.breakPeriod.toString();
-        break;
-      default:
-        console.error('invalid focus attribute');
-    }
-
-    this.setState({
-      editModalShow: true,
-      setting,
-      value,
-    });
-  };
-
-  _onValueChange = value => {
-    this.setState({
-      value,
-    });
-  };
-
-  _onEditConfirm = () => {
-    switch (this.state.setting) {
-      case WORK_PERIOD:
-        this.props.setWorkPeriod(
-          this.props.focus.id, parseInt(this.state.value)
-        );
-        break;
-      case WORK_GOAL:
-        this.props.setWorkGoal(
-          this.props.focus.id, parseInt(this.state.value)
-        );
-        break;
-      case BREAK_PERIOD:
-        this.props.setBreakPeriod(
-          this.props.focus.id, parseInt(this.state.value)
-        );
-        break;
-      default:
-        console.error('invalid focus attribute');
-    }
-
-    this.setState({
-      editModalShow: false,
-    });
-  };
-
-  _onEditCancel = () => {
-    this.setState({
-      editModalShow: false,
-    });
-  };
-
-  _onClickDelete = () => {
-    this.setState({
-      deleteModalShow: true,
-    });
-  };
-
-  _onDeleteConfirm = () => {
-    db.collection('focuses').doc(this.props.focus.id).delete().then(() => {
-      this.props.deleteFocus(this.props.focus.id);
-      this.props.navigation.navigate('Focuses');
-    }).catch(err => {
-      console.error(err);
-    }); 
-
-    this.setState({
-      deleteModalShow: false,
-    });
-  };
-
-  _onDeleteCancel = () => {
-    this.setState({
-      deleteModalShow: false,
-    });
-  };
-
-  _updateFocus = () => {
-    const focus = this.props.focuses[this.props.focus.id];
-    const docRef = db.collection('focuses').doc(this.props.focus.id);
-
-    const updatedFocus = {
-      id: docRef.id,
-      userId: auth.currentUser.uid,
-      name: this.state.name,
-      category: this.state.category,
-      time: focus.workPeriod,
-      level: 0,
-      experience: 0.0,
-      periods: 0,
-      working: true,
-      timer: null,
-      active: false,
-      workPeriod: DEFAULT_WORK_PERIOD,
-      workGoal: DEFAULT_WORK_GOAL,
-      breakPeriod: DEFAULT_BREAK_PERIOD,
-    };
-
-    db.collection('focuses').doc(this.props.focus.id).set(focus).then(doc => {
-      this.props.addFocus(updatedFocus);
-      this.props.navigation.navigate('Focus');
-    }).catch(err => {
-      console.error(err);
-    });
-  };
-
-  _onSetName = () => {
+  _onEditNameConfirm = () => {
     this.props.setName(this.props.focus.id, this.state.name);
   };
 
@@ -299,24 +154,101 @@ class FocusEditScreen extends React.Component {
     });
   };
 
-  _onClickCategory = () => {
+  _onSettingSelect = settingName => {
+    let settingValue;
+    const focus = this.props.focuses[this.props.focus.id];
+
+    switch (settingName) {
+      case WORK_PERIOD:
+        settingValue = focus.workPeriod.toString();
+        break;
+      case WORK_GOAL:
+        settingValue = focus.workGoal.toString();
+        break;
+      case BREAK_PERIOD:
+        settingValue = focus.breakPeriod.toString();
+        break;
+      default:
+        console.error('invalid setting: ' + settingName);
+    }
+
     this.setState({
-      categoryModalShow: true, 
-      newCategory: '',
+      settingName,
+      settingValue,
+      editSettingModalShow: true,
     });
   };
 
-  _onCategoryChange = category => {
+  _onSettingValueChange = settingValue => {
     this.setState({
-      category,
+      settingValue,
+    });
+  };
+
+  _onSettingConfirm = () => {
+    switch (this.state.settingName) {
+      case WORK_PERIOD:
+        this.props.setWorkPeriod(
+          this.props.focus.id, parseInt(this.state.settingValue)
+        );
+        break;
+      case WORK_GOAL:
+        this.props.setWorkGoal(
+          this.props.focus.id, parseInt(this.state.settingValue)
+        );
+        break;
+      case BREAK_PERIOD:
+        this.props.setBreakPeriod(
+          this.props.focus.id, parseInt(this.state.settingValue)
+        );
+        break;
+      default:
+        console.error('invalid focus attribute');
+    }
+
+    this.setState({
+      editSettingModalShow: false,
+    });
+  };
+
+  _onSettingCancel = () => {
+    this.setState({
+      editSettingModalShow: false,
+    });
+  };
+
+  _getSettingRange = (start, end) => {
+    return (
+      Array(start + end  - 1).fill().map((_, i) => 
+        <Picker.Item 
+          key={i} 
+          label={(i + start).toString()} 
+          value={(i + start).toString()} 
+        />
+      )
+    );
+  };
+
+  _onCategorySelect = () => {
+    this.setState({
+      newCategoryName: '',
+      editCategoryModalShow: true, 
+    });
+  };
+
+  _onCategoryNameChange = categoryName => {
+    this.setState({
+      categoryName,
     });
   };
 
   _onCategoryConfirm = () => {
     let categoryName;
 
-    if (this.state.newCategory !== '') {
-      categoryName = this.state.newCategory;
+    if (this.state.newCategoryName === '') {
+      categoryName = this.state.categoryName;
+    } else {
+      categoryName = this.state.newCategoryName;
 
       const category = {
         name: categoryName,
@@ -328,50 +260,57 @@ class FocusEditScreen extends React.Component {
       });
 
       this.props.addCategory(category);
-    } else {
-      categoryName = this.state.category;
     }
 
     this.props.setCategory(this.props.focus.id, categoryName);
 
     this.setState({
-      category: categoryName,
-      categoryModalShow: false,
+      categoryName,
+      editCategoryModalShow: false,
     });
   };
 
   _onCategoryCancel = () => {
     this.setState({
-      category: this.props.focuses[this.props.focus.id].category,
-      categoryModalShow: false,
+      categoryName: this.props.focuses[this.props.focus.id].category,
+      editCategoryModalShow: false,
     });
   };
 
-  _selectSetting = setting => {
-    let value;
-    const focus = this.props.focuses[this.props.focus.id];
+  _getCategoryItems = () => {
+    return (
+      this.props.categories.map((category, idx) => 
+        <Picker.Item 
+          key={idx} 
+          label={category.name} 
+          value={category.name}
+        />
+      )
+    );
+  };
 
-    switch (setting) {
-      case 'Category':
-        value = focus.category;
-        break;
-      case WORK_PERIOD:
-        value = focus.workPeriod.toString();
-        break;
-      case WORK_GOAL:
-        value = focus.workGoal.toString();
-        break;
-      case BREAK_PERIOD:
-        value = focus.breakPeriod.toString();
-        break;
-      default:
-        console.error('invalid focus attribute');
-    }
+  _onDeleteSelect = () => {
+    this.setState({
+      editDeleteModalShow: true,
+    });
+  };
+
+  _onDeleteConfirm = () => {
+    db.collection('focuses').doc(this.props.focus.id).delete().then(() => {
+      this.props.deleteFocus(this.props.focus.id);
+      this.props.navigation.navigate('Focuses');
+    }).catch(err => {
+      console.error(err);
+    }); 
 
     this.setState({
-      editModalShow: true,
-      setting,
-      value,
+      editDeleteModalShow: false,
+    });
+  };
+
+  _onDeleteCancel = () => {
+    this.setState({
+      editDeleteModalShow: false,
     });
   };
 
@@ -379,16 +318,16 @@ class FocusEditScreen extends React.Component {
     return (
       <TextInput
         style={this.state.editNameInputStyle}
-        selectionColor={Colors.primary}
+        placeholder='Focus Name'
         value={this.state.name}
         textAlign='center'
         returnKeyType='done'
         keyboardAppearance='dark'
-        onChangeText={name => this.setState({name})}
-        onSubmitEditing={this._onSetName}
+        selectionColor={Colors.primary}
         onBlur={this._onEditInputBlur}
         onFocus={this._onEditInputFocus}
-        placeholder='Focus Name'
+        onChangeText={name => this.setState({name})}
+        onSubmitEditing={this._onEditNameConfirm}
       />
     );
   };
@@ -397,7 +336,7 @@ class FocusEditScreen extends React.Component {
     return (
       <SettingItem 
         setting={item} 
-        selectSetting={this._onClickCategory} 
+        onSettingSelect={this._onCategorySelect} 
       />
     );
   };
@@ -406,9 +345,9 @@ class FocusEditScreen extends React.Component {
     return (
       <TouchableOpacity 
         key={index} 
-        onPress={this._onClickDelete}
+        onPress={this._onDeleteSelect}
       >
-        <Text style={styles.editDelete}>
+        <Text style={styles.editDeleteText}>
           {item.name}
         </Text>
       </TouchableOpacity> 
@@ -468,103 +407,74 @@ class FocusEditScreen extends React.Component {
         <View style={styles.editContainer}>
           <SettingList
             sections={this._getSectionData()} 
-            selectSetting={this._selectSetting}
+            onSettingSelect={this._onSettingSelect}
           />
 
           <LTModal
-            style={styles.categoryModalContainer}
-            show={this.state.categoryModalShow} 
+            style={styles.editCategoryModalContainer}
+            show={this.state.editCategoryModalShow} 
             onPressBackdrop={this._onCategoryCancel}
           >
             <TextInput
-              style={styles.categoryModalInput}
-              textAlign='center'
-              keyboardAppearance='dark'
-              maxLength={24}
-              returnKeyType='done'
-              onChangeText={newCategory => this.setState({newCategory})}
-              value={this.state.newCategory}
+              style={styles.editCategoryModalInput}
+              value={this.state.newCategoryName}
               placeholder={'New Category'}
+              maxLength={24}
+              textAlign='center'
+              returnKeyType='done'
+              keyboardAppearance='dark'
+              onChangeText={newCategoryName => this.setState({newCategoryName})}
             />
 
             <Picker
-              style={styles.categoryModalPicker}
-              selectedValue={this.state.category}
-              onValueChange={(value, index) => this._onCategoryChange(value)}
+              style={styles.editCategoryModalPicker}
+              selectedValue={this.state.categoryName}
+              onValueChange={categoryName => this._onCategoryNameChange(categoryName)}
             >
-              {
-                this.props.categories.map((category, idx) => 
-                  <Picker.Item 
-                    key={idx} 
-                    label={category.name} 
-                    value={category.name}
-                  />
-                )
-              }
+              {this._getCategoryItems()}
             </Picker>
 
-            <TouchableOpacity
-              onPress={this._onCategoryConfirm}
-            >
-              <Text style={styles.newCategoryText}>
-                Update Category
-              </Text>
-            </TouchableOpacity>
+            <LTConfirm
+              onPressLeft={this._onCategoryConfirm} 
+              onPressRight={this._onCategoryCancel}
+            />
           </LTModal>
 
           <LTModal
-            style={styles.editModalContainer}
-            show={this.state.editModalShow}
-            onPressBackdrop={this._onEditCancel}
+            style={styles.editSettingModalContainer}
+            show={this.state.editSettingModalShow}
+            onPressBackdrop={this._onSettingCancel}
           >
-            <Text style={styles.editModalText}>
-              {this.state.setting}
+            <Text style={styles.editSettingModalTitle}>
+              {this.state.settingName}
             </Text>
 
             <Picker
-              selectedValue={this.state.value}
-              onValueChange={(value, index) => this._onValueChange(value)}
-              style={styles.editModalPicker}
+              selectedValue={this.state.settingValue}
+              onValueChange={(value, index) => this._onSettingValueChange(value)}
+              style={styles.editSettingModalPicker}
             >
-              {
-                Array(40).fill().map((_, i) => 
-                  <Picker.Item 
-                    key={i} 
-                    label={(i + 1).toString()} 
-                    value={(i + 1).toString()} 
-                  />
-                )
-              }
+              {this._getSettingRange(1, 40)}
             </Picker>
 
-            <Button
-              title='Confirm'
-              onPress={this._onEditConfirm}             
-            />
-
-            <Button
-              title='Cancel'
-              onPress={this._onEditCancel}             
+            <LTConfirm
+              onPressLeft={this._onSettingConfirm} 
+              onPressRight={this._onSettingCancel}
             />
           </LTModal>
 
           <LTModal
-            style={styles.deleteModalContainer}
-            show={this.state.deleteModalShow}
+            style={styles.editDeleteModalContainer}
+            show={this.state.editDeleteModalShow}
             onPressBackdrop={this._onDeleteCancel} 
           >
-            <Text style={styles.deleteModalText}>
+            <Text style={styles.editDeleteModalText}>
               Are you sure you want to delete this focus?
             </Text>
               
-            <Button
-              title='Confirm'
-              onPress={this._onDeleteConfirm}             
-            />
-
-            <Button
-              title='Cancel'
-              onPress={this._onDeleteCancel}             
+            <LTConfirm
+              onPressLeft={this._onDeleteConfirm} 
+              onPressRight={this._onDeleteCancel}
             />
           </LTModal>
         </View>
@@ -573,7 +483,7 @@ class FocusEditScreen extends React.Component {
       return null;
     }
   }
-}
+};
 
 const mapStateToProps = state => ({
   categories: state.categories,
