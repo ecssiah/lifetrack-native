@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { db } from '../../config';
+import { db, auth } from '../../config';
 import { 
   View, Text, TextInput, Button, Picker, TouchableOpacity 
 } from 'react-native';
@@ -107,6 +107,7 @@ const styles = createStyles({
   categoryModalInput: {
     width: 272,
     height: 40, 
+    fontSize: 20,
     borderWidth: 1,
     borderRadius: 10,
     borderColor: 'gray', 
@@ -115,6 +116,10 @@ const styles = createStyles({
     height: '70%',
     width: '80%',
     marginBottom: -32,
+  },
+  newCategoryText: {
+    fontSize: 22,
+    color: 'blue',
   },
   deleteModalContainer: {
     height: '28%',
@@ -383,6 +388,7 @@ class FocusEditScreen extends React.Component {
         onSubmitEditing={this._onSetName}
         onBlur={this._onEditInputBlur}
         onFocus={this._onEditInputFocus}
+        placeholder='Focus Name'
       />
     );
   };
@@ -470,10 +476,6 @@ class FocusEditScreen extends React.Component {
             show={this.state.categoryModalShow} 
             onPressBackdrop={this._onCategoryCancel}
           >
-            <Text style={styles.categoryModalText}>
-              New Category:
-            </Text>
-
             <TextInput
               style={styles.categoryModalInput}
               textAlign='center'
@@ -482,6 +484,7 @@ class FocusEditScreen extends React.Component {
               returnKeyType='done'
               onChangeText={newCategory => this.setState({newCategory})}
               value={this.state.newCategory}
+              placeholder={'New Category'}
             />
 
             <Picker
@@ -500,10 +503,13 @@ class FocusEditScreen extends React.Component {
               }
             </Picker>
 
-            <Button
-              title='Done'
+            <TouchableOpacity
               onPress={this._onCategoryConfirm}
-            />
+            >
+              <Text style={styles.newCategoryText}>
+                Update Category
+              </Text>
+            </TouchableOpacity>
           </LTModal>
 
           <LTModal

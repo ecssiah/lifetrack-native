@@ -12,7 +12,6 @@ import SplashScreen from './screens/SplashScreen';
 import SignInScreen from './screens/SignInScreen';
 import SignUpScreen from './screens/SignUpScreen';
 import FocusesScreen from './screens/FocusesScreen';
-import FocusAddScreen from './screens/FocusAddScreen';
 import FocusEditScreen from './screens/FocusEditScreen';
 import FocusScreen from './screens/FocusScreen';
 import StatsScreen from './screens/StatsScreen';
@@ -62,7 +61,6 @@ const StatsStack = createStackNavigator(
 const FocusStack = createStackNavigator(
   {
     Focuses: FocusesScreen,
-    FocusAdd: FocusAddScreen,
     FocusEdit: FocusEditScreen,
     Focus: FocusScreen,
   },
