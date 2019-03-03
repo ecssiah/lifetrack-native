@@ -353,11 +353,11 @@ class SettingsScreen extends React.Component {
             onSubmitEditing={this._onEditCategoryNameConfirm}
           />
 
-          <TouchableOpacity onPress={this._onCategoryDeleteConfirm} >
-            <Text style={styles.settingsCategoryDeleteModalButton}>
-              Delete
-            </Text>
-          </TouchableOpacity> 
+          <LTConfirm
+            leftContent='Delete'
+            onPressLeft={this._onCategoryDeleteConfirm}
+            onPressRight={this._onCategoryDeleteCancel}
+          />
         </LTModal>
       </View>
     );
