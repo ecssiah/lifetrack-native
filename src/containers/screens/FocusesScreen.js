@@ -1,51 +1,19 @@
 import React from 'react';
-import { Picker, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { View } from 'react-native';
 import { connect } from 'react-redux';
 import { setId } from '../../actions/FocusActions';
 import { addFocus, setCategory } from '../../actions/FocusesActions';
 import { addCategory, toggleCategoryShow } from '../../actions/CategoriesActions';
 import firebase from 'firebase';
 import { auth, db } from '../../config';
-import createStyles, { Color, FontSize } from '../../styles';
+import createStyles from '../../styles';
 
 import LTIcon from '../../components/LTIcon';
-import LTModal from '../../components/LTModal';
-import LTConfirm from '../../components/LTConfirm';
+
 import FocusList from '../../components/FocusList';
+import FocusAddModal from '../../components/modals/FocusAddModal';
 
 const styles = createStyles({
-  addModalContainer: {
-    height: '94%',
-  },
-  addNameModalInput: {
-    width: '86%',
-    height: 40, 
-    fontSize: FontSize.modalInput, 
-    color: 'black',
-    borderWidth: 1,
-    borderRadius: 6,
-    borderColor: 'black',
-    backgroundColor: 'white',
-    paddingVertical: 9,
-    paddingHorizontal: 10,
-    marginTop: 14,
-  },
-  addCategoryModalInput: {
-    width: '86%',
-    height: 40, 
-    fontSize: FontSize.modalInput, 
-    color: 'black',
-    borderWidth: 1,
-    borderRadius: 6,
-    borderColor: 'black',
-    backgroundColor: 'white',
-    paddingVertical: 9,
-    paddingHorizontal: 10,
-    marginBottom: 4,
-  },
-  addCategoryModalPicker: {
-    width: '86%',
-  },
 });
 
 class FocusesScreen extends React.Component {
@@ -166,18 +134,6 @@ class FocusesScreen extends React.Component {
     });
   };
 
-  _getCategoryItems = () => {
-    return (
-      this.props.categories.map((category, idx) => 
-        <Picker.Item 
-          key={idx} 
-          label={category.name} 
-          value={category.name}
-        />
-      )
-    );
-  };
-
   _getSectionData = () => {
     let focusArray = Object.values(this.props.focuses);
 
@@ -208,46 +164,18 @@ class FocusesScreen extends React.Component {
           onFocusSelect={this._onFocusSelect}
         />
 
-        <LTModal
-          style={styles.addModalContainer}
-          show={this.props.navigation.getParam('addModalShow')} 
-          onPressBackdrop={this._onAddCancel}
-        >
-          <TextInput
-            style={styles.addNameModalInput}
-            value={this.state.newFocusName}
-            placeholder={'New Focus'}
-            textAlign='center'
-            maxLength={24}
-            returnKeyType='done'
-            keyboardAppearance='dark'
-            onChangeText={newFocusName => this.setState({newFocusName})}
-          />
-
-          <TextInput
-            style={styles.addCategoryModalInput}
-            value={this.state.newCategoryName}
-            placeholder={'New Category'}
-            textAlign='center'
-            maxLength={24}
-            returnKeyType='done'
-            keyboardAppearance='dark'
-            onChangeText={newCategoryName => this.setState({newCategoryName})}
-          />
-
-          <Picker
-            style={styles.addCategoryModalPicker}
-            selectedValue={this.state.categoryName}
-            onValueChange={value => this._onCategoryChange(value)}
-          >
-            {this._getCategoryItems()}
-          </Picker>
-
-          <LTConfirm
-            onPressLeft={this._onAddConfirm}
-            onPressRight={this._onAddCancel}
-          />
-        </LTModal>
+        <FocusAddModal
+          categories={this.props.categories}
+          show={this.props.navigation.getParam('addModalShow')}
+          categoryName={this.state.categoryName}
+          newFocusName={this.state.newFocusName}
+          newCategoryName={this.state.newCategoryName}
+          onConfirm={this._onAddConfirm}
+          onCancel={this._onAddCancel}
+          onChangeName={text => this.setState({newFocusName: text})}
+          onChangeNewCategory={text => this.setState({newCategoryName: text})}
+          onChangeCategory={value => this._onCategoryChange(value)}
+        />
       </View>
     );
   };

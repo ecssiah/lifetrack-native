@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { 
-  Picker, Text, TextInput, TouchableOpacity, View 
+  Picker, Text, TouchableOpacity, View 
 } from 'react-native';
 import { auth, db } from '../../config';
 import firebase from 'firebase';
@@ -36,16 +36,6 @@ const styles = createStyles({
     alignItems: 'center',
     marginHorizontal: 16,
     marginVertical: 10,
-  },
-  settingsModalContainer: {
-    height: '78%',
-  },
-  settingsModalText: {
-    fontSize: FontSize.modalTitle, 
-    marginTop: 14,
-  },
-  settingsModalPicker: {
-    width: '86%',
   },
 });
 
@@ -139,18 +129,6 @@ class SettingsScreen extends React.Component {
     this.setState({
       settingsModalShow: false,
     });
-  };
-
-  _getSettingRange = (start, end) => {
-    return (
-      Array(start + end  - 1).fill().map((_, i) => 
-        <Picker.Item 
-          key={i} 
-          label={(i + start).toString()} 
-          value={(i + start).toString()} 
-        />
-      )
-    );
   };
 
   _onCategorySelect = categoryName => {

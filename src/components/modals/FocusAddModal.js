@@ -1,0 +1,103 @@
+import React from 'react';
+import { Picker, Text, TextInput, TouchableOpacity } from 'react-native';
+import createStyles, { FontSize, Color } from '../../styles';
+
+import LTModal from '../LTModal';
+import LTConfirm from '../LTConfirm';
+
+const styles = createStyles({
+  container: {
+    height: '94%',
+  },
+  nameInput: {
+    width: '86%',
+    height: 40, 
+    fontSize: FontSize.modalInput, 
+    color: 'black',
+    borderWidth: 1,
+    borderRadius: 6,
+    borderColor: 'black',
+    backgroundColor: 'white',
+    paddingVertical: 9,
+    paddingHorizontal: 10,
+    marginTop: 14,
+  },
+  categoryInput: {
+    width: '86%',
+    height: 40, 
+    fontSize: FontSize.modalInput, 
+    color: 'black',
+    borderWidth: 1,
+    borderRadius: 6,
+    borderColor: 'black',
+    backgroundColor: 'white',
+    paddingVertical: 9,
+    paddingHorizontal: 10,
+    marginBottom: 4,
+  },
+  picker: {
+    width: '86%',
+  },
+});
+
+class FocusAddModal extends React.Component {
+
+  _getCategoryItems = () => {
+    return (
+      this.props.categories.map((category, idx) => 
+        <Picker.Item 
+          key={idx} 
+          label={category.name} 
+          value={category.name}
+        />
+      )
+    );
+  };
+
+  render() {
+    return (
+      <LTModal
+        style={styles.container}
+        show={this.props.show} 
+        onPressBackdrop={this.props.onCancel}
+      >
+        <TextInput
+          style={styles.nameInput}
+          value={this.props.newFocusName}
+          placeholder={'New Focus'}
+          textAlign='center'
+          maxLength={24}
+          returnKeyType='done'
+          keyboardAppearance='dark'
+          onChangeText={this.props.onChangeName}
+        />
+
+        <TextInput
+          style={styles.categoryInput}
+          value={this.props.newCategoryName}
+          placeholder={'New Category'}
+          textAlign='center'
+          maxLength={24}
+          returnKeyType='done'
+          keyboardAppearance='dark'
+          onChangeText={this.props.onChangeNewCategory}
+        />
+
+        <Picker
+          style={styles.picker}
+          selectedValue={this.props.categoryName}
+          onValueChange={this.props.onChangeCategory}
+        >
+          {this._getCategoryItems()}
+        </Picker>
+
+        <LTConfirm
+          onPressLeft={this.props.onConfirm}
+          onPressRight={this.props.onCancel}
+        />
+      </LTModal>
+    );
+  };
+};
+
+export default FocusAddModal;

@@ -8,11 +8,12 @@ import {
 import { SECOND } from '../../reducers/FocusesReducer';
 import createStyles from '../../styles';
 
+import LTIcon from '../../components/LTIcon';
+
 import FocusTitle from '../../components/FocusTitle';
 import FocusTimer from '../../components/FocusTimer';
 import FocusGoal from '../../components/FocusGoal';
 import FocusExperience from '../../components/FocusExperience';
-import LTIcon from '../../components/LTIcon';
 
 const styles = createStyles({ 
   container: {
