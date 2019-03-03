@@ -16,6 +16,7 @@ export const UPDATE_TIME = 'focuses:update-time';
 export const UPDATE_PERIODS = 'focuses:update-periods';
 export const UPDATE_EXPERIENCE = 'focuses:update-experience';
 export const RESET_PERIODS = 'focuses:reset-periods';
+export const UPDATE_CATEGORIES = 'focuses:update-categories';
 
 export function setFocuses(focuses) {
   return {
@@ -135,5 +136,13 @@ export function resetPeriods(id) {
   return {
     type: RESET_PERIODS,
     id,
+  };
+};
+
+export function updateCategories(name, newName) {
+  return {
+    type: UPDATE_CATEGORIES,
+    name,
+    newName,
   };
 };

@@ -10,19 +10,15 @@ import createStyles from '../../styles';
 
 import LTIcon from '../../components/LTIcon';
 import LTModal from '../../components/LTModal';
-import FocusList from '../../components/FocusList';
 import LTConfirm from '../../components/LTConfirm';
+import FocusList from '../../components/FocusList';
 
 const styles = createStyles({
-  addContainer: {
-    flex: 1, 
-  },  
   addModalContainer: {
-    height: '56%',
-    width: '86%',
+    height: '94%',
   },
   addNameModalInput: {
-    width: 272,
+    width: '86%',
     height: 40, 
     fontSize: 20, 
     fontWeight: 'bold',
@@ -31,12 +27,12 @@ const styles = createStyles({
     backgroundColor: 'white',
     borderWidth: 1,
     borderRadius: 6,
-    margin: 8,
+    marginTop: 14,
     paddingVertical: 9,
     paddingHorizontal: 10,
   },
   addCategoryModalInput: {
-    width: 272,
+    width: '86%',
     height: 40, 
     fontSize: 20, 
     fontWeight: 'bold',
@@ -45,13 +41,12 @@ const styles = createStyles({
     backgroundColor: 'white',
     borderWidth: 1,
     borderRadius: 6,
-    margin: 8,
+    marginBottom: 4,
     paddingVertical: 9,
     paddingHorizontal: 10,
   },
   addCategoryModalPicker: {
-    height: '70%',
-    width: '80%',
+    width: '86%',
   },
   addFocusText: {
     fontSize: 22,
@@ -68,9 +63,9 @@ class FocusesScreen extends React.Component {
     });
 
     this.state = {
-      newFocus: '',
-      newCategory: '',
-      category: this.props.categories[0].name,
+      newFocusName: '',
+      newCategoryName: '',
+      categoryName: this.props.categories[0].name,
     };
   };
 
@@ -85,14 +80,14 @@ class FocusesScreen extends React.Component {
     ),
   });
 
-  _addFocus = category => {
+  _addFocus = categoryName => {
     const docRef = db.collection('focuses').doc();
 
     const focus = {
       id: docRef.id,
       userId: auth.currentUser.uid,
-      name: this.state.newFocus,
-      category: category,
+      name: this.state.newFocusName,
+      category: categoryName,
       level: 0,
       experience: 0.0,
       time: this.props.settings.workPeriod,
@@ -106,8 +101,8 @@ class FocusesScreen extends React.Component {
     };
 
     this.setState({
-      newFocus: '',
-      newCategory: '',
+      newFocusName: '',
+      newCategoryName: '',
     });
 
     docRef.set(focus).then(doc => {
@@ -120,10 +115,10 @@ class FocusesScreen extends React.Component {
   _onAddConfirm = () => {
     let categoryName;
 
-    if (this.state.newCategory === '') {
-      categoryName = this.state.category;
+    if (this.state.newCategoryName === '') {
+      categoryName = this.state.categoryName;
     } else {
-      categoryName = this.state.newCategory;
+      categoryName = this.state.newCategoryName;
 
       const category = {
         name: categoryName,
@@ -136,7 +131,7 @@ class FocusesScreen extends React.Component {
         console.error(err);
       });
 
-      this.props.addCategory(category);
+      this.props.addCategory(categoryName);
     }
 
     this._addFocus(categoryName);
@@ -146,12 +141,12 @@ class FocusesScreen extends React.Component {
     });
 
     this.setState({
-      category: categoryName,
+      categoryName: categoryName,
     });
   };
 
-  _selectCategory = category => {
-    this.props.toggleCategoryShow(category);
+  _selectCategory = categoryName => {
+    this.props.toggleCategoryShow(categoryName);
   };
 
   _selectFocus = id => {
@@ -188,9 +183,9 @@ class FocusesScreen extends React.Component {
 
   _onAddCancel = () => {
     this.setState({
-      newFocus: '',
-      newCategory: '',
-      category: this.props.categories[0].name,
+      newFocusName: '',
+      newCategoryName: '',
+      categoryName: this.props.categories[0].name,
     });
 
     this.props.navigation.setParams({
@@ -198,9 +193,9 @@ class FocusesScreen extends React.Component {
     });
   };
 
-  _onCategoryChange = category => {
+  _onCategoryChange = categoryName => {
     this.setState({
-      category,
+      categoryName,
     });
   };
 
@@ -232,29 +227,29 @@ class FocusesScreen extends React.Component {
         >
           <TextInput
             style={styles.addNameModalInput}
+            value={this.state.newFocusName}
+            placeholder={'New Focus'}
             textAlign='center'
-            keyboardAppearance='dark'
             maxLength={24}
             returnKeyType='done'
-            onChangeText={newFocus => this.setState({newFocus})}
-            value={this.state.newFocus}
-            placeholder={'New Focus'}
+            keyboardAppearance='dark'
+            onChangeText={newFocusName => this.setState({newFocusName})}
           />
 
           <TextInput
             style={styles.addCategoryModalInput}
+            value={this.state.newCategoryName}
+            placeholder={'New Category'}
             textAlign='center'
-            keyboardAppearance='dark'
             maxLength={24}
             returnKeyType='done'
-            onChangeText={newCategory => this.setState({newCategory})}
-            value={this.state.newCategory}
-            placeholder={'New Category'}
+            keyboardAppearance='dark'
+            onChangeText={newCategoryName => this.setState({newCategoryName})}
           />
 
           <Picker
             style={styles.addCategoryModalPicker}
-            selectedValue={this.state.category}
+            selectedValue={this.state.categoryName}
             onValueChange={value => this._onCategoryChange(value)}
           >
             {this._getCategoryItems()}

@@ -14,7 +14,13 @@ import FocusGoal from '../../components/FocusGoal';
 import FocusExperience from '../../components/FocusExperience';
 import LTIcon from '../../components/LTIcon';
 
-const styles = createStyles({ });
+const styles = createStyles({ 
+  focusContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+});
 
 class FocusScreen extends React.Component {
   static navigationOptions = ({ navigation }) => ({
@@ -92,7 +98,7 @@ class FocusScreen extends React.Component {
 
     if (focus) {
       return (
-        <View style={styles.container}>
+        <View style={styles.focusContainer}>
           <FocusTitle 
             name={focus.name} 
           />

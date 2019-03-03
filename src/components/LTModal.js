@@ -5,32 +5,28 @@ import createStyles from '../styles';
 const styles = createStyles({
   modalBackdrop: {
     flex: 1,
-    flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',
+    paddingHorizontal: '8%',
+    paddingVertical: '24%',
     backgroundColor: '#00000080',
   },
-  modalBackdropMask: {
+  modalMask: {
+    width: '100%',
+    height: '100%',
+  },
+  modalContent: {
+    flex: 1,
+    justifyContent: 'space-between',
     alignItems: 'center',
     borderRadius: 10,
     borderWidth: 2,
-    borderColor: '#dddddd',
+    borderColor: '#aaaaaa',
     backgroundColor: 'white',
-  },
-  modalContent: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    width: '100%',
-    height: '100%',
   },
 });
 
 class LTModal extends React.Component {
-  static defaultProps = {
-    width: '86%',
-    height: '49%',
-  };
-
   render() {
     return (
       <Modal
@@ -42,7 +38,7 @@ class LTModal extends React.Component {
           onPress={this.props.onPressBackdrop}
         >
           <TouchableHighlight 
-            style={[styles.modalBackdropMask, this.props.style]}
+            style={[styles.modalMask, this.props.style]}
             activeOpacity={1}
           >
             <View style={styles.modalContent} >

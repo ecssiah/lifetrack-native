@@ -1,26 +1,30 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { 
-  Picker, Text, TouchableOpacity, View 
+  Picker, Text, TextInput, TouchableOpacity, View 
 } from 'react-native';
 import { auth, db } from '../../config';
 import firebase from 'firebase';
 import { 
   WORK_PERIOD, WORK_GOAL, BREAK_PERIOD,
 } from '../../constants/Focus';
+import {
+  deleteCategory,
+  setCategoryName,
+} from '../../actions/CategoriesActions';
 import { 
   setDefaultWorkPeriod, setDefaultWorkGoal, setDefaultBreakPeriod, 
 } from '../../actions/SettingsActions';
-import createStyles from '../../styles'; 
+import {
+  updateCategories,
+} from '../../actions/FocusesActions';
+import createStyles, { Colors } from '../../styles'; 
 
 import LTModal from '../../components/LTModal';
 import LTConfirm from '../../components/LTConfirm';
 import SettingList from '../../components/SettingList';
 
 const styles = createStyles({
-  settingsContainer: {
-    flex: 1,
-  },
   settingsItem: {
     fontSize: 32, 
   },
@@ -36,8 +40,6 @@ const styles = createStyles({
     marginVertical: 10,
   },
   settingsEditModalContainer: {
-    height: '50%',
-    width: '86%',
   },
   settingsEditModalText: {
     fontSize: 24, 
@@ -48,14 +50,41 @@ const styles = createStyles({
     width: '80%',
   },
   settingsCategoryDeleteModalContainer: {
-    height: '28%',
-    width: '86%',
   },
-  settingsCategoryDeleteModalText: {
+  settingsEditCategoryNameBlur: {
+    fontSize: 36, 
+    fontWeight: 'bold',
+    borderColor: 'black',
+    color: 'black',
+    backgroundColor: 'white',
+    borderWidth: 0,
+    margin: 8,
+    paddingVertical: 9,
+    paddingHorizontal: 15,
+  },
+  settingsEditCategoryNameFocus: {
+    fontSize: 36, 
+    fontWeight: 'bold',
+    borderColor: 'black',
+    color: 'black',
+    backgroundColor: 'white',
+    borderWidth: 1,
+    borderRadius: 6,
+    margin: 8,
+    paddingVertical: 8,
+    paddingHorizontal: 14,
+  },
+  settingsCategoryDeleteModalMessage: {
     fontSize: 24,
     textAlign: 'center', 
     marginHorizontal: 4,
     marginBottom: 20, 
+  },
+  settingsCategoryDeleteModalButton: {
+    fontSize: 24,
+    color: 'red',
+    textAlign: 'center', 
+    marginHorizontal: 4,
   },
 });
 
@@ -67,8 +96,10 @@ class SettingsScreen extends React.Component {
       settingName: '',
       settingValue: '',
       categoryName: '',
+      newCategoryName: '',
       settingsEditModalShow: false,
       settingsCategoryDeleteModalShow: false,
+      settingsEditCategoryNameStyle: styles.settingsEditCategoryNameBlur,
     };
   };
 
@@ -157,18 +188,30 @@ class SettingsScreen extends React.Component {
   _onCategorySelect = categoryName => {
     this.setState({
       categoryName,
+      newCategoryName: categoryName,
       settingsCategoryDeleteModalShow: true,
     });
   };
 
   _onCategoryDeleteConfirm = () => {
-    db.collection('categories').doc(auth.currentUser.uid).update({
-      list: firebase.firestore.FieldValue.arrayRemove(this.state.categoryName),
-    }).then(() => {
-      // 
-    }).catch(err => {
-      console.error(err);
-    }); 
+    if (this.state.categoryName !== 'Uncategorized') {
+      const category = this.props.categories.find(category => 
+        category.name === this.state.categoryName
+      );
+
+      db.collection('categories').doc(auth.currentUser.uid).update({
+        list: firebase.firestore.FieldValue.arrayRemove(category),
+      }).then(() => {
+        this.props.deleteCategory(this.state.categoryName);
+        this.props.updateCategories(this.state.categoryName, 'Uncategorized');
+
+        // Update focus categories in firestore
+      }).catch(err => {
+        console.error(err);
+      }); 
+    } else {
+      console.warn('Uncategorized can not be deleted');
+    }
 
     this.setState({
       settingsCategoryDeleteModalShow: false,
@@ -181,30 +224,55 @@ class SettingsScreen extends React.Component {
     });
   };
 
-  _renderLogout = ({ item, index, section: { title, data } }) => {
-    return (
-      <TouchableOpacity 
-        key={index} 
-        onPress={this._logoutUser}
-      >
-        <Text style={styles.settingsLogout}>
-          {item.name}
-        </Text>
-      </TouchableOpacity> 
-    );
+  _onEditCategoryNameConfirm = () => {
+    this.props.setCategoryName(this.state.categoryName, this.state.newCategoryName);
+    this.props.updateCategories(this.state.categoryName, this.state.newCategoryName);
   };
 
-  _renderCategory = ({ item, index, section: { title, data } }) => {
-    return (
-      <TouchableOpacity 
-        key={index} 
-        onPress={() => this._onCategorySelect(item.name)}
-      >
-        <Text style={styles.settingsEditCategory}>
-          {item.name}
-        </Text>
-      </TouchableOpacity> 
-    );
+  _onEditCategoryNameBlur = () => {
+    this.setState({
+      settingsEditCategoryNameStyle: styles.settingsEditCategoryNameBlur,
+    });
+  };
+
+  _onEditCategoryNameFocus = () => {
+    this.setState({
+      settingsEditCategoryNameStyle: styles.settingsEditCategoryNameFocus,
+    });
+  };
+
+  _renderLogout = ({item, index}) => {
+    if (item) {
+      return (
+        <TouchableOpacity 
+          key={index} 
+          onPress={this._logoutUser}
+        >
+          <Text style={styles.settingsLogout}>
+            {item.name}
+          </Text>
+        </TouchableOpacity> 
+      );
+    } else {
+      return null;
+    }
+  };
+
+  _renderCategory = ({item, index}) => {
+    if (item) {
+      return (
+        <TouchableOpacity 
+          key={index} 
+          onPress={() => this._onCategorySelect(item.name)}
+        >
+          <Text style={styles.settingsEditCategory}>
+            {item.name}
+          </Text>
+        </TouchableOpacity> 
+      );
+    } else {
+      return null;
+    }
   };
 
   _getSectionData = () => {
@@ -274,14 +342,25 @@ class SettingsScreen extends React.Component {
           show={this.state.settingsCategoryDeleteModalShow}
           onPressBackdrop={this._onCategoryDeleteCancel} 
         >
-          <Text style={styles.settingsCategoryDeleteModalText}>
-            Do you want to delete {this.state.categoryName}? 
-          </Text>
-            
-          <LTConfirm
-            onPressLeft={this._onCategoryDeleteConfirm}
-            onPressRight={this._onCategoryDeleteCancel}
+          <TextInput
+            style={this.state.settingsEditCategoryNameStyle}
+            placeholder='Category Name'
+            value={this.state.newCategoryName}
+            textAlign='center'
+            returnKeyType='done'
+            keyboardAppearance='dark'
+            selectionColor={Colors.primary}
+            onBlur={this._onEditCategoryNameBlur}
+            onFocus={this._onEditCategoryNameFocus}
+            onChangeText={newCategoryName => this.setState({newCategoryName})}
+            onSubmitEditing={this._onEditCategoryNameConfirm}
           />
+
+          <TouchableOpacity onPress={this._onCategoryDeleteConfirm} >
+            <Text style={styles.settingsCategoryDeleteModalButton}>
+              Delete
+            </Text>
+          </TouchableOpacity> 
         </LTModal>
       </View>
     );
@@ -296,6 +375,9 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
+  deleteCategory: name => dispatch(deleteCategory(name)),
+  setCategoryName: (name, newName) => dispatch(setCategoryName(name, newName)),
+  updateCategories: (name, newName) => dispatch(updateCategories(name, newName)),
   setDefaultWorkPeriod: period => dispatch(setDefaultWorkPeriod(period)),
   setDefaultWorkGoal: goal => dispatch(setDefaultWorkGoal(goal)),
   setDefaultBreakPeriod: period => dispatch(setDefaultBreakPeriod(period)),

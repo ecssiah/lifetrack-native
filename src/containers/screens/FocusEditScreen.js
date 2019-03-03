@@ -25,9 +25,6 @@ import SettingList from '../../components/SettingList';
 import LTConfirm from '../../components/LTConfirm';
 
 const styles = createStyles({
-  editContainer: {
-    flex: 1,
-  },
   editNameInputBlur: {
     fontSize: 36, 
     fontWeight: 'bold',
@@ -52,56 +49,53 @@ const styles = createStyles({
     paddingHorizontal: 14,
   },
   editDeleteText: {
-    fontSize: 26,
+    fontSize: 24,
+    fontWeight: 'bold',
     textAlign: 'center',
     color: 'red',
     margin: 16,
   },
   editSettingModalContainer: {
-    height: '50%',
-    width: '86%',
+    height: '78%',
   },
   editSettingModalTitle: {
     fontSize: 24,
+    marginTop: 14,
   },
   editSettingModalPicker: {
-    height: '70%',
-    width: '80%',
+    width: '86%',
   },
   editSettingModalButton: {
     fontSize: 18,
     color: 'blue',
   },
   editCategoryModalContainer: {
-    height: '46%',
-    width: '86%',
+    height: '80%',
   },
   editCategoryModalInput: {
-    width: 272,
+    width: '86%',
     height: 40, 
     fontSize: 20,
+    marginTop: 14,
     borderWidth: 1,
     borderRadius: 10,
     borderColor: 'gray', 
   },
   editCategoryModalPicker: {
-    flex: 2,
-    height: 60,
-    width: 110,
+    width: '86%',
   },
   editCategoryModalButton: {
     fontSize: 18,
     color: 'blue',
   },
   editDeleteModalContainer: {
-    height: '28%',
-    width: '86%',
+    height: '36%',
   },
   editDeleteModalText: {
     fontSize: 24,
     textAlign: 'center', 
+    marginTop: 12,
     marginHorizontal: 4,
-    marginBottom: 20, 
   },
   editDeleteModalButton: {
     fontSize: 18,

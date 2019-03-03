@@ -35,7 +35,7 @@ class SettingList extends React.Component {
     return (
       <SectionList
         sections={this.props.sections}
-        keyExtractor={(item, index) => item.name + index}
+        keyExtractor={(item, index) => index}
         renderItem={({item}) => this._renderItem(item)}
         renderSectionHeader={({section}) => this._renderHeader(section)}
         ItemSeparatorComponent={this._renderSeparator}

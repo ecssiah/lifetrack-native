@@ -39,7 +39,7 @@ class FocusList extends React.Component {
     return (
       <SectionList
         sections={this.props.sections}
-        keyExtractor={item => item.id}
+        keyExtractor={(item, index) => index}
         ItemSeparatorComponent={this._renderSeparator}
         renderItem={({item}) => this._renderItem(item)}
         renderSectionHeader={({section}) => this._renderHeader(section)}
