@@ -12,42 +12,51 @@ function focusesReducer(state = {}, action) {
   let newState = {...state};
 
   switch (action.type) {
-    case SET_FOCUSES:
+    case SET_FOCUSES: {
       return action.focuses;
-    case ADD_FOCUS:
+    }
+    case ADD_FOCUS: {
       newState[action.focus.id] = action.focus;
 
       return newState;
-    case DELETE_FOCUS:
+    }
+    case DELETE_FOCUS: {
       clearInterval(newState[action.id].timer);
       delete newState[action.id];
 
       return newState;
-    case SET_NAME:
+    }
+    case SET_NAME: {
       newState[action.id].name = action.name;
 
       return newState;
-    case SET_CATEGORY:
+    }
+    case SET_CATEGORY: {
       newState[action.id].category = action.category;
       
       return newState;
-    case SET_TIME:
+    }
+    case SET_TIME: {
       newState[action.id].time = action.time;
 
       return newState;
-    case SET_WORKING:
+    }
+    case SET_WORKING: {
       newState[action.id].working = action.working;
 
       return newState;
-    case SET_ACTIVE:
+    }
+    case SET_ACTIVE: {
       newState[action.id].active = action.active;
 
       return newState;
-    case SET_TIMER:
+    }
+    case SET_TIMER: {
       newState[action.id].timer = action.timer;
 
       return newState;
-    case SET_WORK_PERIOD:
+    }
+    case SET_WORK_PERIOD: {
       newState[action.id].workPeriod = action.period;
 
       if (newState[action.id].working) {
@@ -55,23 +64,28 @@ function focusesReducer(state = {}, action) {
       }
 
       return newState;
-    case SET_WORK_GOAL:
+    }
+    case SET_WORK_GOAL: {
       newState[action.id].workGoal = action.goal;
 
       return newState;
-    case SET_BREAK_PERIOD:
+    }
+    case SET_BREAK_PERIOD: {
       newState[action.id].breakPeriod = action.period;
 
       return newState;
-    case UPDATE_TIME:
+    }
+    case UPDATE_TIME: {
       newState[action.id].time -= SECOND;
 
       return newState;
-    case UPDATE_PERIODS:
+    }
+    case UPDATE_PERIODS: {
       newState[action.id].periods += 1;
 
       return newState;
-    case UPDATE_EXPERIENCE:
+    }
+    case UPDATE_EXPERIENCE: {
       newState[action.id].experience += EXPERIENCE_PER_SECOND;
 
       if (newState[action.id].experience >= 100) {
@@ -80,11 +94,13 @@ function focusesReducer(state = {}, action) {
       }
 
       return newState;
-    case RESET_PERIODS:
+    }
+    case RESET_PERIODS: {
       newState[action.id].periods = 0;
 
       return newState;
-    case UPDATE_CATEGORIES:
+    }
+    case UPDATE_CATEGORIES: {
       for (const key in newState) {
         if (newState[key].category === action.name) {
           newState[key].category = action.newName;
@@ -92,8 +108,10 @@ function focusesReducer(state = {}, action) {
       }
 
       return newState;
-    default:
+    }
+    default: {
       return newState; 
+    }
   }
 };
 

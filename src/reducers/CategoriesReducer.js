@@ -62,8 +62,9 @@ function categoriesReducer(state = [], action) {
 
       return newState;
     }
-    default:
+    default: {
       return newState;
+    }
   }
 };
 

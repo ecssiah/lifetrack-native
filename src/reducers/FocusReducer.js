@@ -6,12 +6,14 @@ function focusReducer(state = {}, action) {
   let newState = {...state};
 
   switch (action.type) {
-    case SET_ID:
+    case SET_ID: {
       newState.id = action.id;
 
       return newState;
-    default:
+    }
+    default: {
       return newState;
+    } 
   }
 };
 
