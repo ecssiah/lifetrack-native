@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { db, auth } from '../../config';
 import firebase from 'firebase';
 import { 
-  View, Text, TextInput, Button, Picker, TouchableOpacity 
+  View, Text, TextInput, Picker, TouchableOpacity 
 } from 'react-native';
 import {
   addCategory,
@@ -15,7 +15,6 @@ import {
 } from '../../actions/FocusesActions';
 import { 
   WORK_PERIOD, WORK_GOAL, BREAK_PERIOD,
-  DEFAULT_WORK_PERIOD, DEFAULT_WORK_GOAL, DEFAULT_BREAK_PERIOD, 
 } from '../../constants/Focus';
 import createStyles, { Colors } from '../../styles';
 
@@ -429,7 +428,9 @@ class FocusEditScreen extends React.Component {
             <Picker
               style={styles.editCategoryModalPicker}
               selectedValue={this.state.categoryName}
-              onValueChange={categoryName => this._onCategoryNameChange(categoryName)}
+              onValueChange={categoryName => 
+                this._onCategoryNameChange(categoryName)
+              }
             >
               {this._getCategoryItems()}
             </Picker>
@@ -451,7 +452,7 @@ class FocusEditScreen extends React.Component {
 
             <Picker
               selectedValue={this.state.settingValue}
-              onValueChange={(value, index) => this._onSettingValueChange(value)}
+              onValueChange={value => this._onSettingValueChange(value)}
               style={styles.editSettingModalPicker}
             >
               {this._getSettingRange(1, 40)}

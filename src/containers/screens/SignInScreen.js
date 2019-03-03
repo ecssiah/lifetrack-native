@@ -38,17 +38,24 @@ class SignInScreen extends React.Component {
     auth.signInWithEmailAndPassword(
       this.state.email, this.state.password
     ).then(cred => {
-      db.collection('settings').doc(cred.user.uid).get().then(doc => {
-        const settings = {
-          workPeriod: doc.get('workPeriod'),
-          workGoal: doc.get('workGoal'),
-          breakPeriod: doc.get('breakPeriod'),
-        };
+      const settingsPromise = db.collection('settings').doc(cred.user.uid).get();
+      const categoriesPromise = db.collection('categories').doc(cred.user.uid).get();
 
+      Promise.all([
+        settingsPromise,
+        categoriesPromise, 
+      ]).then(values => {
+        const settingsDoc = values[0];
+        const categoriesDoc = values[1];
+
+        const settings = {
+          workPeriod: settingsDoc.get('workPeriod'),
+          workGoal: settingsDoc.get('workGoal'),
+          breakPeriod: settingsDoc.get('breakPeriod'),
+        };
         this.props.setSettings(settings);
 
-        const categories = doc.get('list');
-
+        const categories = categoriesDoc.get('list');
         this.props.setCategories(categories);
       }).catch(err => {
         console.error(err);

@@ -31,24 +31,20 @@ class SplashScreen extends React.Component {
           this._loadFocuses()
         ]).then(values => {
           const settingsDoc = values[0];
+          const categoriesDoc = values[1];
+          const focusesSnapshot = values[2];
 
           const settings = {
             workPeriod: settingsDoc.get('workPeriod'),
             workGoal: settingsDoc.get('workGoal'),
             breakPeriod: settingsDoc.get('breakPeriod'),
           };
-
           this.props.setSettings(settings);
 
-          const categoriesDoc = values[1];
-
           const categories = categoriesDoc.get('list');
-
           this.props.setCategories(categories);
 
           let focuses = {};
-          const focusesSnapshot = values[2];
-
           focusesSnapshot.forEach(doc => {
             focuses[doc.id] = {
               id: doc.get('id'),

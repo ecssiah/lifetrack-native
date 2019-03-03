@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { 
-  Button, Picker, Text, TouchableOpacity, TouchableHighlight, View 
+  Picker, Text, TouchableOpacity, View 
 } from 'react-native';
 import { auth, db } from '../../config';
 import firebase from 'firebase';
@@ -11,47 +11,47 @@ import {
 import { 
   setDefaultWorkPeriod, setDefaultWorkGoal, setDefaultBreakPeriod, 
 } from '../../actions/SettingsActions';
-import createStyles, { Colors } from '../../styles'; 
+import createStyles from '../../styles'; 
 
 import LTModal from '../../components/LTModal';
-import SettingList from '../../components/SettingList';
 import LTConfirm from '../../components/LTConfirm';
+import SettingList from '../../components/SettingList';
 
 const styles = createStyles({
   settingsContainer: {
     flex: 1,
   },
-  settingsModalContainer: {
-    height: '50%',
-    width: '86%',
+  settingsItem: {
+    fontSize: 32, 
   },
   settingsLogout: {
     fontSize: 32,
     textAlign: 'center',
     margin: 6,
   },
-  settingsCategory: {
+  settingsEditCategory: {
     fontSize: 20,
     alignItems: 'center',
     marginHorizontal: 16,
     marginVertical: 10,
   },
-  settingsItem: {
-    fontSize: 32, 
+  settingsEditModalContainer: {
+    height: '50%',
+    width: '86%',
   },
-  settingsModalText: {
+  settingsEditModalText: {
     fontSize: 24, 
     marginBottom: 4,
   },
-  settingsModalPicker: {
+  settingsEditModalPicker: {
     height: '70%',
     width: '80%',
   },
-  editDeleteModalContainer: {
+  settingsCategoryDeleteModalContainer: {
     height: '28%',
     width: '86%',
   },
-  editDeleteModalText: {
+  settingsCategoryDeleteModalText: {
     fontSize: 24,
     textAlign: 'center', 
     marginHorizontal: 4,
@@ -64,11 +64,11 @@ class SettingsScreen extends React.Component {
     super(props);
 
     this.state = {
-      modalShow: false,
-      editDeleteModalShow: false,
-      setting: null,
-      value: null,
-      category: null,
+      settingName: '',
+      settingValue: '',
+      categoryName: '',
+      settingsEditModalShow: false,
+      settingsCategoryDeleteModalShow: false,
     };
   };
 
@@ -86,75 +86,84 @@ class SettingsScreen extends React.Component {
     });
   };
 
-  _onSettingSelect = setting => {
-    let value;
+  _onSettingSelect = settingName => {
+    let settingValue;
 
-    switch (setting) {
-      case 'Logout':
-        this._logoutUser();
-        return;
+    switch (settingName) {
       case WORK_PERIOD:
-        value = this.props.settings.workPeriod.toString();
+        settingValue = this.props.settings.workPeriod.toString();
         break;
       case WORK_GOAL:
-        value = this.props.settings.workGoal.toString();
+        settingValue = this.props.settings.workGoal.toString();
         break;
       case BREAK_PERIOD:
-        value = this.props.settings.breakPeriod.toString();
+        settingValue = this.props.settings.breakPeriod.toString();
         break;
       default:
-        console.error('Invalid setting: ' + setting);
+        console.error('Invalid setting: ' + settingName);
     }
 
     this.setState({
-      modalShow: true,
-      setting,
-      value,
+      settingName,
+      settingValue,
+      settingsEditModalShow: true,
     });
   };
 
-  _onValueChange = value => {
+  _getSettingRange = (start, end) => {
+    return (
+      Array(start + end  - 1).fill().map((_, i) => 
+        <Picker.Item 
+          key={i} 
+          label={(i + start).toString()} 
+          value={(i + start).toString()} 
+        />
+      )
+    );
+  };
+
+  _onSettingValueChange = settingValue => {
     this.setState({
-      value,
+      settingValue,
     });
   };
 
-  _onConfirm = () => {
-    switch (this.state.setting) {
+  _onSettingEditConfirm = () => {
+    switch (this.state.settingName) {
       case WORK_PERIOD:
-        this.props.setDefaultWorkPeriod(parseInt(this.state.value));
+        this.props.setDefaultWorkPeriod(parseInt(this.state.settingValue));
         break;
       case WORK_GOAL:
-        this.props.setDefaultWorkGoal(parseInt(this.state.value));
+        this.props.setDefaultWorkGoal(parseInt(this.state.settingValue));
         break;
       case BREAK_PERIOD:
-        this.props.setDefaultBreakPeriod(parseInt(this.state.value));
+        this.props.setDefaultBreakPeriod(parseInt(this.state.settingValue));
         break;
       default:
-        console.error('invalid focus attribute');
+        console.error('invalid setting: ' + settingName);
     }
 
     this.setState({
-      modalShow: false,
+      settingsEditModalShow: false,
     });
   };
 
-  _onCancel = () => {
+  _onSettingEditCancel = () => {
     this.setState({
-      modalShow: false,
+      settingsEditModalShow: false,
     });
   };
 
-  _selectCategory = category => {
+  _onCategorySelect = categoryName => {
     this.setState({
-      category: category,
-      editDeleteModalShow: true,
+      categoryName,
+      settingsCategoryDeleteModalShow: true,
     });
   };
 
-  _onDeleteConfirm = () => {
+  _onCategoryDeleteConfirm = () => {
     db.collection('categories').doc(auth.currentUser.uid).update({
-      list: firebase.firestore.FieldValue.arrayRemove(this.state.category),
+      list: firebase.firestore.FieldValue.arrayRemove(this.state.categoryName),
     }).then(() => {
       // 
     }).catch(err => {
@@ -162,13 +171,13 @@ class SettingsScreen extends React.Component {
     }); 
 
     this.setState({
-      editDeleteModalShow: false,
+      settingsCategoryDeleteModalShow: false,
     });
   };
 
-  _onDeleteCancel = () => {
+  _onCategoryDeleteCancel = () => {
     this.setState({
-      editDeleteModalShow: false,
+      settingsCategoryDeleteModalShow: false,
     });
   };
 
@@ -176,7 +185,7 @@ class SettingsScreen extends React.Component {
     return (
       <TouchableOpacity 
         key={index} 
-        onPress={() => this._onSettingSelect('Logout')}
+        onPress={this._logoutUser}
       >
         <Text style={styles.settingsLogout}>
           {item.name}
@@ -189,9 +198,9 @@ class SettingsScreen extends React.Component {
     return (
       <TouchableOpacity 
         key={index} 
-        onPress={() => this._selectCategory(item.name)}
+        onPress={() => this._onCategorySelect(item.name)}
       >
-        <Text style={styles.settingsCategory}>
+        <Text style={styles.settingsEditCategory}>
           {item.name}
         </Text>
       </TouchableOpacity> 
@@ -238,48 +247,40 @@ class SettingsScreen extends React.Component {
         />
 
         <LTModal 
-          style={styles.settingsModalContainer}
-          show={this.state.modalShow}
-          onPressBackdrop={this._onCancel}
+          style={styles.settingsEditModalContainer}
+          show={this.state.settingsEditModalShow}
+          onPressBackdrop={this._onSettingEditCancel}
         >
-          <Text style={styles.settingsModalText}>
-            {this.state.setting}
+          <Text style={styles.settingsEditModalText}>
+            {this.state.settingName}
           </Text>
 
           <Picker
-            style={styles.settingsModalPicker}
-            selectedValue={this.state.value}
-            onValueChange={(value, index) => this._onValueChange(value)}
+            style={styles.settingsEditModalPicker}
+            selectedValue={this.state.settingValue}
+            onValueChange={value => this._onSettingValueChange(value)}
           >
-            {
-              Array(40).fill().map((_, i) => 
-                <Picker.Item 
-                  key={i} 
-                  label={(i + 1).toString()} 
-                  value={(i + 1).toString()} 
-                />
-              )
-            }
+            {this._getSettingRange(1, 40)}
           </Picker>
 
           <LTConfirm
-            onPressLeft={this._onConfirm}
-            onPressRight={this._onCancel}
+            onPressLeft={this._onSettingEditConfirm}
+            onPressRight={this._onSettingEditCancel}
           />
         </LTModal>
 
         <LTModal
-          style={styles.editDeleteModalContainer}
-          show={this.state.editDeleteModalShow}
-          onPressBackdrop={this._onDeleteCancel} 
+          style={styles.settingsCategoryDeleteModalContainer}
+          show={this.state.settingsCategoryDeleteModalShow}
+          onPressBackdrop={this._onCategoryDeleteCancel} 
         >
-          <Text style={styles.editDeleteModalText}>
-            Do you want to delete {this.state.category}? 
+          <Text style={styles.settingsCategoryDeleteModalText}>
+            Do you want to delete {this.state.categoryName}? 
           </Text>
             
           <LTConfirm
-            onPressLeft={this._onDeleteConfirm}
-            onPressRight={this._onDeleteCancel}
+            onPressLeft={this._onCategoryDeleteConfirm}
+            onPressRight={this._onCategoryDeleteCancel}
           />
         </LTModal>
       </View>
