@@ -1,6 +1,6 @@
 import React from 'react';
 import { Text, TouchableOpacity, ProgressViewIOS, View } from 'react-native';
-import createStyles, { Color } from '../styles';
+import createStyles, { Color, FontSize } from '../styles';
 
 const styles = createStyles({
   goalContainer: {
@@ -9,7 +9,7 @@ const styles = createStyles({
   goalHeading: {
     alignSelf: 'center',
     marginVertical: 10,
-    fontSize: 32,
+    fontSize: FontSize.focusSubtitle,
   },
   goalProgress: {
     width: '100%',

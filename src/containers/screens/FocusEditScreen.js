@@ -16,7 +16,7 @@ import {
 import { 
   WORK_PERIOD, WORK_GOAL, BREAK_PERIOD,
 } from '../../constants/Focus';
-import createStyles, { Color } from '../../styles';
+import createStyles, { Color, FontSize } from '../../styles';
 
 import LTModal from '../../components/LTModal';
 import LTIcon from '../../components/LTIcon';
@@ -26,7 +26,7 @@ import LTConfirm from '../../components/LTConfirm';
 
 const styles = createStyles({
   editNameInputBlur: {
-    fontSize: 24, 
+    fontSize: FontSize.modalTitle, 
     color: 'black',
     borderWidth: 0,
     borderRadius: 6,
@@ -37,7 +37,7 @@ const styles = createStyles({
     margin: 8,
   },
   editNameInputFocus: {
-    fontSize: 24, 
+    fontSize: FontSize.modalTitle, 
     color: 'black',
     borderWidth: 1,
     borderRadius: 6,
@@ -48,7 +48,7 @@ const styles = createStyles({
     margin: 8,
   },
   editDeleteText: {
-    fontSize: 24,
+    fontSize: FontSize.modalTitle,
     fontWeight: 'bold',
     textAlign: 'center',
     color: Color.highlight,
@@ -58,7 +58,7 @@ const styles = createStyles({
     height: '78%',
   },
   editSettingModalTitle: {
-    fontSize: 24,
+    fontSize: FontSize.modalTitle,
     marginTop: 14,
   },
   editSettingModalPicker: {
@@ -70,7 +70,7 @@ const styles = createStyles({
   editCategoryModalInput: {
     width: '86%',
     height: 40, 
-    fontSize: 20,
+    fontSize: FontSize.modalInput,
     marginTop: 14,
     borderWidth: 1,
     borderRadius: 10,
@@ -83,7 +83,7 @@ const styles = createStyles({
     height: '36%',
   },
   editDeleteModalText: {
-    fontSize: 24,
+    fontSize: FontSize.modalTitle,
     textAlign: 'center', 
     marginTop: 12,
     marginHorizontal: 4,

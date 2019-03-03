@@ -5,7 +5,7 @@ import { View, Text } from 'react-native';
 import { setSettings } from '../../actions/SettingsActions';
 import { setCategories } from '../../actions/CategoriesActions';
 import { setFocuses } from '../../actions/FocusesActions';
-import createStyles, { Color } from '../../styles';
+import createStyles, { Color, FontSize } from '../../styles';
 
 const styles = createStyles({
   splashContainer: {
@@ -15,7 +15,7 @@ const styles = createStyles({
     backgroundColor: Color.primary,
   },
   splashTitle: {
-    fontSize: 68,
+    fontSize: FontSize.splashTitle,
     textShadowOffset: {
       width: -3,
       height: 2,

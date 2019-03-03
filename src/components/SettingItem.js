@@ -2,7 +2,7 @@ import React from 'react';
 import { 
   TouchableOpacity, Text, View, ProgressViewIOS 
 } from 'react-native';
-import createStyles, { Color } from '../styles'; 
+import createStyles, { Color, FontSize } from '../styles'; 
 
 const styles = createStyles({
   settingContainer: {
@@ -18,8 +18,11 @@ const styles = createStyles({
     flexDirection: 'row',
     justifyContent: 'flex-start',
     alignItems: 'center',
-    fontSize: 20,
-    color: Color.text,
+  },
+  settingName: {
+    fontSize: FontSize.settingItem,
+    alignItems: 'center',
+    marginRight: 10,
   },
   settingItemRight: {
     flex: 1,
@@ -27,13 +30,8 @@ const styles = createStyles({
     justifyContent: 'flex-end',
     alignItems: 'center',
   },
-  settingName: {
-    fontSize: 20,
-    alignItems: 'center',
-    marginRight: 10,
-  },
   settingValue: {
-    fontSize: 20,
+    fontSize: FontSize.settingItem,
     alignItems: 'center',
     marginRight: 10,
   },

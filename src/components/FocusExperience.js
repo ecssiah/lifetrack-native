@@ -1,6 +1,6 @@
 import React from 'react';
 import { Text, View, ProgressViewIOS } from 'react-native';
-import createStyles, { Color } from '../styles';
+import createStyles, { Color, FontSize } from '../styles';
 
 const styles = createStyles({
   experienceContainer: {
@@ -8,7 +8,7 @@ const styles = createStyles({
   },
   experienceLevel: {
     alignSelf: 'center',
-    fontSize: 32,
+    fontSize: FontSize.focusSubtitle,
     marginVertical: 10,
   },
   experienceProgress: {

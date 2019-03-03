@@ -6,7 +6,7 @@ import { addFocus, setCategory } from '../../actions/FocusesActions';
 import { addCategory, toggleCategoryShow } from '../../actions/CategoriesActions';
 import firebase from 'firebase';
 import { auth, db } from '../../config';
-import createStyles, { Color } from '../../styles';
+import createStyles, { Color, FontSize } from '../../styles';
 
 import LTIcon from '../../components/LTIcon';
 import LTModal from '../../components/LTModal';
@@ -20,7 +20,7 @@ const styles = createStyles({
   addNameModalInput: {
     width: '86%',
     height: 40, 
-    fontSize: 20, 
+    fontSize: FontSize.modalInput, 
     color: 'black',
     borderWidth: 1,
     borderRadius: 6,
@@ -33,7 +33,7 @@ const styles = createStyles({
   addCategoryModalInput: {
     width: '86%',
     height: 40, 
-    fontSize: 20, 
+    fontSize: FontSize.modalInput, 
     color: 'black',
     borderWidth: 1,
     borderRadius: 6,

@@ -13,7 +13,7 @@ export const Color  = {
   secondary: '#aeaeae',
   highlight: '#820020',
   working: '#2200aa',
-  break: '#990033',
+  break: '#227755',
 };
 
 export const Font = {
@@ -22,7 +22,14 @@ export const Font = {
 };
 
 export const FontSize = {
+  timer: 142,
+  splashTitle: 68,
+  focusSubtitle: 32,
   headerTitle: 28, 
+  modalTitle: 24,
+  modalInput: 20,
+  sectionHeader: 18,
+  settingItem: 19,
 };
 
 const BaseStyles = {

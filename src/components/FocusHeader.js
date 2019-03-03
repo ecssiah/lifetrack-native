@@ -2,7 +2,7 @@ import React from 'react';
 import { 
   Text, TouchableOpacity, View 
 } from 'react-native';
-import createStyles from '../styles'; 
+import createStyles, { FontSize } from '../styles'; 
 
 const styles = createStyles({
   focusHeaderContainerActive: {
@@ -21,13 +21,13 @@ const styles = createStyles({
   },
   focusHeaderTextActive: {
     color: 'white',
-    fontSize: 18,
+    fontSize: FontSize.sectionHeader,
     marginLeft: 4,
     marginVertical: 2,
   },
   focusHeaderTextInactive: {
     color: '#a0a0a0',
-    fontSize: 18,
+    fontSize: FontSize.sectionHeader,
     marginLeft: 4,
     marginVertical: 2,
   },

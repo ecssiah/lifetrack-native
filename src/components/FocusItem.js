@@ -2,7 +2,7 @@ import React from 'react';
 import { 
   TouchableHighlight, TouchableOpacity, Text, View, ProgressViewIOS 
 } from 'react-native';
-import createStyles, { Color } from '../styles'; 
+import createStyles, { Color, FontSize } from '../styles'; 
 
 const styles = createStyles({
   focusContainer: {
@@ -10,7 +10,7 @@ const styles = createStyles({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    marginHorizontal: 12,
+    marginHorizontal: 10,
     marginVertical: 10,
   },
   focusItemLeft: {
@@ -18,8 +18,12 @@ const styles = createStyles({
     flexDirection: 'row',
     justifyContent: 'flex-start',
     alignItems: 'center',
-    fontSize: 20,
-    color: Color.text,
+  },
+  focusName: {
+    fontSize: FontSize.settingItem,
+    textAlign: 'center',
+    alignItems: 'center',
+    marginRight: 6,
   },
   focusItemRight: {
     flex: 1,
@@ -28,13 +32,13 @@ const styles = createStyles({
     alignItems: 'center',
   },
   focusLevel: {
-    fontSize: 20,
+    fontSize: FontSize.settingItem,
     textAlign: 'center',
     alignItems: 'center',
-    marginRight: 10,
+    marginRight: 6,
   },
   focusProgress: {
-    width: 80,
+    width: 54,
     marginTop: 1,
     transform: [
       { scaleX: 1.0 }, 
@@ -51,7 +55,11 @@ class FocusItem extends React.Component {
         style={styles.focusContainer}
         onPress={() => this.props.selectFocus(this.props.focus.id)}
       >
-        <Text style={styles.focusItemLeft}>{this.props.focus.name}</Text>
+        <View style={styles.focusItemLeft}>
+          <Text style={styles.focusName}>
+            {this.props.focus.name}
+          </Text>
+        </View>
 
         <View style={styles.focusItemRight} >
           <Text style={styles.focusLevel}>

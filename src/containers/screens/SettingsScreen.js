@@ -18,16 +18,13 @@ import {
 import {
   updateCategories,
 } from '../../actions/FocusesActions';
-import createStyles, { Color } from '../../styles'; 
+import createStyles, { Color, FontSize } from '../../styles'; 
 
 import LTModal from '../../components/LTModal';
 import LTConfirm from '../../components/LTConfirm';
 import SettingList from '../../components/SettingList';
 
 const styles = createStyles({
-  settingsItem: {
-    fontSize: 32, 
-  },
   settingsLogout: {
     fontSize: 32,
     color: Color.highlight,
@@ -35,7 +32,7 @@ const styles = createStyles({
     margin: 6,
   },
   settingsEditCategory: {
-    fontSize: 20,
+    fontSize: FontSize.settingItem,
     alignItems: 'center',
     marginHorizontal: 16,
     marginVertical: 10,
@@ -44,7 +41,7 @@ const styles = createStyles({
     height: '78%',
   },
   settingsEditModalText: {
-    fontSize: 24, 
+    fontSize: FontSize.modalTitle, 
     marginTop: 14,
   },
   settingsEditModalPicker: {
@@ -77,13 +74,13 @@ const styles = createStyles({
     paddingHorizontal: 14,
   },
   settingsCategoryDeleteModalMessage: {
-    fontSize: 24,
+    fontSize: FontSize.modalTitle,
     textAlign: 'center', 
     marginHorizontal: 4,
     marginTop: 14,
   },
   settingsCategoryDeleteModalButton: {
-    fontSize: 24,
+    fontSize: FontSize.modalTitle,
     color: Color.highlight,
     textAlign: 'center', 
     marginHorizontal: 4,

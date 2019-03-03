@@ -1,24 +1,22 @@
 import React from 'react';
 import { Text, TouchableOpacity } from 'react-native';
-import createStyles, { Color, Font } from '../styles';
-
-const fontSize = 144;
+import createStyles, { Color, Font, FontSize } from '../styles';
 
 const styles = createStyles({
   working: {
-    fontSize,
+    fontSize: FontSize.timer,
     fontFamily: Font.timer,
     textAlign: 'center',
     color: Color.working,
   },
   paused: {
-    fontSize,
+    fontSize: FontSize.timer,
     fontFamily: Font.timer,
     textAlign: 'center',
     color: Color.highlight,
   },
   break: {
-    fontSize,
+    fontSize: FontSize.timer,
     fontFamily: Font.timer,
     textAlign: 'center',
     color: Color.break,

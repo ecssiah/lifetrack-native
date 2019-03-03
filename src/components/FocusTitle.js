@@ -1,10 +1,10 @@
 import React from 'react';
-import { Text, View } from 'react-native';
+import { Text } from 'react-native';
 import createStyles from '../styles';
 
 const styles = createStyles({
   focusTitle: {
-    fontSize: 52,
+    fontSize: 48,
     textAlign: 'center',
   },
 });

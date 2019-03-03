@@ -2,7 +2,7 @@ import React from 'react';
 import { 
   Text, View 
 } from 'react-native';
-import createStyles from '../styles'; 
+import createStyles, { FontSize } from '../styles'; 
 
 const styles = createStyles({
   settingsHeaderContainer: {
@@ -14,7 +14,7 @@ const styles = createStyles({
   },
   settingsHeaderText: {
     color: 'white',
-    fontSize: 18,
+    fontSize: FontSize.sectionHeader,
     marginLeft: 4,
     marginVertical: 2,
   },
