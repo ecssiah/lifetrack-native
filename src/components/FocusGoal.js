@@ -9,7 +9,7 @@ const styles = createStyles({
   goalHeading: {
     alignSelf: 'center',
     marginVertical: 10,
-    fontSize: FontSize.focusSubtitle,
+    fontSize: FontSize.subtitle,
   },
   goalProgress: {
     width: '100%',

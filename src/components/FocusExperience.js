@@ -8,7 +8,7 @@ const styles = createStyles({
   },
   experienceLevel: {
     alignSelf: 'center',
-    fontSize: FontSize.focusSubtitle,
+    fontSize: FontSize.subtitle,
     marginVertical: 10,
   },
   experienceProgress: {

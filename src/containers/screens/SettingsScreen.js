@@ -26,7 +26,7 @@ import SettingList from '../../components/SettingList';
 
 const styles = createStyles({
   settingsLogout: {
-    fontSize: 32,
+    fontSize: FontSize.subtitle,
     color: Color.highlight,
     textAlign: 'center',
     margin: 6,
@@ -51,8 +51,7 @@ const styles = createStyles({
     height: '32%',
   },
   settingsEditCategoryNameBlur: {
-    fontSize: 36, 
-    fontWeight: 'bold',
+    fontSize: FontSize.modalTitle, 
     borderColor: 'black',
     color: 'black',
     backgroundColor: 'white',
@@ -62,9 +61,7 @@ const styles = createStyles({
     paddingHorizontal: 15,
   },
   settingsEditCategoryNameFocus: {
-    fontSize: 36, 
-    fontWeight: 'bold',
-    borderColor: 'black',
+    fontSize: FontSize.modalTitle, 
     color: 'black',
     backgroundColor: 'white',
     borderWidth: 1,
@@ -72,12 +69,6 @@ const styles = createStyles({
     margin: 8,
     paddingVertical: 8,
     paddingHorizontal: 14,
-  },
-  settingsCategoryDeleteModalMessage: {
-    fontSize: FontSize.modalTitle,
-    textAlign: 'center', 
-    marginHorizontal: 4,
-    marginTop: 14,
   },
   settingsCategoryDeleteModalButton: {
     fontSize: FontSize.modalTitle,
@@ -121,17 +112,21 @@ class SettingsScreen extends React.Component {
     let settingValue;
 
     switch (settingName) {
-      case WORK_PERIOD:
+      case WORK_PERIOD: {
         settingValue = this.props.settings.workPeriod.toString();
         break;
-      case WORK_GOAL:
+      }
+      case WORK_GOAL: {
         settingValue = this.props.settings.workGoal.toString();
         break;
-      case BREAK_PERIOD:
+      }
+      case BREAK_PERIOD: {
         settingValue = this.props.settings.breakPeriod.toString();
         break;
-      default:
+      }
+      default: {
         console.error('Invalid setting: ' + settingName);
+      }
     }
 
     this.setState({
@@ -161,17 +156,21 @@ class SettingsScreen extends React.Component {
 
   _onSettingEditConfirm = () => {
     switch (this.state.settingName) {
-      case WORK_PERIOD:
+      case WORK_PERIOD: {
         this.props.setDefaultWorkPeriod(parseInt(this.state.settingValue));
         break;
-      case WORK_GOAL:
+      }
+      case WORK_GOAL: {
         this.props.setDefaultWorkGoal(parseInt(this.state.settingValue));
         break;
-      case BREAK_PERIOD:
+      }
+      case BREAK_PERIOD: {
         this.props.setDefaultBreakPeriod(parseInt(this.state.settingValue));
         break;
-      default:
+      }
+      default: {
         console.error('invalid setting: ' + settingName);
+      }
     }
 
     this.setState({
@@ -276,32 +275,30 @@ class SettingsScreen extends React.Component {
   };
 
   _getSectionData = () => {
-    let sectionData = [];
-
-    sectionData.push({
-      title: '',
-      data: [
-        { name: 'Logout', value: ''},
-      ], 
-      renderItem: this._renderLogout,
-    });
-
-    sectionData.push({
-      title: 'Default',
-      data: [ 
-        { name: WORK_PERIOD, value: this.props.settings.workPeriod },
-        { name: WORK_GOAL, value: this.props.settings.workGoal },
-        { name: BREAK_PERIOD, value: this.props.settings.breakPeriod },
-      ],
-    });
-
-    sectionData.push({
-      title: 'Categories',
-      data: this.props.categories.map(category => {
-        return { name: category.name, value: '' };
-      }),
-      renderItem: this._renderCategory,
-    });
+    const sectionData = [
+      {
+        title: '',
+        data: [
+          { name: 'Logout', value: ''},
+        ], 
+        renderItem: this._renderLogout,
+      },
+      {
+        title: 'Default',
+        data: [ 
+          { name: WORK_PERIOD, value: this.props.settings.workPeriod },
+          { name: WORK_GOAL, value: this.props.settings.workGoal },
+          { name: BREAK_PERIOD, value: this.props.settings.breakPeriod },
+        ],
+      },
+      {
+        title: 'Categories',
+        data: this.props.categories.map(category => {
+          return { name: category.name, value: '' };
+        }),
+        renderItem: this._renderCategory,
+      },
+    ];
 
     return sectionData;
   };
@@ -344,8 +341,8 @@ class SettingsScreen extends React.Component {
         >
           <TextInput
             style={this.state.settingsEditCategoryNameStyle}
-            placeholder='Category Name'
             value={this.state.newCategoryName}
+            placeholder='Category Name'
             textAlign='center'
             returnKeyType='done'
             keyboardAppearance='dark'

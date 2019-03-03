@@ -24,7 +24,7 @@ export const Font = {
 export const FontSize = {
   timer: 142,
   splashTitle: 68,
-  focusSubtitle: 32,
+  subtitle: 32,
   headerTitle: 28, 
   modalTitle: 24,
   modalInput: 20,
