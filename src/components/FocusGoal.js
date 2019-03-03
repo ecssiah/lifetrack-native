@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, TouchableOpacity, ProgressViewIOS, View } from 'react-native';
+import { ProgressViewIOS, Text, TouchableOpacity } from 'react-native';
 import createStyles, { Color, FontSize } from '../styles';
 
 const styles = createStyles({
@@ -25,6 +25,7 @@ class FocusGoal extends React.PureComponent {
   render() {
     return (
       <TouchableOpacity
+        activeOpacity={0.7}
         style={styles.container}
         onPress={this.props.onGoalClick}
       >

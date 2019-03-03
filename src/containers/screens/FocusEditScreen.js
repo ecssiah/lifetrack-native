@@ -334,6 +334,7 @@ class FocusEditScreen extends React.Component {
     return (
       <TouchableOpacity 
         key={index} 
+        activeOpacity={0.7}
         onPress={this._onDeleteSelect}
       >
         <Text style={styles.deleteText}>

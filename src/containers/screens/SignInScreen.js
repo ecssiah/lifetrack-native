@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Button, View, Text, TextInput } from 'react-native';
+import { Button, View, TextInput } from 'react-native';
 import { auth, db } from '../../config';
 import createStyles, { FontSize } from '../../styles';
 import { setSettings } from '../../actions/SettingsActions';

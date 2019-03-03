@@ -68,7 +68,7 @@ class FocusItem extends React.Component {
           <ProgressViewIOS
             style={styles.progress}
             progressTintColor={Color.highlight}
-            progress={this.props.focus.experience / 100.0}
+            progress={this.props.focus.experience / 100}
           />
         </View>
       </TouchableOpacity>

@@ -1,22 +1,17 @@
 import React from 'react';
-import { SectionList, View } from 'react-native';
-import createStyles from '../styles';
+import { SectionList} from 'react-native';
 
+import LTSeparator from './LTSeparator';
 import SettingItem from './SettingItem';
 import SettingHeader from './SettingHeader';
 
-const styles = createStyles({
-  separator: {
-    height: 1,
-    backgroundColor: '#ced0ce',
-    marginHorizontal: '3%',
-  },
-});
-
 class SettingList extends React.Component {
-  _renderSeparator = () => (
-    <View style={styles.separator} />
-  );
+
+  _renderHeader = section => (
+    <SettingHeader 
+      title={section.title} 
+    />
+  ); 
 
   _renderItem = item => (
     <SettingItem 
@@ -25,20 +20,14 @@ class SettingList extends React.Component {
     />
   );
 
-  _renderHeader = section => (
-    <SettingHeader 
-      title={section.title} 
-    />
-  ); 
-
   render() {
     return (
       <SectionList
         sections={this.props.sections}
         keyExtractor={(item, index) => index}
-        renderItem={({item}) => this._renderItem(item)}
+        ItemSeparatorComponent={LTSeparator}
         renderSectionHeader={({section}) => this._renderHeader(section)}
-        ItemSeparatorComponent={this._renderSeparator}
+        renderItem={({item}) => this._renderItem(item)}
       />
     );
   };

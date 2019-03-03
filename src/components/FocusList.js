@@ -1,32 +1,11 @@
 import React from 'react';
-import { SectionList, View } from 'react-native';
-import createStyles from '../styles';
+import { SectionList } from 'react-native';
 
+import LTSeparator from './LTSeparator';
 import FocusHeader from './FocusHeader';
 import FocusItem from './FocusItem';
 
-const styles = createStyles({
-  separator: {
-    height: 1,
-    backgroundColor: '#ced0ce',
-    marginHorizontal: '3%',
-  },
-});
-
 class FocusList extends React.Component {
-  _renderSeparator = () => (
-    <View style={styles.separator} />
-  );
-
-  _renderItem = item => {
-    return (
-      <FocusItem 
-        focus={item} 
-        onFocusSelect={this.props.onFocusSelect} 
-      />
-    );
-  };
-
   _renderHeader = section => {
     return (
       <FocusHeader 
@@ -37,14 +16,23 @@ class FocusList extends React.Component {
     );
   }; 
 
+  _renderItem = item => {
+    return (
+      <FocusItem 
+        focus={item} 
+        onFocusSelect={this.props.onFocusSelect} 
+      />
+    );
+  };
+
   render() {
     return (
       <SectionList
         sections={this.props.sections}
         keyExtractor={(item, index) => index}
-        ItemSeparatorComponent={this._renderSeparator}
-        renderItem={({item}) => this._renderItem(item)}
+        ItemSeparatorComponent={LTSeparator}
         renderSectionHeader={({section}) => this._renderHeader(section)}
+        renderItem={({item}) => this._renderItem(item)}
       />
     );
   };

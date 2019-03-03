@@ -44,7 +44,10 @@ class FocusTimer extends React.PureComponent {
 
   render() {
     return (
-      <TouchableOpacity onPress={this.props.onActivate} >
+      <TouchableOpacity 
+        activeOpacity={0.7}
+        onPress={this.props.onActivate} 
+      >
         <Text style={this._getTimerStyle()}>
           {this._getDisplayTime()}
         </Text>

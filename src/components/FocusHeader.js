@@ -12,7 +12,7 @@ const styles = createStyles({
     borderBottomWidth: 1,
     borderBottomColor: '#666666',
   },
-  containerInactive: {
+  container: {
     backgroundColor: '#505050',
     borderTopWidth: 1,
     borderTopColor: '#606060',
@@ -25,7 +25,7 @@ const styles = createStyles({
     marginLeft: 4,
     marginVertical: 2,
   },
-  headerInactive: {
+  header: {
     color: '#a0a0a0',
     fontSize: FontSize.sectionHeader,
     marginLeft: 4,
@@ -36,26 +36,18 @@ const styles = createStyles({
 class FocusHeader extends React.Component {
 
   _getContainerStyle = () => {
-    if (this.props.active) {
-      return styles.containerActive;
-    } else {
-      return styles.containerInactive;
-    }
+    return this.props.active ? styles.containerActive : styles.container;
   };
 
   _getHeaderStyle = () => {
-    if (this.props.active) {
-      return styles.headerActive;
-    } else {
-      return styles.headerInactive;
-    }
+    return this.props.active ? styles.headerActive : styles.header;
   };
 
   render() {
     return (
       <View style={this._getContainerStyle()}>
         <TouchableOpacity 
-          activeOpacity={0.9} 
+          activeOpacity={0.7} 
           onPress={() => this.props.onCategorySelect(this.props.title)}
         >
           <Text style={this._getHeaderStyle()}>

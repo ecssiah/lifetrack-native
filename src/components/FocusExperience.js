@@ -32,7 +32,7 @@ class FocusExperience extends React.PureComponent {
         <ProgressViewIOS
           style={styles.progress}
           progressTintColor={Color.highlight}
-          progress={this.props.experience / 100.0}
+          progress={this.props.experience / 100}
         />
       </View>
     );
