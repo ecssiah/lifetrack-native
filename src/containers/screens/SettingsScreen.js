@@ -18,7 +18,7 @@ import {
 import {
   updateCategories,
 } from '../../actions/FocusesActions';
-import createStyles, { Colors } from '../../styles'; 
+import createStyles, { Color } from '../../styles'; 
 
 import LTModal from '../../components/LTModal';
 import LTConfirm from '../../components/LTConfirm';
@@ -30,6 +30,7 @@ const styles = createStyles({
   },
   settingsLogout: {
     fontSize: 32,
+    color: Color.highlight,
     textAlign: 'center',
     margin: 6,
   },
@@ -40,16 +41,17 @@ const styles = createStyles({
     marginVertical: 10,
   },
   settingsEditModalContainer: {
+    height: '78%',
   },
   settingsEditModalText: {
     fontSize: 24, 
-    marginBottom: 4,
+    marginTop: 14,
   },
   settingsEditModalPicker: {
-    height: '70%',
-    width: '80%',
+    width: '86%',
   },
-  settingsCategoryDeleteModalContainer: {
+  settingsCategoryEditModalContainer: {
+    height: '32%',
   },
   settingsEditCategoryNameBlur: {
     fontSize: 36, 
@@ -78,13 +80,14 @@ const styles = createStyles({
     fontSize: 24,
     textAlign: 'center', 
     marginHorizontal: 4,
-    marginBottom: 20, 
+    marginTop: 14,
   },
   settingsCategoryDeleteModalButton: {
     fontSize: 24,
-    color: 'red',
+    color: Color.highlight,
     textAlign: 'center', 
     marginHorizontal: 4,
+    marginBottom: 14,
   },
 });
 
@@ -338,7 +341,7 @@ class SettingsScreen extends React.Component {
         </LTModal>
 
         <LTModal
-          style={styles.settingsCategoryDeleteModalContainer}
+          style={styles.settingsCategoryEditModalContainer}
           show={this.state.settingsCategoryDeleteModalShow}
           onPressBackdrop={this._onCategoryDeleteCancel} 
         >
@@ -349,7 +352,7 @@ class SettingsScreen extends React.Component {
             textAlign='center'
             returnKeyType='done'
             keyboardAppearance='dark'
-            selectionColor={Colors.primary}
+            selectionColor={Color.primary}
             onBlur={this._onEditCategoryNameBlur}
             onFocus={this._onEditCategoryNameFocus}
             onChangeText={newCategoryName => this.setState({newCategoryName})}

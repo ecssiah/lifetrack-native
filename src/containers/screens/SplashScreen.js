@@ -5,14 +5,14 @@ import { View, Text } from 'react-native';
 import { setSettings } from '../../actions/SettingsActions';
 import { setCategories } from '../../actions/CategoriesActions';
 import { setFocuses } from '../../actions/FocusesActions';
-import createStyles, { Colors } from '../../styles';
+import createStyles, { Color } from '../../styles';
 
 const styles = createStyles({
   splashContainer: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: Colors.primary,
+    backgroundColor: Color.primary,
   },
   splashTitle: {
     fontSize: 68,

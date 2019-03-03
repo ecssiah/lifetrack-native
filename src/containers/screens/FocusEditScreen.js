@@ -16,7 +16,7 @@ import {
 import { 
   WORK_PERIOD, WORK_GOAL, BREAK_PERIOD,
 } from '../../constants/Focus';
-import createStyles, { Colors } from '../../styles';
+import createStyles, { Color } from '../../styles';
 
 import LTModal from '../../components/LTModal';
 import LTIcon from '../../components/LTIcon';
@@ -26,33 +26,32 @@ import LTConfirm from '../../components/LTConfirm';
 
 const styles = createStyles({
   editNameInputBlur: {
-    fontSize: 36, 
-    fontWeight: 'bold',
-    borderColor: 'black',
+    fontSize: 24, 
     color: 'black',
-    backgroundColor: 'white',
     borderWidth: 0,
-    margin: 8,
+    borderRadius: 6,
+    borderColor: 'black',
+    backgroundColor: 'white',
     paddingVertical: 9,
     paddingHorizontal: 15,
+    margin: 8,
   },
   editNameInputFocus: {
-    fontSize: 36, 
-    fontWeight: 'bold',
-    borderColor: 'black',
+    fontSize: 24, 
     color: 'black',
-    backgroundColor: 'white',
     borderWidth: 1,
     borderRadius: 6,
-    margin: 8,
+    borderColor: 'black',
+    backgroundColor: 'white',
     paddingVertical: 8,
     paddingHorizontal: 14,
+    margin: 8,
   },
   editDeleteText: {
     fontSize: 24,
     fontWeight: 'bold',
     textAlign: 'center',
-    color: 'red',
+    color: Color.highlight,
     margin: 16,
   },
   editSettingModalContainer: {
@@ -64,10 +63,6 @@ const styles = createStyles({
   },
   editSettingModalPicker: {
     width: '86%',
-  },
-  editSettingModalButton: {
-    fontSize: 18,
-    color: 'blue',
   },
   editCategoryModalContainer: {
     height: '80%',
@@ -84,10 +79,6 @@ const styles = createStyles({
   editCategoryModalPicker: {
     width: '86%',
   },
-  editCategoryModalButton: {
-    fontSize: 18,
-    color: 'blue',
-  },
   editDeleteModalContainer: {
     height: '36%',
   },
@@ -96,10 +87,6 @@ const styles = createStyles({
     textAlign: 'center', 
     marginTop: 12,
     marginHorizontal: 4,
-  },
-  editDeleteModalButton: {
-    fontSize: 18,
-    color: 'blue',
   },
 });
 
@@ -152,17 +139,21 @@ class FocusEditScreen extends React.Component {
     const focus = this.props.focuses[this.props.focus.id];
 
     switch (settingName) {
-      case WORK_PERIOD:
+      case WORK_PERIOD: {
         settingValue = focus.workPeriod.toString();
         break;
-      case WORK_GOAL:
+      }
+      case WORK_GOAL: {
         settingValue = focus.workGoal.toString();
         break;
-      case BREAK_PERIOD:
+      }
+      case BREAK_PERIOD: {
         settingValue = focus.breakPeriod.toString();
         break;
-      default:
+      }
+      default: {
         console.error('invalid setting: ' + settingName);
+      }
     }
 
     this.setState({
@@ -180,23 +171,27 @@ class FocusEditScreen extends React.Component {
 
   _onSettingConfirm = () => {
     switch (this.state.settingName) {
-      case WORK_PERIOD:
+      case WORK_PERIOD: {
         this.props.setWorkPeriod(
           this.props.focus.id, parseInt(this.state.settingValue)
         );
         break;
-      case WORK_GOAL:
+      }
+      case WORK_GOAL: {
         this.props.setWorkGoal(
           this.props.focus.id, parseInt(this.state.settingValue)
         );
         break;
-      case BREAK_PERIOD:
+      }
+      case BREAK_PERIOD: {
         this.props.setBreakPeriod(
           this.props.focus.id, parseInt(this.state.settingValue)
         );
         break;
-      default:
+      }
+      default: {
         console.error('invalid focus attribute');
+      }
     }
 
     this.setState({
@@ -307,16 +302,17 @@ class FocusEditScreen extends React.Component {
     });
   };
 
-  _renderName = ({ item, index, section: { title, data } }) => {
+  _renderName = () => {
     return (
       <TextInput
         style={this.state.editNameInputStyle}
         placeholder='Focus Name'
         value={this.state.name}
         textAlign='center'
+        maxLength={24}
         returnKeyType='done'
         keyboardAppearance='dark'
-        selectionColor={Colors.primary}
+        selectionColor={Color.primary}
         onBlur={this._onEditInputBlur}
         onFocus={this._onEditInputFocus}
         onChangeText={name => this.setState({name})}
@@ -325,7 +321,7 @@ class FocusEditScreen extends React.Component {
     );
   };
 
-  _renderCategory = ({ item, index, section: { title, data} }) => {
+  _renderCategory = ({item}) => {
     return (
       <SettingItem 
         setting={item} 
@@ -334,7 +330,7 @@ class FocusEditScreen extends React.Component {
     );
   };
 
-  _renderDelete = ({ item, index, section: { title, data } }) => {
+  _renderDelete = ({item, index}) => {
     return (
       <TouchableOpacity 
         key={index} 
@@ -348,46 +344,43 @@ class FocusEditScreen extends React.Component {
   };
 
   _getSectionData = () => {
-    let sectionData = [];
     const focus = this.props.focuses[this.props.focus.id];
 
-    sectionData.push({
-      title: '',
-      data: [
-        { name: '', value: focus.name },
-      ],
-      renderItem: this._renderName,
-    });
-
-    sectionData.push({
-      title: '',
-      data: [ 
-        { name: 'Category', value: focus.category },
-      ],
-      renderItem: this._renderCategory,
-    });
-
-    sectionData.push({
-      title: '',
-      data: [ 
-        { name: WORK_PERIOD, value: focus.workPeriod },
-        { name: WORK_GOAL, value: focus.workGoal },
-        { name: BREAK_PERIOD, value: focus.breakPeriod },
-      ],
-    });
-
-    sectionData.push({
-      title: '',
-      data: [
-        { name: 'Delete', value: '' },
-      ],
-      renderItem: this._renderDelete,
-    })
-
-    sectionData.push({
-      title: '',
-      data: [],
-    });
+    const sectionData = [
+      {
+        title: '',
+        data: [
+          { name: '', value: focus.name },
+        ],
+        renderItem: this._renderName,
+      },
+      {
+        title: '',
+        data: [ 
+          { name: 'Category', value: focus.category },
+        ],
+        renderItem: this._renderCategory,
+      },
+      {
+        title: '',
+        data: [ 
+          { name: WORK_PERIOD, value: focus.workPeriod },
+          { name: WORK_GOAL, value: focus.workGoal },
+          { name: BREAK_PERIOD, value: focus.breakPeriod },
+        ],
+      },
+      {
+        title: '',
+        data: [
+          { name: 'Delete', value: '' },
+        ],
+        renderItem: this._renderDelete,
+      },
+      {
+        title: '',
+        data: [],
+      },
+    ];
 
     return sectionData;
   };

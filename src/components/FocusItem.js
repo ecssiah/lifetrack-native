@@ -2,7 +2,7 @@ import React from 'react';
 import { 
   TouchableHighlight, TouchableOpacity, Text, View, ProgressViewIOS 
 } from 'react-native';
-import createStyles, { Colors } from '../styles'; 
+import createStyles, { Color } from '../styles'; 
 
 const styles = createStyles({
   focusContainer: {
@@ -19,7 +19,7 @@ const styles = createStyles({
     justifyContent: 'flex-start',
     alignItems: 'center',
     fontSize: 20,
-    color: Colors.text,
+    color: Color.text,
   },
   focusItemRight: {
     flex: 1,
@@ -59,7 +59,7 @@ class FocusItem extends React.Component {
           </Text>
           <ProgressViewIOS
             style={styles.focusProgress}
-            progressTintColor={Colors.primary}
+            progressTintColor={Color.highlight}
             progress={this.props.focus.experience / 100.0}
           />
         </View>

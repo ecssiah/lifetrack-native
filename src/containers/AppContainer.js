@@ -6,7 +6,7 @@ import {
   createBottomTabNavigator, 
   createAppContainer 
 } from "react-navigation";
-import { Colors } from '../styles';
+import { Color, FontSize } from '../styles';
 
 import SplashScreen from './screens/SplashScreen';
 import SignInScreen from './screens/SignInScreen';
@@ -26,10 +26,10 @@ const AuthStack = createStackNavigator(
     initialRouteName: 'SignIn',
     defaultNavigationOptions: {
       headerStyle: {
-        backgroundColor: Colors.primary,
+        backgroundColor: Color.primary,
       },
       headerTitleStyle: {
-        fontSize: 26,
+        fontSize: FontSize.headerTitle,
         fontWeight: 'bold',
       },
       headerTintColor: 'white',
@@ -46,12 +46,12 @@ const StatsStack = createStackNavigator(
     initialRouteName: 'Stats',
     defaultNavigationOptions: {
       headerStyle: {
-        backgroundColor: Colors.primary,
+        backgroundColor: Color.primary,
       },
       headerTintColor: 'white',
       headerBackTitle: null,
       headerTitleStyle: {
-        fontSize: 26,
+        fontSize: FontSize.headerTitle,
         fontWeight: 'bold',
       },
     },
@@ -68,12 +68,12 @@ const FocusStack = createStackNavigator(
     initialRouteName: 'Focuses',
     defaultNavigationOptions: {
       headerStyle: {
-        backgroundColor: Colors.primary,
+        backgroundColor: Color.primary,
       },
       headerTintColor: 'white',
       headerBackTitle: null,
       headerTitleStyle: {
-        fontSize: 26,
+        fontSize: FontSize.headerTitle,
         fontWeight: 'bold',
       },
     },
@@ -88,11 +88,11 @@ const SettingsStack = createStackNavigator(
     initialRouteName: 'Settings',
     defaultNavigationOptions: {
       headerStyle: {
-        backgroundColor: Colors.primary,
+        backgroundColor: Color.primary,
       },
       headerTintColor: 'white',
       headerTitleStyle: {
-        fontSize: 26,
+        fontSize: FontSize.headerTitle,
         fontWeight: 'bold',
       },
     },
@@ -112,7 +112,7 @@ const AppNavigator = createBottomTabNavigator(
       inactiveTintColor: '#777777',
       showLabel: false,
       style: {
-        backgroundColor: Colors.primary,
+        backgroundColor: Color.primary,
       },
     },
     defaultNavigationOptions: ({ navigation }) => ({

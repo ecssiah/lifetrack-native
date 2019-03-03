@@ -4,7 +4,7 @@ import createStyles from '../styles';
 
 const styles = createStyles({
   focusTitle: {
-    fontSize: 60,
+    fontSize: 52,
     textAlign: 'center',
   },
 });

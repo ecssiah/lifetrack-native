@@ -1,6 +1,6 @@
 import React from 'react';
 import { Text, TouchableOpacity, View } from 'react-native';
-import createStyles from '../styles';
+import createStyles, { Color } from '../styles';
 
 const styles = createStyles({
   ltconfirmContainer: {
@@ -26,13 +26,13 @@ const styles = createStyles({
     borderBottomWidth: 0,
   },
   ltconfirmTextLeft: {
-    color: '#4444aa',
+    color: Color.working,
     fontSize: 18, 
     paddingVertical: '10%',
     textAlign: 'center',
   },
   ltconfirmTextRight: {
-    color: '#aa4444',
+    color: Color.highlight,
     fontSize: 18, 
     paddingVertical: '10%',
     textAlign: 'center',

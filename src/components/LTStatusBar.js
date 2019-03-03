@@ -1,10 +1,10 @@
 import React from 'react';
 import { StatusBar, View } from 'react-native';
-import createStyles, { Colors, Screen } from '../styles';
+import createStyles, { Color, Screen } from '../styles';
 
 const styles = createStyles({
   statusBar: {
-    backgroundColor: Colors.primary,
+    backgroundColor: Color.primary,
     width: Screen.w,
     height: 20,
   },

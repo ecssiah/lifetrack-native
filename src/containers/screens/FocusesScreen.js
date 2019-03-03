@@ -6,7 +6,7 @@ import { addFocus, setCategory } from '../../actions/FocusesActions';
 import { addCategory, toggleCategoryShow } from '../../actions/CategoriesActions';
 import firebase from 'firebase';
 import { auth, db } from '../../config';
-import createStyles from '../../styles';
+import createStyles, { Color } from '../../styles';
 
 import LTIcon from '../../components/LTIcon';
 import LTModal from '../../components/LTModal';
@@ -21,36 +21,30 @@ const styles = createStyles({
     width: '86%',
     height: 40, 
     fontSize: 20, 
-    fontWeight: 'bold',
-    borderColor: 'black',
     color: 'black',
-    backgroundColor: 'white',
     borderWidth: 1,
     borderRadius: 6,
-    marginTop: 14,
+    borderColor: 'black',
+    backgroundColor: 'white',
     paddingVertical: 9,
     paddingHorizontal: 10,
+    marginTop: 14,
   },
   addCategoryModalInput: {
     width: '86%',
     height: 40, 
     fontSize: 20, 
-    fontWeight: 'bold',
-    borderColor: 'black',
     color: 'black',
-    backgroundColor: 'white',
     borderWidth: 1,
     borderRadius: 6,
-    marginBottom: 4,
+    borderColor: 'black',
+    backgroundColor: 'white',
     paddingVertical: 9,
     paddingHorizontal: 10,
+    marginBottom: 4,
   },
   addCategoryModalPicker: {
     width: '86%',
-  },
-  addFocusText: {
-    fontSize: 22,
-    color: 'blue',
   },
 });
 
@@ -105,11 +99,11 @@ class FocusesScreen extends React.Component {
       newCategoryName: '',
     });
 
-    docRef.set(focus).then(doc => {
-      this.props.addFocus(focus);
-    }).catch(err => {
-      console.error(err);
-    });
+    docRef.set(focus).then(doc =>
+      this.props.addFocus(focus)
+    ).catch(err => 
+      console.error(err)
+    );
   };
 
   _onAddConfirm = () => {
@@ -127,9 +121,9 @@ class FocusesScreen extends React.Component {
 
       db.collection('categories').doc(auth.currentUser.uid).update({
         list: firebase.firestore.FieldValue.arrayUnion(category),
-      }).catch(err => {
-        console.error(err);
-      });
+      }).catch(err => 
+        console.error(err)
+      );
 
       this.props.addCategory(categoryName);
     }
@@ -155,27 +149,21 @@ class FocusesScreen extends React.Component {
   };
 
   _getSectionData = () => {
-    let sectionData = [];
     let focusArray = Object.values(this.props.focuses);
 
-    this.props.categories.forEach(category => {
+    const sectionData = this.props.categories.map(category => {
       let data = [];
 
       if (category.show) {
-        data = focusArray.filter(focus => {
-          return focus.category === category.name;
-        }).sort((a, b) => {
-          return a.name.localeCompare(b.name);
-        });
+        data = focusArray.filter(focus => focus.category === category.name);
+        data = data.sort((a, b) => a.name.localeCompare(b.name));
       }
 
-      let section = {
+      return {
         title: category.name,
-        data,
         show: category.show,
+        data,
       };
-
-      sectionData.push(section);
     });
 
     return sectionData;

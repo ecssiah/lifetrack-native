@@ -1,27 +1,27 @@
 import React from 'react';
 import { Text, TouchableOpacity } from 'react-native';
-import createStyles, { Fonts } from '../styles';
+import createStyles, { Color, Font } from '../styles';
 
-const fontSize = 140;
+const fontSize = 144;
 
 const styles = createStyles({
   working: {
     fontSize,
-    fontFamily: Fonts.timer,
+    fontFamily: Font.timer,
     textAlign: 'center',
-    color: '#0022ee',
+    color: Color.working,
   },
   paused: {
     fontSize,
-    fontFamily: Fonts.timer,
+    fontFamily: Font.timer,
     textAlign: 'center',
-    color: '#990033',
+    color: Color.highlight,
   },
   break: {
     fontSize,
-    fontFamily: Fonts.timer,
+    fontFamily: Font.timer,
     textAlign: 'center',
-    color: '#227755',
+    color: Color.break,
   },
 });
 
@@ -38,11 +38,7 @@ class FocusTimer extends React.PureComponent {
 
   _getTimerStyle() {
     if (this.props.working) {
-      if (this.props.active) {
-        return styles.working;
-      } else {
-        return styles.paused;
-      }
+      return this.props.active ? styles.working : styles.paused;
     } else {
       return styles.break;
     }
