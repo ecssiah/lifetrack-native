@@ -193,24 +193,20 @@ class SettingsScreen extends React.Component {
   };
 
   _onCategoryDeleteConfirm = () => {
-    if (this.state.categoryName !== 'Uncategorized') {
-      const category = this.props.categories.find(category => 
-        category.name === this.state.categoryName
-      );
+    const category = this.props.categories.find(category => 
+      category.name === this.state.categoryName
+    );
 
-      db.collection('categories').doc(auth.currentUser.uid).update({
-        list: firebase.firestore.FieldValue.arrayRemove(category),
-      }).then(() => {
-        this.props.deleteCategory(this.state.categoryName);
-        this.props.updateCategories(this.state.categoryName, 'Uncategorized');
+    db.collection('categories').doc(auth.currentUser.uid).update({
+      list: firebase.firestore.FieldValue.arrayRemove(category),
+    }).then(() => {
+      this.props.deleteCategory(this.state.categoryName);
+      this.props.updateCategories(this.state.categoryName, 'Uncategorized');
 
-        // Update focus categories in firestore
-      }).catch(err => {
-        console.error(err);
-      }); 
-    } else {
-      console.warn('Uncategorized can not be deleted');
-    }
+      // Update focus categories in firestore
+    }).catch(err => {
+      console.error(err);
+    }); 
 
     this.setState({
       settingsCategoryDeleteModalShow: false,

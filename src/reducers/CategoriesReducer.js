@@ -12,7 +12,7 @@ function categoriesReducer(state = [], action) {
       return action.categories;
     }
     case ADD_CATEGORY: {
-      newState.push(action.category);
+      newState.unshift(action.category);
 
       return newState;
     }
@@ -27,8 +27,6 @@ function categoriesReducer(state = [], action) {
         console.warn(action.name + ' was not found');
       }
         
-      console.warn(newState);
-
       return newState;
     }
     case SET_CATEGORY_NAME: {
