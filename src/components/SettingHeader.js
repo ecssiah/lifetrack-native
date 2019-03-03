@@ -5,14 +5,14 @@ import {
 import createStyles, { FontSize } from '../styles'; 
 
 const styles = createStyles({
-  settingsHeaderContainer: {
+  container: {
     backgroundColor: '#666666',
     borderTopWidth: 1,
     borderTopColor: '#777777',
     borderBottomWidth: 1,
     borderBottomColor: '#555555',
   },
-  settingsHeaderText: {
+  title: {
     color: 'white',
     fontSize: FontSize.sectionHeader,
     marginLeft: 4,
@@ -23,8 +23,8 @@ const styles = createStyles({
 class SettingsHeader extends React.Component {
   render() {
     return (
-      <View style={styles.settingsHeaderContainer}>
-        <Text style={styles.settingsHeaderText}>
+      <View style={styles.container}>
+        <Text style={styles.title}>
           {this.props.title}
         </Text>
       </View>

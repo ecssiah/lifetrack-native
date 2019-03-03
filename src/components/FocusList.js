@@ -6,7 +6,7 @@ import FocusHeader from './FocusHeader';
 import FocusItem from './FocusItem';
 
 const styles = createStyles({
-  focusSeparator: {
+  separator: {
     height: 1,
     backgroundColor: '#ced0ce',
     marginHorizontal: '3%',
@@ -15,22 +15,24 @@ const styles = createStyles({
 
 class FocusList extends React.Component {
   _renderSeparator = () => (
-    <View style={styles.focusSeparator} />
+    <View style={styles.separator} />
   );
 
-  _renderItem = item => (
-    <FocusItem 
-      focus={item} 
-      selectFocus={this.props.selectFocus} 
-    />
-  );
+  _renderItem = item => {
+    return (
+      <FocusItem 
+        focus={item} 
+        onFocusSelect={this.props.onFocusSelect} 
+      />
+    );
+  };
 
   _renderHeader = section => {
     return (
       <FocusHeader 
         title={section.title} 
         active={section.show}
-        selectCategory={this.props.selectCategory}
+        onCategorySelect={this.props.onCategorySelect}
       />
     );
   }; 

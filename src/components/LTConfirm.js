@@ -3,11 +3,11 @@ import { Text, TouchableOpacity, View } from 'react-native';
 import createStyles, { Color } from '../styles';
 
 const styles = createStyles({
-  ltconfirmContainer: {
+  container: {
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
-  ltconfirmViewLeft: {
+  viewLeft: {
     flex: 1,
     bottom: 0,
     borderColor: '#dddddd', 
@@ -16,7 +16,7 @@ const styles = createStyles({
     borderLeftWidth: 0,
     borderBottomWidth: 0,
   },
-  ltconfirmViewRight: {
+  viewRight: {
     flex: 1,
     bottom: 0,
     borderColor: '#dddddd', 
@@ -25,13 +25,13 @@ const styles = createStyles({
     borderLeftWidth: 1,
     borderBottomWidth: 0,
   },
-  ltconfirmTextLeft: {
+  textLeft: {
     color: Color.working,
     fontSize: 18, 
     paddingVertical: '10%',
     textAlign: 'center',
   },
-  ltconfirmTextRight: {
+  textRight: {
     color: Color.highlight,
     fontSize: 18, 
     paddingVertical: '10%',
@@ -47,21 +47,23 @@ class LTConfirm extends React.Component {
 
   render() {
     return (
-      <View style={styles.ltconfirmContainer}>
+      <View style={styles.container}>
         <TouchableOpacity 
-          style={styles.ltconfirmViewLeft} 
+          style={styles.viewLeft} 
+          activeOpacity={0.7}
           onPress={this.props.onPressLeft} 
         >
-          <Text style={styles.ltconfirmTextLeft} >
+          <Text style={styles.textLeft} >
             {this.props.leftContent}
           </Text>
         </TouchableOpacity>
 
         <TouchableOpacity 
-          style={styles.ltconfirmViewRight} 
+          style={styles.viewRight} 
+          activeOpacity={0.7}
           onPress={this.props.onPressRight} 
         >
-          <Text style={styles.ltconfirmTextRight} >
+          <Text style={styles.textRight} >
             {this.props.rightContent}
           </Text>
         </TouchableOpacity>

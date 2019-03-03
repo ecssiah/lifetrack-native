@@ -5,27 +5,27 @@ import {
 import createStyles, { FontSize } from '../styles'; 
 
 const styles = createStyles({
-  focusHeaderContainerActive: {
+  containerActive: {
     backgroundColor: '#777777',
     borderTopWidth: 1,
     borderTopColor: '#888888',
     borderBottomWidth: 1,
     borderBottomColor: '#666666',
   },
-  focusHeaderContainerInactive: {
+  containerInactive: {
     backgroundColor: '#505050',
     borderTopWidth: 1,
     borderTopColor: '#606060',
     borderBottomWidth: 1,
     borderBottomColor: '#404040',
   },
-  focusHeaderTextActive: {
+  headerActive: {
     color: 'white',
     fontSize: FontSize.sectionHeader,
     marginLeft: 4,
     marginVertical: 2,
   },
-  focusHeaderTextInactive: {
+  headerInactive: {
     color: '#a0a0a0',
     fontSize: FontSize.sectionHeader,
     marginLeft: 4,
@@ -35,34 +35,34 @@ const styles = createStyles({
 
 class FocusHeader extends React.Component {
 
-  _getHeaderStyle = () => {
+  _getContainerStyle = () => {
     if (this.props.active) {
-      return styles.focusHeaderTextActive;
+      return styles.containerActive;
     } else {
-      return styles.focusHeaderTextInactive;
+      return styles.containerInactive;
     }
   };
 
-  _getHeaderContainerStyle = () => {
+  _getHeaderStyle = () => {
     if (this.props.active) {
-      return styles.focusHeaderContainerActive;
+      return styles.headerActive;
     } else {
-      return styles.focusHeaderContainerInactive;
+      return styles.headerInactive;
     }
   };
 
   render() {
     return (
-      <TouchableOpacity 
-        activeOpacity={0.9} 
-        onPress={() => this.props.selectCategory(this.props.title)}
-      >
-        <View style={this._getHeaderContainerStyle()}>
+      <View style={this._getContainerStyle()}>
+        <TouchableOpacity 
+          activeOpacity={0.9} 
+          onPress={() => this.props.onCategorySelect(this.props.title)}
+        >
           <Text style={this._getHeaderStyle()}>
             {this.props.title}
           </Text>
-        </View>
-      </TouchableOpacity>
+        </TouchableOpacity>
+      </View>
     );
   }
 }

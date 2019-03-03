@@ -25,6 +25,8 @@ const AuthStack = createStackNavigator(
   {
     initialRouteName: 'SignIn',
     defaultNavigationOptions: {
+      headerTintColor: 'white',
+      headerBackTitle: null,
       headerStyle: {
         backgroundColor: Color.primary,
       },
@@ -32,8 +34,6 @@ const AuthStack = createStackNavigator(
         fontSize: FontSize.headerTitle,
         fontWeight: 'bold',
       },
-      headerTintColor: 'white',
-      headerBackTitle: null,
     },
   },
 );
@@ -45,11 +45,11 @@ const StatsStack = createStackNavigator(
   {
     initialRouteName: 'Stats',
     defaultNavigationOptions: {
+      headerTintColor: 'white',
+      headerBackTitle: null,
       headerStyle: {
         backgroundColor: Color.primary,
       },
-      headerTintColor: 'white',
-      headerBackTitle: null,
       headerTitleStyle: {
         fontSize: FontSize.headerTitle,
         fontWeight: 'bold',
@@ -67,11 +67,11 @@ const FocusStack = createStackNavigator(
   {
     initialRouteName: 'Focuses',
     defaultNavigationOptions: {
+      headerTintColor: 'white',
+      headerBackTitle: null,
       headerStyle: {
         backgroundColor: Color.primary,
       },
-      headerTintColor: 'white',
-      headerBackTitle: null,
       headerTitleStyle: {
         fontSize: FontSize.headerTitle,
         fontWeight: 'bold',
@@ -87,10 +87,11 @@ const SettingsStack = createStackNavigator(
   {
     initialRouteName: 'Settings',
     defaultNavigationOptions: {
+      headerTintColor: 'white',
+      headerBackTitle: null,
       headerStyle: {
         backgroundColor: Color.primary,
       },
-      headerTintColor: 'white',
       headerTitleStyle: {
         fontSize: FontSize.headerTitle,
         fontWeight: 'bold',
@@ -117,18 +118,20 @@ const AppNavigator = createBottomTabNavigator(
     },
     defaultNavigationOptions: ({ navigation }) => ({
       tabBarIcon: ({ focused, horizontal, tintColor }) => {
-        const { routeName } = navigation.state;
-        let iconName;
-
-        if (routeName === 'Focuses') {
-          iconName = 'ios-eye';
-        } else if (routeName === 'Settings') {
-          iconName = 'md-settings';
-        } else if (routeName === 'Stats') {
-          iconName = 'ios-podium';
+        switch (navigation.state.routeName) {
+          case 'Focuses': {
+            return <Icon name={'ios-eye'} size={35} color={tintColor} />;
+          }
+          case 'Settings': {
+            return <Icon name={'md-settings'} size={35} color={tintColor} />;
+          }
+          case 'Stats': {
+            return <Icon name={'ios-podium'} size={35} color={tintColor} />;
+          }
+          default: {
+            console.error('unhandled routeName: ' + navigation.state.routeName);
+          }
         }
-
-        return <Icon name={iconName} size={35} color={tintColor} />;
       },
     }),
   },

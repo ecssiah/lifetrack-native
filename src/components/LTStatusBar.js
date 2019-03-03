@@ -4,9 +4,9 @@ import createStyles, { Color, Screen } from '../styles';
 
 const styles = createStyles({
   statusBar: {
-    backgroundColor: Color.primary,
-    width: Screen.w,
     height: 20,
+    width: Screen.w,
+    backgroundColor: Color.primary,
   },
 });
 

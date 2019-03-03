@@ -25,7 +25,7 @@ import SettingList from '../../components/SettingList';
 import LTConfirm from '../../components/LTConfirm';
 
 const styles = createStyles({
-  editNameInputBlur: {
+  nameInputBlur: {
     fontSize: FontSize.modalTitle, 
     color: 'black',
     borderWidth: 0,
@@ -36,7 +36,7 @@ const styles = createStyles({
     paddingHorizontal: 15,
     margin: 8,
   },
-  editNameInputFocus: {
+  nameInputFocus: {
     fontSize: FontSize.modalTitle, 
     color: 'black',
     borderWidth: 1,
@@ -47,27 +47,17 @@ const styles = createStyles({
     paddingHorizontal: 14,
     margin: 8,
   },
-  editDeleteText: {
+  deleteText: {
     fontSize: FontSize.modalTitle,
     fontWeight: 'bold',
     textAlign: 'center',
     color: Color.highlight,
     margin: 16,
   },
-  editSettingModalContainer: {
-    height: '78%',
-  },
-  editSettingModalTitle: {
-    fontSize: FontSize.modalTitle,
-    marginTop: 14,
-  },
-  editSettingModalPicker: {
-    width: '86%',
-  },
-  editCategoryModalContainer: {
+  categoryModalContainer: {
     height: '80%',
   },
-  editCategoryModalInput: {
+  categoryModalInput: {
     width: '86%',
     height: 40, 
     fontSize: FontSize.modalInput,
@@ -76,13 +66,23 @@ const styles = createStyles({
     borderRadius: 10,
     borderColor: 'gray', 
   },
-  editCategoryModalPicker: {
+  categoryModalPicker: {
     width: '86%',
   },
-  editDeleteModalContainer: {
+  settingsModalContainer: {
+    height: '78%',
+  },
+  settingsModalTitle: {
+    fontSize: FontSize.modalTitle,
+    marginTop: 14,
+  },
+  settingsModalPicker: {
+    width: '86%',
+  },
+  deleteModalContainer: {
     height: '36%',
   },
-  editDeleteModalText: {
+  deleteModalText: {
     fontSize: FontSize.modalTitle,
     textAlign: 'center', 
     marginTop: 12,
@@ -96,14 +96,14 @@ class FocusEditScreen extends React.Component {
 
     this.state = {
       name: props.focuses[props.focus.id].name,
+      nameInputStyle: styles.nameInputBlur,
       categoryName: props.focuses[props.focus.id].category,
       newCategoryName: '',
       settingName: '',
       settingValue: 1,
-      editCategoryModalShow: false,
-      editSettingModalShow: false,
-      editDeleteModalShow: false,
-      editNameInputStyle: styles.editNameInputBlur,
+      categoryModalShow: false,
+      settingsModalShow: false,
+      deleteModalShow: false,
     };
   };
 
@@ -122,15 +122,15 @@ class FocusEditScreen extends React.Component {
     this.props.setName(this.props.focus.id, this.state.name);
   };
 
-  _onEditInputFocus = () => {
+  _onEditNameFocus = () => {
     this.setState({
-      editNameInputStyle: styles.editNameInputFocus,
+      nameInputStyle: styles.nameInputFocus,
     });
   };
 
-  _onEditInputBlur = () => {
+  _onEditNameBlur = () => {
     this.setState({
-      editNameInputStyle: styles.editNameInputBlur,
+      nameInputStyle: styles.nameInputBlur,
     });
   };
 
@@ -159,11 +159,11 @@ class FocusEditScreen extends React.Component {
     this.setState({
       settingName,
       settingValue,
-      editSettingModalShow: true,
+      settingsModalShow: true,
     });
   };
 
-  _onSettingValueChange = settingValue => {
+  _onSettingChange = settingValue => {
     this.setState({
       settingValue,
     });
@@ -195,13 +195,13 @@ class FocusEditScreen extends React.Component {
     }
 
     this.setState({
-      editSettingModalShow: false,
+      settingsModalShow: false,
     });
   };
 
   _onSettingCancel = () => {
     this.setState({
-      editSettingModalShow: false,
+      settingsModalShow: false,
     });
   };
 
@@ -220,11 +220,11 @@ class FocusEditScreen extends React.Component {
   _onCategorySelect = () => {
     this.setState({
       newCategoryName: '',
-      editCategoryModalShow: true, 
+      categoryModalShow: true, 
     });
   };
 
-  _onCategoryNameChange = categoryName => {
+  _onCategoryChange = categoryName => {
     this.setState({
       categoryName,
     });
@@ -254,14 +254,14 @@ class FocusEditScreen extends React.Component {
 
     this.setState({
       categoryName,
-      editCategoryModalShow: false,
+      categoryModalShow: false,
     });
   };
 
   _onCategoryCancel = () => {
     this.setState({
       categoryName: this.props.focuses[this.props.focus.id].category,
-      editCategoryModalShow: false,
+      categoryModalShow: false,
     });
   };
 
@@ -279,7 +279,7 @@ class FocusEditScreen extends React.Component {
 
   _onDeleteSelect = () => {
     this.setState({
-      editDeleteModalShow: true,
+      deleteModalShow: true,
     });
   };
 
@@ -292,20 +292,20 @@ class FocusEditScreen extends React.Component {
     }); 
 
     this.setState({
-      editDeleteModalShow: false,
+      deleteModalShow: false,
     });
   };
 
   _onDeleteCancel = () => {
     this.setState({
-      editDeleteModalShow: false,
+      deleteModalShow: false,
     });
   };
 
   _renderName = () => {
     return (
       <TextInput
-        style={this.state.editNameInputStyle}
+        style={this.state.nameInputStyle}
         placeholder='Focus Name'
         value={this.state.name}
         textAlign='center'
@@ -313,8 +313,8 @@ class FocusEditScreen extends React.Component {
         returnKeyType='done'
         keyboardAppearance='dark'
         selectionColor={Color.primary}
-        onBlur={this._onEditInputBlur}
-        onFocus={this._onEditInputFocus}
+        onBlur={this._onEditNameBlur}
+        onFocus={this._onEditNameFocus}
         onChangeText={name => this.setState({name})}
         onSubmitEditing={this._onEditNameConfirm}
       />
@@ -336,7 +336,7 @@ class FocusEditScreen extends React.Component {
         key={index} 
         onPress={this._onDeleteSelect}
       >
-        <Text style={styles.editDeleteText}>
+        <Text style={styles.deleteText}>
           {item.name}
         </Text>
       </TouchableOpacity> 
@@ -397,27 +397,29 @@ class FocusEditScreen extends React.Component {
           />
 
           <LTModal
-            style={styles.editCategoryModalContainer}
-            show={this.state.editCategoryModalShow} 
+            style={styles.categoryModalContainer}
+            show={this.state.categoryModalShow} 
             onPressBackdrop={this._onCategoryCancel}
           >
             <TextInput
-              style={styles.editCategoryModalInput}
+              style={styles.categoryModalInput}
               value={this.state.newCategoryName}
               placeholder={'New Category'}
               maxLength={24}
               textAlign='center'
               returnKeyType='done'
               keyboardAppearance='dark'
-              onChangeText={newCategoryName => this.setState({newCategoryName})}
+              onChangeText={newCategoryName => {
+                this.setState({newCategoryName})
+              }}
             />
 
             <Picker
-              style={styles.editCategoryModalPicker}
+              style={styles.categoryModalPicker}
               selectedValue={this.state.categoryName}
-              onValueChange={categoryName => 
-                this._onCategoryNameChange(categoryName)
-              }
+              onValueChange={categoryName => {
+                this._onCategoryChange(categoryName)
+              }}
             >
               {this._getCategoryItems()}
             </Picker>
@@ -429,18 +431,18 @@ class FocusEditScreen extends React.Component {
           </LTModal>
 
           <LTModal
-            style={styles.editSettingModalContainer}
-            show={this.state.editSettingModalShow}
+            style={styles.settingsModalContainer}
+            show={this.state.settingsModalShow}
             onPressBackdrop={this._onSettingCancel}
           >
-            <Text style={styles.editSettingModalTitle}>
+            <Text style={styles.settingsModalTitle}>
               {this.state.settingName}
             </Text>
 
             <Picker
               selectedValue={this.state.settingValue}
-              onValueChange={value => this._onSettingValueChange(value)}
-              style={styles.editSettingModalPicker}
+              onValueChange={value => this._onSettingChange(value)}
+              style={styles.settingsModalPicker}
             >
               {this._getSettingRange(1, 40)}
             </Picker>
@@ -452,11 +454,11 @@ class FocusEditScreen extends React.Component {
           </LTModal>
 
           <LTModal
-            style={styles.editDeleteModalContainer}
-            show={this.state.editDeleteModalShow}
+            style={styles.deleteModalContainer}
+            show={this.state.deleteModalShow}
             onPressBackdrop={this._onDeleteCancel} 
           >
-            <Text style={styles.editDeleteModalText}>
+            <Text style={styles.deleteModalText}>
               Are you sure you want to delete this focus?
             </Text>
               

@@ -26,10 +26,10 @@ export const FontSize = {
   splashTitle: 68,
   subtitle: 32,
   headerTitle: 28, 
-  modalTitle: 24,
-  modalInput: 20,
   sectionHeader: 18,
   settingItem: 19,
+  modalTitle: 24,
+  modalInput: 20,
 };
 
 const BaseStyles = {

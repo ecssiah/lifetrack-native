@@ -3,7 +3,7 @@ import { Modal, TouchableHighlight, View } from 'react-native';
 import createStyles from '../styles';
 
 const styles = createStyles({
-  modalBackdrop: {
+  backdrop: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
@@ -11,11 +11,11 @@ const styles = createStyles({
     paddingVertical: '24%',
     backgroundColor: '#00000080',
   },
-  modalMask: {
+  mask: {
     width: '100%',
     height: '100%',
   },
-  modalContent: {
+  content: {
     flex: 1,
     justifyContent: 'space-between',
     alignItems: 'center',
@@ -34,14 +34,14 @@ class LTModal extends React.Component {
         visible={this.props.show} 
       >
         <TouchableHighlight 
-          style={styles.modalBackdrop}
+          style={styles.backdrop}
           onPress={this.props.onPressBackdrop}
         >
           <TouchableHighlight 
-            style={[styles.modalMask, this.props.style]}
+            style={[styles.mask, this.props.style]}
             activeOpacity={1}
           >
-            <View style={styles.modalContent} >
+            <View style={styles.content} >
               {this.props.children}
             </View>
           </TouchableHighlight>

@@ -3,15 +3,15 @@ import { Text, TouchableOpacity, ProgressViewIOS, View } from 'react-native';
 import createStyles, { Color, FontSize } from '../styles';
 
 const styles = createStyles({
-  goalContainer: {
+  container: {
     width: '80%',
   },
-  goalHeading: {
+  heading: {
     alignSelf: 'center',
     marginVertical: 6,
     fontSize: FontSize.subtitle,
   },
-  goalProgress: {
+  progress: {
     width: '100%',
     marginVertical: 10,
     transform: [
@@ -25,15 +25,15 @@ class FocusGoal extends React.PureComponent {
   render() {
     return (
       <TouchableOpacity
-        style={styles.goalContainer}
-        onPress={this.props.onClickGoal}
+        style={styles.container}
+        onPress={this.props.onGoalClick}
       >
-        <Text style={styles.goalHeading}>
+        <Text style={styles.heading}>
           Goal: {this.props.goal}
         </Text>
 
         <ProgressViewIOS
-          style={styles.goalProgress}
+          style={styles.progress}
           progressTintColor={Color.highlight}
           progress={this.props.periods / this.props.goal}
         />

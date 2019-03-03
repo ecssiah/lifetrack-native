@@ -5,7 +5,7 @@ import {
 import createStyles, { Color, FontSize } from '../styles'; 
 
 const styles = createStyles({
-  settingContainer: {
+  container: {
     flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
@@ -13,7 +13,7 @@ const styles = createStyles({
     marginHorizontal: 16,
     marginVertical: 10,
   },
-  settingItemLeft: {
+  itemLeft: {
     flex: 1,
     flexDirection: 'row',
     justifyContent: 'flex-start',
@@ -24,7 +24,7 @@ const styles = createStyles({
     alignItems: 'center',
     marginRight: 10,
   },
-  settingItemRight: {
+  itemRight: {
     flex: 1,
     flexDirection: 'row',
     justifyContent: 'flex-end',
@@ -41,16 +41,16 @@ class SettingItem extends React.Component {
     return (
       <TouchableOpacity
         activeOpacity={0.7}
-        style={styles.settingContainer}
+        style={styles.container}
         onPress={() => this.props.onSettingSelect(this.props.setting.name)}
       >
-        <View style={styles.settingItemLeft}>
+        <View style={styles.itemLeft}>
           <Text style={styles.settingName}>
             {this.props.setting.name}
           </Text>
         </View>
 
-        <View style={styles.settingItemRight} >
+        <View style={styles.itemRight} >
           <Text style={styles.settingValue}>
             {this.props.setting.value}
           </Text>

@@ -15,7 +15,7 @@ import FocusExperience from '../../components/FocusExperience';
 import LTIcon from '../../components/LTIcon';
 
 const styles = createStyles({ 
-  focusContainer: {
+  container: {
     flex: 1,
     justifyContent: 'flex-start',
     alignItems: 'center',
@@ -61,7 +61,7 @@ class FocusScreen extends React.Component {
     }
   };
 
-  _onClickGoal = () => {
+  _onGoalClick = () => {
     this.props.resetPeriods(this.props.focus.id);
   };
 
@@ -96,32 +96,30 @@ class FocusScreen extends React.Component {
   render() {
     const focus = this.props.focuses[this.props.focus.id];
 
-    if (focus) {
-      return (
-        <View style={styles.focusContainer}>
-          <FocusTitle 
-            name={focus.name} 
-          />
-          <FocusTimer 
-            active={focus.active}
-            working={focus.working} 
-            time={focus.time} 
-            onActivate={this._onActivate}
-          />
-          <FocusGoal 
-            periods={focus.periods} 
-            goal={focus.workGoal} 
-            onClickGoal={this._onClickGoal}
-          />
-          <FocusExperience 
-            level={focus.level}
-            experience={focus.experience} 
-          />
-        </View>
-      );
-    } else {
-      return null;
-    }
+    if (!focus) return null;
+
+    return (
+      <View style={styles.container}>
+        <FocusTitle 
+          name={focus.name} 
+        />
+        <FocusTimer 
+          active={focus.active}
+          working={focus.working} 
+          time={focus.time} 
+          onActivate={this._onActivate}
+        />
+        <FocusGoal 
+          periods={focus.periods} 
+          goal={focus.workGoal} 
+          onGoalClick={this._onGoalClick}
+        />
+        <FocusExperience 
+          level={focus.level}
+          experience={focus.experience} 
+        />
+      </View>
+    );
   }
 }
 

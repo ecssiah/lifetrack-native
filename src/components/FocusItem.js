@@ -1,11 +1,11 @@
 import React from 'react';
 import { 
-  TouchableHighlight, TouchableOpacity, Text, View, ProgressViewIOS 
+  TouchableOpacity, Text, View, ProgressViewIOS 
 } from 'react-native';
 import createStyles, { Color, FontSize } from '../styles'; 
 
 const styles = createStyles({
-  focusContainer: {
+  container: {
     flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
@@ -13,31 +13,31 @@ const styles = createStyles({
     marginHorizontal: 10,
     marginVertical: 10,
   },
-  focusItemLeft: {
+  itemLeft: {
     flex: 2,
     flexDirection: 'row',
     justifyContent: 'flex-start',
     alignItems: 'center',
   },
-  focusName: {
+  name: {
     fontSize: FontSize.settingItem,
     textAlign: 'center',
     alignItems: 'center',
     marginRight: 6,
   },
-  focusItemRight: {
+  itemRight: {
     flex: 1,
     flexDirection: 'row',
     justifyContent: 'flex-end',
     alignItems: 'center',
   },
-  focusLevel: {
+  level: {
     fontSize: FontSize.settingItem,
     textAlign: 'center',
     alignItems: 'center',
     marginRight: 6,
   },
-  focusProgress: {
+  progress: {
     width: 54,
     marginTop: 1,
     transform: [
@@ -52,21 +52,21 @@ class FocusItem extends React.Component {
     return (
       <TouchableOpacity
         activeOpacity={0.7}
-        style={styles.focusContainer}
-        onPress={() => this.props.selectFocus(this.props.focus.id)}
+        style={styles.container}
+        onPress={() => this.props.onFocusSelect(this.props.focus.id)}
       >
-        <View style={styles.focusItemLeft}>
-          <Text style={styles.focusName}>
+        <View style={styles.itemLeft}>
+          <Text style={styles.name}>
             {this.props.focus.name}
           </Text>
         </View>
 
-        <View style={styles.focusItemRight} >
-          <Text style={styles.focusLevel}>
+        <View style={styles.itemRight} >
+          <Text style={styles.level}>
             {this.props.focus.level}
           </Text>
           <ProgressViewIOS
-            style={styles.focusProgress}
+            style={styles.progress}
             progressTintColor={Color.highlight}
             progress={this.props.focus.experience / 100.0}
           />

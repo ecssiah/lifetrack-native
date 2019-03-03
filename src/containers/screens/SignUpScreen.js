@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Button, View, Text, TextInput } from 'react-native';
 import { auth, db } from '../../config';
-import createStyles from '../../styles';
+import createStyles, { FontSize } from '../../styles';
 import { setSettings } from '../../actions/SettingsActions';
 import { setCategories } from '../../actions/CategoriesActions';
 import { 
@@ -10,15 +10,36 @@ import {
 } from '../../constants/Focus';
 
 const styles = createStyles({
-  signUpContainer: {
+  container: {
     flex: 1,
     alignItems: 'center',
   },
-  signUpInput: {
-    width: 240, 
+  emailInput: {
+    width: '86%', 
     height: 40, 
+    fontSize: FontSize.modalInput,
     borderWidth: 1,
+    borderRadius: 6,
     borderColor: 'gray', 
+    marginTop: 14,
+  },
+  passwordInput: {
+    width: '86%', 
+    height: 40, 
+    fontSize: FontSize.modalInput,
+    borderWidth: 1,
+    borderRadius: 6,
+    borderColor: 'gray', 
+    marginTop: 14,
+  },
+  confirmInput: {
+    width: '86%', 
+    height: 40, 
+    fontSize: FontSize.modalInput,
+    borderWidth: 1,
+    borderRadius: 6,
+    borderColor: 'gray', 
+    marginTop: 14,
   },
 });
 
@@ -104,44 +125,38 @@ class SignUpScreen extends React.Component {
 
   render() {
     return (
-      <View style={styles.signUpContainer}>
-        <Text style={styles.section}>
-          Email
-        </Text> 
-
+      <View style={styles.container}>
         <TextInput
-          style={styles.signUpInput}
+          style={styles.emailInput}
+          value={this.state.email}
+          placeholder='email'
           textAlign='center'
+          autoCapitalize='none'
           keyboardType='email-address'
           keyboardAppearance='dark'
           onChangeText={email => this.setState({email})}
-          value={this.state.email}
         />
-
-        <Text style={styles.section}>
-          Password
-        </Text>
 
         <TextInput
           secureTextEntry={true}
-          style={styles.signUpInput}
+          style={styles.passwordInput}
+          value={this.state.password}
+          placeholder='password'
           textAlign='center'
+          autoCapitalize='none'
           keyboardAppearance='dark'
           onChangeText={password => this.setState({password})}
-          value={this.state.password}
         />
-
-        <Text style={styles.section}>
-          Confirm Password
-        </Text>
 
         <TextInput
           secureTextEntry={true}
-          style={styles.signUpInput}
+          style={styles.confirmInput}
+          value={this.state.confirm}
+          placeholder='confirm password'
           textAlign='center'
+          autoCapitalize='none'
           keyboardAppearance='dark'
           onChangeText={confirm => this.setState({confirm})}
-          value={this.state.confirm}
         />
 
         <Button

@@ -139,13 +139,43 @@ class FocusesScreen extends React.Component {
     });
   };
 
-  _selectCategory = categoryName => {
+  _onAddCancel = () => {
+    this.setState({
+      newFocusName: '',
+      newCategoryName: '',
+      categoryName: this.props.categories[0].name,
+    });
+
+    this.props.navigation.setParams({
+      addModalShow: false,
+    });
+  };
+
+  _onCategorySelect = categoryName => {
     this.props.toggleCategoryShow(categoryName);
   };
 
-  _selectFocus = id => {
+  _onFocusSelect = id => {
     this.props.setId(id);
     this.props.navigation.navigate('Focus');
+  };
+
+  _onCategoryChange = categoryName => {
+    this.setState({
+      categoryName,
+    });
+  };
+
+  _getCategoryItems = () => {
+    return (
+      this.props.categories.map((category, idx) => 
+        <Picker.Item 
+          key={idx} 
+          label={category.name} 
+          value={category.name}
+        />
+      )
+    );
   };
 
   _getSectionData = () => {
@@ -169,43 +199,13 @@ class FocusesScreen extends React.Component {
     return sectionData;
   };
 
-  _onAddCancel = () => {
-    this.setState({
-      newFocusName: '',
-      newCategoryName: '',
-      categoryName: this.props.categories[0].name,
-    });
-
-    this.props.navigation.setParams({
-      addModalShow: false,
-    });
-  };
-
-  _onCategoryChange = categoryName => {
-    this.setState({
-      categoryName,
-    });
-  };
-
-  _getCategoryItems = () => {
-    return (
-      this.props.categories.map((category, idx) => 
-        <Picker.Item 
-          key={idx} 
-          label={category.name} 
-          value={category.name}
-        />
-      )
-    );
-  };
-
   render() {
     return (
       <View style={styles.container}>
         <FocusList
           sections={this._getSectionData()}
-          selectCategory={this._selectCategory}
-          selectFocus={this._selectFocus}
+          onCategorySelect={this._onCategorySelect}
+          onFocusSelect={this._onFocusSelect}
         />
 
         <LTModal

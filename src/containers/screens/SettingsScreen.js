@@ -25,32 +25,32 @@ import LTConfirm from '../../components/LTConfirm';
 import SettingList from '../../components/SettingList';
 
 const styles = createStyles({
-  settingsLogout: {
+  logout: {
     fontSize: FontSize.subtitle,
     color: Color.highlight,
     textAlign: 'center',
     margin: 6,
   },
-  settingsEditCategory: {
+  categoryName: {
     fontSize: FontSize.settingItem,
     alignItems: 'center',
     marginHorizontal: 16,
     marginVertical: 10,
   },
-  settingsEditModalContainer: {
+  settingsModalContainer: {
     height: '78%',
   },
-  settingsEditModalText: {
+  settingsModalText: {
     fontSize: FontSize.modalTitle, 
     marginTop: 14,
   },
-  settingsEditModalPicker: {
+  settingsModalPicker: {
     width: '86%',
   },
-  settingsCategoryEditModalContainer: {
+  categoryModalContainer: {
     height: '32%',
   },
-  settingsEditCategoryNameBlur: {
+  categoryModalNameBlur: {
     fontSize: FontSize.modalTitle, 
     borderColor: 'black',
     color: 'black',
@@ -60,7 +60,7 @@ const styles = createStyles({
     paddingVertical: 9,
     paddingHorizontal: 15,
   },
-  settingsEditCategoryNameFocus: {
+  categoryModalNameFocus: {
     fontSize: FontSize.modalTitle, 
     color: 'black',
     backgroundColor: 'white',
@@ -69,13 +69,6 @@ const styles = createStyles({
     margin: 8,
     paddingVertical: 8,
     paddingHorizontal: 14,
-  },
-  settingsCategoryDeleteModalButton: {
-    fontSize: FontSize.modalTitle,
-    color: Color.highlight,
-    textAlign: 'center', 
-    marginHorizontal: 4,
-    marginBottom: 14,
   },
 });
 
@@ -88,9 +81,9 @@ class SettingsScreen extends React.Component {
       settingValue: '',
       categoryName: '',
       newCategoryName: '',
-      settingsEditModalShow: false,
-      settingsCategoryDeleteModalShow: false,
-      settingsEditCategoryNameStyle: styles.settingsEditCategoryNameBlur,
+      categoryModalNameStyle: styles.categoryModalNameBlur,
+      settingsModalShow: false,
+      categoryModalShow: false,
     };
   };
 
@@ -105,6 +98,12 @@ class SettingsScreen extends React.Component {
 
     auth.signOut().then(() => {
       this.props.navigation.navigate('Login');
+    });
+  };
+
+  _onSettingChange = settingValue => {
+    this.setState({
+      settingValue,
     });
   };
 
@@ -132,29 +131,11 @@ class SettingsScreen extends React.Component {
     this.setState({
       settingName,
       settingValue,
-      settingsEditModalShow: true,
+      settingsModalShow: true,
     });
   };
 
-  _getSettingRange = (start, end) => {
-    return (
-      Array(start + end  - 1).fill().map((_, i) => 
-        <Picker.Item 
-          key={i} 
-          label={(i + start).toString()} 
-          value={(i + start).toString()} 
-        />
-      )
-    );
-  };
-
-  _onSettingValueChange = settingValue => {
-    this.setState({
-      settingValue,
-    });
-  };
-
-  _onSettingEditConfirm = () => {
+  _onSettingConfirm = () => {
     switch (this.state.settingName) {
       case WORK_PERIOD: {
         this.props.setDefaultWorkPeriod(parseInt(this.state.settingValue));
@@ -174,21 +155,33 @@ class SettingsScreen extends React.Component {
     }
 
     this.setState({
-      settingsEditModalShow: false,
+      settingsModalShow: false,
     });
   };
 
-  _onSettingEditCancel = () => {
+  _onSettingCancel = () => {
     this.setState({
-      settingsEditModalShow: false,
+      settingsModalShow: false,
     });
+  };
+
+  _getSettingRange = (start, end) => {
+    return (
+      Array(start + end  - 1).fill().map((_, i) => 
+        <Picker.Item 
+          key={i} 
+          label={(i + start).toString()} 
+          value={(i + start).toString()} 
+        />
+      )
+    );
   };
 
   _onCategorySelect = categoryName => {
     this.setState({
       categoryName,
       newCategoryName: categoryName,
-      settingsCategoryDeleteModalShow: true,
+      categoryModalShow: true,
     });
   };
 
@@ -209,65 +202,65 @@ class SettingsScreen extends React.Component {
     }); 
 
     this.setState({
-      settingsCategoryDeleteModalShow: false,
+      categoryModalShow: false,
     });
   };
 
   _onCategoryDeleteCancel = () => {
     this.setState({
-      settingsCategoryDeleteModalShow: false,
+      categoryModalShow: false,
     });
   };
 
-  _onEditCategoryNameConfirm = () => {
-    this.props.setCategoryName(this.state.categoryName, this.state.newCategoryName);
-    this.props.updateCategories(this.state.categoryName, this.state.newCategoryName);
+  _onCategoryNameEditConfirm = () => {
+    this.props.setCategoryName(
+      this.state.categoryName, this.state.newCategoryName
+    );
+    this.props.updateCategories(
+      this.state.categoryName, this.state.newCategoryName
+    );
   };
 
-  _onEditCategoryNameBlur = () => {
+  _onCategoryNameEditBlur = () => {
     this.setState({
-      settingsEditCategoryNameStyle: styles.settingsEditCategoryNameBlur,
+      categoryModalNameStyle: styles.categoryModalNameBlur,
     });
   };
 
-  _onEditCategoryNameFocus = () => {
+  _onCategoryNameEditFocus = () => {
     this.setState({
-      settingsEditCategoryNameStyle: styles.settingsEditCategoryNameFocus,
+      categoryModalNameStyle: styles.categoryModalNameFocus,
     });
   };
 
   _renderLogout = ({item, index}) => {
-    if (item) {
-      return (
-        <TouchableOpacity 
-          key={index} 
-          onPress={this._logoutUser}
-        >
-          <Text style={styles.settingsLogout}>
-            {item.name}
-          </Text>
-        </TouchableOpacity> 
-      );
-    } else {
-      return null;
-    }
+    if (!item) return null;
+
+    return (
+      <TouchableOpacity 
+        key={index} 
+        onPress={this._logoutUser}
+      >
+        <Text style={styles.logout}>
+          {item.name}
+        </Text>
+      </TouchableOpacity> 
+    );
   };
 
   _renderCategory = ({item, index}) => {
-    if (item) {
-      return (
-        <TouchableOpacity 
-          key={index} 
-          onPress={() => this._onCategorySelect(item.name)}
-        >
-          <Text style={styles.settingsEditCategory}>
-            {item.name}
-          </Text>
-        </TouchableOpacity> 
-      );
-    } else {
-      return null;
-    }
+    if (!item) return null;
+
+    return (
+      <TouchableOpacity 
+        key={index} 
+        onPress={() => this._onCategorySelect(item.name)}
+      >
+        <Text style={styles.categoryName}>
+          {item.name}
+        </Text>
+      </TouchableOpacity> 
+    );
   };
 
   _getSectionData = () => {
@@ -310,45 +303,45 @@ class SettingsScreen extends React.Component {
         />
 
         <LTModal 
-          style={styles.settingsEditModalContainer}
-          show={this.state.settingsEditModalShow}
-          onPressBackdrop={this._onSettingEditCancel}
+          style={styles.settingsModalContainer}
+          show={this.state.settingsModalShow}
+          onPressBackdrop={this._onSettingCancel}
         >
-          <Text style={styles.settingsEditModalText}>
+          <Text style={styles.settingsModalText}>
             {this.state.settingName}
           </Text>
 
           <Picker
-            style={styles.settingsEditModalPicker}
+            style={styles.settingsModalPicker}
             selectedValue={this.state.settingValue}
-            onValueChange={value => this._onSettingValueChange(value)}
+            onValueChange={value => this._onSettingChange(value)}
           >
             {this._getSettingRange(1, 40)}
           </Picker>
 
           <LTConfirm
-            onPressLeft={this._onSettingEditConfirm}
-            onPressRight={this._onSettingEditCancel}
+            onPressLeft={this._onSettingConfirm}
+            onPressRight={this._onSettingCancel}
           />
         </LTModal>
 
         <LTModal
-          style={styles.settingsCategoryEditModalContainer}
-          show={this.state.settingsCategoryDeleteModalShow}
+          style={styles.categoryModalContainer}
+          show={this.state.categoryModalShow}
           onPressBackdrop={this._onCategoryDeleteCancel} 
         >
           <TextInput
-            style={this.state.settingsEditCategoryNameStyle}
+            style={this.state.categoryModalNameStyle}
             value={this.state.newCategoryName}
             placeholder='Category Name'
             textAlign='center'
             returnKeyType='done'
             keyboardAppearance='dark'
             selectionColor={Color.primary}
-            onBlur={this._onEditCategoryNameBlur}
-            onFocus={this._onEditCategoryNameFocus}
+            onBlur={this._onCategoryNameEditBlur}
+            onFocus={this._onCategoryNameEditFocus}
             onChangeText={newCategoryName => this.setState({newCategoryName})}
-            onSubmitEditing={this._onEditCategoryNameConfirm}
+            onSubmitEditing={this._onCategoryNameEditConfirm}
           />
 
           <LTConfirm

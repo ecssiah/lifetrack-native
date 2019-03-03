@@ -5,8 +5,8 @@ import createStyles from '../styles';
 
 const styles = createStyles({
   iconBase: {
-    alignItems: 'center',
     width: 38, 
+    alignItems: 'center',
   },
 });
 
@@ -19,9 +19,9 @@ class LTIcon extends React.Component {
         onPress={this.props.onPress}
       >
         <Ionicon
+          color='#ffffff' 
           name={this.props.type} 
           size={this.props.size} 
-          color='#ffffff' 
         />
       </TouchableOpacity>
     );

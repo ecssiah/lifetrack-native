@@ -6,7 +6,7 @@ import SettingItem from './SettingItem';
 import SettingHeader from './SettingHeader';
 
 const styles = createStyles({
-  settingSeparator: {
+  separator: {
     height: 1,
     backgroundColor: '#ced0ce',
     marginHorizontal: '3%',
@@ -15,7 +15,7 @@ const styles = createStyles({
 
 class SettingList extends React.Component {
   _renderSeparator = () => (
-    <View style={styles.settingSeparator} />
+    <View style={styles.separator} />
   );
 
   _renderItem = item => (

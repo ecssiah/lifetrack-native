@@ -8,79 +8,22 @@ import { setFocuses } from '../../actions/FocusesActions';
 import createStyles, { Color, FontSize } from '../../styles';
 
 const styles = createStyles({
-  splashContainer: {
+  container: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: Color.primary,
   },
-  splashTitle: {
+  title: {
     fontSize: FontSize.splashTitle,
-    textShadowOffset: {
-      width: -3,
-      height: 2,
-    },
+    color: '#dddddd',
     textShadowColor: '#111111',
     textShadowRadius: 1,
-    color: '#dddddd',
+    textShadowOffset: { width: -3, height: 2, },
   },
 });
 
 class SplashScreen extends React.Component {
-
-  componentDidMount() {
-    auth.onAuthStateChanged(user => {
-      if (user) {
-        Promise.all([
-          this._loadSettings(),
-          this._loadCategories(),
-          this._loadFocuses()
-        ]).then(values => {
-          const settingsDoc = values[0];
-          const categoriesDoc = values[1];
-          const focusesSnapshot = values[2];
-
-          const settings = {
-            workPeriod: settingsDoc.get('workPeriod'),
-            workGoal: settingsDoc.get('workGoal'),
-            breakPeriod: settingsDoc.get('breakPeriod'),
-          };
-          this.props.setSettings(settings);
-
-          const categories = categoriesDoc.get('list');
-          this.props.setCategories(categories);
-
-          let focuses = {};
-          focusesSnapshot.forEach(doc => {
-            focuses[doc.id] = {
-              id: doc.get('id'),
-              userId: doc.get('userId'),
-              name: doc.get('name'),
-              category: doc.get('category'),
-              time: doc.get('time'),
-              periods: doc.get('periods'),
-              level: doc.get('level'),
-              workPeriod: doc.get('workPeriod'),
-              workGoal: doc.get('workGoal'),
-              breakPeriod: doc.get('breakPeriod'),
-              experience: doc.get('experience'),
-              working: doc.get('working'),
-              timerActive: doc.get('timerActive'),
-              timer: doc.get('timer'),
-            };
-          });
-
-          this.props.setFocuses(focuses);
-
-          this.props.navigation.navigate('App');
-        }).catch(err => {
-          console.error(err);
-        });
-      } else {
-        this.props.navigation.navigate('Auth');
-      }
-    });
-  };
 
   _loadSettings = () => {
     return db.collection('settings').doc(auth.currentUser.uid).get();
@@ -91,24 +34,72 @@ class SplashScreen extends React.Component {
   };
 
   _loadFocuses = () => {
-    const focusPromise = db.collection('focuses').where(
+    return db.collection('focuses').where(
       'userId', '==', auth.currentUser.uid
     ).get();
+  };
 
-    return focusPromise;
+  componentDidMount() {
+    auth.onAuthStateChanged(user => {
+      if (!user) return this.props.navigation.navigate('Auth');
+
+      Promise.all([
+        this._loadSettings(),
+        this._loadCategories(),
+        this._loadFocuses()
+      ]).then(values => {
+        const settingsDoc = values[0];
+        const categoriesDoc = values[1];
+        const focusesSnapshot = values[2];
+
+        const settings = {
+          workPeriod: settingsDoc.get('workPeriod'),
+          workGoal: settingsDoc.get('workGoal'),
+          breakPeriod: settingsDoc.get('breakPeriod'),
+        };
+        this.props.setSettings(settings);
+
+        const categories = categoriesDoc.get('list');
+        this.props.setCategories(categories);
+
+        let focuses = {};
+        focusesSnapshot.forEach(doc => {
+          focuses[doc.id] = {
+            id: doc.get('id'),
+            userId: doc.get('userId'),
+            name: doc.get('name'),
+            category: doc.get('category'),
+            time: doc.get('time'),
+            periods: doc.get('periods'),
+            level: doc.get('level'),
+            workPeriod: doc.get('workPeriod'),
+            workGoal: doc.get('workGoal'),
+            breakPeriod: doc.get('breakPeriod'),
+            experience: doc.get('experience'),
+            working: doc.get('working'),
+            timerActive: doc.get('timerActive'),
+            timer: doc.get('timer'),
+          };
+        });
+
+        this.props.setFocuses(focuses);
+        this.props.navigation.navigate('App');
+      }).catch(err => {
+        console.error(err);
+      });
+    });
   };
 
   render() {
     return (
-      <View style={styles.splashContainer}>
-        <Text style={styles.splashTitle}>LifeTrack</Text>
+      <View style={styles.container}>
+        <Text style={styles.title}>LifeTrack</Text>
       </View>
     );
   }
 }
 
 const mapStateToProps = state => ({
-
 });
 
 const mapDispatchToProps = dispatch => ({
