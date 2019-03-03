@@ -16,6 +16,12 @@ const styles = createStyles({
   },
   splashTitle: {
     fontSize: 62,
+    textShadowOffset: {
+      width: -3,
+      height: 3,
+    },
+    textShadowColor: '#111111',
+    textShadowRadius: 0,
     color: Colors.secondary,
   },
 });
