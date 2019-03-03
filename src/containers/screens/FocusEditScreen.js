@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { db, auth } from '../../config';
 import firebase from 'firebase';
 import { 
-  View, Text, TextInput, Picker, TouchableOpacity 
+  View, Text, TouchableOpacity 
 } from 'react-native';
 import {
   addCategory,
@@ -18,75 +18,22 @@ import {
 } from '../../constants/Focus';
 import createStyles, { Color, FontSize } from '../../styles';
 
-import LTModal from '../../components/LTModal';
 import LTIcon from '../../components/LTIcon';
+
+import TextEdit from '../../components/TextEdit';
+import CategoryModal from '../../components/modals/CategoryModal';
+import SettingsModal from '../../components/modals/SettingsModal';
+import DeleteFocusModal from '../../components/modals/DeleteFocusModal';
 import SettingItem from '../../components/SettingItem';
 import SettingList from '../../components/SettingList';
-import LTConfirm from '../../components/LTConfirm';
 
 const styles = createStyles({
-  nameInputBlur: {
-    fontSize: FontSize.modalTitle, 
-    color: 'black',
-    borderWidth: 0,
-    borderRadius: 6,
-    borderColor: 'black',
-    backgroundColor: 'white',
-    paddingVertical: 9,
-    paddingHorizontal: 15,
-    margin: 8,
-  },
-  nameInputFocus: {
-    fontSize: FontSize.modalTitle, 
-    color: 'black',
-    borderWidth: 1,
-    borderRadius: 6,
-    borderColor: 'black',
-    backgroundColor: 'white',
-    paddingVertical: 8,
-    paddingHorizontal: 14,
-    margin: 8,
-  },
   deleteText: {
     fontSize: FontSize.modalTitle,
     fontWeight: 'bold',
     textAlign: 'center',
     color: Color.highlight,
     margin: 16,
-  },
-  categoryModalContainer: {
-    height: '80%',
-  },
-  categoryModalInput: {
-    width: '86%',
-    height: 40, 
-    fontSize: FontSize.modalInput,
-    marginTop: 14,
-    borderWidth: 1,
-    borderRadius: 10,
-    borderColor: 'gray', 
-  },
-  categoryModalPicker: {
-    width: '86%',
-  },
-  settingsModalContainer: {
-    height: '78%',
-  },
-  settingsModalTitle: {
-    fontSize: FontSize.modalTitle,
-    marginTop: 14,
-  },
-  settingsModalPicker: {
-    width: '86%',
-  },
-  deleteModalContainer: {
-    height: '36%',
-  },
-  deleteModalText: {
-    fontSize: FontSize.modalTitle,
-    textAlign: 'center', 
-    marginTop: 12,
-    marginHorizontal: 4,
   },
 });
 
@@ -205,18 +152,6 @@ class FocusEditScreen extends React.Component {
     });
   };
 
-  _getSettingRange = (start, end) => {
-    return (
-      Array(start + end  - 1).fill().map((_, i) => 
-        <Picker.Item 
-          key={i} 
-          label={(i + start).toString()} 
-          value={(i + start).toString()} 
-        />
-      )
-    );
-  };
-
   _onCategorySelect = () => {
     this.setState({
       newCategoryName: '',
@@ -265,18 +200,6 @@ class FocusEditScreen extends React.Component {
     });
   };
 
-  _getCategoryItems = () => {
-    return (
-      this.props.categories.map((category, idx) => 
-        <Picker.Item 
-          key={idx} 
-          label={category.name} 
-          value={category.name}
-        />
-      )
-    );
-  };
-
   _onDeleteSelect = () => {
     this.setState({
       deleteModalShow: true,
@@ -304,18 +227,9 @@ class FocusEditScreen extends React.Component {
 
   _renderName = () => {
     return (
-      <TextInput
-        style={this.state.nameInputStyle}
-        placeholder='Focus Name'
-        value={this.state.name}
-        textAlign='center'
-        maxLength={24}
-        returnKeyType='done'
-        keyboardAppearance='dark'
-        selectionColor={Color.primary}
-        onBlur={this._onEditNameBlur}
-        onFocus={this._onEditNameFocus}
-        onChangeText={name => this.setState({name})}
+      <TextEdit
+        text={this.state.name}
+        onChangeText={text => this.setState({name: text})}
         onSubmitEditing={this._onEditNameConfirm}
       />
     );
@@ -389,90 +303,42 @@ class FocusEditScreen extends React.Component {
   render() {
     const focus = this.props.focuses[this.props.focus.id];
 
-    if (focus) {
-      return (
-        <View style={styles.container}>
-          <SettingList
-            sections={this._getSectionData()} 
-            onSettingSelect={this._onSettingSelect}
-          />
+    if (!focus) return null;
 
-          <LTModal
-            style={styles.categoryModalContainer}
-            show={this.state.categoryModalShow} 
-            onPressBackdrop={this._onCategoryCancel}
-          >
-            <TextInput
-              style={styles.categoryModalInput}
-              value={this.state.newCategoryName}
-              placeholder={'New Category'}
-              maxLength={24}
-              textAlign='center'
-              returnKeyType='done'
-              keyboardAppearance='dark'
-              onChangeText={newCategoryName => {
-                this.setState({newCategoryName})
-              }}
-            />
+    return (
+      <View style={styles.container}>
+        <SettingList
+          sections={this._getSectionData()} 
+          onSettingSelect={this._onSettingSelect}
+        />
 
-            <Picker
-              style={styles.categoryModalPicker}
-              selectedValue={this.state.categoryName}
-              onValueChange={categoryName => {
-                this._onCategoryChange(categoryName)
-              }}
-            >
-              {this._getCategoryItems()}
-            </Picker>
+        <CategoryModal
+          categories={this.props.categories}
+          show={this.state.categoryModalShow}
+          categoryName={this.state.categoryName}
+          newCategoryName={this.state.newCategoryName}
+          onConfirm={this._onCategoryConfirm}
+          onCancel={this._onCategoryCancel}
+          onCategoryTextChange={text => this.setState({newCategoryName: text})}
+          onCategoryValueChange={value => this._onCategoryChange(value)} 
+        />
 
-            <LTConfirm
-              onPressLeft={this._onCategoryConfirm} 
-              onPressRight={this._onCategoryCancel}
-            />
-          </LTModal>
+        <SettingsModal
+          show={this.state.settingsModalShow}
+          settingName={this.state.settingName}
+          settingValue={this.state.settingValue}
+          onConfirm={this._onSettingConfirm}
+          onCancel={this._onSettingCancel}
+          onSettingChange={value => this._onSettingChange(value)}
+        />
 
-          <LTModal
-            style={styles.settingsModalContainer}
-            show={this.state.settingsModalShow}
-            onPressBackdrop={this._onSettingCancel}
-          >
-            <Text style={styles.settingsModalTitle}>
-              {this.state.settingName}
-            </Text>
-
-            <Picker
-              selectedValue={this.state.settingValue}
-              onValueChange={value => this._onSettingChange(value)}
-              style={styles.settingsModalPicker}
-            >
-              {this._getSettingRange(1, 40)}
-            </Picker>
-
-            <LTConfirm
-              onPressLeft={this._onSettingConfirm} 
-              onPressRight={this._onSettingCancel}
-            />
-          </LTModal>
-
-          <LTModal
-            style={styles.deleteModalContainer}
-            show={this.state.deleteModalShow}
-            onPressBackdrop={this._onDeleteCancel} 
-          >
-            <Text style={styles.deleteModalText}>
-              Are you sure you want to delete this focus?
-            </Text>
-              
-            <LTConfirm
-              onPressLeft={this._onDeleteConfirm} 
-              onPressRight={this._onDeleteCancel}
-            />
-          </LTModal>
-        </View>
-      );
-    } else {
-      return null;
-    }
+        <DeleteFocusModal
+          show={this.state.deleteModalShow}
+          onConfirm={this._onDeleteConfirm}
+          onCancel={this._onDeleteCancel}
+        />
+      </View>
+    );
   }
 };
 

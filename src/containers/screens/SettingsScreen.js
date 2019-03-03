@@ -20,9 +20,9 @@ import {
 } from '../../actions/FocusesActions';
 import createStyles, { Color, FontSize } from '../../styles'; 
 
-import LTModal from '../../components/LTModal';
-import LTConfirm from '../../components/LTConfirm';
 import SettingList from '../../components/SettingList';
+import SettingsModal from '../../components/modals/SettingsModal';
+import CategoryEditModal from '../../components/modals/CategoryEditModal';
 
 const styles = createStyles({
   logout: {
@@ -47,29 +47,6 @@ const styles = createStyles({
   settingsModalPicker: {
     width: '86%',
   },
-  categoryModalContainer: {
-    height: '32%',
-  },
-  categoryModalNameBlur: {
-    fontSize: FontSize.modalTitle, 
-    borderColor: 'black',
-    color: 'black',
-    backgroundColor: 'white',
-    borderWidth: 0,
-    margin: 8,
-    paddingVertical: 9,
-    paddingHorizontal: 15,
-  },
-  categoryModalNameFocus: {
-    fontSize: FontSize.modalTitle, 
-    color: 'black',
-    backgroundColor: 'white',
-    borderWidth: 1,
-    borderRadius: 6,
-    margin: 8,
-    paddingVertical: 8,
-    paddingHorizontal: 14,
-  },
 });
 
 class SettingsScreen extends React.Component {
@@ -81,7 +58,6 @@ class SettingsScreen extends React.Component {
       settingValue: '',
       categoryName: '',
       newCategoryName: '',
-      categoryModalNameStyle: styles.categoryModalNameBlur,
       settingsModalShow: false,
       categoryModalShow: false,
     };
@@ -185,7 +161,7 @@ class SettingsScreen extends React.Component {
     });
   };
 
-  _onCategoryDeleteConfirm = () => {
+  _onCategoryEditDelete = () => {
     const category = this.props.categories.find(category => 
       category.name === this.state.categoryName
     );
@@ -206,7 +182,13 @@ class SettingsScreen extends React.Component {
     });
   };
 
-  _onCategoryDeleteCancel = () => {
+  _onCategoryEditConfirm = () => {
+    this.setState({
+      categoryModalShow: false,
+    });
+  };
+
+  _onCategoryEditCancel = () => {
     this.setState({
       categoryModalShow: false,
     });
@@ -301,55 +283,25 @@ class SettingsScreen extends React.Component {
           sections={this._getSectionData()} 
           onSettingSelect={this._onSettingSelect}
         />
-
-        <LTModal 
-          style={styles.settingsModalContainer}
+        
+        <SettingsModal
           show={this.state.settingsModalShow}
-          onPressBackdrop={this._onSettingCancel}
-        >
-          <Text style={styles.settingsModalText}>
-            {this.state.settingName}
-          </Text>
+          settingName={this.state.settingName}
+          settingValue={this.state.settingValue}
+          onConfirm={this._onSettingConfirm} 
+          onCancel={this._onSettingCancel}
+          onSettingChange={value => this._onSettingChange(value)}
+        />
 
-          <Picker
-            style={styles.settingsModalPicker}
-            selectedValue={this.state.settingValue}
-            onValueChange={value => this._onSettingChange(value)}
-          >
-            {this._getSettingRange(1, 40)}
-          </Picker>
-
-          <LTConfirm
-            onPressLeft={this._onSettingConfirm}
-            onPressRight={this._onSettingCancel}
-          />
-        </LTModal>
-
-        <LTModal
-          style={styles.categoryModalContainer}
-          show={this.state.categoryModalShow}
-          onPressBackdrop={this._onCategoryDeleteCancel} 
-        >
-          <TextInput
-            style={this.state.categoryModalNameStyle}
-            value={this.state.newCategoryName}
-            placeholder='Category Name'
-            textAlign='center'
-            returnKeyType='done'
-            keyboardAppearance='dark'
-            selectionColor={Color.primary}
-            onBlur={this._onCategoryNameEditBlur}
-            onFocus={this._onCategoryNameEditFocus}
-            onChangeText={newCategoryName => this.setState({newCategoryName})}
-            onSubmitEditing={this._onCategoryNameEditConfirm}
-          />
-
-          <LTConfirm
-            leftContent='Delete'
-            onPressLeft={this._onCategoryDeleteConfirm}
-            onPressRight={this._onCategoryDeleteCancel}
-          />
-        </LTModal>
+        <CategoryEditModal
+          show={this.state.categoryModalShow} 
+          newCategoryName={this.state.newCategoryName}
+          onDelete={this._onCategoryEditDelete}
+          onConfirm={this._onCategoryEditConfirm}
+          onCancel={this._onCategoryEditCancel}
+          onChangeText={text => this.setState({newCategoryName: text})}
+          onSubmitEditing={this._onCategoryNameEditConfirm}
+        />
       </View>
     );
   };
