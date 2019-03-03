@@ -33,7 +33,6 @@ const styles = createStyles({
   settingValue: {
     fontSize: FontSize.settingItem,
     alignItems: 'center',
-    marginRight: 10,
   },
 });
 

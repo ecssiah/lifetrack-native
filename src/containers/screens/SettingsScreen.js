@@ -293,7 +293,9 @@ class SettingsScreen extends React.Component {
       },
       {
         title: 'Categories',
-        data: this.props.categories.map(category => {
+        data: this.props.categories.filter(category => {
+          return category.name !== 'Uncategorized';
+        }).map(category => {
           return { name: category.name, value: '' };
         }),
         renderItem: this._renderCategory,

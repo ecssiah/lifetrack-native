@@ -17,7 +17,7 @@ import LTIcon from '../../components/LTIcon';
 const styles = createStyles({ 
   focusContainer: {
     flex: 1,
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
     alignItems: 'center',
   },
 });
