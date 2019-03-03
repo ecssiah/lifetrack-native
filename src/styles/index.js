@@ -21,8 +21,6 @@ export const Fonts = {
 const BaseStyles = {
   container: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
   },
   screen: {
     flex: 1,

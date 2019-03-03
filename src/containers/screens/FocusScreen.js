@@ -14,7 +14,7 @@ import FocusGoal from '../../components/FocusGoal';
 import FocusExperience from '../../components/FocusExperience';
 import LTIcon from '../../components/LTIcon';
 
-const styles = createStyles();
+const styles = createStyles({ });
 
 class FocusScreen extends React.Component {
   static navigationOptions = ({ navigation }) => ({

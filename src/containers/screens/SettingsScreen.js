@@ -240,7 +240,7 @@ class SettingsScreen extends React.Component {
 
   render() {
     return (
-      <View style={styles.settingsContainer}>
+      <View style={styles.container}>
         <SettingList
           sections={this._getSectionData()} 
           onSettingSelect={this._onSettingSelect}

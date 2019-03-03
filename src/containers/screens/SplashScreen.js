@@ -15,14 +15,14 @@ const styles = createStyles({
     backgroundColor: Colors.primary,
   },
   splashTitle: {
-    fontSize: 62,
+    fontSize: 68,
     textShadowOffset: {
       width: -3,
-      height: 3,
+      height: 2,
     },
     textShadowColor: '#111111',
-    textShadowRadius: 0,
-    color: Colors.secondary,
+    textShadowRadius: 1,
+    color: '#dddddd',
   },
 });
 
@@ -93,7 +93,7 @@ class SplashScreen extends React.Component {
   _loadFocuses = () => {
     const focusPromise = db.collection('focuses').where(
       'userId', '==', auth.currentUser.uid
-    ).orderBy('name').get();
+    ).get();
 
     return focusPromise;
   };

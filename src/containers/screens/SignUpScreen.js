@@ -13,7 +13,6 @@ const styles = createStyles({
   signUpContainer: {
     flex: 1,
     alignItems: 'center',
-    marginTop: '8%',
   },
   signUpInput: {
     width: 240, 

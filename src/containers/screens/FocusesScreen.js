@@ -218,7 +218,7 @@ class FocusesScreen extends React.Component {
 
   render() {
     return (
-      <View style={styles.addContainer}>
+      <View style={styles.container}>
         <FocusList
           sections={this._getSectionData()}
           selectCategory={this._selectCategory}

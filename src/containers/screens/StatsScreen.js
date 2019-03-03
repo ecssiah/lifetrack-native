@@ -11,7 +11,7 @@ class StatsScreen extends React.Component {
 
   render() {
     return (
-      <View style={styles.screen}>
+      <View style={styles.container}>
       </View>
     );
   }

@@ -403,7 +403,7 @@ class FocusEditScreen extends React.Component {
 
     if (focus) {
       return (
-        <View style={styles.editContainer}>
+        <View style={styles.container}>
           <SettingList
             sections={this._getSectionData()} 
             onSettingSelect={this._onSettingSelect}

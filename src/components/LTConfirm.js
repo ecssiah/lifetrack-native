@@ -3,7 +3,7 @@ import { Text, TouchableOpacity, View } from 'react-native';
 import createStyles from '../styles';
 
 const styles = createStyles({
-  ltconfirmBase: {
+  ltconfirmContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
@@ -47,7 +47,7 @@ class LTConfirm extends React.Component {
 
   render() {
     return (
-      <View style={styles.ltconfirmBase}>
+      <View style={styles.ltconfirmContainer}>
         <TouchableOpacity 
           style={styles.ltconfirmViewLeft} 
           onPress={this.props.onPressLeft} 

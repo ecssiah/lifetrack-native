@@ -10,12 +10,12 @@ const styles = createStyles({
   signInContainer: {
     flex: 1,
     alignItems: 'center',
-    marginTop: '8%',
   },
   signInInput: {
     width: 240, 
     height: 40, 
     borderWidth: 1,
+    borderRadius: 6,
     borderColor: 'gray', 
   },
 });
@@ -81,11 +81,11 @@ class SignInScreen extends React.Component {
 
         <TextInput
           style={styles.signInInput}
+          value={this.state.email}
           textAlign='center'
           keyboardType='email-address'
           keyboardAppearance='dark'
           onChangeText={email => this.setState({email})}
-          value={this.state.email}
         />
 
         <Text style={styles.section} >
@@ -93,12 +93,12 @@ class SignInScreen extends React.Component {
         </Text>
 
         <TextInput
+          style={styles.signInInput}
+          value={this.state.password}
           secureTextEntry={true}
           textAlign='center'
           keyboardAppearance='dark'
-          style={styles.signInInput}
           onChangeText={password => this.setState({password})}
-          value={this.state.password}
         />
 
         <Button
