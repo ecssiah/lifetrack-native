@@ -69,7 +69,7 @@ class FocusAddModal extends React.Component {
           maxLength={24}
           returnKeyType='done'
           keyboardAppearance='dark'
-          onChangeText={this.props.onChangeName}
+          onChangeText={this.props.onFocusNameChange}
         />
 
         <TextInput
@@ -80,13 +80,13 @@ class FocusAddModal extends React.Component {
           maxLength={24}
           returnKeyType='done'
           keyboardAppearance='dark'
-          onChangeText={this.props.onChangeNewCategory}
+          onChangeText={this.props.onNewCategoryNameChange}
         />
 
         <Picker
           style={styles.picker}
           selectedValue={this.props.categoryName}
-          onValueChange={this.props.onChangeCategory}
+          onValueChange={this.props.onCategoryValueChange}
         >
           {this._getCategoryItems()}
         </Picker>

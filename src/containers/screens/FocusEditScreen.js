@@ -18,9 +18,9 @@ import {
 } from '../../constants/Focus';
 import createStyles, { Color, FontSize } from '../../styles';
 
+import LTEdit from '../../components/LT/LTEdit';
 import LTIcon from '../../components/LT/LTIcon';
 
-import TextEdit from '../../components/LT/LTEdit';
 import CategoryModal from '../../components/modals/CategoryModal';
 import SettingsModal from '../../components/modals/SettingsModal';
 import DeleteFocusModal from '../../components/modals/DeleteFocusModal';
@@ -110,7 +110,7 @@ class FocusEditScreen extends React.Component {
     });
   };
 
-  _onSettingChange = settingValue => {
+  _onSettingValueChange = settingValue => {
     this.setState({
       settingValue,
     });
@@ -227,7 +227,7 @@ class FocusEditScreen extends React.Component {
 
   _renderName = () => {
     return (
-      <TextEdit
+      <LTEdit
         text={this.state.name}
         onChangeText={text => this.setState({name: text})}
         onSubmitEditing={this._onEditNameConfirm}
@@ -320,7 +320,7 @@ class FocusEditScreen extends React.Component {
           onConfirm={this._onCategoryConfirm}
           onCancel={this._onCategoryCancel}
           onCategoryTextChange={text => this.setState({newCategoryName: text})}
-          onCategoryValueChange={value => this._onCategoryChange(value)} 
+          onCategoryValueChange={value => this._onCategoryValueChange(value)} 
         />
 
         <SettingsModal
@@ -329,7 +329,7 @@ class FocusEditScreen extends React.Component {
           settingValue={this.state.settingValue}
           onConfirm={this._onSettingConfirm}
           onCancel={this._onSettingCancel}
-          onSettingChange={value => this._onSettingChange(value)}
+          onSettingValueChange={value => this._onSettingValueChange(value)}
         />
 
         <DeleteFocusModal

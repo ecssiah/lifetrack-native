@@ -128,7 +128,7 @@ class FocusesScreen extends React.Component {
     this.props.navigation.navigate('Focus');
   };
 
-  _onCategoryChange = categoryName => {
+  _onCategoryValueChange = categoryName => {
     this.setState({
       categoryName,
     });
@@ -172,9 +172,9 @@ class FocusesScreen extends React.Component {
           newCategoryName={this.state.newCategoryName}
           onConfirm={this._onAddConfirm}
           onCancel={this._onAddCancel}
-          onChangeName={text => this.setState({newFocusName: text})}
-          onChangeNewCategory={text => this.setState({newCategoryName: text})}
-          onChangeCategory={value => this._onCategoryChange(value)}
+          onFocusNameChange={text => this.setState({newFocusName: text})}
+          onNewCategoryNameChange={text => this.setState({newCategoryName: text})}
+          onCategoryValueChange={value => this._onCategoryValueChange(value)}
         />
       </View>
     );

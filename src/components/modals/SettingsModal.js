@@ -45,7 +45,7 @@ class SettingsModal extends React.Component {
 
         <Picker
           selectedValue={this.props.settingValue}
-          onValueChange={this.props.onSettingChange}
+          onValueChange={this.props.onSettingValueChange}
           style={styles.picker}
         >
           {this._getSettingRange(1, 40)}

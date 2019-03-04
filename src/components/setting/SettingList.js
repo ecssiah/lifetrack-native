@@ -1,5 +1,5 @@
 import React from 'react';
-import { SectionList} from 'react-native';
+import { SectionList } from 'react-native';
 
 import SettingItem from './SettingItem';
 import SettingHeader from './SettingHeader';
