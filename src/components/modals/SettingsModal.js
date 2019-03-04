@@ -18,8 +18,8 @@ const styles = createStyles({
   },
 });
 
-class SettingsModal extends React.Component {
-
+class SettingsModal extends React.Component 
+{
   _getSettingRange = (start, end) => {
     return (
       Array(start + end  - 1).fill().map((_, i) => 

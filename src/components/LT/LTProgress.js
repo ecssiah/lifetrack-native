@@ -15,7 +15,8 @@ const styles = createStyles({
   }, 
 });
 
-class LTProgress extends React.Component {
+class LTProgress extends React.Component 
+{
   render() {
     return (
       <View style={styles.container} >

@@ -10,7 +10,8 @@ const styles = createStyles({
   },
 });
 
-class LTStatusBar extends React.PureComponent {
+class LTStatusBar extends React.PureComponent 
+{
   render() {
     return (
       <View style={styles.statusBar}>

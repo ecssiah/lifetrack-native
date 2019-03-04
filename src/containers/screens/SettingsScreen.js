@@ -39,7 +39,8 @@ const styles = createStyles({
   },
 });
 
-class SettingsScreen extends React.Component {
+class SettingsScreen extends React.Component 
+{
   constructor(props) {
     super(props);
 

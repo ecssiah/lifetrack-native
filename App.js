@@ -4,8 +4,9 @@ import { createStore, applyMiddleware } from 'redux';
 import createSagaMiddleware from 'redux-saga';
 
 import LTStatusBar from './src/components/LT/LTStatusBar';
-import AppContainer from './src/containers/AppContainer';
+
 import RootReducer from './src/reducers/RootReducer';
+import AppContainer from './src/containers/AppContainer';
 
 const sagaMiddleware = createSagaMiddleware();
 
@@ -14,7 +15,8 @@ const store = createStore(
   applyMiddleware(sagaMiddleware)
 );
 
-class App extends React.Component {
+class App extends React.Component 
+{
   render() {
     return (
       <Provider store={store}>
@@ -22,7 +24,7 @@ class App extends React.Component {
         <AppContainer />
       </Provider>
     );
-  }
-}
+  };
+};
 
 export default App;

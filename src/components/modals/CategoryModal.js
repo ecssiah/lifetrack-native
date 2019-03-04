@@ -23,8 +23,8 @@ const styles = createStyles({
   },
 });
 
-class CategoryModal extends React.Component {
-
+class CategoryModal extends React.Component 
+{
   _getCategoryItems = () => {
     return (
       this.props.categories.map((category, idx) => 

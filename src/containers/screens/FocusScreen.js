@@ -23,7 +23,8 @@ const styles = createStyles({
   },
 });
 
-class FocusScreen extends React.Component {
+class FocusScreen extends React.Component 
+{
   static navigationOptions = ({ navigation }) => ({
     title: 'Focus',
     headerLeft: (
@@ -121,8 +122,8 @@ class FocusScreen extends React.Component {
         />
       </View>
     );
-  }
-}
+  };
+};
 
 const mapStateToProps = state => ({
   focus: state.focus,

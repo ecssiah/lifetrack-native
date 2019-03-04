@@ -39,7 +39,8 @@ const styles = createStyles({
   },
 });
 
-class LTConfirm extends React.Component {
+class LTConfirm extends React.Component 
+{
   static defaultProps = {
     leftContent: 'Confirm',
     rightContent: 'Cancel',

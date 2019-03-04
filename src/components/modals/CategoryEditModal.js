@@ -19,8 +19,8 @@ const styles = createStyles({
   },
 });
 
-class CategoryEditModal extends React.Component {
-
+class CategoryEditModal extends React.Component 
+{
   render() {
     return (
       <LTModal

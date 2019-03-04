@@ -20,7 +20,8 @@ const styles = createStyles({
   },
 });
 
-class SettingsHeader extends React.Component {
+class SettingsHeader extends React.Component 
+{
   render() {
     return (
       <View style={styles.container}>
@@ -29,7 +30,7 @@ class SettingsHeader extends React.Component {
         </Text>
       </View>
     );
-  }
-}
+  };
+};
 
 export default SettingsHeader;

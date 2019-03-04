@@ -5,7 +5,8 @@ import FocusHeader from './FocusHeader';
 import FocusItem from './FocusItem';
 import LTSeparator from '../LT/LTSeparator';
 
-class FocusList extends React.Component {
+class FocusList extends React.Component 
+{
   _renderHeader = section => {
     return (
       <FocusHeader 

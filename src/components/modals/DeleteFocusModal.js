@@ -17,8 +17,8 @@ const styles = createStyles({
   },
 });
 
-class DeleteFocusModal extends React.Component {
-
+class DeleteFocusModal extends React.Component 
+{
   render() {
     return (
       <LTModal

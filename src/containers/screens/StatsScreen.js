@@ -5,7 +5,8 @@ import createStyles from '../../styles';
 const styles = createStyles({
 });
 
-class StatsScreen extends React.Component {
+class StatsScreen extends React.Component 
+{
   static navigationOptions = {
     title: 'Stats',
   };
@@ -15,7 +16,7 @@ class StatsScreen extends React.Component {
       <View style={styles.container}>
       </View>
     );
-  }
-}
+  };
+};
 
 export default StatsScreen;

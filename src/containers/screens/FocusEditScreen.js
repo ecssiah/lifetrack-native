@@ -37,7 +37,8 @@ const styles = createStyles({
   },
 });
 
-class FocusEditScreen extends React.Component {
+class FocusEditScreen extends React.Component 
+{
   constructor(props) {
     super(props);
 
@@ -339,7 +340,7 @@ class FocusEditScreen extends React.Component {
         />
       </View>
     );
-  }
+  };
 };
 
 const mapStateToProps = state => ({

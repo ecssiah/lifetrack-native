@@ -33,8 +33,8 @@ const styles = createStyles({
   },
 });
 
-class FocusHeader extends React.Component {
-
+class FocusHeader extends React.Component 
+{
   _getContainerStyle = () => {
     return this.props.active ? styles.containerActive : styles.container;
   };
@@ -56,7 +56,7 @@ class FocusHeader extends React.Component {
         </TouchableOpacity>
       </View>
     );
-  }
-}
+  };
+};
 
 export default FocusHeader;

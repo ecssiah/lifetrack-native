@@ -16,7 +16,8 @@ import FocusAddModal from '../../components/modals/FocusAddModal';
 const styles = createStyles({
 });
 
-class FocusesScreen extends React.Component {
+class FocusesScreen extends React.Component 
+{
   constructor(props) {
     super(props);
 

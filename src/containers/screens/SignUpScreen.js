@@ -43,7 +43,8 @@ const styles = createStyles({
   },
 });
 
-class SignUpScreen extends React.Component {
+class SignUpScreen extends React.Component 
+{
   constructor(props) {
     super(props);
 
@@ -52,7 +53,7 @@ class SignUpScreen extends React.Component {
       password: '',
       confirm: '',
     };
-  }
+  };
 
   static navigationOptions = ({ navigation }) => ({
     title: 'Sign Up',
@@ -121,7 +122,7 @@ class SignUpScreen extends React.Component {
       password: '',
       confirm: '',
     });
-  }
+  };
 
   render() {
     return (
@@ -166,8 +167,8 @@ class SignUpScreen extends React.Component {
         />
       </View>
     );
-  }
-}
+  };
+};
 
 const mapStateToProps = state => ({
 

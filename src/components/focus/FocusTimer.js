@@ -23,7 +23,8 @@ const styles = createStyles({
   },
 });
 
-class FocusTimer extends React.PureComponent {
+class FocusTimer extends React.PureComponent 
+{
   _getDisplayTime() {
     const minutes = Math.floor(this.props.time).toFixed(0);
     const seconds = ((this.props.time - minutes) * 60).toFixed(0);
@@ -45,7 +46,7 @@ class FocusTimer extends React.PureComponent {
   render() {
     return (
       <TouchableOpacity 
-        activeOpacity={0.7}
+        activeOpacity={0.6}
         onPress={this.props.onActivate} 
       >
         <Text style={this._getTimerStyle()}>
@@ -53,7 +54,7 @@ class FocusTimer extends React.PureComponent {
         </Text>
       </TouchableOpacity>
     );
-  }
-}
+  };
+};
 
 export default FocusTimer;

@@ -23,7 +23,8 @@ const styles = createStyles({
   },
 });
 
-class FocusTitle extends React.PureComponent {
+class FocusTitle extends React.PureComponent 
+{
   render() {
     return (
       <View style={styles.background}>
@@ -33,6 +34,6 @@ class FocusTitle extends React.PureComponent {
       </View>
     );
   }
-}
+};
 
 export default FocusTitle;

@@ -27,7 +27,8 @@ const styles = createStyles({
   },
 });
 
-class LTEdit extends React.Component {
+class LTEdit extends React.Component 
+{
   static defaultProps = {
     placeholder: '',
   };
@@ -65,7 +66,7 @@ class LTEdit extends React.Component {
         onSubmitEditing={this.props.onSubmitEditing}
       />
     );
-  }
+  };
 };
 
 export default LTEdit;

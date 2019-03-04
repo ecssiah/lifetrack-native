@@ -36,7 +36,8 @@ const styles = createStyles({
   },
 });
 
-class SettingItem extends React.Component {
+class SettingItem extends React.Component 
+{
   render() {
     return (
       <TouchableOpacity
@@ -57,7 +58,7 @@ class SettingItem extends React.Component {
         </View>
       </TouchableOpacity>
     );
-  }
-}
+  };
+};
 
 export default SettingItem;

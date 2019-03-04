@@ -23,8 +23,8 @@ const styles = createStyles({
   },
 });
 
-class SplashScreen extends React.Component {
-
+class SplashScreen extends React.Component 
+{
   _loadSettings = () => {
     return db.collection('settings').doc(auth.currentUser.uid).get();
   };
@@ -96,8 +96,8 @@ class SplashScreen extends React.Component {
         <Text style={styles.title}>LifeTrack</Text>
       </View>
     );
-  }
-}
+  };
+};
 
 const mapStateToProps = state => ({
 });

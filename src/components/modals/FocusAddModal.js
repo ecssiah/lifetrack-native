@@ -40,8 +40,8 @@ const styles = createStyles({
   },
 });
 
-class FocusAddModal extends React.Component {
-
+class FocusAddModal extends React.Component 
+{
   _getCategoryItems = () => {
     return (
       this.props.categories.map((category, idx) => 

@@ -21,7 +21,8 @@ const styles = createStyles({
   }
 });
 
-class FocusExperience extends React.PureComponent {
+class FocusExperience extends React.PureComponent 
+{
   render() {
     return (
       <View style={styles.container}>
@@ -36,7 +37,7 @@ class FocusExperience extends React.PureComponent {
         />
       </View>
     );
-  }
-}
+  };
+};
 
 export default FocusExperience;

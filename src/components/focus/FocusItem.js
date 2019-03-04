@@ -47,7 +47,8 @@ const styles = createStyles({
   },
 });
 
-class FocusItem extends React.Component {
+class FocusItem extends React.Component 
+{
   render() {
     return (
       <TouchableOpacity
@@ -73,7 +74,7 @@ class FocusItem extends React.Component {
         </View>
       </TouchableOpacity>
     );
-  }
-}
+  };
+};
 
 export default FocusItem;

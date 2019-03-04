@@ -10,7 +10,8 @@ const styles = createStyles({
   },
 });
 
-class LTIcon extends React.Component {
+class LTIcon extends React.Component 
+{
   render() {
     return (
       <TouchableOpacity

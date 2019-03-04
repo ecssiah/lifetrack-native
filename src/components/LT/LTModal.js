@@ -26,7 +26,8 @@ const styles = createStyles({
   },
 });
 
-class LTModal extends React.Component {
+class LTModal extends React.Component 
+{
   render() {
     return (
       <Modal

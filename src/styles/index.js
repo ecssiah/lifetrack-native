@@ -18,11 +18,11 @@ export const Color  = {
 
 export const Font = {
   primary: 'Arial',
-  timer: 'Helvetica Neue',
+  timer: 'HelveticaNeue-Light',
 };
 
 export const FontSize = {
-  timer: 142,
+  timer: 140,
   splashTitle: 68,
   subtitle: 32,
   headerTitle: 28, 

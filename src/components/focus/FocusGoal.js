@@ -21,7 +21,8 @@ const styles = createStyles({
   },
 });
 
-class FocusGoal extends React.PureComponent {
+class FocusGoal extends React.PureComponent 
+{
   render() {
     return (
       <TouchableOpacity
@@ -40,7 +41,7 @@ class FocusGoal extends React.PureComponent {
         />
       </TouchableOpacity>
     );
-  }
-}
+  };
+};
 
 export default FocusGoal;
