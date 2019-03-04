@@ -3,7 +3,7 @@ import { Provider } from 'react-redux';
 import { createStore, applyMiddleware } from 'redux';
 import createSagaMiddleware from 'redux-saga';
 
-import LTStatusBar from './src/components/LTStatusBar';
+import LTStatusBar from './src/components/LT/LTStatusBar';
 import AppContainer from './src/containers/AppContainer';
 import RootReducer from './src/reducers/RootReducer';
 

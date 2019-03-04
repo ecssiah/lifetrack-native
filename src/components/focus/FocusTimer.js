@@ -1,6 +1,6 @@
 import React from 'react';
 import { Text, TouchableOpacity } from 'react-native';
-import createStyles, { Color, Font, FontSize } from '../styles';
+import createStyles, { Color, Font, FontSize } from '../../styles';
 
 const styles = createStyles({
   working: {

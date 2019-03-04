@@ -2,7 +2,7 @@ import React from 'react';
 import { 
   Text, View 
 } from 'react-native';
-import createStyles, { FontSize } from '../styles'; 
+import createStyles, { FontSize } from '../../styles'; 
 
 const styles = createStyles({
   container: {

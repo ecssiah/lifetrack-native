@@ -8,9 +8,9 @@ import firebase from 'firebase';
 import { auth, db } from '../../config';
 import createStyles from '../../styles';
 
-import LTIcon from '../../components/LTIcon';
+import LTIcon from '../../components/LT/LTIcon';
 
-import FocusList from '../../components/FocusList';
+import FocusList from '../../components/focus/FocusList';
 import FocusAddModal from '../../components/modals/FocusAddModal';
 
 const styles = createStyles({

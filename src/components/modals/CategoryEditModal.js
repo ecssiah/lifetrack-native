@@ -2,9 +2,9 @@ import React from 'react';
 import { Text, TouchableOpacity } from 'react-native';
 import createStyles, { FontSize, Color } from '../../styles';
 
-import TextEdit from '../TextEdit';
-import LTModal from '../LTModal';
-import LTConfirm from '../LTConfirm';
+import LTEdit from '../LT/LTEdit';
+import LTModal from '../LT/LTModal';
+import LTConfirm from '../LT/LTConfirm';
 
 const styles = createStyles({
   container: {
@@ -28,7 +28,7 @@ class CategoryEditModal extends React.Component {
         show={this.props.show}
         onPressBackdrop={this.props.onCancel} 
       >
-        <TextEdit
+        <LTEdit
           text={this.props.newCategoryName}
           onChangeText={this.props.onChangeText}
           onSubmitEditing={this.props.onSubmitEditing}

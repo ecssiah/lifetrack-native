@@ -20,7 +20,7 @@ import {
 } from '../../actions/FocusesActions';
 import createStyles, { Color, FontSize } from '../../styles'; 
 
-import SettingList from '../../components/SettingList';
+import SettingList from '../../components/setting/SettingList';
 import SettingsModal from '../../components/modals/SettingsModal';
 import CategoryEditModal from '../../components/modals/CategoryEditModal';
 

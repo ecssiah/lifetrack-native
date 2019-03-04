@@ -1,6 +1,6 @@
 import React from 'react';
 import { ProgressViewIOS, Text, TouchableOpacity } from 'react-native';
-import createStyles, { Color, FontSize } from '../styles';
+import createStyles, { Color, FontSize } from '../../styles';
 
 const styles = createStyles({
   container: {

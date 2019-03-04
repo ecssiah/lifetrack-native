@@ -1,7 +1,7 @@
 import React from 'react';
 import { TouchableOpacity } from 'react-native';
 import Ionicon from 'react-native-vector-icons/Ionicons';
-import createStyles from '../styles';
+import createStyles from '../../styles';
 
 const styles = createStyles({
   iconBase: {

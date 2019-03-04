@@ -18,14 +18,14 @@ import {
 } from '../../constants/Focus';
 import createStyles, { Color, FontSize } from '../../styles';
 
-import LTIcon from '../../components/LTIcon';
+import LTIcon from '../../components/LT/LTIcon';
 
-import TextEdit from '../../components/TextEdit';
+import TextEdit from '../../components/LT/LTEdit';
 import CategoryModal from '../../components/modals/CategoryModal';
 import SettingsModal from '../../components/modals/SettingsModal';
 import DeleteFocusModal from '../../components/modals/DeleteFocusModal';
-import SettingItem from '../../components/SettingItem';
-import SettingList from '../../components/SettingList';
+import SettingItem from '../../components/setting/SettingItem';
+import SettingList from '../../components/setting/SettingList';
 
 const styles = createStyles({
   deleteText: {

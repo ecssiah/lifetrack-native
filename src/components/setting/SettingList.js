@@ -1,9 +1,9 @@
 import React from 'react';
 import { SectionList} from 'react-native';
 
-import LTSeparator from './LTSeparator';
 import SettingItem from './SettingItem';
 import SettingHeader from './SettingHeader';
+import LTSeparator from '../LT/LTSeparator';
 
 class SettingList extends React.Component {
 

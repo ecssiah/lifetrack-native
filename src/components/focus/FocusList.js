@@ -1,9 +1,9 @@
 import React from 'react';
 import { SectionList } from 'react-native';
 
-import LTSeparator from './LTSeparator';
 import FocusHeader from './FocusHeader';
 import FocusItem from './FocusItem';
+import LTSeparator from '../LT/LTSeparator';
 
 class FocusList extends React.Component {
   _renderHeader = section => {

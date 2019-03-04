@@ -2,7 +2,7 @@ import React from 'react';
 import { 
   TouchableOpacity, Text, View, ProgressViewIOS 
 } from 'react-native';
-import createStyles, { Color, FontSize } from '../styles'; 
+import createStyles, { Color, FontSize } from '../../styles'; 
 
 const styles = createStyles({
   container: {

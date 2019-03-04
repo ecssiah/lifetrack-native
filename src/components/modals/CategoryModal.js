@@ -2,8 +2,8 @@ import React from 'react';
 import { Picker, TextInput } from 'react-native';
 import createStyles, { FontSize } from '../../styles';
 
-import LTModal from '../LTModal';
-import LTConfirm from '../LTConfirm';
+import LTModal from '../LT/LTModal';
+import LTConfirm from '../LT/LTConfirm';
 
 const styles = createStyles({
   container: {

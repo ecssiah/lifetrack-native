@@ -1,6 +1,6 @@
 import React from 'react';
 import { TextInput } from 'react-native';
-import createStyles, { Color, FontSize } from '../styles';
+import createStyles, { Color, FontSize } from '../../styles';
 
 const styles = createStyles({
   focus: {
@@ -27,7 +27,7 @@ const styles = createStyles({
   },
 });
 
-class TextEdit extends React.Component {
+class LTEdit extends React.Component {
   static defaultProps = {
     placeholder: '',
   };
@@ -68,4 +68,4 @@ class TextEdit extends React.Component {
   }
 };
 
-export default TextEdit;
+export default LTEdit;
