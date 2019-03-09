@@ -1,22 +1,23 @@
-export const SET_FOCUSES = 'focuses:set-focuses';
-export const ADD_FOCUS = 'focuses:add-focus';
-export const DELETE_FOCUS = 'focuses:delete-focus';
+import {
+  LOAD_FOCUSES_REQUEST, LOAD_FOCUSES_SUCCESS, LOAD_FOCUSES_FAIL,
+  SET_FOCUSES, DELETE_FOCUS, ADD_FOCUS, 
+  SET_NAME, SET_CATEGORY, SET_ACTIVE, SET_TIME, SET_TIMER,
+  SET_WORKING, SET_WORK_PERIOD, SET_BREAK_PERIOD,
+  UPDATE_EXPERIENCE, UPDATE_TIME, UPDATE_CATEGORIES,
+  RESET_PERIODS,
+} from '../constants/Focuses';
 
-export const SET_NAME = 'focuses:set-name';
-export const SET_CATEGORY = 'focuses:set-category';
-export const SET_TIME = 'focuses:set-time';
-export const SET_WORKING = 'focuses:set-working';
-export const SET_ACTIVE = 'focuses:set-active';
-export const SET_TIMER = 'focuses:set-timer';
-export const SET_WORK_PERIOD = 'focuses:set-work-period';
-export const SET_WORK_GOAL = 'focuses:set-work-goal';
-export const SET_BREAK_PERIOD = 'focuses:set-break-period';
+export function requestFocuses() {
+  return {
+    type: LOAD_FOCUSES_REQUEST,
+  };
+};
 
-export const UPDATE_TIME = 'focuses:update-time';
-export const UPDATE_PERIODS = 'focuses:update-periods';
-export const UPDATE_EXPERIENCE = 'focuses:update-experience';
-export const RESET_PERIODS = 'focuses:reset-periods';
-export const UPDATE_CATEGORIES = 'focuses:update-categories';
+export function loadFocuses() {
+  return {
+    type: LOAD_FOCUSES,
+  };
+};
 
 export function setFocuses(focuses) {
   return {

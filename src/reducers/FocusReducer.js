@@ -1,6 +1,6 @@
 import { 
   SET_ID
-} from "../actions/FocusActions";
+} from "../constants/Focus";
 
 function focusReducer(state = {}, action) {
   let newState = {...state};

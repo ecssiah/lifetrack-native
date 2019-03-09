@@ -2,8 +2,8 @@ import {
   SET_FOCUSES, ADD_FOCUS, DELETE_FOCUS, 
   SET_NAME, SET_CATEGORY, SET_TIME, SET_WORKING, SET_ACTIVE, SET_TIMER, 
   SET_WORK_PERIOD, SET_WORK_GOAL, SET_BREAK_PERIOD,
-  UPDATE_TIME, UPDATE_PERIODS, UPDATE_EXPERIENCE, RESET_PERIODS, UPDATE_CATEGORIES,
-} from "../actions/FocusesActions";
+  UPDATE_TIME, UPDATE_PERIODS, UPDATE_EXPERIENCE, RESET_PERIODS, UPDATE_CATEGORIES, LOAD_FOCUSES_SUCCESS, LOAD_FOCUSES_FAIL,
+} from "../constants/Focuses";
 
 export const SECOND = 1 / 60.0;
 export const EXPERIENCE_PER_SECOND = 40 / 60.0;
@@ -14,6 +14,14 @@ function focusesReducer(state = {}, action) {
   switch (action.type) {
     case SET_FOCUSES: {
       return action.focuses;
+    }
+    case LOAD_FOCUSES_SUCCESS: {
+      return action.focuses;
+    }
+    case LOAD_FOCUSES_FAIL: {
+      console.warn(action.error);
+
+      return newState;
     }
     case ADD_FOCUS: {
       newState[action.focus.id] = action.focus;

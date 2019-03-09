@@ -2,7 +2,7 @@ import {
   SET_CATEGORIES, 
   ADD_CATEGORY, 
   SET_CATEGORY_SHOW, TOGGLE_CATEGORY_SHOW, SET_CATEGORY_NAME, DELETE_CATEGORY,
-} from "../actions/CategoriesActions";
+} from "../constants/Categories";
 
 function categoriesReducer(state = [], action) {
   let newState = state.slice();

@@ -1,3 +1,5 @@
+export const SET_ID = 'focus:set-id';
+
 export const WORK_PERIOD = 'Work Period';
 export const WORK_GOAL = 'Work Goal';
 export const BREAK_PERIOD = 'Break Period';

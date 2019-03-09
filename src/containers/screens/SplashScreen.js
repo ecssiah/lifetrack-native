@@ -4,7 +4,7 @@ import { auth, db } from '../../config';
 import { View, Text } from 'react-native';
 import { setSettings } from '../../actions/SettingsActions';
 import { setCategories } from '../../actions/CategoriesActions';
-import { setFocuses } from '../../actions/FocusesActions';
+import { setFocuses, requestFocuses } from '../../actions/FocusesActions';
 import createStyles, { Color, FontSize } from '../../styles';
 
 const styles = createStyles({
@@ -42,6 +42,8 @@ class SplashScreen extends React.Component
   componentDidMount() {
     auth.onAuthStateChanged(user => {
       if (!user) return this.props.navigation.navigate('Auth');
+
+      this.props.requestFocuses();
 
       Promise.all([
         this._loadSettings(),
@@ -103,6 +105,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
+  requestFocuses: () => dispatch(requestFocuses()),
   setSettings: settings => dispatch(setSettings(settings)),
   setCategories: categories => dispatch(setCategories(categories)),
   setFocuses: focuses => dispatch(setFocuses(focuses)),

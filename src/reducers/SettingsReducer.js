@@ -1,7 +1,7 @@
 import { 
   SET_SETTINGS,
   SET_DEFAULT_WORK_PERIOD, SET_DEFAULT_WORK_GOAL, SET_DEFAULT_BREAK_PERIOD,
-} from "../actions/SettingsActions";
+} from "../constants/Settings";
 
 function settingsReducer(state = {}, action) {
   let newState = {...state};

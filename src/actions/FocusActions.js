@@ -1,4 +1,4 @@
-export const SET_ID = 'focus:set-id';
+import { SET_ID } from '../constants/Focus';
 
 export function setId(id) {
   return {
