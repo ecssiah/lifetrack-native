@@ -9,6 +9,9 @@ import {
   WORK_PERIOD, WORK_GOAL, BREAK_PERIOD,
 } from '../../constants/Focus';
 import {
+  alert
+} from '../../actions/AlertActions';
+import {
   deleteCategory,
   setCategoryName,
 } from '../../actions/CategoriesActions';
@@ -175,12 +178,20 @@ class SettingsScreen extends React.Component
   };
 
   _onCategoryNameEditConfirm = () => {
-    this.props.setCategoryName(
-      this.state.categoryName, this.state.newCategoryName
+    const categoryExists = this.props.categories.find(category => 
+      category.name === this.state.categoryName
     );
-    this.props.updateCategories(
-      this.state.categoryName, this.state.newCategoryName
-    );
+
+    if (categoryExists) {
+      this.props.alert(this.state.categoryName + ' already exists');
+    } else {
+      this.props.setCategoryName(
+        this.state.categoryName, this.state.newCategoryName
+      );
+      this.props.updateCategories(
+        this.state.categoryName, this.state.newCategoryName
+      );
+    }
   };
 
   _onCategoryNameEditBlur = () => {
@@ -295,6 +306,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
+  alert: message => dispatch(alert(message)),
   deleteCategory: name => dispatch(deleteCategory(name)),
   setCategoryName: (name, newName) => dispatch(setCategoryName(name, newName)),
   updateCategories: (name, newName) => dispatch(updateCategories(name, newName)),

@@ -31,15 +31,11 @@ function categoriesReducer(state = [], action) {
       return newState;
     }
     case SET_CATEGORY_NAME: {
-      if (newState.find(category => category.name === action.newName)) {
-        console.warn(action.newName + ' already exists');
-      } else {
-        const categoryIndex = newState.findIndex(category =>
-          category.name === action.name
-        );
+      const categoryIndex = newState.findIndex(category =>
+        category.name === action.name
+      );
 
-        newState[categoryIndex].name = action.newName;
-      }
+      newState[categoryIndex].name = action.newName;
 
       return newState;
     }
