@@ -19,8 +19,6 @@ function focusesReducer(state = {}, action) {
       return action.focuses;
     }
     case LOAD_FOCUSES_FAIL: {
-      console.warn(action.error);
-
       return newState;
     }
     case ADD_FOCUS: {

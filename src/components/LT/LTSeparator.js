@@ -10,7 +10,7 @@ const styles = createStyles({
   },
 });
 
-class LTSeparator extends React.Component 
+class LTSeparator extends React.PureComponent 
 {
   render() {
     return (

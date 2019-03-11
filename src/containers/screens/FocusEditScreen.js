@@ -2,9 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { db, auth } from '../../config';
 import firebase from 'firebase';
-import { 
-  View, Text, TouchableOpacity 
-} from 'react-native';
+import { View } from 'react-native';
 import {
   addCategory,
 } from '../../actions/CategoriesActions';
@@ -18,24 +16,14 @@ import {
 } from '../../constants/Focus';
 import createStyles, { Color, FontSize } from '../../styles';
 
-import LTEdit from '../../components/LT/LTEdit';
 import LTIcon from '../../components/LT/LTIcon';
 
 import CategoryModal from '../../components/modals/CategoryModal';
 import SettingsModal from '../../components/modals/SettingsModal';
 import DeleteFocusModal from '../../components/modals/DeleteFocusModal';
-import SettingItem from '../../components/setting/SettingItem';
-import SettingList from '../../components/setting/SettingList';
+import FocusEditList from '../../components/focus/FocusEditList';
 
-const styles = createStyles({
-  deleteText: {
-    fontSize: FontSize.modalTitle,
-    fontWeight: 'bold',
-    textAlign: 'center',
-    color: Color.highlight,
-    margin: 16,
-  },
-});
+const styles = createStyles();
 
 class FocusEditScreen extends React.Component 
 {
@@ -65,6 +53,12 @@ class FocusEditScreen extends React.Component
       />
     ),
   });
+
+  _onEditNameChange = name => {
+    this.setState({
+      name,
+    });
+  };
 
   _onEditNameConfirm = () => {
     this.props.setName(this.props.focus.id, this.state.name);
@@ -160,7 +154,7 @@ class FocusEditScreen extends React.Component
     });
   };
 
-  _onCategoryChange = categoryName => {
+  _onCategoryValueChange = categoryName => {
     this.setState({
       categoryName,
     });
@@ -226,81 +220,6 @@ class FocusEditScreen extends React.Component
     });
   };
 
-  _renderName = () => {
-    return (
-      <LTEdit
-        text={this.state.name}
-        onChangeText={text => this.setState({name: text})}
-        onSubmitEditing={this._onEditNameConfirm}
-      />
-    );
-  };
-
-  _renderCategory = ({item}) => {
-    return (
-      <SettingItem 
-        setting={item} 
-        onSettingSelect={this._onCategorySelect} 
-      />
-    );
-  };
-
-  _renderDelete = ({item, index}) => {
-    return (
-      <TouchableOpacity 
-        key={index} 
-        activeOpacity={0.7}
-        onPress={this._onDeleteSelect}
-      >
-        <Text style={styles.deleteText}>
-          {item.name}
-        </Text>
-      </TouchableOpacity> 
-    );
-  };
-
-  _getSectionData = () => {
-    const focus = this.props.focuses[this.props.focus.id];
-
-    const sectionData = [
-      {
-        title: '',
-        data: [
-          { name: '', value: focus.name },
-        ],
-        renderItem: this._renderName,
-      },
-      {
-        title: '',
-        data: [ 
-          { name: 'Category', value: focus.category },
-        ],
-        renderItem: this._renderCategory,
-      },
-      {
-        title: '',
-        data: [ 
-          { name: WORK_PERIOD, value: focus.workPeriod },
-          { name: WORK_GOAL, value: focus.workGoal },
-          { name: BREAK_PERIOD, value: focus.breakPeriod },
-        ],
-      },
-      {
-        title: '',
-        data: [
-          { name: 'Delete', value: '' },
-        ],
-        renderItem: this._renderDelete,
-      },
-      {
-        title: '',
-        data: [],
-      },
-    ];
-
-    return sectionData;
-  };
-
   render() {
     const focus = this.props.focuses[this.props.focus.id];
 
@@ -308,9 +227,14 @@ class FocusEditScreen extends React.Component
 
     return (
       <View style={styles.container}>
-        <SettingList
-          sections={this._getSectionData()} 
-          onSettingSelect={this._onSettingSelect}
+        <FocusEditList
+          name={this.state.name}
+          focus={this.props.focuses[this.props.focus.id]}
+          onEditNameChange={this._onEditNameChange}
+          onEditNameConfirm={this._onEditNameConfirm}
+          onSettingSelect={this._onSettingSelect} 
+          onCategorySelect={this._onCategorySelect}
+          onDeleteSelect={this._onDeleteSelect}
         />
 
         <CategoryModal

@@ -20,16 +20,18 @@ const styles = createStyles({
 
 class SettingsModal extends React.Component 
 {
-  _getSettingRange = (start, end) => {
-    return (
-      Array(start + end  - 1).fill().map((_, i) => 
-        <Picker.Item 
-          key={i} 
-          label={(i + start).toString()} 
-          value={(i + start).toString()} 
-        />
-      )
+  _getSettingItems = (start, end) => {
+    const settingArray = Array(start + end  - 1).fill();
+
+    const settingItems = settingArray.map((_, i) => 
+      <Picker.Item 
+        key={i} 
+        label={(i + start).toString()} 
+        value={(i + start).toString()} 
+      />
     );
+
+    return settingItems;
   };
 
   render() {
@@ -48,7 +50,7 @@ class SettingsModal extends React.Component
           onValueChange={this.props.onSettingValueChange}
           style={styles.picker}
         >
-          {this._getSettingRange(1, 40)}
+          {this._getSettingItems(1, 40)}
         </Picker>
 
         <LTConfirm

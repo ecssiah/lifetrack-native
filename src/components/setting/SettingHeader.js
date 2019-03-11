@@ -20,7 +20,7 @@ const styles = createStyles({
   },
 });
 
-class SettingsHeader extends React.Component 
+class SettingsHeader extends React.PureComponent 
 {
   render() {
     return (

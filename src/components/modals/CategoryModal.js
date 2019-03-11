@@ -26,15 +26,15 @@ const styles = createStyles({
 class CategoryModal extends React.Component 
 {
   _getCategoryItems = () => {
-    return (
-      this.props.categories.map((category, idx) => 
-        <Picker.Item 
-          key={idx} 
-          label={category.name} 
-          value={category.name}
-        />
-      )
+    const categoryItems = this.props.categories.map((category, idx) => 
+      <Picker.Item 
+        key={idx} 
+        label={category.name} 
+        value={category.name}
+      />
     );
+
+    return categoryItems;
   };
 
   render() {

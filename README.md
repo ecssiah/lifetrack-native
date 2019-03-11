@@ -1,4 +1,4 @@
 # LifeTrack
 
-A react-native lifelong goal tracking app
+A React Native lifelong goal tracking app.
 
