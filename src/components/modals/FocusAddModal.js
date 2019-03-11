@@ -1,6 +1,6 @@
 import React from 'react';
 import { Picker, Text, TextInput, TouchableOpacity } from 'react-native';
-import createStyles, { FontSize, Color } from '../../styles';
+import createStyles, { FontSize, Color, Font } from '../../styles';
 
 import LTModal from '../LT/LTModal';
 import LTConfirm from '../LT/LTConfirm';
@@ -13,6 +13,7 @@ const styles = createStyles({
     width: '86%',
     height: 40, 
     fontSize: FontSize.modalInput, 
+    fontFamily: Font.primary,
     color: 'black',
     borderWidth: 1,
     borderRadius: 6,
@@ -26,6 +27,7 @@ const styles = createStyles({
     width: '86%',
     height: 40, 
     fontSize: FontSize.modalInput, 
+    fontFamily: Font.primary,
     color: 'black',
     borderWidth: 1,
     borderRadius: 6,
@@ -85,6 +87,7 @@ class FocusAddModal extends React.Component
 
         <Picker
           style={styles.picker}
+          itemStyle={{ fontFamily: Font.primary }}
           selectedValue={this.props.categoryName}
           onValueChange={this.props.onCategoryValueChange}
         >

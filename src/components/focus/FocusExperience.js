@@ -2,6 +2,8 @@ import React from 'react';
 import { Text, View, ProgressViewIOS } from 'react-native';
 import createStyles, { Color, FontSize } from '../../styles';
 
+import LTText from '../LT/LTText';
+
 const styles = createStyles({
   container: {
     width: '80%',
@@ -26,9 +28,9 @@ class FocusExperience extends React.PureComponent
   render() {
     return (
       <View style={styles.container}>
-        <Text style={styles.level}>
+        <LTText style={styles.level}>
           {"Level: " + this.props.level}
-        </Text>
+        </LTText>
 
         <ProgressViewIOS
           style={styles.progress}

@@ -4,6 +4,8 @@ import {
 } from 'react-native';
 import createStyles, { Color, FontSize } from '../../styles'; 
 
+import LTText from '../LT/LTText';
+
 const styles = createStyles({
   container: {
     flex: 1,
@@ -39,7 +41,6 @@ const styles = createStyles({
   },
   progress: {
     width: 54,
-    marginTop: 1,
     transform: [
       { scaleX: 1.0 }, 
       { scaleY: 6.0 },
@@ -57,15 +58,15 @@ class FocusItem extends React.Component
         onPress={() => this.props.onFocusSelect(this.props.focus.id)}
       >
         <View style={styles.itemLeft}>
-          <Text style={styles.name}>
+          <LTText style={styles.name}>
             {this.props.focus.name}
-          </Text>
+          </LTText>
         </View>
 
         <View style={styles.itemRight} >
-          <Text style={styles.level}>
+          <LTText style={styles.level}>
             {this.props.focus.level}
-          </Text>
+          </LTText>
           <ProgressViewIOS
             style={styles.progress}
             progressTintColor={Color.highlight}

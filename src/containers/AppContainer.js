@@ -6,7 +6,7 @@ import {
   createBottomTabNavigator, 
   createAppContainer 
 } from "react-navigation";
-import { Color, FontSize } from '../styles';
+import createStyles, { Color, FontSize, Font } from '../styles';
 
 import SplashScreen from './screens/SplashScreen';
 import SignInScreen from './screens/SignInScreen';
@@ -16,6 +16,17 @@ import FocusEditScreen from './screens/FocusEditScreen';
 import FocusScreen from './screens/FocusScreen';
 import StatsScreen from './screens/StatsScreen';
 import SettingsScreen from './screens/SettingsScreen';
+
+const styles = createStyles({
+  headerStyle: {
+    backgroundColor: Color.primary,
+  },
+  headerTitleStyle: {
+    fontFamily: Font.primary,
+    fontSize: FontSize.headerTitle,
+    fontWeight: 'bold',
+  },
+});
 
 const AuthStack = createStackNavigator(
   {
@@ -27,13 +38,8 @@ const AuthStack = createStackNavigator(
     defaultNavigationOptions: {
       headerTintColor: 'white',
       headerBackTitle: null,
-      headerStyle: {
-        backgroundColor: Color.primary,
-      },
-      headerTitleStyle: {
-        fontSize: FontSize.headerTitle,
-        fontWeight: 'bold',
-      },
+      headerStyle: styles.headerStyle,
+      headerTitleStyle: styles.headerTitleStyle,
     },
   },
 );
@@ -47,13 +53,8 @@ const StatsStack = createStackNavigator(
     defaultNavigationOptions: {
       headerTintColor: 'white',
       headerBackTitle: null,
-      headerStyle: {
-        backgroundColor: Color.primary,
-      },
-      headerTitleStyle: {
-        fontSize: FontSize.headerTitle,
-        fontWeight: 'bold',
-      },
+      headerStyle: styles.headerStyle,
+      headerTitleStyle: styles.headerTitleStyle,
     },
   },
 );
@@ -69,13 +70,8 @@ const FocusStack = createStackNavigator(
     defaultNavigationOptions: {
       headerTintColor: 'white',
       headerBackTitle: null,
-      headerStyle: {
-        backgroundColor: Color.primary,
-      },
-      headerTitleStyle: {
-        fontSize: FontSize.headerTitle,
-        fontWeight: 'bold',
-      },
+      headerStyle: styles.headerStyle,
+      headerTitleStyle: styles.headerTitleStyle,
     },
   },
 );
@@ -89,13 +85,8 @@ const SettingsStack = createStackNavigator(
     defaultNavigationOptions: {
       headerTintColor: 'white',
       headerBackTitle: null,
-      headerStyle: {
-        backgroundColor: Color.primary,
-      },
-      headerTitleStyle: {
-        fontSize: FontSize.headerTitle,
-        fontWeight: 'bold',
-      },
+      headerStyle: styles.headerStyle,
+      headerTitleStyle: styles.headerTitleStyle,
     },
   },
 );
@@ -112,9 +103,7 @@ const AppNavigator = createBottomTabNavigator(
       activeTintColor: 'white',
       inactiveTintColor: '#777777',
       showLabel: false,
-      style: {
-        backgroundColor: Color.primary,
-      },
+      style: styles.headerStyle,
     },
     defaultNavigationOptions: ({ navigation }) => ({
       tabBarIcon: ({ focused, horizontal, tintColor }) => {

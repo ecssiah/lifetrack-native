@@ -2,6 +2,8 @@ import React from 'react';
 import { ProgressViewIOS, Text, TouchableOpacity } from 'react-native';
 import createStyles, { Color, FontSize } from '../../styles';
 
+import LTText from '../LT/LTText';
+
 const styles = createStyles({
   container: {
     width: '80%',
@@ -30,9 +32,9 @@ class FocusGoal extends React.PureComponent
         style={styles.container}
         onPress={this.props.onGoalClick}
       >
-        <Text style={styles.heading}>
+        <LTText style={styles.heading}>
           Goal: {this.props.goal}
-        </Text>
+        </LTText>
 
         <ProgressViewIOS
           style={styles.progress}

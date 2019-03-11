@@ -2,6 +2,8 @@ import React from 'react';
 import { Text, View } from 'react-native';
 import createStyles, { Color } from '../../styles';
 
+import LTText from '../LT/LTText';
+
 const styles = createStyles({
   background: {
     alignSelf: 'stretch',
@@ -28,9 +30,9 @@ class FocusTitle extends React.PureComponent
   render() {
     return (
       <View style={styles.background}>
-        <Text style={styles.title}>
+        <LTText style={styles.title}>
           {this.props.name}
-        </Text>
+        </LTText>
       </View>
     );
   }

@@ -4,6 +4,8 @@ import {
 } from 'react-native';
 import createStyles, { FontSize } from '../../styles'; 
 
+import LTText from '../LT/LTText';
+
 const styles = createStyles({
   container: {
     backgroundColor: '#666666',
@@ -25,9 +27,9 @@ class SettingsHeader extends React.PureComponent
   render() {
     return (
       <View style={styles.container}>
-        <Text style={styles.title}>
+        <LTText style={styles.title}>
           {this.props.title}
-        </Text>
+        </LTText>
       </View>
     );
   };

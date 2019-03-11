@@ -2,6 +2,7 @@ import React from 'react';
 import { Text, TouchableOpacity } from 'react-native';
 import createStyles, { FontSize, Color } from '../../styles';
 
+import LTText from '../LT/LTText';
 import LTEdit from '../LT/LTEdit';
 import LTModal from '../LT/LTModal';
 import LTConfirm from '../LT/LTConfirm';
@@ -38,9 +39,9 @@ class CategoryEditModal extends React.Component
           activeOpacity={0.7}
           onPress={this.props.onDelete}
         >
-          <Text style={styles.deleteText}>
+          <LTText style={styles.deleteText}>
             Delete
-          </Text>
+          </LTText>
         </TouchableOpacity> 
 
         <LTConfirm

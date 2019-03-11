@@ -1,6 +1,6 @@
 import React from 'react';
 import { Picker, TextInput } from 'react-native';
-import createStyles, { FontSize } from '../../styles';
+import createStyles, { FontSize, Font } from '../../styles';
 
 import LTModal from '../LT/LTModal';
 import LTConfirm from '../LT/LTConfirm';
@@ -13,6 +13,7 @@ const styles = createStyles({
     width: '86%',
     height: 40, 
     fontSize: FontSize.modalInput,
+    fontFamily: Font.primary,
     marginTop: 14,
     borderWidth: 1,
     borderRadius: 10,
@@ -57,6 +58,7 @@ class CategoryModal extends React.Component
 
         <Picker
           style={styles.picker}
+          itemStyle={{ fontFamily: Font.primary }}
           selectedValue={this.props.categoryName}
           onValueChange={this.props.onCategoryValueChange}
         >

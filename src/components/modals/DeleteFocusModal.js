@@ -1,7 +1,8 @@
 import React from 'react';
 import { Text } from 'react-native';
-import createStyles, { FontSize } from '../../styles';
+import createStyles, { FontSize, Font } from '../../styles';
 
+import LTText from '../LT/LTText';
 import LTModal from '../LT/LTModal';
 import LTConfirm from '../LT/LTConfirm';
 
@@ -26,9 +27,9 @@ class DeleteFocusModal extends React.Component
         show={this.props.show}
         onPressBackdrop={this.props.onCancel} 
       >
-        <Text style={styles.message}>
+        <LTText style={styles.message}>
           Are you sure you want to delete this focus?
-        </Text>
+        </LTText>
           
         <LTConfirm
           onPressLeft={this.props.onConfirm} 

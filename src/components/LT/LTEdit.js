@@ -1,9 +1,10 @@
 import React from 'react';
 import { TextInput } from 'react-native';
-import createStyles, { Color, FontSize } from '../../styles';
+import createStyles, { Color, FontSize, Font } from '../../styles';
 
 const styles = createStyles({
   focus: {
+    fontFamily: Font.primary,
     fontSize: FontSize.modalTitle, 
     color: 'black',
     borderWidth: 3,
@@ -15,6 +16,7 @@ const styles = createStyles({
     margin: 6,
   },
   blur: {
+    fontFamily: Font.primary,
     fontSize: FontSize.modalTitle, 
     color: 'black',
     borderWidth: 1,

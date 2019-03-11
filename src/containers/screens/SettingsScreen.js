@@ -20,6 +20,7 @@ import {
 } from '../../actions/FocusesActions';
 import createStyles, { Color, FontSize } from '../../styles'; 
 
+import LTText from '../../components/LT/LTText';
 import SettingList from '../../components/setting/SettingList';
 import SettingsModal from '../../components/modals/SettingsModal';
 import CategoryEditModal from '../../components/modals/CategoryEditModal';
@@ -202,9 +203,9 @@ class SettingsScreen extends React.Component
         key={index} 
         onPress={this._logoutUser}
       >
-        <Text style={styles.logout}>
+        <LTText style={styles.logout}>
           {item.name}
-        </Text>
+        </LTText>
       </TouchableOpacity> 
     );
   };
@@ -217,9 +218,9 @@ class SettingsScreen extends React.Component
         key={index} 
         onPress={() => this._onCategorySelect(item.name)}
       >
-        <Text style={styles.categoryName}>
+        <LTText style={styles.categoryName}>
           {item.name}
-        </Text>
+        </LTText>
       </TouchableOpacity> 
     );
   };

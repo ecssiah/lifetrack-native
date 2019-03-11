@@ -3,6 +3,7 @@ import { Text, TouchableOpacity } from 'react-native';
 import createStyles, { FontSize, Color } from '../../styles';
 import { WORK_PERIOD, WORK_GOAL, BREAK_PERIOD } from '../../constants/Focus';
 
+import LTText from '../LT/LTText';
 import LTEdit from '../LT/LTEdit';
 import SettingItem from '../setting/SettingItem';
 import SettingList from '../setting/SettingList';
@@ -45,9 +46,9 @@ class FocusEditList extends React.Component
         activeOpacity={0.7}
         onPress={this.props.onDeleteSelect}
       >
-        <Text style={styles.deleteText}>
+        <LTText style={styles.deleteText}>
           {item.name}
-        </Text>
+        </LTText>
       </TouchableOpacity> 
     );
   };

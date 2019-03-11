@@ -17,7 +17,7 @@ export const Color  = {
 };
 
 export const Font = {
-  primary: 'Arial',
+  primary: 'AppleSDGothicNeo-Regular',
   timer: 'HelveticaNeue-Light',
 };
 
@@ -34,13 +34,12 @@ export const FontSize = {
 
 const BaseStyles = {
   container: {
-    flex: 1,
   },
 };
 
 export default function createStyles(overrides = {}) {
   return StyleSheet.create({
     ...BaseStyles, 
-    ...overrides
+    ...overrides,
   });
 };

@@ -1,7 +1,8 @@
 import React from 'react';
 import { Picker, Text } from 'react-native';
-import createStyles, { FontSize } from '../../styles';
+import createStyles, { FontSize, Font } from '../../styles';
 
+import LTText from '../LT/LTText';
 import LTModal from '../LT/LTModal';
 import LTConfirm from '../LT/LTConfirm';
 
@@ -41,14 +42,15 @@ class SettingsModal extends React.Component
         show={this.props.show}
         onPressBackdrop={this.props.onCancel}
       >
-        <Text style={styles.title}>
+        <LTText style={styles.title}>
           {this.props.settingName}
-        </Text>
+        </LTText>
 
         <Picker
+          style={styles.picker}
+          itemStyle={{ fontFamily: Font.primary }}
           selectedValue={this.props.settingValue}
           onValueChange={this.props.onSettingValueChange}
-          style={styles.picker}
         >
           {this._getSettingItems(1, 40)}
         </Picker>

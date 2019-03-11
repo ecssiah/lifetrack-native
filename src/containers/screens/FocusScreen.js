@@ -18,7 +18,6 @@ import FocusExperience from '../../components/focus/FocusExperience';
 const styles = createStyles({ 
   container: {
     flex: 1,
-    justifyContent: 'flex-start',
     alignItems: 'center',
   },
 });

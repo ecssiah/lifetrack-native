@@ -2,6 +2,8 @@ import React from 'react';
 import { Text, TouchableOpacity, View } from 'react-native';
 import createStyles, { Color } from '../../styles';
 
+import LTText from '../LT/LTText';
+
 const styles = createStyles({
   container: {
     flexDirection: 'row',
@@ -54,9 +56,9 @@ class LTConfirm extends React.Component
           activeOpacity={0.7}
           onPress={this.props.onPressLeft} 
         >
-          <Text style={styles.textLeft} >
+          <LTText style={styles.textLeft} >
             {this.props.leftContent}
-          </Text>
+          </LTText>
         </TouchableOpacity>
 
         <TouchableOpacity 
@@ -64,9 +66,9 @@ class LTConfirm extends React.Component
           activeOpacity={0.7}
           onPress={this.props.onPressRight} 
         >
-          <Text style={styles.textRight} >
+          <LTText style={styles.textRight} >
             {this.props.rightContent}
-          </Text>
+          </LTText>
         </TouchableOpacity>
       </View>
     );

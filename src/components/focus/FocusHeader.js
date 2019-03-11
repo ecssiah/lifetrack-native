@@ -4,6 +4,8 @@ import {
 } from 'react-native';
 import createStyles, { FontSize } from '../../styles'; 
 
+import LTText from '../LT/LTText';
+
 const styles = createStyles({
   containerActive: {
     backgroundColor: '#777777',
@@ -50,9 +52,9 @@ class FocusHeader extends React.Component
           activeOpacity={0.7} 
           onPress={() => this.props.onCategorySelect(this.props.title)}
         >
-          <Text style={this._getHeaderStyle()}>
+          <LTText style={this._getHeaderStyle()}>
             {this.props.title}
-          </Text>
+          </LTText>
         </TouchableOpacity>
       </View>
     );

@@ -4,13 +4,15 @@ import {
 } from 'react-native';
 import createStyles, { Color, FontSize } from '../../styles'; 
 
+import LTText from '../LT/LTText';
+
 const styles = createStyles({
   container: {
     flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    marginHorizontal: 16,
+    marginHorizontal: 10,
     marginVertical: 10,
   },
   itemLeft: {
@@ -46,15 +48,15 @@ class SettingItem extends React.Component
         onPress={() => this.props.onSettingSelect(this.props.setting.name)}
       >
         <View style={styles.itemLeft}>
-          <Text style={styles.settingName}>
+          <LTText style={styles.settingName}>
             {this.props.setting.name}
-          </Text>
+          </LTText>
         </View>
 
         <View style={styles.itemRight} >
-          <Text style={styles.settingValue}>
+          <LTText style={styles.settingValue}>
             {this.props.setting.value}
-          </Text>
+          </LTText>
         </View>
       </TouchableOpacity>
     );
