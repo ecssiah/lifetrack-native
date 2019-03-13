@@ -32,8 +32,8 @@ class DeleteFocusModal extends React.Component
         </LTText>
           
         <LTConfirm
-          onPressLeft={this.props.onConfirm} 
-          onPressRight={this.props.onCancel}
+          onPressLeft={this.props.onCancel} 
+          onPressRight={this.props.onConfirm}
         />
       </LTModal>
     );

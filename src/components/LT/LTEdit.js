@@ -13,7 +13,7 @@ const styles = createStyles({
     backgroundColor: 'white',
     paddingVertical: 8,
     paddingHorizontal: 14,
-    margin: 6,
+    margin: 10,
   },
   blur: {
     fontFamily: Font.primary,
@@ -25,7 +25,7 @@ const styles = createStyles({
     backgroundColor: 'white',
     paddingVertical: 8,
     paddingHorizontal: 14,
-    margin: 8,
+    margin: 12,
   },
 });
 
@@ -54,7 +54,7 @@ class LTEdit extends React.Component
   render() {
     return (
       <TextInput
-        style={this.state.style}
+        style={[this.state.style, this.props.style]}
         value={this.props.text}
         placeholder={this.props.placeholder}
         textAlign='center'

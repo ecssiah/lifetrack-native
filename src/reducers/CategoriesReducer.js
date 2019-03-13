@@ -19,13 +19,13 @@ function categoriesReducer(state = [], action) {
     }
     case DELETE_CATEGORY: {
       const categoryIndex = newState.findIndex(category => 
-        category.name === action.name
+        category.name === action.category.name
       );
 
       if (categoryIndex !== -1) {
-        delete newState[categoryIndex];
+        newState.splice(categoryIndex, 1);
       } else {
-        console.warn(action.name + ' was not found');
+        console.warn(action.category.name + ' was not found');
       }
         
       return newState;

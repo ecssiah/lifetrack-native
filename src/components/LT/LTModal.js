@@ -7,7 +7,7 @@ const styles = createStyles({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    paddingHorizontal: '8%',
+    paddingHorizontal: '4%',
     paddingVertical: '24%',
     backgroundColor: '#00000080',
   },

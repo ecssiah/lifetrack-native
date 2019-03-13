@@ -2,7 +2,7 @@ import {
   LOAD_FOCUSES_REQUEST,
   SET_FOCUSES, DELETE_FOCUS, ADD_FOCUS, 
   SET_NAME, SET_CATEGORY, SET_ACTIVE, SET_TIME, SET_TIMER,
-  SET_WORKING, SET_WORK_PERIOD, SET_BREAK_PERIOD,
+  SET_WORKING, SET_WORK_PERIOD, SET_WORK_GOAL, SET_BREAK_PERIOD,
   UPDATE_EXPERIENCE, UPDATE_TIME, UPDATE_CATEGORIES, UPDATE_PERIODS,
   RESET_PERIODS,
 } from '../constants/Focuses';
@@ -140,10 +140,10 @@ export function resetPeriods(id) {
   };
 };
 
-export function updateCategories(name, newName) {
+export function updateCategories(category, newName) {
   return {
     type: UPDATE_CATEGORIES,
-    name,
+    category,
     newName,
   };
 };

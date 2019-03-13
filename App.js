@@ -8,7 +8,6 @@ import LTStatusBar from './src/components/LT/LTStatusBar';
 import RootReducer from './src/reducers/RootReducer';
 import AppContainer from './src/containers/AppContainer';
 import rootSaga from './src/sagas/RootSaga';
-import LTAlert from './src/components/LT/LTAlert';
 
 const sagaMiddleware = createSagaMiddleware();
 
@@ -25,7 +24,6 @@ class App extends React.Component
     return (
       <Provider store={store}>
         <LTStatusBar />
-        <LTAlert />
         <AppContainer />
       </Provider>
     );

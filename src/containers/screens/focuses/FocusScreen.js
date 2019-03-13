@@ -4,16 +4,16 @@ import { View } from 'react-native';
 import { 
   setTime, updateTime, updatePeriods, updateExperience, resetPeriods,
   setWorking, setActive, setTimer
-} from '../../actions/FocusesActions';
-import { SECOND } from '../../reducers/FocusesReducer';
-import createStyles from '../../styles';
+} from '../../../actions/FocusesActions';
+import { SECOND } from '../../../reducers/FocusesReducer';
+import createStyles from '../../../styles';
 
-import LTIcon from '../../components/LT/LTIcon';
+import LTIcon from '../../../components/LT/LTIcon';
 
-import FocusTitle from '../../components/focus/FocusTitle';
-import FocusTimer from '../../components/focus/FocusTimer';
-import FocusGoal from '../../components/focus/FocusGoal';
-import FocusExperience from '../../components/focus/FocusExperience';
+import FocusTitle from '../../../components/focuses/FocusTitle';
+import FocusTimer from '../../../components/focuses/FocusTimer';
+import FocusGoal from '../../../components/focuses/FocusGoal';
+import FocusExperience from '../../../components/focuses/FocusExperience';
 
 const styles = createStyles({ 
   container: {

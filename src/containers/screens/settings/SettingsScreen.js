@@ -1,32 +1,29 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { 
-  Picker, Text, TouchableOpacity, View 
+  Alert, Picker, Text, TouchableOpacity, View 
 } from 'react-native';
-import { auth, db } from '../../config';
+import { auth, db } from '../../../config';
 import firebase from 'firebase';
 import { 
   WORK_PERIOD, WORK_GOAL, BREAK_PERIOD,
-} from '../../constants/Focus';
-import {
-  alert
-} from '../../actions/AlertActions';
+} from '../../../constants/Focus';
 import {
   deleteCategory,
   setCategoryName,
-} from '../../actions/CategoriesActions';
+} from '../../../actions/CategoriesActions';
 import { 
   setDefaultWorkPeriod, setDefaultWorkGoal, setDefaultBreakPeriod, 
-} from '../../actions/SettingsActions';
+} from '../../../actions/SettingsActions';
 import {
   updateCategories,
-} from '../../actions/FocusesActions';
-import createStyles, { Color, FontSize } from '../../styles'; 
+} from '../../../actions/FocusesActions';
+import createStyles, { Color, FontSize } from '../../../styles'; 
 
-import LTText from '../../components/LT/LTText';
-import SettingList from '../../components/setting/SettingList';
-import SettingsModal from '../../components/modals/SettingsModal';
-import CategoryEditModal from '../../components/modals/CategoryEditModal';
+import LTText from '../../../components/LT/LTText';
+import SettingList from '../../../components/setting/SettingList';
+import SettingsModal from '../../../components/modals/SettingsModal';
+import CategoryEditModal from '../../../components/modals/CategoryEditModal';
 
 const styles = createStyles({
   logout: {
@@ -72,7 +69,7 @@ class SettingsScreen extends React.Component
     });
   };
 
-  _onSettingChange = settingValue => {
+  _onSettingValueChange = settingValue => {
     this.setState({
       settingValue,
     });
@@ -82,6 +79,10 @@ class SettingsScreen extends React.Component
     let settingValue;
 
     switch (settingName) {
+      case 'Categories': {
+        this.props.navigation.navigate('Categories');
+        return;
+      }
       case WORK_PERIOD: {
         settingValue = this.props.settings.workPeriod.toString();
         break;
@@ -144,7 +145,7 @@ class SettingsScreen extends React.Component
     });
   };
 
-  _onCategoryEditDelete = () => {
+  _handleCategoryDelete = () => {
     const category = this.props.categories.find(category => 
       category.name === this.state.categoryName
     );
@@ -165,25 +166,56 @@ class SettingsScreen extends React.Component
     });
   };
 
-  _onCategoryEditConfirm = () => {
+  _onCategoryDelete = () => {
+    Alert.alert(
+      'Are you sure you want to delete ' + this.state.categoryName + '?',
+      '',
+      [
+        {
+          text: 'Cancel',
+          onPress: null,
+        },
+        {
+          text: 'Confirm', 
+          onPress: this._handleCategoryDelete,
+        },
+      ],
+    );
+  };
+
+  _onCategoryConfirm = () => {
     this.setState({
       categoryModalShow: false,
     });
   };
 
-  _onCategoryEditCancel = () => {
+  _onCategoryCancel = () => {
     this.setState({
       categoryModalShow: false,
     });
   };
 
   _onCategoryNameEditConfirm = () => {
-    const categoryExists = this.props.categories.find(category => 
-      category.name === this.state.categoryName
+    if (this.state.categoryName === this.state.newCategoryName) {
+      return;
+    }
+
+    const category = this.props.categories.find(category => 
+      category.name === this.state.newCategoryName
     );
 
-    if (categoryExists) {
-      this.props.alert(this.state.categoryName + ' already exists');
+    if (category) {
+      Alert.alert(
+        this.state.newCategoryName + ' already exists.',
+        '',
+        [
+          {text: 'Confirm', onPress: null},
+        ],
+      );
+
+      this.setState({
+        newCategoryName: this.state.categoryName,
+      });
     } else {
       this.props.setCategoryName(
         this.state.categoryName, this.state.newCategoryName
@@ -246,21 +278,13 @@ class SettingsScreen extends React.Component
         renderItem: this._renderLogout,
       },
       {
-        title: 'Default',
+        title: 'General',
         data: [ 
           { name: WORK_PERIOD, value: this.props.settings.workPeriod },
           { name: WORK_GOAL, value: this.props.settings.workGoal },
           { name: BREAK_PERIOD, value: this.props.settings.breakPeriod },
+          { name: 'Categories', value: '⇨'},
         ],
-      },
-      {
-        title: 'Categories',
-        data: this.props.categories.filter(category => {
-          return category.name !== 'Uncategorized';
-        }).map(category => {
-          return { name: category.name, value: '' };
-        }),
-        renderItem: this._renderCategory,
       },
     ];
 
@@ -271,7 +295,7 @@ class SettingsScreen extends React.Component
     return (
       <View style={styles.container}>
         <SettingList
-          sections={this._getSectionData()} 
+          sectionData={this._getSectionData()} 
           onSettingSelect={this._onSettingSelect}
         />
         
@@ -281,17 +305,7 @@ class SettingsScreen extends React.Component
           settingValue={this.state.settingValue}
           onConfirm={this._onSettingConfirm} 
           onCancel={this._onSettingCancel}
-          onSettingChange={value => this._onSettingChange(value)}
-        />
-
-        <CategoryEditModal
-          show={this.state.categoryModalShow} 
-          newCategoryName={this.state.newCategoryName}
-          onDelete={this._onCategoryEditDelete}
-          onConfirm={this._onCategoryEditConfirm}
-          onCancel={this._onCategoryEditCancel}
-          onChangeText={text => this.setState({newCategoryName: text})}
-          onSubmitEditing={this._onCategoryNameEditConfirm}
+          onSettingValueChange={value => this._onSettingValueChange(value)}
         />
       </View>
     );
@@ -306,7 +320,6 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  alert: message => dispatch(alert(message)),
   deleteCategory: name => dispatch(deleteCategory(name)),
   setCategoryName: (name, newName) => dispatch(setCategoryName(name, newName)),
   updateCategories: (name, newName) => dispatch(updateCategories(name, newName)),

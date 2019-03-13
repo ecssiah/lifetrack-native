@@ -2,7 +2,9 @@ import {
   SET_FOCUSES, ADD_FOCUS, DELETE_FOCUS, 
   SET_NAME, SET_CATEGORY, SET_TIME, SET_WORKING, SET_ACTIVE, SET_TIMER, 
   SET_WORK_PERIOD, SET_WORK_GOAL, SET_BREAK_PERIOD,
-  UPDATE_TIME, UPDATE_PERIODS, UPDATE_EXPERIENCE, RESET_PERIODS, UPDATE_CATEGORIES, LOAD_FOCUSES_SUCCESS, LOAD_FOCUSES_FAIL,
+  UPDATE_TIME, UPDATE_PERIODS, UPDATE_EXPERIENCE, UPDATE_CATEGORIES, 
+  RESET_PERIODS, 
+  LOAD_FOCUSES_SUCCESS, LOAD_FOCUSES_FAIL,
 } from "../constants/Focuses";
 
 export const SECOND = 1 / 60.0;
@@ -108,7 +110,7 @@ function focusesReducer(state = {}, action) {
     }
     case UPDATE_CATEGORIES: {
       for (const key in newState) {
-        if (newState[key].category === action.name) {
+        if (newState[key].category === action.category.name) {
           newState[key].category = action.newName;
         }
       }

@@ -28,13 +28,13 @@ const styles = createStyles({
     borderBottomWidth: 0,
   },
   textLeft: {
-    color: Color.working,
+    color: Color.highlight,
     fontSize: 18, 
     paddingVertical: '10%',
     textAlign: 'center',
   },
   textRight: {
-    color: Color.highlight,
+    color: Color.working,
     fontSize: 18, 
     paddingVertical: '10%',
     textAlign: 'center',
@@ -44,8 +44,8 @@ const styles = createStyles({
 class LTConfirm extends React.Component 
 {
   static defaultProps = {
-    leftContent: 'Confirm',
-    rightContent: 'Cancel',
+    leftContent: 'Cancel',
+    rightContent: 'Confirm',
   };
 
   render() {

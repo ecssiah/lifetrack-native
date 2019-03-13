@@ -19,10 +19,10 @@ export function addCategory(category) {
   };
 };
 
-export function deleteCategory(name) {
+export function deleteCategory(category) {
   return {
     type: DELETE_CATEGORY,
-    name,
+    category,
   };
 };
 

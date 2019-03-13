@@ -1,5 +1,5 @@
 import React from 'react';
-import { Picker, Text, TextInput, TouchableOpacity } from 'react-native';
+import { TextInput } from 'react-native';
 import createStyles, { FontSize, Color, Font } from '../../styles';
 
 import LTModal from '../LT/LTModal';
@@ -7,7 +7,7 @@ import LTConfirm from '../LT/LTConfirm';
 
 const styles = createStyles({
   container: {
-    height: '80%',
+    height: '36%',
   },
   nameInput: {
     width: '86%',
@@ -23,25 +23,10 @@ const styles = createStyles({
     paddingHorizontal: 10,
     marginTop: 14,
   },
-  picker: {
-    width: '72%',
-  },
 });
 
-class FocusAddModal extends React.Component 
+class CategoryAddModal extends React.Component 
 {
-  _getCategoryItems = () => {
-    const categoryItems = this.props.categories.map((category, idx) => 
-      <Picker.Item 
-        key={idx} 
-        label={category.name} 
-        value={category.name}
-      />
-    );
-
-    return categoryItems;
-  };
-
   render() {
     return (
       <LTModal
@@ -51,23 +36,14 @@ class FocusAddModal extends React.Component
       >
         <TextInput
           style={styles.nameInput}
-          value={this.props.newFocusName}
-          placeholder={'New Focus'}
+          value={this.props.newCategoryName}
+          placeholder={'New Category'}
           textAlign='center'
           maxLength={24}
           returnKeyType='done'
           keyboardAppearance='dark'
-          onChangeText={this.props.onFocusNameChange}
+          onChangeText={this.props.onChangeText}
         />
-
-        <Picker
-          style={styles.picker}
-          itemStyle={{ fontFamily: Font.primary }}
-          selectedValue={this.props.categoryName}
-          onValueChange={this.props.onCategoryValueChange}
-        >
-          {this._getCategoryItems()}
-        </Picker>
 
         <LTConfirm
           onPressLeft={this.props.onCancel}
@@ -78,4 +54,4 @@ class FocusAddModal extends React.Component
   };
 };
 
-export default FocusAddModal;
+export default CategoryAddModal;

@@ -1,27 +1,27 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { db, auth } from '../../config';
+import { db, auth } from '../../../config';
 import firebase from 'firebase';
-import { View } from 'react-native';
+import { Alert, View } from 'react-native';
 import {
   addCategory,
-} from '../../actions/CategoriesActions';
+} from '../../../actions/CategoriesActions';
 import { 
   deleteFocus,
   setName, setCategory,
   setWorkPeriod, setWorkGoal, setBreakPeriod,
-} from '../../actions/FocusesActions';
+} from '../../../actions/FocusesActions';
 import { 
   WORK_PERIOD, WORK_GOAL, BREAK_PERIOD,
-} from '../../constants/Focus';
-import createStyles, { Color, FontSize } from '../../styles';
+} from '../../../constants/Focus';
+import createStyles, { Color, FontSize } from '../../../styles';
 
-import LTIcon from '../../components/LT/LTIcon';
+import LTIcon from '../../../components/LT/LTIcon';
 
-import CategoryModal from '../../components/modals/CategoryModal';
-import SettingsModal from '../../components/modals/SettingsModal';
-import DeleteFocusModal from '../../components/modals/DeleteFocusModal';
-import FocusEditList from '../../components/focus/FocusEditList';
+import CategoryModal from '../../../components/modals/CategoryModal';
+import SettingsModal from '../../../components/modals/SettingsModal';
+import DeleteFocusModal from '../../../components/modals/DeleteFocusModal';
+import FocusEditList from '../../../components/focuses/FocusEditList';
 
 const styles = createStyles();
 
@@ -196,9 +196,28 @@ class FocusEditScreen extends React.Component
   };
 
   _onDeleteSelect = () => {
-    this.setState({
-      deleteModalShow: true,
-    });
+    Alert.alert(
+      'Are you sure you want to delete ' + this.props.focuses[this.props.focus.id].name + '?',
+      [
+        {
+          text: 'Cancel',
+          onPress: null,
+        },
+        {
+          text: 'Confirm', 
+          onPress: this._handleFocusDelete,
+        },
+      ],
+    );
+  };
+
+  _handleFocusDelete = () => {
+    db.collection('focuses').doc(this.props.focus.id).delete().then(() => {
+      this.props.deleteFocus(this.props.focus.id);
+      this.props.navigation.navigate('Focuses');
+    }).catch(err => {
+      console.error(err);
+    }); 
   };
 
   _onDeleteConfirm = () => {

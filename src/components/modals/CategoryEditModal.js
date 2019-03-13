@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, TouchableOpacity } from 'react-native';
+import { Text, TouchableOpacity, View } from 'react-native';
 import createStyles, { FontSize, Color } from '../../styles';
 
 import LTText from '../LT/LTText';
@@ -9,7 +9,10 @@ import LTConfirm from '../LT/LTConfirm';
 
 const styles = createStyles({
   container: {
-    height: '46%',
+    height: '52%',
+  },
+  categoryEdit: {
+    width: '92%',
   },
   deleteText: {
     fontSize: FontSize.modalTitle,
@@ -24,31 +27,34 @@ class CategoryEditModal extends React.Component
 {
   render() {
     return (
-      <LTModal
-        style={styles.container}
-        show={this.props.show}
-        onPressBackdrop={this.props.onCancel} 
-      >
-        <LTEdit
-          text={this.props.newCategoryName}
-          onChangeText={this.props.onChangeText}
-          onSubmitEditing={this.props.onSubmitEditing}
-        />
-
-        <TouchableOpacity 
-          activeOpacity={0.7}
-          onPress={this.props.onDelete}
+      <View>
+        <LTModal
+          style={styles.container} 
+          show={this.props.show}
+          onPressBackdrop={this.props.onCancel} 
         >
-          <LTText style={styles.deleteText}>
-            Delete
-          </LTText>
-        </TouchableOpacity> 
+          <LTEdit
+            style={styles.categoryEdit}
+            text={this.props.newCategoryName}
+            onChangeText={this.props.onChangeText}
+            onSubmitEditing={this.props.onSubmitEditing}
+          />
 
-        <LTConfirm
-          onPressLeft={this.props.onConfirm}
-          onPressRight={this.props.onCancel}
-        />
-      </LTModal>
+          <TouchableOpacity 
+            activeOpacity={0.7}
+            onPress={this.props.onDelete}
+          >
+            <LTText style={styles.deleteText}>
+              Delete Category
+            </LTText>
+          </TouchableOpacity> 
+
+          <LTConfirm
+            onPressLeft={this.props.onCancel}
+            onPressRight={this.props.onConfirm}
+          />
+        </LTModal>
+      </View>
     );
   };
 };

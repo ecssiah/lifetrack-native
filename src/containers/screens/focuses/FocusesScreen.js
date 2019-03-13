@@ -1,17 +1,17 @@
 import React from 'react';
 import { View } from 'react-native';
 import { connect } from 'react-redux';
-import { setId } from '../../actions/FocusActions';
-import { addFocus, setCategory } from '../../actions/FocusesActions';
-import { addCategory, toggleCategoryShow } from '../../actions/CategoriesActions';
+import { setId } from '../../../actions/FocusActions';
+import { addFocus, setCategory } from '../../../actions/FocusesActions';
+import { toggleCategoryShow } from '../../../actions/CategoriesActions';
 import firebase from 'firebase';
-import { auth, db } from '../../config';
-import createStyles from '../../styles';
+import { auth, db } from '../../../config';
+import cloneDeep from 'lodash/cloneDeep';
+import createStyles from '../../../styles';
 
-import LTIcon from '../../components/LT/LTIcon';
-
-import FocusList from '../../components/focus/FocusList';
-import FocusAddModal from '../../components/modals/FocusAddModal';
+import LTIcon from '../../../components/LT/LTIcon';
+import FocusList from '../../../components/focuses/FocusList';
+import FocusAddModal from '../../../components/modals/FocusAddModal';
 
 const styles = createStyles({
 });
@@ -21,14 +21,10 @@ class FocusesScreen extends React.Component
   constructor(props) {
     super(props);
 
-    props.navigation.setParams({
-      addModalShow: false,
-    });
-
     this.state = {
       newFocusName: '',
-      newCategoryName: '',
       categoryName: this.props.categories[0].name,
+      addModalShow: false,
     };
   };
 
@@ -38,10 +34,22 @@ class FocusesScreen extends React.Component
       <LTIcon
         type='ios-add'
         size={42}
-        onPress={() => navigation.setParams({addModalShow: true})}
+        onPress={() => navigation.state.params.addModalToggle()}
       />
     ),
   });
+
+  componentDidMount() {
+    this.props.navigation.setParams({
+      addModalToggle: this._onAddModalToggle,
+    });
+  };
+
+  _onAddModalToggle = () => {
+    this.setState({
+      addModalShow: !this.state.addModalShow,
+    });
+  };
 
   _addFocus = categoryName => {
     const docRef = db.collection('focuses').doc();
@@ -65,7 +73,6 @@ class FocusesScreen extends React.Component
 
     this.setState({
       newFocusName: '',
-      newCategoryName: '',
     });
 
     docRef.set(focus).then(doc =>
@@ -76,34 +83,10 @@ class FocusesScreen extends React.Component
   };
 
   _onAddConfirm = () => {
-    let categoryName;
-
-    if (this.state.newCategoryName === '') {
-      categoryName = this.state.categoryName;
-    } else {
-      categoryName = this.state.newCategoryName;
-
-      const category = {
-        name: categoryName,
-        show: true,
-      };
-
-      db.collection('categories').doc(auth.currentUser.uid).update({
-        list: firebase.firestore.FieldValue.arrayUnion(category),
-      }).catch(err => 
-        console.error(err)
-      );
-
-      this.props.addCategory(categoryName);
-    }
-
     this._addFocus(categoryName);
 
-    this.props.navigation.setParams({
-      addModalShow: false,
-    });
-
     this.setState({
+      addModalShow: false,
       categoryName: categoryName,
     });
   };
@@ -111,12 +94,8 @@ class FocusesScreen extends React.Component
   _onAddCancel = () => {
     this.setState({
       newFocusName: '',
-      newCategoryName: '',
-      categoryName: this.props.categories[0].name,
-    });
-
-    this.props.navigation.setParams({
       addModalShow: false,
+      categoryName: this.props.categories[0].name,
     });
   };
 
@@ -138,7 +117,13 @@ class FocusesScreen extends React.Component
   _getSectionData = () => {
     let focusArray = Object.values(this.props.focuses);
 
-    const sectionData = this.props.categories.map(category => {
+    let sortedCategories = cloneDeep(this.props.categories);
+
+    sortedCategories.sort((categoryA, categoryB) => {
+      return categoryA.name.localeCompare(categoryB.name); 
+    });
+
+    const sectionData = sortedCategories.map(category => {
       let data = [];
 
       if (category.show) {
@@ -167,14 +152,12 @@ class FocusesScreen extends React.Component
 
         <FocusAddModal
           categories={this.props.categories}
-          show={this.props.navigation.getParam('addModalShow')}
+          show={this.state.addModalShow}
           categoryName={this.state.categoryName}
           newFocusName={this.state.newFocusName}
-          newCategoryName={this.state.newCategoryName}
           onConfirm={this._onAddConfirm}
           onCancel={this._onAddCancel}
           onFocusNameChange={text => this.setState({newFocusName: text})}
-          onNewCategoryNameChange={text => this.setState({newCategoryName: text})}
           onCategoryValueChange={value => this._onCategoryValueChange(value)}
         />
       </View>
@@ -192,7 +175,6 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
   setId: id => dispatch(setId(id)),
   addFocus: focus => dispatch(addFocus(focus)), 
-  addCategory: category => dispatch(addCategory(category)),
   setCategory: (id, category) => dispatch(setCategory(id, category)),
   toggleCategoryShow: name => dispatch(toggleCategoryShow(name)),
 });

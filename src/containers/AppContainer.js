@@ -9,13 +9,18 @@ import {
 import createStyles, { Color, FontSize, Font } from '../styles';
 
 import SplashScreen from './screens/SplashScreen';
-import SignInScreen from './screens/SignInScreen';
-import SignUpScreen from './screens/SignUpScreen';
-import FocusesScreen from './screens/FocusesScreen';
-import FocusEditScreen from './screens/FocusEditScreen';
-import FocusScreen from './screens/FocusScreen';
-import StatsScreen from './screens/StatsScreen';
-import SettingsScreen from './screens/SettingsScreen';
+
+import SignInScreen from './screens/auth/SignInScreen';
+import SignUpScreen from './screens/auth/SignUpScreen';
+
+import FocusesScreen from './screens/focuses/FocusesScreen';
+import FocusEditScreen from './screens/focuses/FocusEditScreen';
+import FocusScreen from './screens/focuses/FocusScreen';
+
+import SettingsScreen from './screens/settings/SettingsScreen';
+import CategoriesScreen from './screens/settings/CategoriesScreen';
+
+import StatsScreen from './screens/stats/StatsScreen';
 
 const styles = createStyles({
   headerStyle: {
@@ -62,8 +67,8 @@ const StatsStack = createStackNavigator(
 const FocusStack = createStackNavigator(
   {
     Focuses: FocusesScreen,
-    FocusEdit: FocusEditScreen,
     Focus: FocusScreen,
+    FocusEdit: FocusEditScreen,
   },
   {
     initialRouteName: 'Focuses',
@@ -79,6 +84,7 @@ const FocusStack = createStackNavigator(
 const SettingsStack = createStackNavigator(
   {
     Settings: SettingsScreen,
+    Categories: CategoriesScreen,
   },
   {
     initialRouteName: 'Settings',

@@ -1,10 +1,10 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Button, View, TextInput } from 'react-native';
-import { auth, db } from '../../config';
-import createStyles, { FontSize } from '../../styles';
-import { setSettings } from '../../actions/SettingsActions';
-import { setCategories } from '../../actions/CategoriesActions';
+import { auth, db } from '../../../config';
+import createStyles, { FontSize } from '../../../styles';
+import { setSettings } from '../../../actions/SettingsActions';
+import { setCategories } from '../../../actions/CategoriesActions';
 
 const styles = createStyles({
   container: {

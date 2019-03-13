@@ -1,13 +1,13 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Button, View, Text, TextInput } from 'react-native';
-import { auth, db } from '../../config';
-import createStyles, { FontSize } from '../../styles';
-import { setSettings } from '../../actions/SettingsActions';
-import { setCategories } from '../../actions/CategoriesActions';
+import { auth, db } from '../../../config';
+import createStyles, { FontSize } from '../../../styles';
+import { setSettings } from '../../../actions/SettingsActions';
+import { setCategories } from '../../../actions/CategoriesActions';
 import { 
   DEFAULT_WORK_PERIOD, DEFAULT_WORK_GOAL, DEFAULT_BREAK_PERIOD 
-} from '../../constants/Focus';
+} from '../../../constants/Focus';
 
 const styles = createStyles({
   container: {

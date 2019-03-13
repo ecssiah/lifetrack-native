@@ -56,8 +56,8 @@ class SettingsModal extends React.Component
         </Picker>
 
         <LTConfirm
-          onPressLeft={this.props.onConfirm} 
-          onPressRight={this.props.onCancel}
+          onPressLeft={this.props.onCancel} 
+          onPressRight={this.props.onConfirm}
         />
       </LTModal>
     );
