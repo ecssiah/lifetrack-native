@@ -57,3 +57,6 @@ buck-out/
 
 # React Native debugging
 .react
+
+# VS Code
+.vscode
