@@ -25,6 +25,14 @@ const styles = createStyles({
 
 class FocusTimer extends React.PureComponent 
 {
+  _getTimerStyle() {
+    if (this.props.working) {
+      return this.props.active ? styles.working : styles.paused;
+    } else {
+      return styles.break;
+    }
+  };
+
   _getDisplayTime() {
     const minutes = Math.floor(this.props.time).toFixed(0);
     const seconds = ((this.props.time - minutes) * 60).toFixed(0);
@@ -33,14 +41,6 @@ class FocusTimer extends React.PureComponent
     const displaySeconds = seconds < 10 ? '0' + seconds : seconds;
 
     return `${displayMinutes}:${displaySeconds}`;
-  };
-
-  _getTimerStyle() {
-    if (this.props.working) {
-      return this.props.active ? styles.working : styles.paused;
-    } else {
-      return styles.break;
-    }
   };
 
   render() {

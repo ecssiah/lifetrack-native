@@ -5,6 +5,7 @@ import createStyles, { FontSize, Font } from '../../styles';
 import LTText from '../LT/LTText';
 import LTModal from '../LT/LTModal';
 import LTConfirm from '../LT/LTConfirm';
+import LTSpacer from '../LT/LTSpacer';
 
 const styles = createStyles({
   container: {
@@ -12,7 +13,6 @@ const styles = createStyles({
   },
   title: {
     fontSize: FontSize.modalTitle,
-    marginTop: 14,
   },
   picker: {
     width: '86%',
@@ -42,6 +42,8 @@ class SettingsModal extends React.Component
         show={this.props.show}
         onPressBackdrop={this.props.onCancel}
       >
+        <LTSpacer medium />
+
         <LTText style={styles.title}>
           {this.props.settingName}
         </LTText>

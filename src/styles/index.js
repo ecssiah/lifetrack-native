@@ -16,6 +16,12 @@ export const Color  = {
   break: '#227755',
 };
 
+export const Size = {
+  small: 4,
+  medium: 8,
+  large: 16,
+};
+
 export const Font = {
   primary: 'AppleSDGothicNeo-Regular',
   timer: 'HelveticaNeue-Light',

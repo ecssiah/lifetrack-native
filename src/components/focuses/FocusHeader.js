@@ -1,6 +1,6 @@
 import React from 'react';
 import { 
-  Text, TouchableOpacity, View 
+  TouchableOpacity, View 
 } from 'react-native';
 import createStyles, { FontSize } from '../../styles'; 
 
@@ -28,7 +28,7 @@ const styles = createStyles({
     marginVertical: 2,
   },
   header: {
-    color: '#a0a0a0',
+    color: '#bbbbbb',
     fontSize: FontSize.sectionHeader,
     marginLeft: 4,
     marginVertical: 2,

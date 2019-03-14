@@ -100,6 +100,20 @@ class FocusesScreen extends React.Component
   };
 
   _onCategorySelect = categoryName => {
+    const updatedCategories = this.props.categories.map(category => {
+      if (category.name === categoryName) {
+        return { ...category, show: !category.show };
+      } else {
+        return { ...category };
+      }
+    });
+
+    db.collection('categories').doc(auth.currentUser.uid).update({
+      list: updatedCategories,
+    }).catch(err => {
+      console.error(err);
+    }); 
+
     this.props.toggleCategoryShow(categoryName);
   };
 

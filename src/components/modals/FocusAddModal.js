@@ -4,6 +4,7 @@ import createStyles, { FontSize, Color, Font } from '../../styles';
 
 import LTModal from '../LT/LTModal';
 import LTConfirm from '../LT/LTConfirm';
+import LTSpacer from '../LT/LTSpacer';
 
 const styles = createStyles({
   container: {
@@ -21,7 +22,6 @@ const styles = createStyles({
     backgroundColor: 'white',
     paddingVertical: 9,
     paddingHorizontal: 10,
-    marginTop: 14,
   },
   picker: {
     width: '72%',
@@ -49,6 +49,8 @@ class FocusAddModal extends React.Component
         show={this.props.show} 
         onPressBackdrop={this.props.onCancel}
       >
+        <LTSpacer medium />
+
         <TextInput
           style={styles.nameInput}
           value={this.props.newFocusName}

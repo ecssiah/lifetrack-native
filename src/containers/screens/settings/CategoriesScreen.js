@@ -122,7 +122,7 @@ class CategoriesScreen extends React.Component
       this.props.deleteCategory(category);
       this.props.updateCategories(category, 'Uncategorized');
 
-      // Update focus categories in firestore
+      // TODO: Update focus categories in firestore
     }).catch(err => {
       console.error(err);
     }); 
@@ -137,14 +137,8 @@ class CategoriesScreen extends React.Component
       'Are you sure you want to delete ' + this.state.categoryName + '?',
       '',
       [
-        {
-          text: 'Cancel',
-          onPress: null,
-        },
-        {
-          text: 'Confirm', 
-          onPress: this._handleCategoryDelete,
-        },
+        { text: 'Cancel', onPress: null, },
+        { text: 'Confirm', onPress: this._handleCategoryDelete, },
       ],
     );
   };

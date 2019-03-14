@@ -96,7 +96,7 @@ class FocusEditList extends React.Component
   render() {
     return (
       <SettingList
-        sections={this._getSectionData()} 
+        sectionData={this._getSectionData()} 
         onSettingSelect={this.props.onSettingSelect}
       />
     );

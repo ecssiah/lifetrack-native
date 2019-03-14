@@ -5,6 +5,7 @@ import createStyles, { FontSize, Font } from '../../styles';
 import LTText from '../LT/LTText';
 import LTModal from '../LT/LTModal';
 import LTConfirm from '../LT/LTConfirm';
+import LTSpacer from '../LT/LTSpacer';
 
 const styles = createStyles({
   container: {
@@ -13,7 +14,6 @@ const styles = createStyles({
   message: {
     fontSize: FontSize.modalTitle,
     textAlign: 'center', 
-    marginTop: 12,
     marginHorizontal: 4,
   },
 });
@@ -27,6 +27,8 @@ class DeleteFocusModal extends React.Component
         show={this.props.show}
         onPressBackdrop={this.props.onCancel} 
       >
+        <LTSpacer medium />
+
         <LTText style={styles.message}>
           Are you sure you want to delete this focus?
         </LTText>
