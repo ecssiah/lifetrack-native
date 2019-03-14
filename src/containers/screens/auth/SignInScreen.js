@@ -46,37 +46,32 @@ class SignInScreen extends React.Component
     title: 'Sign In',
   });
 
+  _loadSettings = cred => {
+    return db.collection('settings').doc(auth.currentUser.uid).get();
+  };
+
+  _loadCategories = cred => {
+    return db.collection('categories').doc(auth.currentUser.uid).get();
+  };
+
   _onPressSignIn = () => {
     auth.signInWithEmailAndPassword(
       this.state.email, this.state.password
     ).then(cred => {
-      const settingsPromise = db.collection('settings').doc(cred.user.uid).get();
-      const categoriesPromise = db.collection('categories').doc(cred.user.uid).get();
-
       Promise.all([
-        settingsPromise,
-        categoriesPromise, 
+        this._loadSettings(),
+        this._loadCategories(),
       ]).then(values => {
         const settingsDoc = values[0];
         const categoriesDoc = values[1];
 
-        const settings = {
-          workPeriod: settingsDoc.get('workPeriod'),
-          workGoal: settingsDoc.get('workGoal'),
-          breakPeriod: settingsDoc.get('breakPeriod'),
-        };
-        this.props.setSettings(settings);
-
-        const categories = categoriesDoc.get('list');
-        this.props.setCategories(categories);
-      }).catch(err => {
-        console.error(err);
+        this.props.setSettings(settingsDoc.data());
+        this.props.setCategories(categoriesDoc.data().list);
+      }).catch(error => {
+        console.error(error);
       });
-    }).catch(err => {
-      const errorCode = err.code;
-      const errorMessage = err.message;
-
-      console.warn(errorCode + ": " + errorMessage);
+    }).catch(error => {
+      console.error(error);
     });
 
     this.setState({

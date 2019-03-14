@@ -84,6 +84,8 @@ class SignUpScreen extends React.Component
 
         this.props.setCategories(categories.list);
 
+        // TODO: Stats Stuff
+        //
         // const stats = {
         //   today: {
         //     untracked: 12.4,
@@ -108,11 +110,8 @@ class SignUpScreen extends React.Component
         // db.collection('stats').doc(cred.user.uid).set(stats);
 
         // this.props.setStats(stats);
-      }).catch(err => {
-        const errorCode = err.code;
-        const errorMessage = err.message;
-
-        console.warn(errorCode + ": " + errorMessage);
+      }).catch(error => {
+        console.error(error);
       });
     } else {
       console.warn("Password confirmation does not match");

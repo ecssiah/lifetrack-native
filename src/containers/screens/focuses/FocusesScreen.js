@@ -110,8 +110,8 @@ class FocusesScreen extends React.Component
 
     db.collection('categories').doc(auth.currentUser.uid).update({
       list: updatedCategories,
-    }).catch(err => {
-      console.error(err);
+    }).catch(error => {
+      console.error(error);
     }); 
 
     this.props.toggleCategoryShow(categoryName);
@@ -129,20 +129,17 @@ class FocusesScreen extends React.Component
   };
 
   _getSectionData = () => {
-    let focusArray = Object.values(this.props.focuses);
+    let categories = [...this.props.categories];
+    categories.sort((a, b) => a.name.localeCompare(b.name));
 
-    let sortedCategories = cloneDeep(this.props.categories);
-
-    sortedCategories.sort((categoryA, categoryB) => {
-      return categoryA.name.localeCompare(categoryB.name); 
-    });
-
-    const sectionData = sortedCategories.map(category => {
+    const sectionData = categories.map(category => {
       let data = [];
 
       if (category.show) {
+        const focusArray = Object.values(this.props.focuses);
+
         data = focusArray.filter(focus => focus.category === category.name);
-        data = data.sort((a, b) => a.name.localeCompare(b.name));
+        data.sort((a, b) => a.name.localeCompare(b.name));
       }
 
       return {

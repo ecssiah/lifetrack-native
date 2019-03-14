@@ -4,7 +4,7 @@ import { auth, db } from '../../config';
 import { View, Text } from 'react-native';
 import { setSettings } from '../../actions/SettingsActions';
 import { setCategories } from '../../actions/CategoriesActions';
-import { setFocuses, requestFocuses } from '../../actions/FocusesActions';
+import { setFocuses } from '../../actions/FocusesActions';
 import createStyles, { Color, FontSize } from '../../styles';
 
 const styles = createStyles({
@@ -34,16 +34,16 @@ class SplashScreen extends React.Component
   };
 
   _loadFocuses = () => {
-    return db.collection('focuses').where(
-      'userId', '==', auth.currentUser.uid
-    ).get();
+    let query;
+    query = db.collection('focuses');
+    query = query.where('userId', '==', auth.currentUser.uid);
+
+    return query.get();
   };
 
   componentDidMount() {
     auth.onAuthStateChanged(user => {
       if (!user) return this.props.navigation.navigate('Auth');
-
-      this.props.requestFocuses();
 
       Promise.all([
         this._loadSettings(),
@@ -51,16 +51,16 @@ class SplashScreen extends React.Component
         this._loadFocuses()
       ]).then(values => {
         const settingsDoc = values[0];
-        this.props.setSettings(settingsDoc.data());
-
         const categoriesDoc = values[1];
-        this.props.setCategories(categoriesDoc.get('list'));
+        const focusesSnapshot = values[2];
 
         let focuses = {};
-        const focusesSnapshot = values[2];
         focusesSnapshot.forEach(doc => focuses[doc.id] = doc.data());
 
         this.props.setFocuses(focuses);
+        this.props.setSettings(settingsDoc.data());
+        this.props.setCategories(categoriesDoc.data().list);
+
         this.props.navigation.navigate('App');
       }).catch(err => {
         console.error(err);
@@ -81,7 +81,6 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  requestFocuses: () => dispatch(requestFocuses()),
   setSettings: settings => dispatch(setSettings(settings)),
   setCategories: categories => dispatch(setCategories(categories)),
   setFocuses: focuses => dispatch(setFocuses(focuses)),
