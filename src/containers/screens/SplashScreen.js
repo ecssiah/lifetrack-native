@@ -51,38 +51,14 @@ class SplashScreen extends React.Component
         this._loadFocuses()
       ]).then(values => {
         const settingsDoc = values[0];
+        this.props.setSettings(settingsDoc.data());
+
         const categoriesDoc = values[1];
-        const focusesSnapshot = values[2];
-
-        const settings = {
-          workPeriod: settingsDoc.get('workPeriod'),
-          workGoal: settingsDoc.get('workGoal'),
-          breakPeriod: settingsDoc.get('breakPeriod'),
-        };
-        this.props.setSettings(settings);
-
-        const categories = categoriesDoc.get('list');
-        this.props.setCategories(categories);
+        this.props.setCategories(categoriesDoc.get('list'));
 
         let focuses = {};
-        focusesSnapshot.forEach(doc => {
-          focuses[doc.id] = {
-            id: doc.get('id'),
-            userId: doc.get('userId'),
-            name: doc.get('name'),
-            category: doc.get('category'),
-            time: doc.get('time'),
-            periods: doc.get('periods'),
-            level: doc.get('level'),
-            workPeriod: doc.get('workPeriod'),
-            workGoal: doc.get('workGoal'),
-            breakPeriod: doc.get('breakPeriod'),
-            experience: doc.get('experience'),
-            working: doc.get('working'),
-            timerActive: doc.get('timerActive'),
-            timer: doc.get('timer'),
-          };
-        });
+        const focusesSnapshot = values[2];
+        focusesSnapshot.forEach(doc => focuses[doc.id] = doc.data());
 
         this.props.setFocuses(focuses);
         this.props.navigation.navigate('App');
