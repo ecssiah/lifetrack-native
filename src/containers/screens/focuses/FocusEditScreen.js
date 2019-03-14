@@ -14,10 +14,9 @@ import {
 import { 
   WORK_PERIOD, WORK_GOAL, BREAK_PERIOD,
 } from '../../../constants/Focus';
-import createStyles, { Color, FontSize } from '../../../styles';
+import createStyles from '../../../styles';
 
 import LTIcon from '../../../components/LT/LTIcon';
-
 import CategoryModal from '../../../components/modals/CategoryModal';
 import SettingsModal from '../../../components/modals/SettingsModal';
 import DeleteFocusModal from '../../../components/modals/DeleteFocusModal';
@@ -196,8 +195,10 @@ class FocusEditScreen extends React.Component
   };
 
   _onDeleteSelect = () => {
+    const focusName = this.props.focuses[this.props.focus.id].name;
+
     Alert.alert(
-      'Are you sure you want to delete ' + this.props.focuses[this.props.focus.id].name + '?',
+      'Are you sure you want to delete ' + focusName + '?',
       '',
       [
         { text: 'Cancel', onPress: null, },

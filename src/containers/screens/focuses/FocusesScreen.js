@@ -4,9 +4,7 @@ import { connect } from 'react-redux';
 import { setId } from '../../../actions/FocusActions';
 import { addFocus, setCategory } from '../../../actions/FocusesActions';
 import { toggleCategoryShow } from '../../../actions/CategoriesActions';
-import firebase from 'firebase';
 import { auth, db } from '../../../config';
-import cloneDeep from 'lodash/cloneDeep';
 import createStyles from '../../../styles';
 
 import LTIcon from '../../../components/LT/LTIcon';
@@ -51,14 +49,14 @@ class FocusesScreen extends React.Component
     });
   };
 
-  _addFocus = categoryName => {
+  _addFocus = () => {
     const docRef = db.collection('focuses').doc();
 
     const focus = {
       id: docRef.id,
       userId: auth.currentUser.uid,
       name: this.state.newFocusName,
-      category: categoryName,
+      category: this.state.categoryName,
       level: 0,
       experience: 0.0,
       time: this.props.settings.workPeriod,
@@ -83,7 +81,7 @@ class FocusesScreen extends React.Component
   };
 
   _onAddConfirm = () => {
-    this._addFocus(this.state.categoryName);
+    this._addFocus();
 
     this.setState({
       addModalShow: false,
@@ -100,7 +98,7 @@ class FocusesScreen extends React.Component
   };
 
   _onCategorySelect = categoryName => {
-    const updatedCategories = this.props.categories.map(category => {
+    const categories = this.props.categories.map(category => {
       if (category.name === categoryName) {
         return { ...category, show: !category.show };
       } else {
@@ -109,7 +107,7 @@ class FocusesScreen extends React.Component
     });
 
     db.collection('categories').doc(auth.currentUser.uid).update({
-      list: updatedCategories,
+      list: categories,
     }).catch(error => {
       console.error(error);
     }); 

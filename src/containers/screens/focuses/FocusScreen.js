@@ -9,7 +9,6 @@ import { SECOND } from '../../../reducers/FocusesReducer';
 import createStyles from '../../../styles';
 
 import LTIcon from '../../../components/LT/LTIcon';
-
 import FocusTitle from '../../../components/focuses/FocusTitle';
 import FocusTimer from '../../../components/focuses/FocusTimer';
 import FocusGoal from '../../../components/focuses/FocusGoal';
@@ -80,13 +79,9 @@ class FocusScreen extends React.Component
 
       if (focus.working) {
         this.props.updatePeriods(this.props.focus.id);
-        this.props.setTime(
-          this.props.focus.id, focus.breakPeriod
-        );
+        this.props.setTime(this.props.focus.id, focus.breakPeriod);
       } else {
-        this.props.setTime(
-          this.props.focus.id, focus.workPeriod
-        );
+        this.props.setTime(this.props.focus.id, focus.workPeriod);
       }
 
       this.props.setWorking(this.props.focus.id, !focus.working);
