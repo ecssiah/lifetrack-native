@@ -123,8 +123,21 @@ class CategoriesScreen extends React.Component
       this.props.updateCategories(category, 'Uncategorized');
 
       // TODO: Update focus categories in firestore
-    }).catch(err => {
-      console.error(err);
+      let query = db.collection('focuses').where(
+        'userId', '==', auth.currentUser.uid
+      );
+      query = query.where('category', '==', category.name);
+      query.get().then(snapshot => {
+        let batch = db.batch();
+        snapshot.forEach(focus => {
+          const focusRef = db.collection('focuses').doc(focus.id);
+          batch.update(focusRef, { category: 'Uncategorized' });
+        });
+
+        batch.commit();
+      });
+    }).catch(error => {
+      console.error(error);
     }); 
 
     this.setState({

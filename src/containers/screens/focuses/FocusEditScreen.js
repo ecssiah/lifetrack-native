@@ -198,15 +198,10 @@ class FocusEditScreen extends React.Component
   _onDeleteSelect = () => {
     Alert.alert(
       'Are you sure you want to delete ' + this.props.focuses[this.props.focus.id].name + '?',
+      '',
       [
-        {
-          text: 'Cancel',
-          onPress: null,
-        },
-        {
-          text: 'Confirm', 
-          onPress: this._handleFocusDelete,
-        },
+        { text: 'Cancel', onPress: null, },
+        { text: 'Confirm', onPress: this._handleFocusDelete, },
       ],
     );
   };

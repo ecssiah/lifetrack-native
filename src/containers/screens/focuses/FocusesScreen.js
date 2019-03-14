@@ -83,11 +83,11 @@ class FocusesScreen extends React.Component
   };
 
   _onAddConfirm = () => {
-    this._addFocus(categoryName);
+    this._addFocus(this.state.categoryName);
 
     this.setState({
       addModalShow: false,
-      categoryName: categoryName,
+      categoryName: this.state.categoryName,
     });
   };
 
