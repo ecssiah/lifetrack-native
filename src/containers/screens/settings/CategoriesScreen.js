@@ -111,6 +111,23 @@ class CategoriesScreen extends React.Component
     });
   };
 
+  _updateDatabaseCategories = category => {
+    let query;
+    query = db.collection('focuses');
+    query = query.where('userId', '==', auth.currentUser.uid);
+    query = query.where('category', '==', category.name);
+
+    query.get().then(snapshot => {
+      let batch = db.batch();
+      snapshot.forEach(focus => {
+        const focusRef = db.collection('focuses').doc(focus.id);
+        batch.update(focusRef, { category: 'Uncategorized' });
+      });
+
+      batch.commit();
+    });
+  };
+
   _handleCategoryDelete = () => {
     const category = this.props.categories.find(category => 
       category.name === this.state.categoryName
@@ -119,23 +136,10 @@ class CategoriesScreen extends React.Component
     db.collection('categories').doc(auth.currentUser.uid).update({
       list: firebase.firestore.FieldValue.arrayRemove(category),
     }).then(() => {
+      this._updateDatabaseCategories(category);
+      
       this.props.deleteCategory(category);
       this.props.updateCategories(category, 'Uncategorized');
-
-      // TODO: Update focus categories in firestore
-      let query = db.collection('focuses').where(
-        'userId', '==', auth.currentUser.uid
-      );
-      query = query.where('category', '==', category.name);
-      query.get().then(snapshot => {
-        let batch = db.batch();
-        snapshot.forEach(focus => {
-          const focusRef = db.collection('focuses').doc(focus.id);
-          batch.update(focusRef, { category: 'Uncategorized' });
-        });
-
-        batch.commit();
-      });
     }).catch(error => {
       console.error(error);
     }); 
