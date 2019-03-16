@@ -27,9 +27,10 @@ export function updateFocuses(focuses) {
   };
 };
 
-export function addFocus(focus) {
+export function addFocus(id, focus) {
   return {
     type: ADD_FOCUS,
+    id, 
     focus,
   };
 };

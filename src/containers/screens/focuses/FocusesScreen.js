@@ -2,7 +2,6 @@ import React from 'react';
 import { View } from 'react-native';
 import { connect } from 'react-redux';
 import { setId } from '../../../actions/FocusActions';
-import { setCategory } from '../../../actions/FocusesActions';
 import { UNCATEGORIZED } from '../../../constants/Categories';
 import { addFocusHandler } from '../../../handlers/FocusesHandlers';
 import { setCategoryShowHandler } from '../../../handlers/CategoryHandlers';
@@ -11,6 +10,7 @@ import createStyles from '../../../styles';
 import LTIcon from '../../../components/LT/LTIcon';
 import FocusList from '../../../components/focuses/FocusList';
 import FocusAddModal from '../../../components/modals/FocusAddModal';
+import { auth } from '../../../config/fbConfig';
 
 const styles = createStyles({
 });
@@ -113,7 +113,7 @@ class FocusesScreen extends React.Component
       if (category.show) {
         const focusArray = Object.values(this.props.focuses);
 
-        data = focusArray.filter(focus => focus.category === category.name);
+        data = focusArray.filter(focus => focus.category === categoryName);
         data.sort((a, b) => a.name.localeCompare(b.name));
       }
 
@@ -162,7 +162,6 @@ const mapDispatchToProps = dispatch => ({
   setId: id => dispatch(setId(id)),
   addFocus: focus => addFocusHandler(dispatch, focus), 
   setCategoryShow: (name, show) => setCategoryShowHandler(dispatch, name, show),
-  setCategory: (id, category) => dispatch(setCategory(id, category)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(FocusesScreen);

@@ -2,7 +2,6 @@ import {
   UPDATE_CATEGORIES, 
   ADD_CATEGORY, DELETE_CATEGORY,
   SET_CATEGORY_NAME, SET_CATEGORY_SHOW,
-  TOGGLE_CATEGORY_SHOW,
 } from '../constants/Categories';
 
 export function updateCategories(categories) {
