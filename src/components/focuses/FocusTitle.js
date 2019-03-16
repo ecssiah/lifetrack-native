@@ -17,7 +17,7 @@ const styles = createStyles({
     fontSize: 38,
     color: '#444444',
     textAlign: 'center',
-    textShadowOffset: { width: -2, height: 1 },
+    textShadowOffset: { width: -1, height: 1 },
     textShadowColor: 'black',
     textShadowRadius: 0,
     paddingHorizontal: 4,

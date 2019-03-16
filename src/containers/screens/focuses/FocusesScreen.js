@@ -1,10 +1,12 @@
 import React from 'react';
 import { View } from 'react-native';
+import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { setId } from '../../../actions/FocusActions';
 import { addFocus, setCategory } from '../../../actions/FocusesActions';
 import { toggleCategoryShow } from '../../../actions/CategoriesActions';
-import { auth, db } from '../../../config';
+import { firestoreConnect } from 'react-redux-firebase';
+import firebase from '../../../config/fbConfig';
 import createStyles from '../../../styles';
 
 import LTIcon from '../../../components/LT/LTIcon';
@@ -50,11 +52,11 @@ class FocusesScreen extends React.Component
   };
 
   _addFocus = () => {
-    const docRef = db.collection('focuses').doc();
+    const docRef = firebase.firestore().collection('focuses').doc();
 
     const focus = {
       id: docRef.id,
-      userId: auth.currentUser.uid,
+      userId: firebase.auth().currentUser.uid,
       name: this.state.newFocusName,
       category: this.state.categoryName,
       level: 0,
@@ -106,7 +108,7 @@ class FocusesScreen extends React.Component
       }
     });
 
-    db.collection('categories').doc(auth.currentUser.uid).update({
+    firebase.firestore().collection('categories').doc(firebase.auth().currentUser.uid).update({
       list: categories,
     }).catch(error => {
       console.error(error);
@@ -177,7 +179,7 @@ class FocusesScreen extends React.Component
 const mapStateToProps = state => ({
   focus: state.focus,
   focuses: state.focuses,
-  categories: state.categories,
+  categories: state.firebase.ordered.categories,
   settings: state.settings,
 });
 
@@ -188,4 +190,9 @@ const mapDispatchToProps = dispatch => ({
   toggleCategoryShow: name => dispatch(toggleCategoryShow(name)),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(FocusesScreen);
+export default compose(
+  firestoreConnect(props => [
+    { collection: 'categories', doc: props.firebase.auth.uid },
+  ]),
+  connect(mapStateToProps, mapDispatchToProps),
+)(FocusesScreen);

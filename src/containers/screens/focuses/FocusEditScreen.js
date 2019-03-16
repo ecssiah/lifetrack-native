@@ -1,7 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { db, auth } from '../../../config';
-import firebase from 'firebase';
+import firebase from '../../../config/fbConfig';
 import { Alert, View } from 'react-native';
 import {
   addCategory,
@@ -172,7 +171,7 @@ class FocusEditScreen extends React.Component
         show: true,
       };
 
-      db.collection('categories').doc(auth.currentUser.uid).update({
+      firebase.firestore().collection('categories').doc(firebase.auth().currentUser.uid).update({
         list: firebase.firestore.FieldValue.arrayUnion(category),
       });
 
@@ -208,7 +207,7 @@ class FocusEditScreen extends React.Component
   };
 
   _handleFocusDelete = () => {
-    db.collection('focuses').doc(this.props.focus.id).delete().then(() => {
+    firebase.firestore().collection('focuses').doc(this.props.focus.id).delete().then(() => {
       this.props.deleteFocus(this.props.focus.id);
       this.props.navigation.navigate('Focuses');
     }).catch(err => {
@@ -217,7 +216,7 @@ class FocusEditScreen extends React.Component
   };
 
   _onDeleteConfirm = () => {
-    db.collection('focuses').doc(this.props.focus.id).delete().then(() => {
+    firebase.firestore().collection('focuses').doc(this.props.focus.id).delete().then(() => {
       this.props.deleteFocus(this.props.focus.id);
       this.props.navigation.navigate('Focuses');
     }).catch(err => {

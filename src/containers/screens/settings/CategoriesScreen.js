@@ -1,10 +1,9 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { 
-  Alert, Picker, Text, TouchableOpacity, View 
+  Alert, TouchableOpacity, View 
 } from 'react-native';
-import { auth, db } from '../../../config';
-import firebase from 'firebase';
+import firebase from '../../../config/fbConfig';
 import {
   addCategory,
   deleteCategory,
@@ -13,11 +12,10 @@ import {
 import {
   updateCategories,
 } from '../../../actions/FocusesActions';
-import createStyles, { Color, FontSize } from '../../../styles'; 
+import createStyles, { FontSize } from '../../../styles'; 
 
 import LTIcon from '../../../components/LT/LTIcon';
 import LTText from '../../../components/LT/LTText';
-import SettingList from '../../../components/setting/SettingList';
 import CategoryAddModal from '../../../components/modals/CategoryAddModal';
 import CategoryEditModal from '../../../components/modals/CategoryEditModal';
 import CategoryList from '../../../components/setting/CategoryList';
@@ -80,7 +78,7 @@ class CategoriesScreen extends React.Component
       show: true,
     };
 
-    db.collection('categories').doc(auth.currentUser.uid).update({
+    firebase.firestore().collection('categories').doc(firebase.auth().currentUser.uid).update({
       list: firebase.firestore.FieldValue.arrayUnion(category),
     }).then(() => {
       this.props.addCategory(category);
@@ -113,14 +111,14 @@ class CategoriesScreen extends React.Component
 
   _updateDatabaseCategories = category => {
     let query;
-    query = db.collection('focuses');
-    query = query.where('userId', '==', auth.currentUser.uid);
+    query = firebase.firestore().collection('focuses');
+    query = query.where('userId', '==', firebase.auth().currentUser.uid);
     query = query.where('category', '==', category.name);
 
     query.get().then(snapshot => {
-      let batch = db.batch();
+      let batch = firebase.firestore().batch();
       snapshot.forEach(focus => {
-        const focusRef = db.collection('focuses').doc(focus.id);
+        const focusRef = firebase.firestore().collection('focuses').doc(focus.id);
         batch.update(focusRef, { category: 'Uncategorized' });
       });
 
@@ -133,7 +131,7 @@ class CategoriesScreen extends React.Component
       category.name === this.state.categoryName
     );
 
-    db.collection('categories').doc(auth.currentUser.uid).update({
+    firebase.firestore().collection('categories').doc(firebase.auth().currentUser.uid).update({
       list: firebase.firestore.FieldValue.arrayRemove(category),
     }).then(() => {
       this._updateDatabaseCategories(category);

@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { auth, db } from '../../config';
+import firebase from '../../config/fbConfig'; 
 import { View, Text } from 'react-native';
 import { setSettings } from '../../actions/SettingsActions';
 import { setCategories } from '../../actions/CategoriesActions';
@@ -26,46 +26,54 @@ const styles = createStyles({
 class SplashScreen extends React.Component 
 {
   _loadSettings = () => {
-    return db.collection('settings').doc(auth.currentUser.uid).get();
+    return firebase.firestore().collection('settings').doc(firebase.auth().currentUser.uid).get();
   };
 
   _loadCategories = () => {
-    return db.collection('categories').doc(auth.currentUser.uid).get();
+    return firebase.firestore().collection('categories').doc(firebase.auth().currentUser.uid).get();
   };
 
   _loadFocuses = () => {
     let query;
-    query = db.collection('focuses');
-    query = query.where('userId', '==', auth.currentUser.uid);
+    query = firebase.firestore().collection('focuses');
+    query = query.where('userId', '==', firebase.auth().currentUser.uid);
 
     return query.get();
   };
 
+  componentWillReceiveProps() {
+    if (this.props.firebase.auth.uid) {
+      this.props.navigation.navigate('App');
+    } else {
+      this.props.navigation.navigate('Auth');
+    }
+  };
+
   componentDidMount() {
-    auth.onAuthStateChanged(user => {
-      if (!user) return this.props.navigation.navigate('Auth');
+    // firebase.auth().onAuthStateChanged(user => {
+    //   if (!user) return this.props.navigation.navigate('Auth');
 
-      Promise.all([
-        this._loadSettings(),
-        this._loadCategories(),
-        this._loadFocuses()
-      ]).then(values => {
-        const settingsDoc = values[0];
-        const categoriesDoc = values[1];
-        const focusesSnapshot = values[2];
+      // Promise.all([
+      //   this._loadSettings(),
+      //   this._loadCategories(),
+      //   this._loadFocuses()
+      // ]).then(values => {
+      //   const settingsDoc = values[0];
+      //   const categoriesDoc = values[1];
+      //   const focusesSnapshot = values[2];
 
-        let focuses = {};
-        focusesSnapshot.forEach(doc => focuses[doc.id] = doc.data());
+      //   let focuses = {};
+      //   focusesSnapshot.forEach(doc => focuses[doc.id] = doc.data());
 
-        this.props.setFocuses(focuses);
-        this.props.setSettings(settingsDoc.data());
-        this.props.setCategories(categoriesDoc.data().list);
+      //   this.props.setFocuses(focuses);
+      //   this.props.setSettings(settingsDoc.data());
+      //   this.props.setCategories(categoriesDoc.data().list);
 
-        this.props.navigation.navigate('App');
-      }).catch(err => {
-        console.error(err);
-      });
-    });
+        // this.props.navigation.navigate('App');
+      // }).catch(err => {
+      //   console.error(err);
+      // });
+    // });
   };
 
   render() {
@@ -78,6 +86,7 @@ class SplashScreen extends React.Component
 };
 
 const mapStateToProps = state => ({
+  firebase: state.firebase,
 });
 
 const mapDispatchToProps = dispatch => ({

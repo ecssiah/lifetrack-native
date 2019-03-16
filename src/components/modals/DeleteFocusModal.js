@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text } from 'react-native';
+import { } from 'react-native';
 import createStyles, { FontSize, Font } from '../../styles';
 
 import LTText from '../LT/LTText';

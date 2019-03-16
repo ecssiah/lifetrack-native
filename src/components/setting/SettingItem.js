@@ -2,7 +2,7 @@ import React from 'react';
 import { 
   TouchableOpacity, View,
 } from 'react-native';
-import createStyles, { Color, FontSize } from '../../styles'; 
+import createStyles, { FontSize } from '../../styles'; 
 
 import LTText from '../LT/LTText';
 

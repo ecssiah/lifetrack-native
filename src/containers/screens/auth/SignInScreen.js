@@ -1,8 +1,9 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Button, View, TextInput } from 'react-native';
-import { auth, db } from '../../../config';
+import firebase from '../../../config/fbConfig';
 import createStyles, { FontSize } from '../../../styles';
+import { signIn } from '../../../actions/AuthActions';
 import { setSettings } from '../../../actions/SettingsActions';
 import { setCategories } from '../../../actions/CategoriesActions';
 
@@ -47,32 +48,37 @@ class SignInScreen extends React.Component
   });
 
   _loadSettings = cred => {
-    return db.collection('settings').doc(auth.currentUser.uid).get();
+    return firebase.firestore().collection('settings').doc(firebase.auth().currentUser.uid).get();
   };
 
   _loadCategories = cred => {
-    return db.collection('categories').doc(auth.currentUser.uid).get();
+    return firebase.firestore().collection('categories').doc(firebase.auth().currentUser.uid).get();
   };
 
   _onPressSignIn = () => {
-    auth.signInWithEmailAndPassword(
-      this.state.email, this.state.password
-    ).then(cred => {
-      Promise.all([
-        this._loadSettings(),
-        this._loadCategories(),
-      ]).then(values => {
-        const settingsDoc = values[0];
-        const categoriesDoc = values[1];
-
-        this.props.setSettings(settingsDoc.data());
-        this.props.setCategories(categoriesDoc.data().list);
-      }).catch(error => {
-        console.error(error);
-      });
-    }).catch(error => {
-      console.error(error);
+    this.props.signIn({
+      email: this.state.email, 
+      password: this.state.password,
     });
+
+    // firebase.auth().signInWithEmailAndPassword(
+    //   this.state.email, this.state.password
+    // ).then(cred => {
+    //   Promise.all([
+    //     this._loadSettings(),
+    //     this._loadCategories(),
+    //   ]).then(values => {
+    //     const settingsDoc = values[0];
+    //     const categoriesDoc = values[1];
+
+    //     this.props.setSettings(settingsDoc.data());
+    //     this.props.setCategories(categoriesDoc.data().list);
+    //   }).catch(error => {
+    //     console.error(error);
+    //   });
+    // }).catch(error => {
+    //   console.error(error);
+    // });
 
     this.setState({
       password: '',
@@ -121,10 +127,11 @@ class SignInScreen extends React.Component
 };
 
 const mapStateToProps = state => ({
-
+  auth: state.firebase.auth,
 });
 
 const mapDispatchToProps = dispatch => ({
+  signIn: cred => dispatch(signIn(cred)),
   setSettings: settings => dispatch(setSettings(settings)), 
   setCategories: categories => dispatch(setCategories(categories)),
 });

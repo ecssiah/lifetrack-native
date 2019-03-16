@@ -1,8 +1,9 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Button, View, Text, TextInput } from 'react-native';
-import { auth, db } from '../../../config';
+import firebase from '../../../config/fbConfig';
 import createStyles, { FontSize } from '../../../styles';
+import { signUp } from '../../../actions/AuthActions';
 import { setSettings } from '../../../actions/SettingsActions';
 import { setCategories } from '../../../actions/CategoriesActions';
 import { 
@@ -61,28 +62,33 @@ class SignUpScreen extends React.Component
 
   _onPressSignUp = () => {
     if (this.state.password === this.state.confirm) {
-      auth.createUserWithEmailAndPassword(
-        this.state.email, this.state.password
-      ).then(cred => {
-        const settings = {
-          workPeriod: DEFAULT_WORK_PERIOD,
-          workGoal: DEFAULT_WORK_GOAL,
-          breakPeriod: DEFAULT_BREAK_PERIOD,
-        };
+      this.props.signUp({
+        email: this.state.email,
+        password: this.state.password,
+      });
 
-        db.collection('settings').doc(cred.user.uid).set(settings);
+      // firebase.auth().createUserWithEmailAndPassword(
+      //   this.state.email, this.state.password
+      // ).then(cred => {
+      //   const settings = {
+      //     workPeriod: DEFAULT_WORK_PERIOD,
+      //     workGoal: DEFAULT_WORK_GOAL,
+      //     breakPeriod: DEFAULT_BREAK_PERIOD,
+      //   };
 
-        this.props.setSettings(settings);
+      //   firebase.firestore().collection('settings').doc(cred.user.uid).set(settings);
 
-        const categories = {
-          list: [
-            { name: 'Uncategorized', show: true },
-          ],
-        };
+      //   this.props.setSettings(settings);
 
-        db.collection('categories').doc(cred.user.uid).set(categories);
+      //   const categories = {
+      //     list: [
+      //       { name: 'Uncategorized', show: true },
+      //     ],
+      //   };
 
-        this.props.setCategories(categories.list);
+      //   firebase.firestore().collection('categories').doc(cred.user.uid).set(categories);
+
+      //   this.props.setCategories(categories.list);
 
         // TODO: Stats Stuff
         //
@@ -107,12 +113,12 @@ class SignUpScreen extends React.Component
         //   },
         // };
 
-        // db.collection('stats').doc(cred.user.uid).set(stats);
+        // firebase.firestore().collection('stats').doc(cred.user.uid).set(stats);
 
         // this.props.setStats(stats);
-      }).catch(error => {
-        console.error(error);
-      });
+      // }).catch(error => {
+      //   console.error(error);
+      // });
     } else {
       console.warn("Password confirmation does not match");
     }
@@ -174,6 +180,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
+  signUp: credentials => dispatch(signUp(credentials)),
   setSettings: settings => dispatch(setSettings(settings)),
   setCategories: categories => dispatch(setCategories(categories)),
 });

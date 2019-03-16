@@ -27,9 +27,14 @@ export function setFocuses(focuses) {
 };
 
 export function addFocus(focus) {
-  return {
-    type: ADD_FOCUS,
-    focus,
+  return (dispatch, getState, { getFirebase, getFirestore } ) => {
+    const firestore = getFirestore();
+    firestore.collection('focuses').add(focus);
+
+    dispatch({
+      type: ADD_FOCUS,
+      focus,
+    });
   };
 };
 

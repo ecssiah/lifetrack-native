@@ -2,7 +2,7 @@ import firebase from 'firebase/app';
 import 'firebase/firestore';
 import 'firebase/auth';
 
-const config = {
+export const fbConfig = {
   apiKey: "AIzaSyBtklAJ3LniqGDapAvQ5NoPUN58TwNpjYQ",
   authDomain: "lifetrack-27cd1.firebaseapp.com",
   databaseURL: "https://lifetrack-27cd1.firebaseio.com",
@@ -11,6 +11,12 @@ const config = {
   messagingSenderId: "396651915566",
 };
 
-firebase.initializeApp(config);
+export const rrfConfig = {
+  userProfile: 'users',
+  useFirestoreForProfile: true,
+};
+
+firebase.initializeApp(fbConfig);
+firebase.firestore();
 
 export default firebase;

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, TouchableOpacity, View } from 'react-native';
+import { TouchableOpacity, View } from 'react-native';
 import createStyles, { FontSize, Color } from '../../styles';
 
 import LTText from '../LT/LTText';

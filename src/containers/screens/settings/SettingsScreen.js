@@ -3,7 +3,8 @@ import { connect } from 'react-redux';
 import { 
   Alert, TouchableOpacity, View 
 } from 'react-native';
-import { auth, db } from '../../../config';
+import firebase from '../../../config/fbConfig';
+import { signOut } from '../../../actions/AuthActions';
 import { 
   WORK_PERIOD, WORK_GOAL, BREAK_PERIOD,
 } from '../../../constants/Focus';
@@ -125,9 +126,11 @@ class SettingsScreen extends React.Component
       clearInterval(this.props.focuses[key]);
     }
 
-    auth.signOut().then(() => {
-      this.props.navigation.navigate('Login');
-    });
+    this.props.signOut();
+
+    // firebase.auth().signOut().then(() => {
+    //   this.props.navigation.navigate('Login');
+    // });
   };
 
   _renderLogout = ({item, index}) => {
@@ -157,11 +160,20 @@ class SettingsScreen extends React.Component
       {
         title: 'General',
         data: [ 
-          { name: 'Categories', value: '⇨'},
           { name: WORK_PERIOD, value: this.props.settings.workPeriod },
           { name: WORK_GOAL, value: this.props.settings.workGoal },
           { name: BREAK_PERIOD, value: this.props.settings.breakPeriod },
         ],
+      },
+      {
+        title: '',
+        data: [
+          { name: 'Categories', value: '>'},
+        ],
+      },
+      {
+        title: '',
+        data: [ ],
       },
     ];
 
@@ -196,6 +208,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
+  signOut: () => dispatch(signOut()),
   setDefaultWorkPeriod: period => dispatch(setDefaultWorkPeriod(period)),
   setDefaultWorkGoal: goal => dispatch(setDefaultWorkGoal(goal)),
   setDefaultBreakPeriod: period => dispatch(setDefaultBreakPeriod(period)),

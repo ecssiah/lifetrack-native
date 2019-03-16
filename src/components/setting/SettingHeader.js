@@ -1,6 +1,6 @@
 import React from 'react';
 import { 
-  Text, View 
+  View 
 } from 'react-native';
 import createStyles, { FontSize } from '../../styles'; 
 

@@ -1,6 +1,6 @@
 import React from 'react';
-import { Picker, Text, TextInput, TouchableOpacity } from 'react-native';
-import createStyles, { FontSize, Color, Font } from '../../styles';
+import { Picker, TextInput } from 'react-native';
+import createStyles, { FontSize, Font } from '../../styles';
 
 import LTModal from '../LT/LTModal';
 import LTConfirm from '../LT/LTConfirm';
