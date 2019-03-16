@@ -1,11 +1,9 @@
 import React from 'react';
 import { View } from 'react-native';
-import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { setId } from '../../../actions/FocusActions';
 import { addFocus, setCategory } from '../../../actions/FocusesActions';
 import { toggleCategoryShow } from '../../../actions/CategoriesActions';
-import { firestoreConnect } from 'react-redux-firebase';
 import firebase from '../../../config/fbConfig';
 import createStyles from '../../../styles';
 
@@ -52,11 +50,11 @@ class FocusesScreen extends React.Component
   };
 
   _addFocus = () => {
-    const docRef = firebase.firestore().collection('focuses').doc();
+    const docRef = db.collection('focuses').doc();
 
     const focus = {
       id: docRef.id,
-      userId: firebase.auth().currentUser.uid,
+      userId: auth.currentUser.uid,
       name: this.state.newFocusName,
       category: this.state.categoryName,
       level: 0,
@@ -108,7 +106,7 @@ class FocusesScreen extends React.Component
       }
     });
 
-    firebase.firestore().collection('categories').doc(firebase.auth().currentUser.uid).update({
+    db.collection('categories').doc(auth.currentUser.uid).update({
       list: categories,
     }).catch(error => {
       console.error(error);
@@ -179,7 +177,7 @@ class FocusesScreen extends React.Component
 const mapStateToProps = state => ({
   focus: state.focus,
   focuses: state.focuses,
-  categories: state.firebase.ordered.categories,
+  categories: state.categories,
   settings: state.settings,
 });
 
@@ -190,9 +188,4 @@ const mapDispatchToProps = dispatch => ({
   toggleCategoryShow: name => dispatch(toggleCategoryShow(name)),
 });
 
-export default compose(
-  firestoreConnect(props => [
-    { collection: 'categories', doc: props.firebase.auth.uid },
-  ]),
-  connect(mapStateToProps, mapDispatchToProps),
-)(FocusesScreen);
+export default connect(mapStateToProps, mapDispatchToProps)(FocusesScreen);

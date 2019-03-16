@@ -1,6 +1,4 @@
 import { combineReducers } from 'redux';
-import { firebaseReducer } from 'react-redux-firebase';
-import { firestoreReducer } from 'redux-firestore';
 
 import authReducer from './AuthReducer';
 import focusReducer from './FocusReducer';
@@ -14,8 +12,6 @@ const RootReducer = combineReducers({
   focuses: focusesReducer,
   categories: categoriesReducer,
   settings: settingsReducer,
-  firebase: firebaseReducer,
-  firestore: firestoreReducer,
 });
 
 export default RootReducer;

@@ -171,7 +171,7 @@ class FocusEditScreen extends React.Component
         show: true,
       };
 
-      firebase.firestore().collection('categories').doc(firebase.auth().currentUser.uid).update({
+      db.collection('categories').doc(auth.currentUser.uid).update({
         list: firebase.firestore.FieldValue.arrayUnion(category),
       });
 
@@ -207,7 +207,7 @@ class FocusEditScreen extends React.Component
   };
 
   _handleFocusDelete = () => {
-    firebase.firestore().collection('focuses').doc(this.props.focus.id).delete().then(() => {
+    db.collection('focuses').doc(this.props.focus.id).delete().then(() => {
       this.props.deleteFocus(this.props.focus.id);
       this.props.navigation.navigate('Focuses');
     }).catch(err => {
@@ -216,7 +216,7 @@ class FocusEditScreen extends React.Component
   };
 
   _onDeleteConfirm = () => {
-    firebase.firestore().collection('focuses').doc(this.props.focus.id).delete().then(() => {
+    db.collection('focuses').doc(this.props.focus.id).delete().then(() => {
       this.props.deleteFocus(this.props.focus.id);
       this.props.navigation.navigate('Focuses');
     }).catch(err => {

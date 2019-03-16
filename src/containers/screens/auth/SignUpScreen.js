@@ -58,10 +58,10 @@ class SignUpScreen extends React.Component
 
   _onPressSignUp = () => {
     if (this.state.password === this.state.confirm) {
-      this.props.signUp({
-        email: this.state.email,
-        password: this.state.password,
-      });
+      this.props.signUp(
+        this.state.email,
+        this.state.password,
+      );
     } else {
       Alert.alert(
         'Password confirmation \ndoes not match.',
@@ -124,16 +124,13 @@ class SignUpScreen extends React.Component
   };
 };
 
-function mapStateToProps(state) {
-  return {};
-};
+const mapStateToProps = state => ({
+});
 
-function mapDispatchToProps(dispatch) {
-  return {
-    signUp: credentials => signUpHandler(dispatch, credentials),
-    setSettings: settings => dispatch(setSettings(settings)),
-    setCategories: categories => dispatch(setCategories(categories)),
-  };
-};
+const mapDispatchToProps = dispatch => ({
+  signUp: (email, password) => signUpHandler(dispatch, email, password),
+  setSettings: settings => dispatch(setSettings(settings)),
+  setCategories: categories => dispatch(setCategories(categories)),
+});
 
-export default connect(null, mapDispatchToProps)(SignUpScreen);
+export default connect(mapStateToProps, mapDispatchToProps)(SignUpScreen);

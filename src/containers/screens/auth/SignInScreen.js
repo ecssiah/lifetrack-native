@@ -48,11 +48,11 @@ class SignInScreen extends React.Component
   });
 
   _loadSettings = cred => {
-    return firebase.firestore().collection('settings').doc(firebase.auth().currentUser.uid).get();
+    return db.collection('settings').doc(auth.currentUser.uid).get();
   };
 
   _loadCategories = cred => {
-    return firebase.firestore().collection('categories').doc(firebase.auth().currentUser.uid).get();
+    return db.collection('categories').doc(auth.currentUser.uid).get();
   };
 
   _onPressSignIn = () => {
@@ -61,7 +61,7 @@ class SignInScreen extends React.Component
       password: this.state.password,
     });
 
-    // firebase.auth().signInWithEmailAndPassword(
+    // auth.signInWithEmailAndPassword(
     //   this.state.email, this.state.password
     // ).then(cred => {
     //   Promise.all([
@@ -127,7 +127,6 @@ class SignInScreen extends React.Component
 };
 
 const mapStateToProps = state => ({
-  auth: state.firebase.auth,
 });
 
 const mapDispatchToProps = dispatch => ({

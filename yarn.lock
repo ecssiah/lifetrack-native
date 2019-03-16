@@ -2830,11 +2830,6 @@ image-size@^0.6.0:
   resolved "https://registry.yarnpkg.com/image-size/-/image-size-0.6.3.tgz#e7e5c65bb534bd7cdcedd6cb5166272a85f75fb2"
   integrity sha512-47xSUiQioGaB96nqtp5/q55m0aBQSQdyIloMOc/x+QVTDZLNmXE892IIDrJ0hM1A5vcNUDD5tDffkSP5lCaIIA==
 
-immer@1.5.0:
-  version "1.5.0"
-  resolved "https://registry.yarnpkg.com/immer/-/immer-1.5.0.tgz#1ed9b1b653643fe9276bbc36377613523ea32a39"
-  integrity sha1-HtmxtlNkP+kna7w2N3YTUj6jKjk=
-
 import-fresh@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/import-fresh/-/import-fresh-2.0.0.tgz#d81355c15612d386c61f9ddd3922d4304822a546"
@@ -5518,15 +5513,6 @@ react-proxy@^1.1.7:
     lodash "^4.6.1"
     react-deep-force-update "^1.0.0"
 
-react-redux-firebase@^3.0.0-alpha.10:
-  version "3.0.0-alpha.10"
-  resolved "https://registry.yarnpkg.com/react-redux-firebase/-/react-redux-firebase-3.0.0-alpha.10.tgz#1c929c4d99afd219ef130f03fd63fc8d18c0c790"
-  integrity sha512-SC+Rw1dqbcyg4EXDXy30fQ6c/WapOZs4q6Z5ef5HiZqfP/VcSoukVGursp9+V/HOt1C7BO0LYEO33opKVaGb3w==
-  dependencies:
-    hoist-non-react-statics "^3.2.1"
-    lodash "^4.17.11"
-    prop-types "^15.6.2"
-
 react-redux@^6.0.0:
   version "6.0.0"
   resolved "https://registry.yarnpkg.com/react-redux/-/react-redux-6.0.0.tgz#09e86eeed5febb98e9442458ad2970c8f1a173ef"
@@ -5637,20 +5623,6 @@ realpath-native@^1.0.0, realpath-native@^1.0.2:
   integrity sha512-+S3zTvVt9yTntFrBpm7TQmQ3tzpCrnA1a/y+3cUHAc9ZR6aIjG0WNLR+Rj79QpJktY+VeW/TQtFlQ1bzsehI8g==
   dependencies:
     util.promisify "^1.0.0"
-
-reduce-reducers@0.4.3:
-  version "0.4.3"
-  resolved "https://registry.yarnpkg.com/reduce-reducers/-/reduce-reducers-0.4.3.tgz#8e052618801cd8fc2714b4915adaa8937eb6d66c"
-  integrity sha512-+CNMnI8QhgVMtAt54uQs3kUxC3Sybpa7Y63HR14uGLgI9/QR5ggHvpxwhGGe3wmx5V91YwqQIblN9k5lspAmGw==
-
-redux-firestore@^0.7.2:
-  version "0.7.2"
-  resolved "https://registry.yarnpkg.com/redux-firestore/-/redux-firestore-0.7.2.tgz#087049ba7c44d992b66760690fc4e2c72e08e23a"
-  integrity sha512-3Qus2UFfoRd3x3WhPBBj+IZ69NnvBeEF4gvU61LXB0CM9TGLIXvJH/vUB9eTzbIXo0wMBSv7vbfjD32Vrg0oww==
-  dependencies:
-    immer "1.5.0"
-    lodash "^4.17.11"
-    reduce-reducers "0.4.3"
 
 redux@^4.0.1:
   version "4.0.1"

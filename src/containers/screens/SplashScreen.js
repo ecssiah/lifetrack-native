@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import firebase from '../../config/fbConfig'; 
+import { db, auth } from '../../config/fbConfig';
 import { View, Text } from 'react-native';
 import { setSettings } from '../../actions/SettingsActions';
 import { setCategories } from '../../actions/CategoriesActions';
@@ -26,31 +26,31 @@ const styles = createStyles({
 class SplashScreen extends React.Component 
 {
   _loadSettings = () => {
-    return firebase.firestore().collection('settings').doc(firebase.auth().currentUser.uid).get();
+    return db.collection('settings').doc(auth.currentUser.uid).get();
   };
 
   _loadCategories = () => {
-    return firebase.firestore().collection('categories').doc(firebase.auth().currentUser.uid).get();
+    return db.collection('categories').doc(auth.currentUser.uid).get();
   };
 
   _loadFocuses = () => {
     let query;
-    query = firebase.firestore().collection('focuses');
-    query = query.where('userId', '==', firebase.auth().currentUser.uid);
+    query = db.collection('focuses');
+    query = query.where('userId', '==', auth.currentUser.uid);
 
     return query.get();
   };
 
   componentWillReceiveProps() {
-    if (this.props.firebase.auth.uid) {
+  };
+
+  componentDidMount() {
+    if (auth.currentUser) {
       this.props.navigation.navigate('App');
     } else {
       this.props.navigation.navigate('Auth');
     }
-  };
-
-  componentDidMount() {
-    // firebase.auth().onAuthStateChanged(user => {
+    // auth.onAuthStateChanged(user => {
     //   if (!user) return this.props.navigation.navigate('Auth');
 
       // Promise.all([

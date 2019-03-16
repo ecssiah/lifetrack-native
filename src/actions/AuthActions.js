@@ -28,12 +28,12 @@ export function signUp(credentials) {
     //   };
 
     //   const settingsPromise = firestore.set(
-    //     `settings/${firebase.auth().currentUser.uid}`, 
+    //     `settings/${auth.currentUser.uid}`, 
     //     settings,
     //   );
 
     //   const categoriesPromise = firestore.set(
-    //     `categories/${firebase.auth().currentUser.uid}`,
+    //     `categories/${auth.currentUser.uid}`,
     //     categories,
     //   );
 

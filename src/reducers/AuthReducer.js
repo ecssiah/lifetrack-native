@@ -9,7 +9,6 @@ function authReducer(state = {}, action) {
 
   switch (action.type) {
     case SIGNUP_SUCCESS: {
-      console.warn("it's happening!");
       newState.error = null;
 
       return newState;

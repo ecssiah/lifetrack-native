@@ -78,7 +78,7 @@ class CategoriesScreen extends React.Component
       show: true,
     };
 
-    firebase.firestore().collection('categories').doc(firebase.auth().currentUser.uid).update({
+    db.collection('categories').doc(auth.currentUser.uid).update({
       list: firebase.firestore.FieldValue.arrayUnion(category),
     }).then(() => {
       this.props.addCategory(category);
@@ -111,14 +111,14 @@ class CategoriesScreen extends React.Component
 
   _updateDatabaseCategories = category => {
     let query;
-    query = firebase.firestore().collection('focuses');
-    query = query.where('userId', '==', firebase.auth().currentUser.uid);
+    query = db.collection('focuses');
+    query = query.where('userId', '==', auth.currentUser.uid);
     query = query.where('category', '==', category.name);
 
     query.get().then(snapshot => {
-      let batch = firebase.firestore().batch();
+      let batch = db.batch();
       snapshot.forEach(focus => {
-        const focusRef = firebase.firestore().collection('focuses').doc(focus.id);
+        const focusRef = db.collection('focuses').doc(focus.id);
         batch.update(focusRef, { category: 'Uncategorized' });
       });
 
@@ -131,7 +131,7 @@ class CategoriesScreen extends React.Component
       category.name === this.state.categoryName
     );
 
-    firebase.firestore().collection('categories').doc(firebase.auth().currentUser.uid).update({
+    db.collection('categories').doc(auth.currentUser.uid).update({
       list: firebase.firestore.FieldValue.arrayRemove(category),
     }).then(() => {
       this._updateDatabaseCategories(category);

@@ -11,12 +11,7 @@ export const fbConfig = {
   messagingSenderId: "396651915566",
 };
 
-export const rrfConfig = {
-  userProfile: 'users',
-  useFirestoreForProfile: true,
-};
-
 firebase.initializeApp(fbConfig);
-firebase.firestore();
 
-export default firebase;
+export const auth = firebase.auth();
+export const db = firebase.firestore();
