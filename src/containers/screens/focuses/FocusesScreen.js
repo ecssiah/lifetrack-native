@@ -2,15 +2,15 @@ import React from 'react';
 import { View } from 'react-native';
 import { connect } from 'react-redux';
 import { setId } from '../../../actions/FocusActions';
-import { addFocus, setCategory } from '../../../actions/FocusesActions';
-import { toggleCategoryShow } from '../../../actions/CategoriesActions';
-import firebase from '../../../config/fbConfig';
+import { setCategory } from '../../../actions/FocusesActions';
+import { UNCATEGORIZED } from '../../../constants/Categories';
+import { addFocusHandler } from '../../../handlers/FocusesHandlers';
+import { setCategoryShowHandler } from '../../../handlers/CategoryHandlers';
 import createStyles from '../../../styles';
 
 import LTIcon from '../../../components/LT/LTIcon';
 import FocusList from '../../../components/focuses/FocusList';
 import FocusAddModal from '../../../components/modals/FocusAddModal';
-import { UNCATEGORIZED } from '../../../constants/Categories';
 
 const styles = createStyles({
 });
@@ -50,11 +50,8 @@ class FocusesScreen extends React.Component
     });
   };
 
-  _addFocus = () => {
-    const docRef = db.collection('focuses').doc();
-
+  _onAddConfirm = () => {
     const focus = {
-      id: docRef.id,
       userId: auth.currentUser.uid,
       name: this.state.newFocusName,
       category: this.state.categoryName,
@@ -70,50 +67,28 @@ class FocusesScreen extends React.Component
       timer: null,
     };
 
-    this.setState({
-      newFocusName: '',
-    });
-
-    docRef.set(focus).then(doc =>
-      this.props.addFocus(focus)
-    ).catch(err => 
-      console.error(err)
-    );
-  };
-
-  _onAddConfirm = () => {
-    this._addFocus();
+    this.props.addFocus(focus);
 
     this.setState({
       addModalShow: false,
+      newFocusName: '',
       categoryName: this.state.categoryName,
     });
   };
 
   _onAddCancel = () => {
     this.setState({
-      newFocusName: '',
       addModalShow: false,
+      newFocusName: '',
       categoryName: UNCATEGORIZED,
     });
   };
 
   _onCategorySelect = categoryName => {
-    const categories = this.props.categories.map(category => {
-      if (category.name === categoryName) {
-        return { ...category, show: !category.show };
-      } else {
-        return { ...category };
-      }
-    });
-
-    db.collection('categories').doc(auth.currentUser.uid).update({
-      list: categories,
-    }).catch(error => {
-      console.error(error);
-    }); 
-
-    this.props.toggleCategoryShow(categoryName);
+    this.props.setCategoryShow(
+      categoryName, 
+      !this.props.categories[categoryName].show
+    );
   };
 
   _onFocusSelect = id => {
@@ -128,11 +103,12 @@ class FocusesScreen extends React.Component
   };
 
   _getSectionData = () => {
-    let categories = [...this.props.categories];
-    categories.sort((a, b) => a.name.localeCompare(b.name));
+    let categories = Object.keys(this.props.categories);
+    categories.sort((a, b) => a.localeCompare(b));
 
-    const sectionData = categories.map(category => {
+    const sectionData = categories.map(categoryName => {
       let data = [];
+      const category = this.props.categories[categoryName];
 
       if (category.show) {
         const focusArray = Object.values(this.props.focuses);
@@ -142,7 +118,7 @@ class FocusesScreen extends React.Component
       }
 
       return {
-        title: category.name,
+        title: categoryName,
         show: category.show,
         data,
       };
@@ -184,9 +160,9 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   setId: id => dispatch(setId(id)),
-  addFocus: focus => dispatch(addFocus(focus)), 
+  addFocus: focus => addFocusHandler(dispatch, focus), 
+  setCategoryShow: (name, show) => setCategoryShowHandler(dispatch, name, show),
   setCategory: (id, category) => dispatch(setCategory(id, category)),
-  toggleCategoryShow: name => dispatch(toggleCategoryShow(name)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(FocusesScreen);

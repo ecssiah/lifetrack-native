@@ -167,12 +167,11 @@ class FocusEditScreen extends React.Component
       categoryName = this.state.newCategoryName;
 
       const category = {
-        name: categoryName,
         show: true,
       };
 
       db.collection('categories').doc(auth.currentUser.uid).update({
-        list: firebase.firestore.FieldValue.arrayUnion(category),
+        categoryName: category,
       });
 
       this.props.addCategory(category);

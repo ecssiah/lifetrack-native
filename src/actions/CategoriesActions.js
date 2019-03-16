@@ -41,10 +41,3 @@ export function setCategoryShow(name, show) {
     show,
   };
 };
-
-export function toggleCategoryShow(name) {
-  return {
-    type: TOGGLE_CATEGORY_SHOW,
-    name,
-  };
-};

@@ -49,7 +49,7 @@ export function createUserData(settings, categories) {
 export function loadUserHandler(dispatch) {
   loadUserData().then(values => {
     const settings = values[0].data();
-    const categories = values[1].data().list;
+    const categories = values[1].data();
 
     const focusesSnapshot = values[2];
 
@@ -74,15 +74,12 @@ export function signUpHandler(dispatch, email, password) {
       breakPeriod: DEFAULT_BREAK_PERIOD,
     };
 
-    const categories = {
-      list: [
-        { name: UNCATEGORIZED, show: true },
-      ],
-    };
+    let categories = {};
+    categories[UNCATEGORIZED] = { show: true };
 
     createUserData(settings, categories).then(() => {
       dispatch({ type: UPDATE_SETTINGS, settings });
-      dispatch({ type: UPDATE_CATEGORIES, categories: categories.list });
+      dispatch({ type: UPDATE_CATEGORIES, categories });
 
       NavigationService.navigate('App');
     }).catch(error => {
@@ -97,7 +94,7 @@ export function signInHandler(dispatch, email, password) {
   auth.signInWithEmailAndPassword(email, password).then(() => {
     loadUserData().then(values => {
       const settings = values[0].data();
-      const categories = values[1].data().list;
+      const categories = values[1].data();
 
       const focusesSnapshot = values[2];
 
