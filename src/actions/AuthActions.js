@@ -11,46 +11,44 @@ import {
 import NavigationService from "../services/NavigationService";
 
 export function signUp(credentials) {
-  return (dispatch, getState, { getFirebase, getFirestore }) => {
-    const firebase = getFirebase();
+  return (dispatch, getState) => {
+    // getState().firebase.createUser(credentials).then(cred => {
+    //   const firestore = getFirestore();
 
-    firebase.createUser(credentials).then(cred => {
-      const firestore = getFirestore();
+    //   const settings = {
+    //     workPeriod: DEFAULT_WORK_PERIOD,
+    //     workGoal: DEFAULT_WORK_GOAL,
+    //     breakPeriod: DEFAULT_BREAK_PERIOD,
+    //   };
 
-      const settings = {
-        workPeriod: DEFAULT_WORK_PERIOD,
-        workGoal: DEFAULT_WORK_GOAL,
-        breakPeriod: DEFAULT_BREAK_PERIOD,
-      };
+    //   const categories = {
+    //     list: [
+    //       { name: 'Uncategorized', show: true },
+    //     ],
+    //   };
 
-      const categories = {
-        list: [
-          { name: 'Uncategorized', show: true },
-        ],
-      };
+    //   const settingsPromise = firestore.set(
+    //     `settings/${firebase.auth().currentUser.uid}`, 
+    //     settings,
+    //   );
 
-      const settingsPromise = firestore.set(
-        `settings/${firebase.auth().currentUser.uid}`, 
-        settings,
-      );
+    //   const categoriesPromise = firestore.set(
+    //     `categories/${firebase.auth().currentUser.uid}`,
+    //     categories,
+    //   );
 
-      const categoriesPromise = firestore.set(
-        `categories/${firebase.auth().currentUser.uid}`,
-        categories,
-      );
-
-      Promise.all([
-        settingsPromise,
-        categoriesPromise,
-      ]).then(() => {
-        NavigationService.navigate('App');
-        dispatch({ type: SIGNUP_SUCCESS });
-      }).catch(error => {
-        console.error(error);
-      });
-    }).catch(error => {
-      dispatch({ type: SIGNUP_ERROR, error });
-    });
+    //   Promise.all([
+    //     settingsPromise,
+    //     categoriesPromise,
+    //   ]).then(() => {
+    //     NavigationService.navigate('App');
+    //     dispatch({ type: SIGNUP_SUCCESS });
+    //   }).catch(error => {
+    //     console.error(error);
+    //   });
+    // }).catch(error => {
+    //   dispatch({ type: SIGNUP_ERROR, error });
+    // });
   }
 };
 

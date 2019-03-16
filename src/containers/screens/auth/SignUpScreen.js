@@ -1,14 +1,10 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Button, View, Text, TextInput } from 'react-native';
-import firebase from '../../../config/fbConfig';
+import { Alert, Button, View, TextInput } from 'react-native';
 import createStyles, { FontSize } from '../../../styles';
-import { signUp } from '../../../actions/AuthActions';
 import { setSettings } from '../../../actions/SettingsActions';
 import { setCategories } from '../../../actions/CategoriesActions';
-import { 
-  DEFAULT_WORK_PERIOD, DEFAULT_WORK_GOAL, DEFAULT_BREAK_PERIOD 
-} from '../../../constants/Focus';
+import { signUpHandler } from '../../../handlers/AuthHandlers';
 
 const styles = createStyles({
   container: {
@@ -66,61 +62,14 @@ class SignUpScreen extends React.Component
         email: this.state.email,
         password: this.state.password,
       });
-
-      // firebase.auth().createUserWithEmailAndPassword(
-      //   this.state.email, this.state.password
-      // ).then(cred => {
-      //   const settings = {
-      //     workPeriod: DEFAULT_WORK_PERIOD,
-      //     workGoal: DEFAULT_WORK_GOAL,
-      //     breakPeriod: DEFAULT_BREAK_PERIOD,
-      //   };
-
-      //   firebase.firestore().collection('settings').doc(cred.user.uid).set(settings);
-
-      //   this.props.setSettings(settings);
-
-      //   const categories = {
-      //     list: [
-      //       { name: 'Uncategorized', show: true },
-      //     ],
-      //   };
-
-      //   firebase.firestore().collection('categories').doc(cred.user.uid).set(categories);
-
-      //   this.props.setCategories(categories.list);
-
-        // TODO: Stats Stuff
-        //
-        // const stats = {
-        //   today: {
-        //     untracked: 12.4,
-        //     focus1_ID: 8.2,
-        //     focus2_ID: 2.3,
-        //     focus3_ID: 0.0,
-        //   },
-        //   date1: {
-        //     untracked: 12.4,
-        //     focus1_ID: 8.2,
-        //     focus2_ID: 2.3,
-        //     focus3_ID: 0.0,
-        //   },
-        //   date2: {
-        //     untracked: 12.4,
-        //     focus1_ID: 8.2,
-        //     focus2_ID: 2.3,
-        //     focus3_ID: 0.0,
-        //   },
-        // };
-
-        // firebase.firestore().collection('stats').doc(cred.user.uid).set(stats);
-
-        // this.props.setStats(stats);
-      // }).catch(error => {
-      //   console.error(error);
-      // });
     } else {
-      console.warn("Password confirmation does not match");
+      Alert.alert(
+        'Password confirmation \ndoes not match.',
+        '',
+        [
+          { text: 'Confirm', onPress: null },
+        ],
+      );
     }
 
     this.setState({
@@ -175,14 +124,16 @@ class SignUpScreen extends React.Component
   };
 };
 
-const mapStateToProps = state => ({
+function mapStateToProps(state) {
+  return {};
+};
 
-});
+function mapDispatchToProps(dispatch) {
+  return {
+    signUp: credentials => signUpHandler(dispatch, credentials),
+    setSettings: settings => dispatch(setSettings(settings)),
+    setCategories: categories => dispatch(setCategories(categories)),
+  };
+};
 
-const mapDispatchToProps = dispatch => ({
-  signUp: credentials => dispatch(signUp(credentials)),
-  setSettings: settings => dispatch(setSettings(settings)),
-  setCategories: categories => dispatch(setCategories(categories)),
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(SignUpScreen);
+export default connect(null, mapDispatchToProps)(SignUpScreen);

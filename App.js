@@ -1,10 +1,9 @@
 import React from 'react';
-import thunk from 'redux-thunk';
 import { Provider } from 'react-redux';
-import { createStore, applyMiddleware, compose } from 'redux';
+import { createStore } from 'redux';
 import firebase, { rrfConfig } from './src/config/fbConfig';
-import { reactReduxFirebase, getFirebase } from 'react-redux-firebase';
-import { reduxFirestore, getFirestore } from 'redux-firestore';
+import { ReactReduxFirebaseProvider } from 'react-redux-firebase';
+import { createFirestoreInstance  } from 'redux-firestore';
 
 import NavigationService from './src/services/NavigationService';
 
@@ -15,24 +14,28 @@ import AppContainer from './src/containers/AppContainer';
 
 const store = createStore(
   RootReducer, 
-  compose(
-    applyMiddleware(thunk.withExtraArgument({ getFirebase,  getFirestore })),
-    reactReduxFirebase(firebase, rrfConfig),
-    reduxFirestore(firebase),
-  ),
 );
+
+const rrfProps = {
+  firebase,
+  config: rrfConfig,
+  dispatch: store.dispatch,
+  createFirestoreInstance,
+};
 
 class App extends React.Component 
 {
   render() {
     return (
       <Provider store={store}>
-        <LTStatusBar />
-        <AppContainer 
-          ref={navigatorRef => {
-            NavigationService.setTopLevelNavigator(navigatorRef);
-          }} 
-        />
+        <ReactReduxFirebaseProvider {...rrfProps}>
+          <LTStatusBar />
+          <AppContainer 
+            ref={navigatorRef => {
+              NavigationService.setTopLevelNavigator(navigatorRef);
+            }} 
+          />
+        </ReactReduxFirebaseProvider>
       </Provider>
     );
   };
