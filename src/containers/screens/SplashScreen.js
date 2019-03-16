@@ -1,11 +1,9 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { db, auth } from '../../config/fbConfig';
+import { auth } from '../../config/fbConfig';
 import { View, Text } from 'react-native';
-import { setSettings } from '../../actions/SettingsActions';
-import { setCategories } from '../../actions/CategoriesActions';
-import { setFocuses } from '../../actions/FocusesActions';
 import createStyles, { Color, FontSize } from '../../styles';
+import { loadUserHandler } from '../../handlers/AuthHandlers';
 
 const styles = createStyles({
   container: {
@@ -25,55 +23,12 @@ const styles = createStyles({
 
 class SplashScreen extends React.Component 
 {
-  _loadSettings = () => {
-    return db.collection('settings').doc(auth.currentUser.uid).get();
-  };
-
-  _loadCategories = () => {
-    return db.collection('categories').doc(auth.currentUser.uid).get();
-  };
-
-  _loadFocuses = () => {
-    let query;
-    query = db.collection('focuses');
-    query = query.where('userId', '==', auth.currentUser.uid);
-
-    return query.get();
-  };
-
-  componentWillReceiveProps() {
-  };
-
   componentDidMount() {
     if (auth.currentUser) {
-      this.props.navigation.navigate('App');
+      this.props.loadUser();
     } else {
       this.props.navigation.navigate('Auth');
     }
-    // auth.onAuthStateChanged(user => {
-    //   if (!user) return this.props.navigation.navigate('Auth');
-
-      // Promise.all([
-      //   this._loadSettings(),
-      //   this._loadCategories(),
-      //   this._loadFocuses()
-      // ]).then(values => {
-      //   const settingsDoc = values[0];
-      //   const categoriesDoc = values[1];
-      //   const focusesSnapshot = values[2];
-
-      //   let focuses = {};
-      //   focusesSnapshot.forEach(doc => focuses[doc.id] = doc.data());
-
-      //   this.props.setFocuses(focuses);
-      //   this.props.setSettings(settingsDoc.data());
-      //   this.props.setCategories(categoriesDoc.data().list);
-
-        // this.props.navigation.navigate('App');
-      // }).catch(err => {
-      //   console.error(err);
-      // });
-    // });
   };
 
   render() {
@@ -86,13 +41,10 @@ class SplashScreen extends React.Component
 };
 
 const mapStateToProps = state => ({
-  firebase: state.firebase,
 });
 
 const mapDispatchToProps = dispatch => ({
-  setSettings: settings => dispatch(setSettings(settings)),
-  setCategories: categories => dispatch(setCategories(categories)),
-  setFocuses: focuses => dispatch(setFocuses(focuses)),
+  loadUser: () => loadUserHandler(dispatch),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(SplashScreen);

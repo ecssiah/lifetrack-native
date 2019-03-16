@@ -1,10 +1,11 @@
 import {
   LOAD_FOCUSES_REQUEST,
-  SET_FOCUSES, DELETE_FOCUS, ADD_FOCUS, 
+  UPDATE_FOCUSES, DELETE_FOCUS, ADD_FOCUS, 
   SET_NAME, SET_CATEGORY, SET_ACTIVE, SET_TIME, SET_TIMER,
   SET_WORKING, SET_WORK_PERIOD, SET_WORK_GOAL, SET_BREAK_PERIOD,
-  UPDATE_EXPERIENCE, UPDATE_TIME, UPDATE_CATEGORIES, UPDATE_PERIODS,
+  UPDATE_EXPERIENCE, UPDATE_TIME, UPDATE_PERIODS,
   RESET_PERIODS,
+  REPLACE_CATEGORY,
 } from '../constants/Focuses';
 
 export function requestFocuses() {
@@ -19,22 +20,17 @@ export function loadFocuses() {
   };
 };
 
-export function setFocuses(focuses) {
+export function updateFocuses(focuses) {
   return {
-    type: SET_FOCUSES,
+    type: UPDATE_FOCUSES,
     focuses,
   };
 };
 
 export function addFocus(focus) {
-  return (dispatch, getState, { getFirebase, getFirestore } ) => {
-    const firestore = getFirestore();
-    firestore.collection('focuses').add(focus);
-
-    dispatch({
-      type: ADD_FOCUS,
-      focus,
-    });
+  return {
+    type: ADD_FOCUS,
+    focus,
   };
 };
 
@@ -145,10 +141,10 @@ export function resetPeriods(id) {
   };
 };
 
-export function updateCategories(category, newName) {
+export function replaceCategory(name, newName) {
   return {
-    type: UPDATE_CATEGORIES,
-    category,
+    type: REPLACE_CATEGORY,
+    name,
     newName,
   };
 };

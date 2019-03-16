@@ -1,13 +1,13 @@
 import { 
-  SET_CATEGORIES, 
+  UPDATE_CATEGORIES, 
   ADD_CATEGORY, DELETE_CATEGORY,
   SET_CATEGORY_NAME, SET_CATEGORY_SHOW,
   TOGGLE_CATEGORY_SHOW,
 } from '../constants/Categories';
 
-export function setCategories(categories) {
+export function updateCategories(categories) {
   return {
-    type: SET_CATEGORIES,
+    type: UPDATE_CATEGORIES,
     categories,
   };
 };

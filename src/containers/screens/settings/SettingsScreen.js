@@ -3,8 +3,6 @@ import { connect } from 'react-redux';
 import { 
   Alert, TouchableOpacity, View 
 } from 'react-native';
-import firebase from '../../../config/fbConfig';
-import { signOut } from '../../../actions/AuthActions';
 import { 
   WORK_PERIOD, WORK_GOAL, BREAK_PERIOD,
 } from '../../../constants/Focus';
@@ -127,10 +125,6 @@ class SettingsScreen extends React.Component
     }
 
     this.props.signOut();
-
-    // auth.signOut().then(() => {
-    //   this.props.navigation.navigate('Login');
-    // });
   };
 
   _renderLogout = ({item, index}) => {
@@ -208,7 +202,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  signOut: () => dispatch(signOut()),
+  signOut: () => signOutHandler(dispatch),
   setDefaultWorkPeriod: period => dispatch(setDefaultWorkPeriod(period)),
   setDefaultWorkGoal: goal => dispatch(setDefaultWorkGoal(goal)),
   setDefaultBreakPeriod: period => dispatch(setDefaultBreakPeriod(period)),

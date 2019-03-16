@@ -2,7 +2,7 @@ export const LOAD_FOCUSES_REQUEST = 'focuses:load-focuses-request';
 export const LOAD_FOCUSES_SUCCESS = 'focuses:load-focuses-success';
 export const LOAD_FOCUSES_FAIL = 'focuses:load-focuses-fail';
 
-export const SET_FOCUSES = 'focuses:set-focuses';
+export const UPDATE_FOCUSES = 'focuses:update-focuses';
 export const ADD_FOCUS = 'focuses:add-focus';
 export const DELETE_FOCUS = 'focuses:delete-focus';
 
@@ -20,4 +20,4 @@ export const UPDATE_TIME = 'focuses:update-time';
 export const UPDATE_PERIODS = 'focuses:update-periods';
 export const UPDATE_EXPERIENCE = 'focuses:update-experience';
 export const RESET_PERIODS = 'focuses:reset-periods';
-export const UPDATE_CATEGORIES = 'focuses:update-categories';
+export const REPLACE_CATEGORY = 'focuses:replace-category';

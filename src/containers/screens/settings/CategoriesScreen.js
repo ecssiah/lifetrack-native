@@ -10,7 +10,7 @@ import {
   setCategoryName,
 } from '../../../actions/CategoriesActions';
 import {
-  updateCategories,
+  replaceCategory,
 } from '../../../actions/FocusesActions';
 import createStyles, { FontSize } from '../../../styles'; 
 
@@ -137,7 +137,7 @@ class CategoriesScreen extends React.Component
       this._updateDatabaseCategories(category);
       
       this.props.deleteCategory(category);
-      this.props.updateCategories(category, 'Uncategorized');
+      this.props.replaceCategory(category.name, 'Uncategorized');
     }).catch(error => {
       console.error(error);
     }); 
@@ -195,7 +195,7 @@ class CategoriesScreen extends React.Component
       this.props.setCategoryName(
         this.state.categoryName, this.state.newCategoryName
       );
-      this.props.updateCategories(
+      this.props.replaceCategory(
         this.state.categoryName, this.state.newCategoryName
       );
     }
@@ -279,7 +279,7 @@ const mapDispatchToProps = dispatch => ({
   addCategory: name => dispatch(addCategory(name)),
   deleteCategory: name => dispatch(deleteCategory(name)),
   setCategoryName: (name, newName) => dispatch(setCategoryName(name, newName)),
-  updateCategories: (name, newName) => dispatch(updateCategories(name, newName)),
+  replaceCategory: (name, newName) => dispatch(replaceCategory(name, newName)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(CategoriesScreen);

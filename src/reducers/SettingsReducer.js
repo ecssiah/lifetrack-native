@@ -1,5 +1,5 @@
 import { 
-  SET_SETTINGS,
+  UPDATE_SETTINGS,
   SET_DEFAULT_WORK_PERIOD, SET_DEFAULT_WORK_GOAL, SET_DEFAULT_BREAK_PERIOD,
 } from "../constants/Settings";
 
@@ -7,7 +7,7 @@ function settingsReducer(state = {}, action) {
   let newState = {...state};
 
   switch (action.type) {
-    case SET_SETTINGS: {
+    case UPDATE_SETTINGS: {
       return action.settings;
     }
     case SET_DEFAULT_WORK_PERIOD: {

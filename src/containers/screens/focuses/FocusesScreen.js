@@ -10,6 +10,7 @@ import createStyles from '../../../styles';
 import LTIcon from '../../../components/LT/LTIcon';
 import FocusList from '../../../components/focuses/FocusList';
 import FocusAddModal from '../../../components/modals/FocusAddModal';
+import { UNCATEGORIZED } from '../../../constants/Categories';
 
 const styles = createStyles({
 });
@@ -21,7 +22,7 @@ class FocusesScreen extends React.Component
 
     this.state = {
       newFocusName: '',
-      categoryName: this.props.categories[0].name,
+      categoryName: UNCATEGORIZED,
       addModalShow: false,
     };
   };
@@ -93,7 +94,7 @@ class FocusesScreen extends React.Component
     this.setState({
       newFocusName: '',
       addModalShow: false,
-      categoryName: this.props.categories[0].name,
+      categoryName: UNCATEGORIZED,
     });
   };
 

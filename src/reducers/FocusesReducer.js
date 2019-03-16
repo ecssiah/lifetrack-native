@@ -1,10 +1,11 @@
 import { 
-  SET_FOCUSES, ADD_FOCUS, DELETE_FOCUS, 
+  UPDATE_FOCUSES, ADD_FOCUS, DELETE_FOCUS, 
   SET_NAME, SET_CATEGORY, SET_TIME, SET_WORKING, SET_ACTIVE, SET_TIMER, 
   SET_WORK_PERIOD, SET_WORK_GOAL, SET_BREAK_PERIOD,
-  UPDATE_TIME, UPDATE_PERIODS, UPDATE_EXPERIENCE, UPDATE_CATEGORIES, 
+  UPDATE_TIME, UPDATE_PERIODS, UPDATE_EXPERIENCE,
   RESET_PERIODS, 
-  LOAD_FOCUSES_SUCCESS, LOAD_FOCUSES_FAIL,
+  LOAD_FOCUSES_SUCCESS, LOAD_FOCUSES_FAIL, 
+  REPLACE_CATEGORY,
 } from "../constants/Focuses";
 
 export const SECOND = 1 / 60.0;
@@ -14,7 +15,7 @@ function focusesReducer(state = {}, action) {
   let newState = {...state};
 
   switch (action.type) {
-    case SET_FOCUSES: {
+    case UPDATE_FOCUSES: {
       return action.focuses;
     }
     case LOAD_FOCUSES_SUCCESS: {
@@ -108,7 +109,7 @@ function focusesReducer(state = {}, action) {
 
       return newState;
     }
-    case UPDATE_CATEGORIES: {
+    case REPLACE_CATEGORY: {
       for (const key in newState) {
         if (newState[key].category === action.category.name) {
           newState[key].category = action.newName;

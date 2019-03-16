@@ -1,11 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Button, View, TextInput } from 'react-native';
-import firebase from '../../../config/fbConfig';
 import createStyles, { FontSize } from '../../../styles';
-import { signIn } from '../../../actions/AuthActions';
-import { setSettings } from '../../../actions/SettingsActions';
-import { setCategories } from '../../../actions/CategoriesActions';
+import { signInHandler } from '../../../handlers/AuthHandlers';
 
 const styles = createStyles({
   container: {
@@ -47,38 +44,11 @@ class SignInScreen extends React.Component
     title: 'Sign In',
   });
 
-  _loadSettings = cred => {
-    return db.collection('settings').doc(auth.currentUser.uid).get();
-  };
-
-  _loadCategories = cred => {
-    return db.collection('categories').doc(auth.currentUser.uid).get();
-  };
-
   _onPressSignIn = () => {
     this.props.signIn({
       email: this.state.email, 
       password: this.state.password,
     });
-
-    // auth.signInWithEmailAndPassword(
-    //   this.state.email, this.state.password
-    // ).then(cred => {
-    //   Promise.all([
-    //     this._loadSettings(),
-    //     this._loadCategories(),
-    //   ]).then(values => {
-    //     const settingsDoc = values[0];
-    //     const categoriesDoc = values[1];
-
-    //     this.props.setSettings(settingsDoc.data());
-    //     this.props.setCategories(categoriesDoc.data().list);
-    //   }).catch(error => {
-    //     console.error(error);
-    //   });
-    // }).catch(error => {
-    //   console.error(error);
-    // });
 
     this.setState({
       password: '',
@@ -130,9 +100,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  signIn: cred => dispatch(signIn(cred)),
-  setSettings: settings => dispatch(setSettings(settings)), 
-  setCategories: categories => dispatch(setCategories(categories)),
+  signIn: (email, password) => signInHandler(dispatch, email, password),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(SignInScreen);

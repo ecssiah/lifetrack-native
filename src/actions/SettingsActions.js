@@ -1,11 +1,11 @@
 import { 
-  SET_SETTINGS,
+  UPDATE_SETTINGS,
   SET_DEFAULT_WORK_PERIOD, SET_DEFAULT_WORK_GOAL, SET_DEFAULT_BREAK_PERIOD,
 } from "../constants/Settings";
 
-export function setSettings(settings) {
+export function updateSettings(settings) {
   return {
-    type: SET_SETTINGS,
+    type: UPDATE_SETTINGS,
     settings,
   };
 };

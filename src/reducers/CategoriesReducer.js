@@ -1,5 +1,5 @@
 import { 
-  SET_CATEGORIES, 
+  UPDATE_CATEGORIES, 
   ADD_CATEGORY, DELETE_CATEGORY,
   SET_CATEGORY_NAME, SET_CATEGORY_SHOW,
   TOGGLE_CATEGORY_SHOW,
@@ -9,7 +9,7 @@ function categoriesReducer(state = [], action) {
   let newState = state.slice();
 
   switch (action.type) {
-    case SET_CATEGORIES: {
+    case UPDATE_CATEGORIES: {
       return action.categories;
     }
     case ADD_CATEGORY: {
