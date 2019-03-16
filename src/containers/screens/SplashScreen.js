@@ -24,11 +24,13 @@ const styles = createStyles({
 class SplashScreen extends React.Component 
 {
   componentDidMount() {
-    if (auth.currentUser) {
-      this.props.loadUser();
-    } else {
-      this.props.navigation.navigate('Auth');
-    }
+    auth.onAuthStateChanged(user => {
+      if (user) {
+        this.props.loadUser();
+      } else {
+        this.props.navigation.navigate('Auth');
+      }
+    });
   };
 
   render() {
