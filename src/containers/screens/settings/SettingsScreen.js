@@ -124,7 +124,7 @@ class SettingsScreen extends React.Component
 
   _handleLogout = () => {
     for (const key in this.props.focuses) {
-      clearInterval(this.props.focuses[key]);
+      clearInterval(this.props.focuses[key].timer);
     }
 
     this.props.signOut();

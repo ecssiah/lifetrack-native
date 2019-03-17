@@ -112,12 +112,10 @@ export function signInHandler(dispatch, email, password) {
   }).catch(error => {
     console.error(error);
   });
-}
+};
 
 export function signOutHandler(dispatch) {
-  auth.logout().then(() => {
-    NavigationService.navigate('Auth');
-  }).catch(error => {
+  auth.signOut().catch(error => {
     console.error(error);
   });
-}
+};

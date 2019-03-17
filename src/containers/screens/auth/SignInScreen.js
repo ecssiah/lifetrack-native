@@ -45,10 +45,7 @@ class SignInScreen extends React.Component
   });
 
   _onPressSignIn = () => {
-    this.props.signIn({
-      email: this.state.email, 
-      password: this.state.password,
-    });
+    this.props.signIn(this.state.email, this.state.password);
 
     this.setState({
       password: '',
@@ -89,7 +86,7 @@ class SignInScreen extends React.Component
         <Button
           title="Sign Up"
           color="#841584"
-          onPress={ () => this.props.navigation.navigate('SignUp') }
+          onPress={() => this.props.navigation.navigate('SignUp')} 
         />
       </View>
     );
