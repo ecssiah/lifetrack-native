@@ -1,11 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { View } from 'react-native';
-import { 
-  setTime, updateTime, updatePeriods, updateExperience, resetPeriods,
-  setWorking, setActive, setTimer
-} from '../../../actions/FocusesActions';
-import { SECOND } from '../../../reducers/FocusesReducer';
+import { updateFocusHandler } from '../../../handlers/FocusesHandlers';
+import { SECOND, EXPERIENCE_PER_SECOND } from '../../../reducers/FocusesReducer';
 import createStyles from '../../../styles';
 
 import LTIcon from '../../../components/LT/LTIcon';
@@ -42,51 +39,62 @@ class FocusScreen extends React.Component
   });
 
   _onActivate = () => {
-    const focus = this.props.focuses[this.props.focus.id];
+    const focus = {...this.props.focuses[this.props.focus.id]};
 
     if (focus.active) {
       if (!focus.working) {
-        this.props.setTime(this.props.focus.id, focus.workPeriod);
+        focus.time = focus.workPeriod;
       }
 
-      this.props.setWorking(this.props.focus.id, true);
-      this.props.setActive(this.props.focus.id, false);
+      focus.working = true;
+      focus.active = false;
 
       clearInterval(focus.timer);
     } else {
-      this.props.setActive(this.props.focus.id, true);
-      this.props.setTimer(
-        this.props.focus.id, setInterval(this._updateTimer, 1000)
-      );
+      focus.active = true;
+      focus.timer = setInterval(this._updateTimer, 1000);
     }
+
+    this.props.updateFocus(this.props.focus.id, focus);
   };
 
   _onGoalClick = () => {
-    this.props.resetPeriods(this.props.focus.id);
+    const focus = {...this.props.focuses[this.props.focus.id]};
+
+    focus.periods = 0;
+
+    this.props.updateFocus(this.props.focus.id, focus);
   };
 
   _updateTimer = () => {
-    const focus = this.props.focuses[this.props.focus.id];
+    const focus = {...this.props.focuses[this.props.focus.id]};
 
     if (focus.time >= SECOND) {
-      this.props.updateTime(this.props.focus.id);
+      focus.time -= SECOND;
 
       if (focus.working) {
-        this.props.updateExperience(this.props.focus.id);
+        focus.experience += EXPERIENCE_PER_SECOND;
+
+        if (focus.experience > 100) {
+          focus.level++;
+          focus.experience = 0;
+        }
       }
     } else {
       clearInterval(focus.timer);
 
       if (focus.working) {
-        this.props.updatePeriods(this.props.focus.id);
-        this.props.setTime(this.props.focus.id, focus.breakPeriod);
+        focus.periods = 0;
+        focus.time = focus.breakPeriod;
       } else {
-        this.props.setTime(this.props.focus.id, focus.workPeriod);
+        focus.time = focus.workPeriod;
       }
 
-      this.props.setWorking(this.props.focus.id, !focus.working);
-      this.props.setActive(this.props.focus.id, false);
+      focus.working = !focus.working;
+      focus.active = false;
     }
+
+    this.props.updateFocus(this.props.focus.id, focus);
   };
 
   render() {
@@ -126,14 +134,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  setWorking: (id, working) => dispatch(setWorking(id, working)),
-  setActive: (id, active) => dispatch(setActive(id, active)), 
-  setTimer: (id, timer) => dispatch(setTimer(id, timer)),
-  setTime: (id, time) => dispatch(setTime(id, time)),
-  updateTime: id => dispatch(updateTime(id)),
-  updatePeriods: id => dispatch(updatePeriods(id)), 
-  resetPeriods: id => dispatch(resetPeriods(id)),
-  updateExperience: id => dispatch(updateExperience(id)),
+  updateFocus: (id, focus) => updateFocusHandler(dispatch, id, focus),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(FocusScreen);

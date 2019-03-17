@@ -1,5 +1,8 @@
 import { db } from "../config/fbConfig";
-import { ADD_FOCUS } from "../constants/Focuses";
+import { 
+  ADD_FOCUS, 
+  UPDATE_FOCUS 
+} from "../constants/Focuses";
 
 export function addFocusHandler(dispatch, focus) {
   db.collection('focuses').add(focus).then(doc => {
@@ -8,3 +11,11 @@ export function addFocusHandler(dispatch, focus) {
     console.error(error)
   );
 };
+
+export function updateFocusHandler(dispatch, id, focus) {
+  db.collection('focuses').doc(id).set(focus).then(() => {
+    dispatch({ type: UPDATE_FOCUS, id, focus });
+  }).catch(error => {
+    console.error(error);
+  });
+}

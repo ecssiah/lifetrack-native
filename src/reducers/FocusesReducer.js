@@ -6,6 +6,7 @@ import {
   RESET_PERIODS, 
   LOAD_FOCUSES_SUCCESS, LOAD_FOCUSES_FAIL, 
   REPLACE_CATEGORY,
+  UPDATE_FOCUS,
 } from "../constants/Focuses";
 
 export const SECOND = 1 / 60.0;
@@ -25,7 +26,12 @@ function focusesReducer(state = {}, action) {
       return newState;
     }
     case ADD_FOCUS: {
-      newState[action.focus.id] = action.focus;
+      newState[action.id] = action.focus;
+
+      return newState;
+    }
+    case UPDATE_FOCUS: {
+      newState[action.id] = action.focus;
 
       return newState;
     }

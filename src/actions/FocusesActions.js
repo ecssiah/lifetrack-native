@@ -35,6 +35,14 @@ export function addFocus(id, focus) {
   };
 };
 
+export function updateFocus(id, focus) {
+  return {
+    type: UPDATE_FOCUS,
+    id,
+    focus,
+  };
+};
+
 export function deleteFocus(id) {
   return {
     type: DELETE_FOCUS,

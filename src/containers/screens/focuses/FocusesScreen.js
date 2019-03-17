@@ -1,6 +1,7 @@
 import React from 'react';
 import { View } from 'react-native';
 import { connect } from 'react-redux';
+import { auth } from '../../../config/fbConfig';
 import { setId } from '../../../actions/FocusActions';
 import { UNCATEGORIZED } from '../../../constants/Categories';
 import { addFocusHandler } from '../../../handlers/FocusesHandlers';
@@ -10,7 +11,6 @@ import createStyles from '../../../styles';
 import LTIcon from '../../../components/LT/LTIcon';
 import FocusList from '../../../components/focuses/FocusList';
 import FocusAddModal from '../../../components/modals/FocusAddModal';
-import { auth } from '../../../config/fbConfig';
 
 const styles = createStyles({
 });
@@ -103,17 +103,23 @@ class FocusesScreen extends React.Component
   };
 
   _getSectionData = () => {
-    let categories = Object.keys(this.props.categories);
-    categories.sort((a, b) => a.localeCompare(b));
+    let categoryNames = Object.keys(this.props.categories);
+    categoryNames.sort((a, b) => a.localeCompare(b));
 
-    const sectionData = categories.map(categoryName => {
+    const sectionData = categoryNames.map(categoryName => {
       let data = [];
       const category = this.props.categories[categoryName];
 
       if (category.show) {
-        const focusArray = Object.values(this.props.focuses);
+        for (const key in this.props.focuses) {
+          if (this.props.focuses[key].category === categoryName) {
+            data.push({
+              id: key,
+              ...this.props.focuses[key],
+            });
+          }
+        }
 
-        data = focusArray.filter(focus => focus.category === categoryName);
         data.sort((a, b) => a.name.localeCompare(b.name));
       }
 

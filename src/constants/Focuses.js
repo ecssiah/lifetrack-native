@@ -1,9 +1,6 @@
-export const LOAD_FOCUSES_REQUEST = 'focuses:load-focuses-request';
-export const LOAD_FOCUSES_SUCCESS = 'focuses:load-focuses-success';
-export const LOAD_FOCUSES_FAIL = 'focuses:load-focuses-fail';
-
 export const UPDATE_FOCUSES = 'focuses:update-focuses';
 export const ADD_FOCUS = 'focuses:add-focus';
+export const UPDATE_FOCUS = 'focuses:update-focus';
 export const DELETE_FOCUS = 'focuses:delete-focus';
 
 export const SET_NAME = 'focuses:set-name';
