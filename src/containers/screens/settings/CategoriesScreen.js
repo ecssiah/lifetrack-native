@@ -3,15 +3,12 @@ import { connect } from 'react-redux';
 import { 
   Alert, TouchableOpacity, View 
 } from 'react-native';
-import firebase from '../../../config/fbConfig';
-import {
-  addCategory,
-  deleteCategory,
-  setCategoryName,
-} from '../../../actions/CategoriesActions';
-import {
-  replaceCategory,
-} from '../../../actions/FocusesActions';
+import { 
+  addCategoryHandler, 
+  updateCategoryHandler,
+  deleteCategoryHandler 
+} from '../../../handlers/CategoryHandlers';
+import { UNCATEGORIZED } from '../../../constants/Categories';
 import createStyles, { FontSize } from '../../../styles'; 
 
 import LTIcon from '../../../components/LT/LTIcon';
@@ -73,24 +70,10 @@ class CategoriesScreen extends React.Component
   };
 
   _onCategoryAddConfirm = () => {
-    const category = {
-      name: this.state.newCategoryName,
-      show: true,
-    };
-
-    db.collection('categories').doc(auth.currentUser.uid).update({
-      list: firebase.firestore.FieldValue.arrayUnion(category),
-    }).then(() => {
-      this.props.addCategory(category);
-
-      this.setState({
-        newCategoryName: '',
-      });
-    }).catch(error => {
-      console.error(error);
-    });
+    this.props.addCategory(this.state.newCategoryName);
 
     this.setState({
+      newCategoryName: '',
       addModalShow: false,
     });
   };
@@ -109,38 +92,11 @@ class CategoriesScreen extends React.Component
     });
   };
 
-  _updateDatabaseCategories = category => {
-    let query;
-    query = db.collection('focuses');
-    query = query.where('userId', '==', auth.currentUser.uid);
-    query = query.where('category', '==', category.name);
-
-    query.get().then(snapshot => {
-      let batch = db.batch();
-      snapshot.forEach(focus => {
-        const focusRef = db.collection('focuses').doc(focus.id);
-        batch.update(focusRef, { category: 'Uncategorized' });
-      });
-
-      batch.commit();
-    });
-  };
-
   _handleCategoryDelete = () => {
-    const category = this.props.categories.find(category => 
-      category.name === this.state.categoryName
+    this.props.deleteCategory(
+      this.state.categoryName,
+      {...this.props.focuses}
     );
-
-    db.collection('categories').doc(auth.currentUser.uid).update({
-      list: firebase.firestore.FieldValue.arrayRemove(category),
-    }).then(() => {
-      this._updateDatabaseCategories(category);
-      
-      this.props.deleteCategory(category);
-      this.props.replaceCategory(category.name, 'Uncategorized');
-    }).catch(error => {
-      console.error(error);
-    }); 
 
     this.setState({
       categoryModalShow: false,
@@ -175,11 +131,7 @@ class CategoriesScreen extends React.Component
       return;
     }
 
-    const category = this.props.categories.find(category => 
-      category.name === this.state.newCategoryName
-    );
-
-    if (category) {
+    if (this.props.categories.hasOwnProperty(this.state.newCategoryName)) {
       Alert.alert(
         this.state.newCategoryName + ' already exists.',
         '',
@@ -192,11 +144,10 @@ class CategoriesScreen extends React.Component
         newCategoryName: this.state.categoryName,
       });
     } else {
-      this.props.setCategoryName(
-        this.state.categoryName, this.state.newCategoryName
-      );
-      this.props.replaceCategory(
-        this.state.categoryName, this.state.newCategoryName
+      this.props.updateCategory(
+        {...this.props.categories[this.state.categoryName]},
+        this.state.categoryName, 
+        this.state.newCategoryName, 
       );
     }
   };
@@ -229,12 +180,14 @@ class CategoriesScreen extends React.Component
   };
 
   _getItemData = () => {
-    const data = this.props.categories.filter(category => {
-      return category.name !== 'Uncategorized';
-    }).sort((categoryA, categoryB) => {
-      return categoryA.name.localeCompare(categoryB.name);
-    }).map(category => {
-      return { name: category.name, value: '' };
+    const categoryNames = Object.keys(this.props.categories);
+
+    const data = categoryNames.filter(categoryName => {
+      return categoryName !== UNCATEGORIZED;
+    }).sort((a, b) => {
+      return a.localeCompare(b);
+    }).map(categoryName => {
+      return { name: categoryName, value: '' };
     });
 
     return data;
@@ -276,10 +229,9 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  addCategory: name => dispatch(addCategory(name)),
-  deleteCategory: name => dispatch(deleteCategory(name)),
-  setCategoryName: (name, newName) => dispatch(setCategoryName(name, newName)),
-  replaceCategory: (name, newName) => dispatch(replaceCategory(name, newName)),
+  addCategory: name => addCategoryHandler(dispatch, name),
+  updateCategory: (category, name, newName) => updateCategoryHandler(dispatch, category, name, newName),
+  deleteCategory: name => deleteCategoryHandler(dispatch, name),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(CategoriesScreen);

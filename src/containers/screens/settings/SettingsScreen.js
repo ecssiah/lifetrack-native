@@ -6,9 +6,8 @@ import {
 import { 
   WORK_PERIOD, WORK_GOAL, BREAK_PERIOD,
 } from '../../../constants/Focus';
-import { 
-  setDefaultWorkPeriod, setDefaultWorkGoal, setDefaultBreakPeriod, 
-} from '../../../actions/SettingsActions';
+import { signOutHandler } from '../../../handlers/AuthHandlers';
+import { updateSettingsHandler } from '../../../handlers/SettingsHandlers';
 import createStyles, { Color, FontSize } from '../../../styles'; 
 
 import LTText from '../../../components/LT/LTText';
@@ -79,23 +78,27 @@ class SettingsScreen extends React.Component
   };
 
   _onSettingConfirm = () => {
+    const settings = {...this.props.settings};
+
     switch (this.state.settingName) {
       case WORK_PERIOD: {
-        this.props.setDefaultWorkPeriod(parseInt(this.state.settingValue));
+        settings.workPeriod = parseInt(this.state.settingValue);
         break;
       }
       case WORK_GOAL: {
-        this.props.setDefaultWorkGoal(parseInt(this.state.settingValue));
+        settings.workGoal = parseInt(this.state.workGoal);
         break;
       }
       case BREAK_PERIOD: {
-        this.props.setDefaultBreakPeriod(parseInt(this.state.settingValue));
+        settings.breakPeriod = parseInt(this.state.settingValue);
         break;
       }
       default: {
         console.error('invalid setting: ' + settingName);
       }
     }
+
+    this.props.updateSettings(settings);
 
     this.setState({
       settingsModalShow: false,
@@ -203,9 +206,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   signOut: () => signOutHandler(dispatch),
-  setDefaultWorkPeriod: period => dispatch(setDefaultWorkPeriod(period)),
-  setDefaultWorkGoal: goal => dispatch(setDefaultWorkGoal(goal)),
-  setDefaultBreakPeriod: period => dispatch(setDefaultBreakPeriod(period)),
+  updateSettings: settings => updateSettingsHandler(dispatch, settings),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(SettingsScreen);

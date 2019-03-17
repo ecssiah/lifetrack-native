@@ -11,17 +11,17 @@ export function updateCategories(categories) {
   };
 };
 
-export function addCategory(category) {
+export function addCategory(name) {
   return {
     type: ADD_CATEGORY,
-    category,
+    name,
   };
 };
 
-export function deleteCategory(category) {
+export function deleteCategory(name) {
   return {
     type: DELETE_CATEGORY,
-    category,
+    name,
   };
 };
 

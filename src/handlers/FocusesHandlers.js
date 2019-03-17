@@ -1,9 +1,9 @@
-import { db } from "../config/fbConfig";
+import { db, auth } from "../config/fbConfig";
 import NavigationService from "../services/NavigationService";
 import { 
   ADD_FOCUS, 
   UPDATE_FOCUS, 
-  DELETE_FOCUS
+  DELETE_FOCUS,
 } from "../constants/Focuses";
 import { 
   SECOND,
@@ -84,4 +84,28 @@ export function updateFocusTimerHandler(dispatch, id, focus) {
   }
 
   updateFocusHandler(dispatch, id, focus);
+};
+
+export function updateFocusCategories(dispatch, name, newName) {
+  let query;
+  query = db.collection('focuses');
+  query = query.where('userId', '==', auth.currentUser.uid);
+  query = query.where('category', '==', name);
+
+  query.get().then(snapshot => {
+    let batch = db.batch();
+
+    snapshot.forEach(doc => {
+      const focusRef = db.collection('focuses').doc(doc.id);
+      batch.update(focusRef, { category: newName });
+    });
+
+    batch.commit().then(() => {
+      snapshot.forEach(doc => {
+        dispatch({ type: UPDATE_FOCUS, id: doc.id, focus: doc.data() });
+      })
+    }).catch(error => {
+      console.error(error);
+    });
+  });
 };
