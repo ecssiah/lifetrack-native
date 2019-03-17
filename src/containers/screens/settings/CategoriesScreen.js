@@ -4,9 +4,9 @@ import {
   Alert, TouchableOpacity, View 
 } from 'react-native';
 import { 
-  addCategoryHandler, 
-  updateCategoryHandler,
-  deleteCategoryHandler 
+  addCategory, 
+  updateCategory,
+  deleteCategory 
 } from '../../../handlers/CategoryHandlers';
 import { UNCATEGORIZED } from '../../../constants/Categories';
 import createStyles, { FontSize } from '../../../styles'; 
@@ -93,10 +93,7 @@ class CategoriesScreen extends React.Component
   };
 
   _handleCategoryDelete = () => {
-    this.props.deleteCategory(
-      this.state.categoryName,
-      {...this.props.focuses}
-    );
+    this.props.deleteCategory(this.state.categoryName);
 
     this.setState({
       categoryModalShow: false,
@@ -136,7 +133,7 @@ class CategoriesScreen extends React.Component
         this.state.newCategoryName + ' already exists.',
         '',
         [
-          {text: 'Confirm', onPress: null},
+          { text: 'Confirm', onPress: null },
         ],
       );
 
@@ -229,9 +226,11 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  addCategory: name => addCategoryHandler(dispatch, name),
-  updateCategory: (category, name, newName) => updateCategoryHandler(dispatch, category, name, newName),
-  deleteCategory: name => deleteCategoryHandler(dispatch, name),
+  addCategory: name => addCategory(dispatch, name),
+  updateCategory: (category, name, newName) => {
+    return updateCategory(dispatch, category, name, newName);
+  },
+  deleteCategory: name => deleteCategory(dispatch, name),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(CategoriesScreen);

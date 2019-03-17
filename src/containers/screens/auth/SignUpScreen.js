@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Alert, Button, View, TextInput } from 'react-native';
 import createStyles, { FontSize } from '../../../styles';
-import { signUpHandler } from '../../../handlers/AuthHandlers';
+import { signUp } from '../../../handlers/AuthHandlers';
 
 const styles = createStyles({
   container: {
@@ -126,7 +126,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  signUp: (email, password) => signUpHandler(dispatch, email, password),
+  signUp: (email, password) => signUp(dispatch, email, password),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(SignUpScreen);

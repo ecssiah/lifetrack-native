@@ -5,6 +5,7 @@ export const UPDATE_FOCUSES = 'focuses:update-focuses';
 export const ADD_FOCUS = 'focuses:add-focus';
 export const UPDATE_FOCUS = 'focuses:update-focus';
 export const DELETE_FOCUS = 'focuses:delete-focus';
+export const UPDATE_FOCUS_TIMER_FIELDS = 'focuses:update-focus-timer-fields';
 
 export const SET_NAME = 'focuses:set-name';
 export const SET_CATEGORY = 'focuses:set-category';

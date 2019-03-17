@@ -2,10 +2,10 @@ import { db, auth } from "../config/fbConfig";
 import NavigationService from "../services/NavigationService";
 import { 
   ADD_FOCUS, UPDATE_FOCUS, DELETE_FOCUS,
-  SECOND, EXPERIENCE_PER_SECOND,
+  SECOND, EXPERIENCE_PER_SECOND, UPDATE_FOCUS_TIMER_FIELDS,
 } from "../constants/Focuses";
 
-export function addFocusHandler(dispatch, focus) {
+export function addFocus(dispatch, focus) {
   db.collection('focuses').add(focus).then(doc => {
     dispatch({ type: ADD_FOCUS, id: doc.id, focus });
   }).catch(error => {
@@ -13,7 +13,7 @@ export function addFocusHandler(dispatch, focus) {
   });
 };
 
-export function deleteFocusHandler(dispatch, id) {
+export function deleteFocus(dispatch, id) {
   db.collection('focuses').doc(id).delete().then(() => {
     dispatch({ type: DELETE_FOCUS, id });
 
@@ -23,7 +23,7 @@ export function deleteFocusHandler(dispatch, id) {
   })
 };
 
-export function updateFocusHandler(dispatch, id, focus) {
+export function updateFocus(dispatch, id, focus) {
   db.collection('focuses').doc(id).set(focus).then(() => {
     dispatch({ type: UPDATE_FOCUS, id, focus });
   }).catch(error => {
@@ -31,7 +31,20 @@ export function updateFocusHandler(dispatch, id, focus) {
   });
 };
 
-export function activateFocusHandler(dispatch, id, focus) {
+export function updateFocusTimerFields(dispatch, id, focus) {
+  db.collection('focuses').doc(id).update({
+    time: focus.time,
+    timer: focus.timer,
+    level: focus.level,
+    experience: focus.experience,
+  }).then(() => {
+    dispatch({ type: UPDATE_FOCUS_TIMER_FIELDS, id, focus });
+  }).catch(error => {
+    console.error(error);
+  });  
+};
+
+export function activateFocus(dispatch, id, focus) {
   if (focus.active) {
     if (!focus.working) {
       focus.time = focus.workPeriod;
@@ -44,15 +57,15 @@ export function activateFocusHandler(dispatch, id, focus) {
   } else {
     focus.active = true;
     focus.timer = setInterval(
-      () => updateFocusTimerHandler(dispatch, id, focus), 
+      () => updateFocusTimer(dispatch, id, focus), 
       1000
     );
   }
 
-  updateFocusHandler(dispatch, id, focus);
+  updateFocus(dispatch, id, focus);
 };
 
-export function updateFocusTimerHandler(dispatch, id, focus) {
+export function updateFocusTimer(dispatch, id, focus) {
   if (focus.time >= SECOND) {
     focus.time -= SECOND;
 
@@ -64,6 +77,8 @@ export function updateFocusTimerHandler(dispatch, id, focus) {
         focus.experience = 0;
       }
     }
+
+    updateFocusTimerFields(dispatch, id, focus);
   } else {
     clearInterval(focus.timer);
 
@@ -76,9 +91,9 @@ export function updateFocusTimerHandler(dispatch, id, focus) {
 
     focus.working = !focus.working;
     focus.active = false;
-  }
 
-  updateFocusHandler(dispatch, id, focus);
+    updateFocus(dispatch, id,focus);
+  }
 };
 
 export function updateFocusCategories(dispatch, name, newName) {

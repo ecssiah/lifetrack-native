@@ -3,8 +3,8 @@ import { View } from 'react-native';
 import { connect } from 'react-redux';
 import { auth } from '../../../config/fbConfig';
 import { UNCATEGORIZED } from '../../../constants/Categories';
-import { addFocusHandler } from '../../../handlers/FocusesHandlers';
-import { setCategoryShowHandler } from '../../../handlers/CategoryHandlers';
+import { addFocus } from '../../../handlers/FocusesHandlers';
+import { setCategoryShow } from '../../../handlers/CategoryHandlers';
 import createStyles from '../../../styles';
 
 import LTIcon from '../../../components/LT/LTIcon';
@@ -55,16 +55,15 @@ class FocusesScreen extends React.Component
       userId: auth.currentUser.uid,
       name: this.state.newFocusName,
       category: this.state.categoryName,
+      time: this.props.settings.workPeriod,
+      working: true,
+      timer: null,
+      periods: 0,
       level: 0,
       experience: 0.0,
-      time: this.props.settings.workPeriod,
       workPeriod: this.props.settings.workPeriod,
-      periods: 0,
       workGoal: this.props.settings.workGoal,
       breakPeriod: this.props.settings.breakPeriod,
-      working: true,
-      timerActive: false,
-      timer: null,
     };
 
     this.props.addFocus(focus);
@@ -170,8 +169,8 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   setId: id => dispatch({ type: SET_ID, id }),
-  addFocus: focus => addFocusHandler(dispatch, focus), 
-  setCategoryShow: (name, show) => setCategoryShowHandler(dispatch, name, show),
+  addFocus: focus => addFocus(dispatch, focus), 
+  setCategoryShow: (name, show) => setCategoryShow(dispatch, name, show),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(FocusesScreen);

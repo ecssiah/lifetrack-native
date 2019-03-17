@@ -2,8 +2,8 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { View } from 'react-native';
 import { 
-  updateFocusHandler, 
-  activateFocusHandler
+  updateFocus, 
+  activateFocus
 } from '../../../handlers/FocusesHandlers';
 import createStyles from '../../../styles';
 
@@ -91,8 +91,8 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  activateFocus: (id, focus) => activateFocusHandler(dispatch, id, focus),
-  updateFocus: (id, focus) => updateFocusHandler(dispatch, id, focus),
+  activateFocus: (id, focus) => activateFocus(dispatch, id, focus),
+  updateFocus: (id, focus) => updateFocus(dispatch, id, focus),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(FocusScreen);

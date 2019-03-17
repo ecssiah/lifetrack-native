@@ -1,6 +1,5 @@
 import { db, auth } from '../config/fbConfig';
 import NavigationService from '../services/NavigationService';
-import { cleanupFocuses } from './FocusesHandlers';
 import { 
   DEFAULT_WORK_PERIOD, 
   DEFAULT_WORK_GOAL, 
@@ -47,7 +46,7 @@ export function createUserData(settings, categories) {
   ]);
 };
 
-export function loadUserHandler(dispatch) {
+export function loadUser(dispatch) {
   loadUserData().then(values => {
     const settings = values[0].data();
     const categories = values[1].data();
@@ -67,7 +66,7 @@ export function loadUserHandler(dispatch) {
   });
 };
 
-export function signUpHandler(dispatch, email, password) {
+export function signUp(dispatch, email, password) {
   auth.createUserWithEmailAndPassword(email, password).then(() => {
     const settings = {
       workPeriod: DEFAULT_WORK_PERIOD,
@@ -91,7 +90,7 @@ export function signUpHandler(dispatch, email, password) {
   });
 };
 
-export function signInHandler(dispatch, email, password) {
+export function signIn(dispatch, email, password) {
   auth.signInWithEmailAndPassword(email, password).then(() => {
     loadUserData().then(values => {
       const settings = values[0].data();
@@ -115,7 +114,7 @@ export function signInHandler(dispatch, email, password) {
   });
 };
 
-export function signOutHandler(dispatch) {
+export function signOut(dispatch) {
   let query;
   query = db.collection('focuses');
   query = query.where('userId', '==', auth.currentUser.uid);

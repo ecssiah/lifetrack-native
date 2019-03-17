@@ -1,6 +1,7 @@
 import { 
   UPDATE_FOCUSES, 
   ADD_FOCUS, UPDATE_FOCUS, DELETE_FOCUS, 
+  UPDATE_FOCUS_TIMER_FIELDS, 
 } from "../constants/Focuses";
 
 function focusesReducer(state = {}, action) {
@@ -17,6 +18,14 @@ function focusesReducer(state = {}, action) {
     }
     case UPDATE_FOCUS: {
       newState[action.id] = action.focus;
+
+      return newState;
+    }
+    case UPDATE_FOCUS_TIMER_FIELDS: {
+      newState[action.id].time = action.focus.time;
+      newState[action.id].timer = action.focus.timer;
+      newState[action.id].experience = action.focus.experience;
+      newState[action.id].level = action.focus.level;
 
       return newState;
     }

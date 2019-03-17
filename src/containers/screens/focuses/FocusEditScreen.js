@@ -5,8 +5,8 @@ import {
   WORK_PERIOD, WORK_GOAL, BREAK_PERIOD,
 } from '../../../constants/Focus';
 import { 
-  updateFocusHandler, 
-  deleteFocusHandler 
+  updateFocus, 
+  deleteFocus 
 } from '../../../handlers/FocusesHandlers';
 import createStyles from '../../../styles';
 
@@ -252,8 +252,8 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  updateFocus: (id, focus) => updateFocusHandler(dispatch, id, focus),
-  deleteFocus: id => deleteFocusHandler(dispatch, id),
+  updateFocus: (id, focus) => updateFocus(dispatch, id, focus),
+  deleteFocus: id => deleteFocus(dispatch, id),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(FocusEditScreen);

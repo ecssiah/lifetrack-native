@@ -6,8 +6,8 @@ import {
 import { 
   WORK_PERIOD, WORK_GOAL, BREAK_PERIOD,
 } from '../../../constants/Focus';
-import { signOutHandler } from '../../../handlers/AuthHandlers';
-import { updateSettingsHandler } from '../../../handlers/SettingsHandlers';
+import { signOut } from '../../../handlers/AuthHandlers';
+import { updateSettings } from '../../../handlers/SettingsHandlers';
 import createStyles, { Color, FontSize } from '../../../styles'; 
 
 import LTText from '../../../components/LT/LTText';
@@ -205,8 +205,8 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  signOut: () => signOutHandler(dispatch),
-  updateSettings: settings => updateSettingsHandler(dispatch, settings),
+  signOut: () => signOut(dispatch),
+  updateSettings: settings => updateSettings(dispatch, settings),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(SettingsScreen);

@@ -9,7 +9,7 @@ import {
 } from "../constants/Categories";
 import { updateFocusCategories } from './FocusesHandlers';
 
-export function addCategoryHandler(dispatch, name) {
+export function addCategory(dispatch, name) {
   const categoryUpdate = {};
   categoryUpdate[name] = { 
     show: true 
@@ -24,7 +24,7 @@ export function addCategoryHandler(dispatch, name) {
   });
 };
 
-export function updateCategoryHandler(dispatch, category, name, newName) {
+export function updateCategory(dispatch, category, name, newName) {
   const categoryUpdate = {};
   categoryUpdate[newName] = category; 
   categoryUpdate[name] = firebase.firestore.FieldValue.delete();
@@ -40,7 +40,7 @@ export function updateCategoryHandler(dispatch, category, name, newName) {
   });
 };
 
-export function deleteCategoryHandler(dispatch, name) {
+export function deleteCategory(dispatch, name) {
   const categoryUpdate = {};
   categoryUpdate[name] = firebase.firestore.FieldValue.delete();
   
@@ -55,7 +55,7 @@ export function deleteCategoryHandler(dispatch, name) {
   });
 };
 
-export function setCategoryShowHandler(dispatch, name, show) {
+export function setCategoryShow(dispatch, name, show) {
   const categoryUpdate = {};
   categoryUpdate[name] = { show };
 
