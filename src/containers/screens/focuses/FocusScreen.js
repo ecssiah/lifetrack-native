@@ -1,8 +1,10 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { View } from 'react-native';
-import { updateFocusHandler } from '../../../handlers/FocusesHandlers';
-import { SECOND, EXPERIENCE_PER_SECOND } from '../../../reducers/FocusesReducer';
+import { 
+  updateFocusHandler, 
+  activateFocusHandler
+} from '../../../handlers/FocusesHandlers';
 import createStyles from '../../../styles';
 
 import LTIcon from '../../../components/LT/LTIcon';
@@ -41,58 +43,13 @@ class FocusScreen extends React.Component
   _onActivate = () => {
     const focus = {...this.props.focuses[this.props.focus.id]};
 
-    if (focus.active) {
-      if (!focus.working) {
-        focus.time = focus.workPeriod;
-      }
-
-      focus.working = true;
-      focus.active = false;
-
-      clearInterval(focus.timer);
-    } else {
-      focus.active = true;
-      focus.timer = setInterval(this._updateTimer, 1000);
-    }
-
-    this.props.updateFocus(this.props.focus.id, focus);
+    this.props.activateFocus(this.props.focus.id, focus);
   };
 
   _onGoalClick = () => {
     const focus = {...this.props.focuses[this.props.focus.id]};
 
     focus.periods = 0;
-
-    this.props.updateFocus(this.props.focus.id, focus);
-  };
-
-  _updateTimer = () => {
-    const focus = {...this.props.focuses[this.props.focus.id]};
-
-    if (focus.time >= SECOND) {
-      focus.time -= SECOND;
-
-      if (focus.working) {
-        focus.experience += EXPERIENCE_PER_SECOND;
-
-        if (focus.experience > 100) {
-          focus.level++;
-          focus.experience = 0;
-        }
-      }
-    } else {
-      clearInterval(focus.timer);
-
-      if (focus.working) {
-        focus.periods = 0;
-        focus.time = focus.breakPeriod;
-      } else {
-        focus.time = focus.workPeriod;
-      }
-
-      focus.working = !focus.working;
-      focus.active = false;
-    }
 
     this.props.updateFocus(this.props.focus.id, focus);
   };
@@ -134,6 +91,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
+  activateFocus: (id, focus) => activateFocusHandler(dispatch, id, focus),
   updateFocus: (id, focus) => updateFocusHandler(dispatch, id, focus),
 });
 

@@ -31,13 +31,13 @@ const styles = createStyles({
 class FocusAddModal extends React.Component 
 {
   _getCategoryItems = () => {
-    const categories = Object.keys(this.props.categories);
+    const categoryNames = Object.keys(this.props.categories);
 
-    const categoryItems = categories.map((category, idx) => 
+    const categoryItems = categoryNames.map((categoryName, idx) => 
       <Picker.Item 
         key={idx} 
-        label={category} 
-        value={category}
+        label={categoryName} 
+        value={categoryName}
       />
     );
 

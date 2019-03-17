@@ -7,7 +7,7 @@ import LTConfirm from '../LT/LTConfirm';
 
 const styles = createStyles({
   container: {
-    height: '80%',
+    height: '66%',
   },
   input: {
     width: '86%',
@@ -27,11 +27,13 @@ const styles = createStyles({
 class CategoryModal extends React.Component 
 {
   _getCategoryItems = () => {
-    const categoryItems = this.props.categories.map((category, idx) => 
+    const categories = Object.keys(this.props.categories);
+
+    const categoryItems = categories.map((categoryName, idx) => 
       <Picker.Item 
         key={idx} 
-        label={category.name} 
-        value={category.name}
+        label={categoryName} 
+        value={categoryName}
       />
     );
 
@@ -45,17 +47,6 @@ class CategoryModal extends React.Component
         show={this.props.show} 
         onPressBackdrop={this.props.onCancel}
       >
-        <TextInput
-          style={styles.input}
-          value={this.props.newCategoryName}
-          placeholder={'New Category'}
-          maxLength={24}
-          textAlign='center'
-          returnKeyType='done'
-          keyboardAppearance='dark'
-          onChangeText={this.props.onCategoryTextChange}
-        />
-
         <Picker
           style={styles.picker}
           itemStyle={{ fontFamily: Font.primary }}

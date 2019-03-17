@@ -1,18 +1,13 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import firebase from '../../../config/fbConfig';
 import { Alert, View } from 'react-native';
-import {
-  addCategory,
-} from '../../../actions/CategoriesActions';
-import { 
-  deleteFocus,
-  setName, setCategory,
-  setWorkPeriod, setWorkGoal, setBreakPeriod,
-} from '../../../actions/FocusesActions';
 import { 
   WORK_PERIOD, WORK_GOAL, BREAK_PERIOD,
 } from '../../../constants/Focus';
+import { 
+  updateFocusHandler, 
+  deleteFocusHandler 
+} from '../../../handlers/FocusesHandlers';
 import createStyles from '../../../styles';
 
 import LTIcon from '../../../components/LT/LTIcon';
@@ -29,10 +24,9 @@ class FocusEditScreen extends React.Component
     super(props);
 
     this.state = {
-      name: props.focuses[props.focus.id].name,
       nameInputStyle: styles.nameInputBlur,
+      name: props.focuses[props.focus.id].name,
       categoryName: props.focuses[props.focus.id].category,
-      newCategoryName: '',
       settingName: '',
       settingValue: 1,
       categoryModalShow: false,
@@ -59,7 +53,11 @@ class FocusEditScreen extends React.Component
   };
 
   _onEditNameConfirm = () => {
-    this.props.setName(this.props.focus.id, this.state.name);
+    const focus = {...this.props.focuses[this.props.focus.id]};
+
+    focus.name = this.state.name;
+
+    this.props.updateFocus(this.props.focus.id, focus);
   };
 
   _onEditNameFocus = () => {
@@ -110,29 +108,27 @@ class FocusEditScreen extends React.Component
   };
 
   _onSettingConfirm = () => {
+    const focus = {...this.props.focuses[this.props.focus.id]}; 
+
     switch (this.state.settingName) {
       case WORK_PERIOD: {
-        this.props.setWorkPeriod(
-          this.props.focus.id, parseInt(this.state.settingValue)
-        );
+        focus.workPeriod = parseInt(this.state.settingValue);
         break;
       }
       case WORK_GOAL: {
-        this.props.setWorkGoal(
-          this.props.focus.id, parseInt(this.state.settingValue)
-        );
+        focus.workGoal = parseInt(this.state.settingValue);
         break;
       }
       case BREAK_PERIOD: {
-        this.props.setBreakPeriod(
-          this.props.focus.id, parseInt(this.state.settingValue)
-        );
+        focus.breakPeriod = parseInt(this.state.settingValue);
         break;
       }
       default: {
         console.error('invalid focus attribute');
       }
     }
+
+    this.props.updateFocus(this.props.focus.id, focus);
 
     this.setState({
       settingsModalShow: false,
@@ -147,7 +143,6 @@ class FocusEditScreen extends React.Component
 
   _onCategorySelect = () => {
     this.setState({
-      newCategoryName: '',
       categoryModalShow: true, 
     });
   };
@@ -159,25 +154,11 @@ class FocusEditScreen extends React.Component
   };
 
   _onCategoryConfirm = () => {
-    let categoryName;
+    const focus = {...this.props.focuses[this.props.focus.id]};
 
-    if (this.state.newCategoryName === '') {
-      categoryName = this.state.categoryName;
-    } else {
-      categoryName = this.state.newCategoryName;
+    focus.category = this.state.categoryName;
 
-      const category = {
-        show: true,
-      };
-
-      db.collection('categories').doc(auth.currentUser.uid).update({
-        categoryName: category,
-      });
-
-      this.props.addCategory(category);
-    }
-
-    this.props.setCategory(this.props.focus.id, categoryName);
+    this.props.updateFocus(this.props.focus.id, focus);
 
     this.setState({
       categoryName,
@@ -199,28 +180,14 @@ class FocusEditScreen extends React.Component
       'Are you sure you want to delete ' + focusName + '?',
       '',
       [
-        { text: 'Cancel', onPress: null, },
-        { text: 'Confirm', onPress: this._handleFocusDelete, },
+        { text: 'Cancel', onPress: null },
+        { text: 'Confirm', onPress: this._onDeleteConfirm },
       ],
     );
   };
 
-  _handleFocusDelete = () => {
-    db.collection('focuses').doc(this.props.focus.id).delete().then(() => {
-      this.props.deleteFocus(this.props.focus.id);
-      this.props.navigation.navigate('Focuses');
-    }).catch(err => {
-      console.error(err);
-    }); 
-  };
-
   _onDeleteConfirm = () => {
-    db.collection('focuses').doc(this.props.focus.id).delete().then(() => {
-      this.props.deleteFocus(this.props.focus.id);
-      this.props.navigation.navigate('Focuses');
-    }).catch(err => {
-      console.error(err);
-    }); 
+    this.props.deleteFocus(this.props.focus.id);
 
     this.setState({
       deleteModalShow: false,
@@ -254,10 +221,8 @@ class FocusEditScreen extends React.Component
           categories={this.props.categories}
           show={this.state.categoryModalShow}
           categoryName={this.state.categoryName}
-          newCategoryName={this.state.newCategoryName}
           onConfirm={this._onCategoryConfirm}
           onCancel={this._onCategoryCancel}
-          onCategoryTextChange={text => this.setState({newCategoryName: text})}
           onCategoryValueChange={value => this._onCategoryValueChange(value)} 
         />
 
@@ -287,13 +252,8 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  addCategory: category => dispatch(addCategory(category)),
-  deleteFocus: id => dispatch(deleteFocus(id)),
-  setName: (id, name) => dispatch(setName(id, name)),
-  setCategory: (id, category) => dispatch(setCategory(id, category)),
-  setWorkPeriod: (id, period) => dispatch(setWorkPeriod(id, period)),
-  setWorkGoal: (id, goal) => dispatch(setWorkGoal(id, goal)),
-  setBreakPeriod: (id, period) => dispatch(setBreakPeriod(id, period)),
+  updateFocus: (id, focus) => updateFocusHandler(dispatch, id, focus),
+  deleteFocus: id => deleteFocusHandler(dispatch, id),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(FocusEditScreen);
