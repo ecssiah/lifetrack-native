@@ -1,7 +1,7 @@
 import { 
   UPDATE_CATEGORIES, 
-  ADD_CATEGORY, DELETE_CATEGORY,
-  SET_CATEGORY_NAME, SET_CATEGORY_SHOW, UPDATE_CATEGORY,
+  ADD_CATEGORY, UPDATE_CATEGORY, DELETE_CATEGORY, 
+  SET_CATEGORY_SHOW,
 } from "../constants/Categories";
 
 function categoriesReducer(state = {}, action) {
@@ -27,12 +27,6 @@ function categoriesReducer(state = {}, action) {
     case DELETE_CATEGORY: {
       delete newState[action.name];
         
-      return newState;
-    }
-    case SET_CATEGORY_NAME: {
-      newState[action.newName] = {...newState[action.name]};
-      delete newState[action.name];
-
       return newState;
     }
     case SET_CATEGORY_SHOW: {
