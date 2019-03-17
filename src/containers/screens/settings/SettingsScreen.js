@@ -86,7 +86,7 @@ class SettingsScreen extends React.Component
         break;
       }
       case WORK_GOAL: {
-        settings.workGoal = parseInt(this.state.workGoal);
+        settings.workGoal = parseInt(this.state.settingValue);
         break;
       }
       case BREAK_PERIOD: {
