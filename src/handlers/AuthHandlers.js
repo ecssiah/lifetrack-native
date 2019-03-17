@@ -1,5 +1,6 @@
 import { db, auth } from '../config/fbConfig';
 import NavigationService from '../services/NavigationService';
+import { cleanupFocuses } from './FocusesHandlers';
 import { 
   DEFAULT_WORK_PERIOD, 
   DEFAULT_WORK_GOAL, 
@@ -115,7 +116,31 @@ export function signInHandler(dispatch, email, password) {
 };
 
 export function signOutHandler(dispatch) {
-  auth.signOut().catch(error => {
-    console.error(error);
+  let query;
+  query = db.collection('focuses');
+  query = query.where('userId', '==', auth.currentUser.uid);
+
+  query.get().then(snapshot => {
+    let batch = db.batch();
+
+    snapshot.forEach(doc => {
+      const focusRef = db.collection('focuses').doc(doc.id);
+      batch.update(
+        focusRef, 
+        { 
+          active: false, 
+          working: true,
+          time: doc.get('workPeriod'),
+        }
+      );
+    });
+
+    batch.commit().then(() => {
+      auth.signOut().catch(error => {
+        console.error(error);
+      });
+    }).catch(error => {
+      console.error(error);
+    });
   });
 };
