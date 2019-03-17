@@ -161,7 +161,7 @@ class FocusEditScreen extends React.Component
     this.props.updateFocus(this.props.focus.id, focus);
 
     this.setState({
-      categoryName,
+      categoryName: this.state.categoryName,
       categoryModalShow: false,
     });
   };

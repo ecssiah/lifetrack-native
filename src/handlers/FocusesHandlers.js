@@ -102,7 +102,11 @@ export function updateFocusCategories(dispatch, name, newName) {
 
     batch.commit().then(() => {
       snapshot.forEach(doc => {
-        dispatch({ type: UPDATE_FOCUS, id: doc.id, focus: doc.data() });
+        dispatch({ 
+          type: UPDATE_FOCUS, 
+          id: doc.id, 
+          focus: {...doc.data(), category: newName }
+        });
       })
     }).catch(error => {
       console.error(error);

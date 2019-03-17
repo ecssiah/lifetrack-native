@@ -41,9 +41,12 @@ export function updateCategoryHandler(dispatch, category, name, newName) {
 };
 
 export function deleteCategoryHandler(dispatch, name) {
-  db.collection('categories').doc(auth.currentUser.uid).update({
-    name: firebase.firestore.FieldValue.delete(),
-  }).then(() => {
+  const categoryUpdate = {};
+  categoryUpdate[name] = firebase.firestore.FieldValue.delete();
+  
+  db.collection('categories').doc(auth.currentUser.uid).update(
+    categoryUpdate
+  ).then(() => {
     dispatch({ type: DELETE_CATEGORY, name });
 
     updateFocusCategories(dispatch, name, UNCATEGORIZED);
