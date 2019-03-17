@@ -80,9 +80,9 @@ export function activateApp(dispatch, timeInactive) {
       const title = 'Update Focuses?';
 
       let message = '';
-      message += 'These focuses have been active \n'
-      message += `for ${displayTime(timeElapsed)}:`; 
-      message += '\n\n';
+      message += 'These focuses have \n'
+      message += `been active for ${displayTime(timeElapsed)}.\n`; 
+      message += '\n';
       message += activeFocusNames;
       message += '\n';
       message += 'Is this correct?';
