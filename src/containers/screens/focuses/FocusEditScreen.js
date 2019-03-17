@@ -90,7 +90,7 @@ class FocusEditScreen extends React.Component
         break;
       }
       default: {
-        console.error('invalid setting: ' + settingName);
+        console.error('Invalid setting: ' + settingName);
       }
     }
 
@@ -124,7 +124,7 @@ class FocusEditScreen extends React.Component
         break;
       }
       default: {
-        console.error('invalid focus attribute');
+        console.error('Invalid setting: ' + this.state.settingValue);
       }
     }
 

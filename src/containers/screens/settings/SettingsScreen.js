@@ -94,7 +94,7 @@ class SettingsScreen extends React.Component
         break;
       }
       default: {
-        console.error('invalid setting: ' + settingName);
+        console.error('Invalid setting: ' + settingName);
       }
     }
 

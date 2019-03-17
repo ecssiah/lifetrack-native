@@ -4,7 +4,7 @@ import { createStore } from 'redux';
 
 import NavigationService from './src/services/NavigationService';
 
-import LTStatusBar from './src/components/LT/LTStatusBar';
+import LTStatus from './src/components/LT/LTStatus';
 import RootReducer from './src/reducers/RootReducer';
 import AppContainer from './src/containers/AppContainer';
 
@@ -17,7 +17,7 @@ class App extends React.Component
   render() {
     return (
       <Provider store={store}>
-        <LTStatusBar />
+        <LTStatus />
         <AppContainer 
           ref={navigatorRef => {
             NavigationService.setTopLevelNavigator(navigatorRef);

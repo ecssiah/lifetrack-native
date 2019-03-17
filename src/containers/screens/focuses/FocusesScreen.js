@@ -56,6 +56,7 @@ class FocusesScreen extends React.Component
       name: this.state.newFocusName,
       category: this.state.categoryName,
       time: this.props.settings.workPeriod,
+      active: false,
       working: true,
       timer: null,
       periods: 0,

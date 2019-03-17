@@ -72,9 +72,9 @@ export function updateFocusTimer(dispatch, id, focus) {
     if (focus.working) {
       focus.experience += EXPERIENCE_PER_SECOND;
 
-      if (focus.experience > 100) {
+      if (focus.experience >= 100) {
         focus.level++;
-        focus.experience = 0;
+        focus.experience -= 100;
       }
     }
 
