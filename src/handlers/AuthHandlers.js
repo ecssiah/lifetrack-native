@@ -69,6 +69,11 @@ export function loadUser(dispatch) {
 export function signUp(dispatch, email, password) {
   auth.createUserWithEmailAndPassword(email, password).then(() => {
     // TODO: Add 'Untracked' focus
+    const focus = {
+      name: 'Untracked',
+      category: UNCATEGORIZED,
+      time: 0,
+    };
 
     const settings = {
       workPeriod: DEFAULT_WORK_PERIOD,
@@ -131,7 +136,7 @@ export function signOut(dispatch) {
         { 
           active: false, 
           working: true,
-          time: doc.get('workPeriod'),
+          time: doc.get('workPeriod') * 60,
         }
       );
     });

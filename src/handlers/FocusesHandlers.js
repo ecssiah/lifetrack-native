@@ -47,7 +47,7 @@ export function updateFocusTimerFields(dispatch, id, focus) {
 export function activateFocus(dispatch, id, focus) {
   if (focus.active) {
     if (!focus.working) {
-      focus.time = focus.workPeriod;
+      focus.time = focus.workPeriod * 60;
     }
 
     focus.working = true;
@@ -66,8 +66,8 @@ export function activateFocus(dispatch, id, focus) {
 };
 
 export function updateFocusTimer(dispatch, id, focus) {
-  if (focus.time >= SECOND) {
-    focus.time -= SECOND;
+  if (focus.time > 0) {
+    focus.time -= 1;
 
     if (focus.working) {
       focus.experience += EXPERIENCE_PER_SECOND;
@@ -84,9 +84,9 @@ export function updateFocusTimer(dispatch, id, focus) {
 
     if (focus.working) {
       focus.periods++;
-      focus.time = focus.breakPeriod;
+      focus.time = focus.breakPeriod * 60;
     } else {
-      focus.time = focus.workPeriod;
+      focus.time = focus.workPeriod * 60;
     }
 
     focus.working = !focus.working;

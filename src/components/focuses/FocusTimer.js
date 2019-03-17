@@ -1,6 +1,7 @@
 import React from 'react';
 import { Text, TouchableOpacity } from 'react-native';
 import createStyles, { Color, Font, FontSize } from '../../styles';
+import { displayTime } from '../../utils';
 
 const styles = createStyles({
   working: {
@@ -33,16 +34,6 @@ class FocusTimer extends React.PureComponent
     }
   };
 
-  _getDisplayTime() {
-    const minutes = Math.floor(this.props.time).toFixed(0);
-    const seconds = ((this.props.time - minutes) * 60).toFixed(0);
-
-    const displayMinutes = minutes < 10 ? '0' + minutes : minutes;
-    const displaySeconds = seconds < 10 ? '0' + seconds : seconds;
-
-    return `${displayMinutes}:${displaySeconds}`;
-  };
-
   render() {
     return (
       <TouchableOpacity 
@@ -50,7 +41,7 @@ class FocusTimer extends React.PureComponent
         onPress={this.props.onActivate} 
       >
         <Text style={this._getTimerStyle()}>
-          {this._getDisplayTime()}
+          {displayTime(this.props.time)}
         </Text>
       </TouchableOpacity>
     );

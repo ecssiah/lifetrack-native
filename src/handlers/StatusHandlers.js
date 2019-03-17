@@ -6,8 +6,10 @@ import {
 } from "../constants/Status";
 import { 
   EXPERIENCE_PER_SECOND, 
-  UPDATE_FOCUS_TIMER_FIELDS 
+  UPDATE_FOCUS_TIMER_FIELDS, 
+  SET_FOCUS_ACTIVE
 } from "../constants/Focuses";
+import { displayTime } from "../utils";
 
 function updateFocusExperience(dispatch, snapshot, timeElapsed) {
   const batch = db.batch();
@@ -30,7 +32,10 @@ function updateFocusExperience(dispatch, snapshot, timeElapsed) {
 
     batch.update(
       focusRef, 
-      { level: focus.level, experience: focus.experience }
+      { 
+        level: focus.level, 
+        experience: focus.experience 
+      }
     );
   });
 
@@ -53,15 +58,32 @@ export function activateApp(dispatch, timeInactive) {
     if (!snapshot.empty) {
       const timeElapsed = (Date.now() - timeInactive) / 1000;
 
-      let activeFocuses = ''; 
-      snapshot.forEach(doc => activeFocuses += doc.get('name') + '\n');
+      const batch = db.batch();
+
+      let activeFocusNames = ''; 
+      snapshot.forEach(doc => {
+        const focusRef = db.collection('focuses').doc(doc.id);
+
+        batch.update(focusRef, { active: false });
+
+        return activeFocusNames += doc.get('name') + '\n';
+      });
+
+      batch.commit().then(() => {
+        snapshot.forEach(doc => {
+          dispatch({ type: SET_FOCUS_ACTIVE, id: doc.id, active: false });
+        });
+      }).catch(error => {
+        console.error(error);
+      });
 
       const title = 'Update Focuses?';
 
       let message = '';
-      message += `These focuses have been active for ${timeElapsed} seconds:`; 
+      message += 'These focuses have been active \n'
+      message += `for ${displayTime(timeElapsed)}:`; 
       message += '\n\n';
-      message += activeFocuses;
+      message += activeFocusNames;
       message += '\n';
       message += 'Is this correct?';
 

@@ -55,7 +55,7 @@ class FocusesScreen extends React.Component
       userId: auth.currentUser.uid,
       name: this.state.newFocusName,
       category: this.state.categoryName,
-      time: this.props.settings.workPeriod,
+      time: this.props.settings.workPeriod * 60,
       active: false,
       working: true,
       timer: null,
