@@ -105,6 +105,10 @@ class FocusesScreen extends React.Component
   _getSectionData = () => {
     let categoryNames = Object.keys(this.props.categories);
     categoryNames.sort((a, b) => a.localeCompare(b));
+    categoryNames = categoryNames.filter(categoryName => {
+      return categoryName !== UNCATEGORIZED;
+    });
+    categoryNames.push(UNCATEGORIZED);
 
     const sectionData = categoryNames.map(categoryName => {
       let data = [];
