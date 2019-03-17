@@ -1,10 +1,12 @@
 import { 
   SET_APP_STATE, 
-  SET_TIME_INACTIVE 
+  SET_TIME_INACTIVE, 
+  SET_TRACKING
 } from "../constants/Status";
 
 const initialState = {
   appState: 'active',
+  tracking: false,
 };
 
 function statusReducer(state = initialState, action) {
@@ -13,6 +15,11 @@ function statusReducer(state = initialState, action) {
   switch(action.type) {
     case SET_APP_STATE: {
       newState.appState = action.appState;
+
+      return newState;
+    }
+    case SET_TRACKING: {
+      newState.tracking = action.tracking;
 
       return newState;
     }

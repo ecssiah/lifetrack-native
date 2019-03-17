@@ -62,11 +62,10 @@ export function activateApp(dispatch, timeInactive) {
 
       let activeFocusNames = ''; 
       snapshot.forEach(doc => {
+        activeFocusNames += doc.get('name') + '\n';
+
         const focusRef = db.collection('focuses').doc(doc.id);
-
         batch.update(focusRef, { active: false });
-
-        return activeFocusNames += doc.get('name') + '\n';
       });
 
       batch.commit().then(() => {

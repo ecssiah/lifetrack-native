@@ -65,6 +65,7 @@ class FocusesScreen extends React.Component
       workPeriod: this.props.settings.workPeriod,
       workGoal: this.props.settings.workGoal,
       breakPeriod: this.props.settings.breakPeriod,
+      history: { today: 0 },
     };
 
     this.props.addFocus(focus);
