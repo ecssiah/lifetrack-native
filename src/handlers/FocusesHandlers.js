@@ -1,14 +1,9 @@
 import { db, auth } from "../config/fbConfig";
 import NavigationService from "../services/NavigationService";
 import { 
-  ADD_FOCUS, 
-  UPDATE_FOCUS, 
-  DELETE_FOCUS,
+  ADD_FOCUS, UPDATE_FOCUS, DELETE_FOCUS,
+  SECOND, EXPERIENCE_PER_SECOND,
 } from "../constants/Focuses";
-import { 
-  SECOND,
-  EXPERIENCE_PER_SECOND,
-} from "../reducers/FocusesReducer";
 
 export function addFocusHandler(dispatch, focus) {
   db.collection('focuses').add(focus).then(doc => {

@@ -2,7 +2,6 @@ import React from 'react';
 import { View } from 'react-native';
 import { connect } from 'react-redux';
 import { auth } from '../../../config/fbConfig';
-import { setId } from '../../../actions/FocusActions';
 import { UNCATEGORIZED } from '../../../constants/Categories';
 import { addFocusHandler } from '../../../handlers/FocusesHandlers';
 import { setCategoryShowHandler } from '../../../handlers/CategoryHandlers';
@@ -11,6 +10,7 @@ import createStyles from '../../../styles';
 import LTIcon from '../../../components/LT/LTIcon';
 import FocusList from '../../../components/focuses/FocusList';
 import FocusAddModal from '../../../components/modals/FocusAddModal';
+import { SET_ID } from '../../../constants/Focus';
 
 const styles = createStyles({
 });
@@ -169,7 +169,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  setId: id => dispatch(setId(id)),
+  setId: id => dispatch({ type: SET_ID, id }),
   addFocus: focus => addFocusHandler(dispatch, focus), 
   setCategoryShow: (name, show) => setCategoryShowHandler(dispatch, name, show),
 });
