@@ -68,6 +68,8 @@ export function loadUser(dispatch) {
 
 export function signUp(dispatch, email, password) {
   auth.createUserWithEmailAndPassword(email, password).then(() => {
+    // TODO: Add 'Untracked' focus
+
     const settings = {
       workPeriod: DEFAULT_WORK_PERIOD,
       workGoal: DEFAULT_WORK_GOAL,

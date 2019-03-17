@@ -9,7 +9,7 @@ import {
   UPDATE_FOCUS_TIMER_FIELDS 
 } from "../constants/Focuses";
 
-function updateFocuses(dispatch, snapshot, timeElapsed) {
+function updateFocusExperience(dispatch, snapshot, timeElapsed) {
   const batch = db.batch();
 
   let updatedFocuses = [];
@@ -38,8 +38,6 @@ function updateFocuses(dispatch, snapshot, timeElapsed) {
     updatedFocuses.forEach(focus => {
       dispatch({ type: UPDATE_FOCUS_TIMER_FIELDS, id: focus.id, focus });
     });
-
-    console.warn('I DID IT!');
   }).catch(error => {
     console.error(error);
   });
@@ -74,7 +72,7 @@ export function activateApp(dispatch, timeInactive) {
           { text: 'Cancel', onPress: null },
           { 
             text: 'Confirm', 
-            onPress: () => updateFocuses(dispatch, snapshot, timeElapsed) 
+            onPress: () => updateFocusExperience(dispatch, snapshot, timeElapsed) 
           },
         ],
       )
