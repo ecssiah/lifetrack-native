@@ -5,6 +5,7 @@ import focusReducer from './FocusReducer';
 import focusesReducer from './FocusesReducer';
 import categoriesReducer from './CategoriesReducer';
 import settingsReducer from './SettingsReducer';
+import statsReducer from './StatsReducer';
 
 const RootReducer = combineReducers({
   status: statusReducer,
@@ -12,6 +13,7 @@ const RootReducer = combineReducers({
   focuses: focusesReducer,
   categories: categoriesReducer,
   settings: settingsReducer,
+  stats: statsReducer,
 });
 
 export default RootReducer;

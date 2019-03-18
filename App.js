@@ -4,8 +4,9 @@ import { createStore } from 'redux';
 
 import NavigationService from './src/services/NavigationService';
 
-import LTStatus from './src/components/LT/LTStatus';
 import RootReducer from './src/reducers/RootReducer';
+
+import LTStatus from './src/containers/LT/LTStatus';
 import AppContainer from './src/containers/AppContainer';
 
 const store = createStore(

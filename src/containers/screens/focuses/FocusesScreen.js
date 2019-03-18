@@ -11,6 +11,7 @@ import LTIcon from '../../../components/LT/LTIcon';
 import FocusList from '../../../components/focuses/FocusList';
 import FocusAddModal from '../../../components/modals/FocusAddModal';
 import { SET_ID } from '../../../constants/Focus';
+import { getToday } from '../../../utils';
 
 const styles = createStyles({
 });
@@ -65,7 +66,7 @@ class FocusesScreen extends React.Component
       workPeriod: this.props.settings.workPeriod,
       workGoal: this.props.settings.workGoal,
       breakPeriod: this.props.settings.breakPeriod,
-      history: { today: 0 },
+      history: { [getToday()]: 0 },
     };
 
     this.props.addFocus(focus);

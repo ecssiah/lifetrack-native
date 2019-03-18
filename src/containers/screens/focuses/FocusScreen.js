@@ -3,8 +3,9 @@ import { connect } from 'react-redux';
 import { View } from 'react-native';
 import { 
   updateFocus, 
-  activateFocus
 } from '../../../handlers/FocusesHandlers';
+import { EXPERIENCE_PER_SECOND } from '../../../constants/Focuses';
+import { INC_TRACKED, DEC_TRACKED } from '../../../constants/Stats';
 import createStyles from '../../../styles';
 
 import LTIcon from '../../../components/LT/LTIcon';
@@ -41,17 +42,63 @@ class FocusScreen extends React.Component
   });
 
   _onActivate = () => {
-    const focus = {...this.props.focuses[this.props.focus.id]};
+    let updateFields = {};
+    const focus = this.props.focuses[this.props.focus.id];
 
-    this.props.activateFocus(this.props.focus.id, focus);
+    if (focus.active) {
+      if (focus.working) {
+        updateFields.active = false;
+
+        clearInterval(focus.timer);
+
+        this.props.decTracked();
+      } else {
+        updateFields.working = true;
+        updateFields.time = focus.workPeriod * 60;
+      }
+    } else {
+      if (focus.working) {
+        updateFields.active = true;
+        this.props.incTracked();
+      } 
+
+      updateFields.timer = setInterval(this._updateTimer, 1000);
+    }
+
+    this.props.updateFocus(this.props.focus.id, updateFields); 
+  };
+
+  _updateTimer = () => {
+    let updateFields = {};
+    const focus = this.props.focuses[this.props.focus.id];
+
+    if (focus.time > 0) {
+      updateFields.time = focus.time - 1;
+
+      if (focus.working) {
+        updateFields.experience = focus.experience + EXPERIENCE_PER_SECOND;
+
+        if (focus.experience >= 100) {
+          updateFields.level = focus.level + 1;
+          updateFields.experience = focus.experience + 100;
+        }
+      }
+    } else {
+      if (focus.working) {
+        updateFields.working = false;
+        updateFields.periods = focus.periods + 1;
+        updateFields.time = focus.breakPeriod * 60;
+      } else {
+        updateFields.working = true;
+        updateFields.time = focus.workPeriod * 60;
+      }
+    }
+
+    this.props.updateFocus(this.props.focus.id, updateFields);
   };
 
   _onGoalClick = () => {
-    const focus = {...this.props.focuses[this.props.focus.id]};
-
-    focus.periods = 0;
-
-    this.props.updateFocus(this.props.focus.id, focus);
+    this.props.updateFocus(this.props.focus.id, { periods: 0 });
   };
 
   render() {
@@ -91,8 +138,9 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  activateFocus: (id, focus) => activateFocus(dispatch, id, focus),
-  updateFocus: (id, focus) => updateFocus(dispatch, id, focus),
+  updateFocus: (id, updateFields) => updateFocus(dispatch, id, updateFields),
+  incTracked: () => dispatch({ type: INC_TRACKED }),
+  decTracked: () => dispatch({ type: DEC_TRACKED }),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(FocusScreen);

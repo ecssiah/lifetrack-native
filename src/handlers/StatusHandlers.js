@@ -6,43 +6,61 @@ import {
 } from "../constants/Status";
 import { 
   EXPERIENCE_PER_SECOND, 
-  UPDATE_FOCUS_TIMER_FIELDS, 
-  SET_FOCUS_ACTIVE
+  UPDATE_FOCUS
 } from "../constants/Focuses";
+import { 
+  DEC_TRACKED, 
+  UPDATE_UNTRACKED 
+} from "../constants/Stats";
 import { displayTime } from "../utils";
 
-function updateFocusExperience(dispatch, snapshot, timeElapsed) {
+export function updateUntracked(dispatch, timeElapsed) {
+  const statsRef = db.collection('stats').doc(auth.currentUser.uid);
+
+  db.runTransaction(transaction => {
+    return transaction.get(statsRef).then(doc => {
+      const newUntracked = Math.floor(doc.data().untracked + timeElapsed);
+
+      transaction.update(statsRef, { untracked: newUntracked });
+    });
+  }).then(() => {
+    dispatch({ type: UPDATE_UNTRACKED, elapsed: timeElapsed });
+
+    console.warn('Untracked update transaction successful');
+  }).catch(error => {
+    console.error(error);
+  });
+};
+
+function updateExperience(dispatch, timeElapsed, snapshot) {
   const batch = db.batch();
 
-  let updatedFocuses = [];
+  let focuses = {};
+  let updateFields = {};
 
   snapshot.forEach(doc => {
-    const focus = {id: doc.id, ...doc.data()};
+    focuses[doc.id] = {...doc.data()};
+    updateFields[doc.id] = {};
 
-    focus.experience += EXPERIENCE_PER_SECOND * timeElapsed;
+    const deltaExp = EXPERIENCE_PER_SECOND * timeElapsed;
 
-    while (focus.experience >= 100) {
-      focus.level++;
-      focus.experience -= 100;
+    updateFields[doc.id].level = focuses[doc.id].level;
+    updateFields[doc.id].experience = focuses[doc.id].experience + deltaExp;
+
+    while (updateFields[doc.id].experience >= 100) {
+      updateFields[doc.id].level += 1;
+      updateFields[doc.id].experience -= 100;
     }
 
-    updatedFocuses.push(focus);
+    batch.update(db.collection('focuses').doc(doc.id), updateFields);
 
-    const focusRef = db.collection('focuses').doc(doc.id);
-
-    batch.update(
-      focusRef, 
-      { 
-        level: focus.level, 
-        experience: focus.experience 
-      }
-    );
+    dispatch({ type: DEC_TRACKED });
   });
 
   batch.commit().then(() => {
-    updatedFocuses.forEach(focus => {
-      dispatch({ type: UPDATE_FOCUS_TIMER_FIELDS, id: focus.id, focus });
-    });
+    for (const id in updateFields) {
+      dispatch({ type: UPDATE_FOCUS, id, updateFields: updateFields[id] });
+    }
   }).catch(error => {
     console.error(error);
   });
@@ -70,7 +88,13 @@ export function activateApp(dispatch, timeInactive) {
 
       batch.commit().then(() => {
         snapshot.forEach(doc => {
-          dispatch({ type: SET_FOCUS_ACTIVE, id: doc.id, active: false });
+          clearInterval(doc.get('timer'));
+
+          dispatch({ 
+            type: UPDATE_FOCUS, 
+            id: doc.id, 
+            updateFields: { active: false }}
+          );
         });
       }).catch(error => {
         console.error(error);
@@ -90,10 +114,13 @@ export function activateApp(dispatch, timeInactive) {
         title,
         message,
         [
-          { text: 'Cancel', onPress: null },
+          { 
+            text: 'Cancel', 
+            onPress: () => updateUntracked(dispatch, timeElapsed) 
+          },
           { 
             text: 'Confirm', 
-            onPress: () => updateFocusExperience(dispatch, snapshot, timeElapsed) 
+            onPress: () => updateExperience(dispatch, timeElapsed, snapshot) 
           },
         ],
       )
