@@ -187,6 +187,8 @@ class FocusEditScreen extends React.Component
   };
 
   _onDeleteConfirm = () => {
+    clearInterval(this.props.focuses[this.props.focus.id].timer);
+
     this.props.deleteFocus(this.props.focus.id);
 
     this.setState({

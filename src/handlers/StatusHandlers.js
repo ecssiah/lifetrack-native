@@ -16,6 +16,32 @@ import {
   UPDATE_UNTRACKED 
 } from "../constants/Stats";
 
+export function setAppState(dispatch, appState) {
+  dispatch({ type: SET_APP_STATE, appState });
+};
+
+export function setTimeInactive(dispatch) {
+  dispatch({ type: SET_TIME_INACTIVE, timeInactive: Date.now() })
+};
+
+export function incTracked(dispatch, status) {
+  if (status.tracked === 0) {
+    const newUntracked = (Date.now() - status.timeInactive) / 1000;
+
+    updateUntracked(dispatch, Math.floor(newUntracked));
+  }
+
+  dispatch({ type: INC_TRACKED });
+};
+
+export function decTracked(dispatch, status) {
+  if (status.tracked === 1) {
+    setTimeInactive(dispatch);
+  }
+
+  dispatch({ type: DEC_TRACKED });
+};
+
 export function updateUntracked(dispatch, elapsed) {
   if (elapsed < 30) {
     return;
@@ -133,30 +159,4 @@ export function activateApp(dispatch, timeInactive) {
   }).catch(error => {
     console.error(error);
   });
-};
-
-export function setAppState(dispatch, appState) {
-  dispatch({ type: SET_APP_STATE, appState });
-};
-
-export function setTimeInactive(dispatch) {
-  dispatch({ type: SET_TIME_INACTIVE, timeInactive: Date.now() })
-};
-
-export function incTracked(dispatch, status) {
-  if (status.tracked === 0) {
-    const newUntracked = (Date.now() - status.timeInactive) / 1000;
-
-    updateUntracked(dispatch, Math.floor(newUntracked));
-  }
-
-  dispatch({ type: INC_TRACKED });
-};
-
-export function decTracked(dispatch, status) {
-  if (status.tracked === 1) {
-    setTimeInactive(dispatch);
-  }
-
-  dispatch({ type: DEC_TRACKED });
 };
