@@ -1,38 +1,42 @@
 import { db, auth } from "../config/fbConfig";
 import { Alert } from 'react-native';
+import { displayTime } from "../utils";
 import { 
   SET_APP_STATE, 
-  SET_TIME_INACTIVE 
+  SET_TIME_INACTIVE,
+  INC_TRACKED, 
+  DEC_TRACKED,
+  SET_TRACKED,
 } from "../constants/Status";
 import { 
   EXPERIENCE_PER_SECOND, 
   UPDATE_FOCUS
 } from "../constants/Focuses";
 import { 
-  DEC_TRACKED, 
   UPDATE_UNTRACKED 
 } from "../constants/Stats";
-import { displayTime } from "../utils";
 
-export function updateUntracked(dispatch, timeElapsed) {
+export function updateUntracked(dispatch, elapsed) {
+  if (elapsed < 30) {
+    return;
+  }
+
   const statsRef = db.collection('stats').doc(auth.currentUser.uid);
 
   db.runTransaction(transaction => {
     return transaction.get(statsRef).then(doc => {
-      const newUntracked = Math.floor(doc.data().untracked + timeElapsed);
+      const newUntracked = Math.floor(doc.data().untracked + elapsed);
 
       transaction.update(statsRef, { untracked: newUntracked });
     });
   }).then(() => {
-    dispatch({ type: UPDATE_UNTRACKED, elapsed: timeElapsed });
-
-    console.warn('Untracked update transaction successful');
+    dispatch({ type: UPDATE_UNTRACKED, elapsed });
   }).catch(error => {
     console.error(error);
   });
 };
 
-function updateExperience(dispatch, timeElapsed, snapshot) {
+function updateExperience(dispatch, elapsed, snapshot) {
   const batch = db.batch();
 
   let focuses = {};
@@ -42,7 +46,7 @@ function updateExperience(dispatch, timeElapsed, snapshot) {
     focuses[doc.id] = {...doc.data()};
     updateFields[doc.id] = {};
 
-    const deltaExp = EXPERIENCE_PER_SECOND * timeElapsed;
+    const deltaExp = EXPERIENCE_PER_SECOND * elapsed;
 
     updateFields[doc.id].level = focuses[doc.id].level;
     updateFields[doc.id].experience = focuses[doc.id].experience + deltaExp;
@@ -52,9 +56,7 @@ function updateExperience(dispatch, timeElapsed, snapshot) {
       updateFields[doc.id].experience -= 100;
     }
 
-    batch.update(db.collection('focuses').doc(doc.id), updateFields);
-
-    dispatch({ type: DEC_TRACKED });
+    batch.update(db.collection('focuses').doc(doc.id), updateFields[doc.id]);
   });
 
   batch.commit().then(() => {
@@ -74,7 +76,7 @@ export function activateApp(dispatch, timeInactive) {
 
   query.get().then(snapshot => {
     if (!snapshot.empty) {
-      const timeElapsed = (Date.now() - timeInactive) / 1000;
+      const elapsed = (Date.now() - timeInactive) / 1000;
 
       const batch = db.batch();
 
@@ -87,6 +89,9 @@ export function activateApp(dispatch, timeInactive) {
       });
 
       batch.commit().then(() => {
+        setTimeInactive(dispatch, Date.now());
+        dispatch({ type: SET_TRACKED, tracked: 0 });
+
         snapshot.forEach(doc => {
           clearInterval(doc.get('timer'));
 
@@ -104,7 +109,7 @@ export function activateApp(dispatch, timeInactive) {
 
       let message = '';
       message += 'These focuses have \n'
-      message += `been active for ${displayTime(timeElapsed)}.\n`; 
+      message += `been active for ${displayTime(elapsed)}.\n`; 
       message += '\n';
       message += activeFocusNames;
       message += '\n';
@@ -116,11 +121,11 @@ export function activateApp(dispatch, timeInactive) {
         [
           { 
             text: 'Cancel', 
-            onPress: () => updateUntracked(dispatch, timeElapsed) 
+            onPress: () => updateUntracked(dispatch, elapsed) 
           },
           { 
             text: 'Confirm', 
-            onPress: () => updateExperience(dispatch, timeElapsed, snapshot) 
+            onPress: () => updateExperience(dispatch, elapsed, snapshot) 
           },
         ],
       )
@@ -136,4 +141,22 @@ export function setAppState(dispatch, appState) {
 
 export function setTimeInactive(dispatch) {
   dispatch({ type: SET_TIME_INACTIVE, timeInactive: Date.now() })
+};
+
+export function incTracked(dispatch, status) {
+  if (status.tracked === 0) {
+    const newUntracked = (Date.now() - status.timeInactive) / 1000;
+
+    updateUntracked(dispatch, Math.floor(newUntracked));
+  }
+
+  dispatch({ type: INC_TRACKED });
+};
+
+export function decTracked(dispatch, status) {
+  if (status.tracked === 1) {
+    setTimeInactive(dispatch);
+  }
+
+  dispatch({ type: DEC_TRACKED });
 };

@@ -2,8 +2,9 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { auth } from '../../config/fbConfig';
 import { View, Text } from 'react-native';
-import createStyles, { Color, FontSize } from '../../styles';
 import { loadUser } from '../../handlers/AuthHandlers';
+import { setTimeInactive } from '../../handlers/StatusHandlers';
+import createStyles, { Color, FontSize } from '../../styles';
 
 const styles = createStyles({
   container: {
@@ -27,6 +28,7 @@ class SplashScreen extends React.Component
     auth.onAuthStateChanged(user => {
       if (user) {
         this.props.loadUser();
+        this.props.setTimeInactive();
       } else {
         this.props.navigation.navigate('Auth');
       }
@@ -47,6 +49,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   loadUser: () => loadUser(dispatch),
+  setTimeInactive: () => setTimeInactive(dispatch),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(SplashScreen);

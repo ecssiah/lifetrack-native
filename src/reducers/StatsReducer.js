@@ -1,9 +1,6 @@
 import { 
   UPDATE_STATS, 
-  INITIATE_USER,
-  INC_TRACKED,
-  DEC_TRACKED,
-  SET_UNTRACKED_START,
+  UPDATE_UNTRACKED,
 } from "../constants/Stats";
 
 function statsReducer(state = {}, action) {
@@ -13,8 +10,8 @@ function statsReducer(state = {}, action) {
     case UPDATE_STATS: {
       return action.stats;
     }
-    case SET_UNTRACKED_START: {
-      newState.untrackedStart = action.timestamp;
+    case UPDATE_UNTRACKED: {
+      newState.untracked += 1; 
 
       return newState;
     }

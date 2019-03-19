@@ -4,8 +4,8 @@ import { View } from 'react-native';
 import { 
   updateFocus, 
 } from '../../../handlers/FocusesHandlers';
+import { incTracked, decTracked } from '../../../handlers/StatusHandlers';
 import { EXPERIENCE_PER_SECOND } from '../../../constants/Focuses';
-import { INC_TRACKED, DEC_TRACKED } from '../../../constants/Stats';
 import createStyles from '../../../styles';
 
 import LTIcon from '../../../components/LT/LTIcon';
@@ -51,7 +51,7 @@ class FocusScreen extends React.Component
 
         clearInterval(focus.timer);
 
-        this.props.decTracked();
+        this.props.decTracked(this.props.status);
       } else {
         updateFields.working = true;
         updateFields.time = focus.workPeriod * 60;
@@ -59,7 +59,7 @@ class FocusScreen extends React.Component
     } else {
       if (focus.working) {
         updateFields.active = true;
-        this.props.incTracked();
+        this.props.incTracked(this.props.status);
       } 
 
       updateFields.timer = setInterval(this._updateTimer, 1000);
@@ -78,9 +78,9 @@ class FocusScreen extends React.Component
       if (focus.working) {
         updateFields.experience = focus.experience + EXPERIENCE_PER_SECOND;
 
-        if (focus.experience >= 100) {
+        if (updateFields.experience >= 100) {
           updateFields.level = focus.level + 1;
-          updateFields.experience = focus.experience + 100;
+          updateFields.experience -= 100;
         }
       }
     } else {
@@ -132,15 +132,17 @@ class FocusScreen extends React.Component
 };
 
 const mapStateToProps = state => ({
+  status: state.status,
   focus: state.focus,
   focuses: state.focuses,
   settings: state.settings,
+  stats: state.stats,
 });
 
 const mapDispatchToProps = dispatch => ({
   updateFocus: (id, updateFields) => updateFocus(dispatch, id, updateFields),
-  incTracked: () => dispatch({ type: INC_TRACKED }),
-  decTracked: () => dispatch({ type: DEC_TRACKED }),
+  incTracked: status => incTracked(dispatch, status),
+  decTracked: status => decTracked(dispatch, status),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(FocusScreen);

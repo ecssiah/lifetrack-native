@@ -2,7 +2,8 @@ import {
   SET_APP_STATE, 
   INC_TRACKED,
   DEC_TRACKED,
-  SET_TIME_INACTIVE, 
+  SET_TIME_INACTIVE,
+  SET_TRACKED, 
 } from "../constants/Status";
 
 const initialState = {
@@ -26,6 +27,11 @@ function statusReducer(state = initialState, action) {
     }
     case DEC_TRACKED: {
       newState.tracked--;
+
+      return newState;
+    }
+    case SET_TRACKED: {
+      newState.tracked = action.tracked;
 
       return newState;
     }
