@@ -13,21 +13,6 @@ function statsReducer(state = {}, action) {
     case UPDATE_STATS: {
       return action.stats;
     }
-    case INITIATE_USER: {
-      newState.newUser = false;
-
-      return newState;
-    }
-    case INC_TRACKED: {
-      newState.tracked++;
-
-      return newState;
-    }
-    case DEC_TRACKED: {
-      newState.tracked--;
-
-      return newState;
-    }
     case SET_UNTRACKED_START: {
       newState.untrackedStart = action.timestamp;
 

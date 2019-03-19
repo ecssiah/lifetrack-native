@@ -63,8 +63,6 @@ export function loadUser(dispatch) {
     const categories = values[1].data();
     const stats = values[2].data();
 
-    stats.tracked = 0;
-
     const focusesSnapshot = values[3];
 
     let focuses = {};
@@ -94,8 +92,6 @@ export function signUp(dispatch, email, password) {
     };
 
     const stats = {
-      newUser: true,
-      tracked: 0,
       untracked: 0,
     };
 
@@ -119,8 +115,6 @@ export function signIn(dispatch, email, password) {
       const settings = values[0].data();
       const categories = values[1].data();
       const stats = values[2].data();
-
-      stats.tracked = 0;
 
       const focusesSnapshot = values[3];
 
