@@ -1,16 +1,17 @@
 import { db, auth } from "../config/fbConfig";
+import { err } from "../utils";
 import NavigationService from "../services/NavigationService";
 import { 
   ADD_FOCUS, 
   UPDATE_FOCUS, 
   DELETE_FOCUS,
+  EXPERIENCE_PER_SECOND,
 } from "../constants/Focuses";
-import { err } from "../utils";
 
 export function addFocus(dispatch, focus) {
   db.collection('focuses').add(focus).then(doc => {
     dispatch({ type: ADD_FOCUS, id: doc.id, focus });
-  }).catch(err);
+  }).catch(error => err(error));
 };
 
 export function deleteFocus(dispatch, id) {
@@ -18,13 +19,13 @@ export function deleteFocus(dispatch, id) {
     dispatch({ type: DELETE_FOCUS, id });
 
     NavigationService.navigate('Focuses');
-  }).catch(err);
+  }).catch(error => err(error));
 };
 
 export function updateFocus(dispatch, id, update) {
   db.collection('focuses').doc(id).update(update).then(() => {
     dispatch({ type: UPDATE_FOCUS, id, update }); 
-  }).catch(err);
+  }).catch(error => err(error));
 };
 
 export function updateFocusCategories(dispatch, name, newName) {
@@ -49,38 +50,38 @@ export function updateFocusCategories(dispatch, name, newName) {
           focus: {...docSnapshot.data(), category: newName }
         });
       })
-    }).catch(err);
+    }).catch(error => err(error));
   });
 };
 
 export function updateExperience(dispatch, elapsed, querySnapshot) {
-  const batch = db.batch();
-
   let update = {};
-  let focuses = {};
-
+  let promises = [];
+  
   querySnapshot.forEach(docSnapshot => {
-    const docId = docSnapshot.id;
+    const transactionPromise = db.runTransaction(async transaction => {
+      const doc = await transaction.get(docSnapshot.ref);
+      const deltaExp = EXPERIENCE_PER_SECOND * elapsed;
 
-    update[docId] = {};
-    focuses[docId] = {...docSnapshot.data()};
+      update[doc.id] = {
+        level: doc.data().level,
+        experience: doc.data().experience + deltaExp,
+      };
 
-    const deltaExp = EXPERIENCE_PER_SECOND * elapsed;
+      while (update[doc.id].experience >= 100) {
+        update[doc.id].level++;
+        update[doc.id].experience -= 100;
+      }
 
-    update[docId].level = focuses[docId].level;
-    update[docId].experience = focuses[docId].experience + deltaExp;
+      transaction.update(docSnapshot.ref, update[doc.id]);
+    }).catch(error => err(error));
 
-    while (update[docId].experience >= 100) {
-      update[docId].level += 1;
-      update[docId].experience -= 100;
-    }
-
-    batch.update(db.collection('focuses').doc(docId), update[docId]);
+    promises.push(transactionPromise);
   });
 
-  batch.commit().then(() => {
+  Promise.all(promises).then(() => {
     for (const id in update) {
       dispatch({ type: UPDATE_FOCUS, id, update: update[id] });
     }
-  }).catch(err);
+  }).catch(error => err(error));
 };

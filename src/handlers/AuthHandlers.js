@@ -76,7 +76,7 @@ export function loadUser(dispatch) {
     dispatch({ type: UPDATE_FOCUSES, focuses });
 
     NavigationService.navigate('App');
-  }).catch(err);
+  }).catch(error => err(error));
 };
 
 export function signUp(dispatch, email, password) {
@@ -102,8 +102,8 @@ export function signUp(dispatch, email, password) {
       dispatch({ type: UPDATE_STATS, stats });
 
       NavigationService.navigate('App');
-    }).catch(err);
-  }).catch(err);
+    }).catch(error => err(error));
+  }).catch(error => err(error));
 };
 
 export function signIn(dispatch, email, password) {
@@ -124,8 +124,8 @@ export function signIn(dispatch, email, password) {
       dispatch({ type: UPDATE_FOCUSES, focuses });
 
       NavigationService.navigate('App');
-    }).catch(err);
-  }).catch(err);
+    }).catch(error => err(error));
+  }).catch(error => err(error));
 };
 
 export function signOut(dispatch) {
@@ -139,12 +139,10 @@ export function signOut(dispatch) {
   query.get().then(querySnapshot => {
     querySnapshot.forEach(docSnapshot => {
       const transactionPromise = db.runTransaction(async transaction => {
-        const doc = await transaction.get(docSnapshot.ref);
-
         const update = {
           active: false,
           working: true,
-          time: doc.data().workPeriod * 60,
+          time: docSnapshot.data().workPeriod * 60,
         };
 
         transaction.update(docSnapshot.ref, update);
@@ -157,8 +155,8 @@ export function signOut(dispatch) {
       updateStats(
         dispatch, 
         { timeInactive: Date.now() }, 
-        () => auth.signOut().catch(err)
+        () => auth.signOut().catch(error => err(error))
       );
-    }).catch(err);
-  }).catch(err);
+    }).catch(error => err(error));
+  }).catch(error => err(error));
 };

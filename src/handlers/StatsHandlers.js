@@ -14,7 +14,7 @@ export function updateStats(dispatch, update, callback = null) {
     }
 
     dispatch({ type: UPDATE_STATS, update });
-  }).catch(err);
+  }).catch(error => err(error));
 };
 
 export function updateUntracked(dispatch, elapsed, callback = null) {
@@ -28,17 +28,16 @@ export function updateUntracked(dispatch, elapsed, callback = null) {
 
   const statsRef = db.collection('stats').doc(auth.currentUser.uid);
 
-  db.runTransaction(transaction => {
-    return transaction.get(statsRef).then(doc => {
-      const newUntracked = Math.floor(doc.data().untracked + elapsed);
+  db.runTransaction(async transaction => {
+    const doc = await transaction.get(statsRef);
+    const newUntracked = Math.floor(doc.data().untracked + elapsed);
 
-      transaction.update(statsRef, { untracked: newUntracked });
-    });
+    transaction.update(statsRef, { untracked: newUntracked });
   }).then(() => {
     if (callback) {
       callback();
     }
 
     dispatch({ type: UPDATE_UNTRACKED, elapsed });
-  }).catch(err);
+  }).catch(error => err(error));
 };

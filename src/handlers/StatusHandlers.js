@@ -1,11 +1,10 @@
 import { db, auth } from "../config/fbConfig";
 import { Alert } from 'react-native';
 import { displayTime, err } from "../utils";
+import { UPDATE_STATUS } from "../constants/Status";
+import { UPDATE_FOCUS } from "../constants/Focuses";
 import { updateUntracked } from "./StatsHandlers";
-import { 
-  UPDATE_STATUS,
-} from "../constants/Status";
-import { updateFocus, updateExperience } from "./FocusesHandlers";
+import { updateExperience } from "./FocusesHandlers";
 
 export function activateApp(dispatch) {
   db.collection('stats').doc(auth.currentUser.uid).get().then(docSnapshot => {
@@ -27,38 +26,39 @@ function searchForActiveFocuses(dispatch, timeInactive) {
       return;
     }
 
-    // TODO: Convert to transactions
     const batch = db.batch();
 
-    let activeFocusNames = ''; 
     querySnapshot.forEach(docSnapshot => {
-      activeFocusNames += docSnapshot.get('name') + '\n';
-
-      const focusRef = db.collection('focuses').doc(docSnapshot.id);
-      batch.update(focusRef, { active: false });
+      clearInterval(docSnapshot.data().timer);
+      batch.update(docSnapshot.ref, { active: false });
     });
 
     batch.commit().then(() => {
       dispatch({ type: UPDATE_STATUS, update: { tracked: 0 } });
 
       querySnapshot.forEach(docSnapshot => {
-        clearInterval(docSnapshot.data().timer);
-        updateFocus(dispatch, docSnapshot.id, { active: false });
+        dispatch({ 
+          type: UPDATE_FOCUS, id: docSnapshot.id, update: { active: false }
+        });
       });
     }).catch(err);
 
-    requestFocusUpdate(dispatch, elapsed, activeFocusNames);
+    requestFocusUpdate(dispatch, elapsed, querySnapshot);
   }).catch(err);
 };
 
-function requestFocusUpdate(dispatch, elapsed, activeFocusNames) {
+function requestFocusUpdate(dispatch, elapsed, querySnapshot) {
   const title = 'Update Focuses?';
 
   let message = '';
   message += 'These focuses have \n'
   message += `been active for ${displayTime(elapsed)}.\n`; 
   message += '\n';
-  message += activeFocusNames;
+
+  querySnapshot.forEach(docSnapshot => {
+    message += docSnapshot.data().name + '\n'
+  });
+
   message += '\n';
   message += 'Is this correct?';
 
