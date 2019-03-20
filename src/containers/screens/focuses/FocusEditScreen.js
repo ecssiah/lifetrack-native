@@ -53,11 +53,7 @@ class FocusEditScreen extends React.Component
   };
 
   _onEditNameConfirm = () => {
-    const focus = {...this.props.focuses[this.props.focus.id]};
-
-    focus.name = this.state.name;
-
-    this.props.updateFocus(this.props.focus.id, focus);
+    this.props.updateFocus(this.props.focus.id, { name: this.state.name });
   };
 
   _onEditNameFocus = () => {
@@ -108,19 +104,19 @@ class FocusEditScreen extends React.Component
   };
 
   _onSettingConfirm = () => {
-    const focus = {...this.props.focuses[this.props.focus.id]}; 
+    let update = {};
 
     switch (this.state.settingName) {
       case WORK_PERIOD: {
-        focus.workPeriod = parseInt(this.state.settingValue);
+        update.workPeriod = parseInt(this.state.settingValue);
         break;
       }
       case WORK_GOAL: {
-        focus.workGoal = parseInt(this.state.settingValue);
+        update.workGoal = parseInt(this.state.settingValue);
         break;
       }
       case BREAK_PERIOD: {
-        focus.breakPeriod = parseInt(this.state.settingValue);
+        update.breakPeriod = parseInt(this.state.settingValue);
         break;
       }
       default: {
@@ -128,7 +124,7 @@ class FocusEditScreen extends React.Component
       }
     }
 
-    this.props.updateFocus(this.props.focus.id, focus);
+    this.props.updateFocus(this.props.focus.id, update);
 
     this.setState({
       settingsModalShow: false,
@@ -154,11 +150,10 @@ class FocusEditScreen extends React.Component
   };
 
   _onCategoryConfirm = () => {
-    const focus = {...this.props.focuses[this.props.focus.id]};
-
-    focus.category = this.state.categoryName;
-
-    this.props.updateFocus(this.props.focus.id, focus);
+    this.props.updateFocus(
+      this.props.focus.id, 
+      { category: this.state.categoryName }
+    );
 
     this.setState({
       categoryName: this.state.categoryName,
@@ -248,13 +243,13 @@ class FocusEditScreen extends React.Component
 };
 
 const mapStateToProps = state => ({
-  categories: state.categories,
   focus: state.focus,
   focuses: state.focuses,
+  categories: state.categories,
 });
 
 const mapDispatchToProps = dispatch => ({
-  updateFocus: (id, focus) => updateFocus(dispatch, id, focus),
+  updateFocus: (id, update) => updateFocus(dispatch, id, update),
   deleteFocus: id => deleteFocus(dispatch, id),
 });
 

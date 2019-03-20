@@ -1,11 +1,10 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { View } from 'react-native';
-import { 
-  updateFocus, 
-} from '../../../handlers/FocusesHandlers';
-import { incTracked, decTracked } from '../../../handlers/StatusHandlers';
 import { EXPERIENCE_PER_SECOND } from '../../../constants/Focuses';
+import { INC_TRACKED, DEC_TRACKED } from '../../../constants/Status';
+import { updateFocus } from '../../../handlers/FocusesHandlers';
+import { updateStats, updateUntracked } from '../../../handlers/StatsHandlers';
 import createStyles from '../../../styles';
 
 import LTIcon from '../../../components/LT/LTIcon';
@@ -42,59 +41,74 @@ class FocusScreen extends React.Component
   });
 
   _onActivate = () => {
-    let updateFields = {};
+    let update = {};
     const focus = this.props.focuses[this.props.focus.id];
 
     if (focus.active) {
       if (focus.working) {
-        updateFields.active = false;
+        update.active = false;
 
         clearInterval(focus.timer);
 
-        this.props.decTracked(this.props.status);
+        if (this.props.status.tracked === 1) {
+          this.props.updateStats({ timeInactive: Date.now() });
+        }
+
+        this.props.decTracked();
       } else {
-        updateFields.working = true;
-        updateFields.time = focus.workPeriod * 60;
+        update.working = true;
+        update.time = focus.workPeriod * 60;
       }
     } else {
       if (focus.working) {
-        updateFields.active = true;
-        this.props.incTracked(this.props.status);
+        update.active = true;
+
+        if (this.props.status.tracked === 0 && this.props.stats.timeInactive) {
+          const elapsed = Math.floor(
+            (Date.now() - this.props.stats.timeInactive) / 1000
+          );
+
+          this.props.updateUntracked(elapsed, () => {
+            this.props.updateStats({ timeInactive: null });
+          });
+        }
+
+        this.props.incTracked();
       } 
 
-      updateFields.timer = setInterval(this._updateTimer, 1000);
+      update.timer = setInterval(this._updateTimer, 1000);
     }
 
-    this.props.updateFocus(this.props.focus.id, updateFields); 
+    this.props.updateFocus(this.props.focus.id, update); 
   };
 
   _updateTimer = () => {
-    let updateFields = {};
+    let update = {};
     const focus = this.props.focuses[this.props.focus.id];
 
     if (focus.time > 0) {
-      updateFields.time = focus.time - 1;
+      update.time = focus.time - 1;
 
       if (focus.working) {
-        updateFields.experience = focus.experience + EXPERIENCE_PER_SECOND;
+        update.experience = focus.experience + EXPERIENCE_PER_SECOND;
 
-        if (updateFields.experience >= 100) {
-          updateFields.level = focus.level + 1;
-          updateFields.experience -= 100;
+        if (update.experience >= 100) {
+          update.level = focus.level + 1;
+          update.experience -= 100;
         }
       }
     } else {
       if (focus.working) {
-        updateFields.working = false;
-        updateFields.periods = focus.periods + 1;
-        updateFields.time = focus.breakPeriod * 60;
+        update.working = false;
+        update.periods = focus.periods + 1;
+        update.time = focus.breakPeriod * 60;
       } else {
-        updateFields.working = true;
-        updateFields.time = focus.workPeriod * 60;
+        update.working = true;
+        update.time = focus.workPeriod * 60;
       }
     }
 
-    this.props.updateFocus(this.props.focus.id, updateFields);
+    this.props.updateFocus(this.props.focus.id, update);
   };
 
   _onGoalClick = () => {
@@ -140,9 +154,11 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  updateFocus: (id, updateFields) => updateFocus(dispatch, id, updateFields),
-  incTracked: status => incTracked(dispatch, status),
-  decTracked: status => decTracked(dispatch, status),
+  updateStats: (update, callback) => updateStats(dispatch, update, callback),
+  updateFocus: (id, update) => updateFocus(dispatch, id, update),
+  updateUntracked: elapsed => updateUntracked(dispatch, elapsed),
+  incTracked: () => dispatch({ type: INC_TRACKED }),
+  decTracked: () => dispatch({ type: DEC_TRACKED }),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(FocusScreen);

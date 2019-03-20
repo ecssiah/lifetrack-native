@@ -5,13 +5,12 @@ import {
   UPDATE_FOCUS, 
   DELETE_FOCUS,
 } from "../constants/Focuses";
+import { err } from "../utils";
 
 export function addFocus(dispatch, focus) {
   db.collection('focuses').add(focus).then(doc => {
     dispatch({ type: ADD_FOCUS, id: doc.id, focus });
-  }).catch(error => {
-    console.error(error);
-  });
+  }).catch(err);
 };
 
 export function deleteFocus(dispatch, id) {
@@ -19,17 +18,13 @@ export function deleteFocus(dispatch, id) {
     dispatch({ type: DELETE_FOCUS, id });
 
     NavigationService.navigate('Focuses');
-  }).catch(error => {
-    console.error(error);
-  })
+  }).catch(err);
 };
 
-export function updateFocus(dispatch, id, updateFields) {
-  db.collection('focuses').doc(id).update(updateFields).then(() => {
-    dispatch({ type: UPDATE_FOCUS, id, updateFields }); 
-  }).catch(error => {
-    console.error(error);
-  });
+export function updateFocus(dispatch, id, update) {
+  db.collection('focuses').doc(id).update(update).then(() => {
+    dispatch({ type: UPDATE_FOCUS, id, update }); 
+  }).catch(err);
 };
 
 export function updateFocusCategories(dispatch, name, newName) {
@@ -38,24 +33,22 @@ export function updateFocusCategories(dispatch, name, newName) {
   query = query.where('userId', '==', auth.currentUser.uid);
   query = query.where('category', '==', name);
 
-  query.get().then(snapshot => {
+  query.get().then(querySnapshot => {
     let batch = db.batch();
 
-    snapshot.forEach(doc => {
-      const focusRef = db.collection('focuses').doc(doc.id);
+    querySnapshot.forEach(docSnapshot => {
+      const focusRef = db.collection('focuses').doc(docSnapshot.id);
       batch.update(focusRef, { category: newName });
     });
 
     batch.commit().then(() => {
-      snapshot.forEach(doc => {
+      querySnapshot.forEach(docSnapshot => {
         dispatch({ 
           type: UPDATE_FOCUS, 
-          id: doc.id, 
-          focus: {...doc.data(), category: newName }
+          id: docSnapshot.id, 
+          focus: {...docSnapshot.data(), category: newName }
         });
       })
-    }).catch(error => {
-      console.error(error);
-    });
+    }).catch(err);
   });
 };

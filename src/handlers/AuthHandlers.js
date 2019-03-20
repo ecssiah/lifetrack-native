@@ -8,7 +8,9 @@ import {
 import { UPDATE_FOCUSES } from '../constants/Focuses';
 import { UPDATE_CATEGORIES, UNCATEGORIZED } from '../constants/Categories';
 import { UPDATE_SETTINGS } from '../constants/Settings';
-import { UPDATE_STATS, SET_UNTRACKED_START } from '../constants/Stats';
+import { UPDATE_STATS } from '../constants/Stats';
+import { updateStats } from './StatsHandlers';
+import { err } from '../utils';
 
 export function loadUserData() {
   const settingsPromise = db.collection('settings').doc(
@@ -74,9 +76,7 @@ export function loadUser(dispatch) {
     dispatch({ type: UPDATE_FOCUSES, focuses });
 
     NavigationService.navigate('App');
-  }).catch(error => {
-    console.error(error);
-  });
+  }).catch(err);
 };
 
 export function signUp(dispatch, email, password) {
@@ -92,6 +92,8 @@ export function signUp(dispatch, email, password) {
     };
 
     const stats = {
+      newUser: true,
+      timeInactive: null,
       untracked: 0,
     };
 
@@ -101,12 +103,8 @@ export function signUp(dispatch, email, password) {
       dispatch({ type: UPDATE_STATS, stats });
 
       NavigationService.navigate('App');
-    }).catch(error => {
-      console.error(error);
-    });
-  }).catch(error => {
-    console.error(error);
-  });
+    }).catch(err);
+  }).catch(err);
 };
 
 export function signIn(dispatch, email, password) {
@@ -124,16 +122,11 @@ export function signIn(dispatch, email, password) {
       dispatch({ type: UPDATE_SETTINGS, settings });
       dispatch({ type: UPDATE_CATEGORIES, categories });
       dispatch({ type: UPDATE_STATS, stats });
-
       dispatch({ type: UPDATE_FOCUSES, focuses });
 
       NavigationService.navigate('App');
-    }).catch(error => {
-      console.error(error);
-    });
-  }).catch(error => {
-    console.error(error);
-  });
+    }).catch(err);
+  }).catch(err);
 };
 
 export function signOut(dispatch) {
@@ -142,30 +135,31 @@ export function signOut(dispatch) {
   query = query.where('userId', '==', auth.currentUser.uid);
   query = query.where('active', '==', true);
 
-  query.get().then(snapshot => {
-    let batch = db.batch();
+  let promises = [];
 
-    snapshot.forEach(doc => {
-      const focusRef = db.collection('focuses').doc(doc.id);
+  query.get().then(querySnapshot => {
+    querySnapshot.forEach(docSnapshot => {
+      const transactionPromise = db.runTransaction(async transaction => {
+        const doc = await transaction.get(docSnapshot.ref);
 
-      batch.update(
-        focusRef, 
-        { 
-          active: false, 
+        const update = {
+          active: false,
           working: true,
-          time: doc.get('workPeriod') * 60,
-        }
-      );
-    });
+          time: doc.data().workPeriod * 60,
+        };
 
-    batch.commit().then(() => {
-      dispatch({ type: SET_UNTRACKED_START, timestamp: Date.now() });
-
-      auth.signOut().catch(error => {
-        console.error(error);
+        transaction.update(docSnapshot.ref, update);
       });
-    }).catch(error => {
-      console.error(error);
+
+      promises.push(transactionPromise);
     });
-  });
+
+    Promise.all(promises).then(() => {
+      updateStats(
+        dispatch, 
+        { timeInactive: Date.now() }, 
+        () => auth.signOut().catch(err)
+      );
+    }).catch(err);
+  }).catch(err);
 };

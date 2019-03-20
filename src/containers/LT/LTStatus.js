@@ -1,12 +1,9 @@
 import React from 'react';
-import { AppState, Alert } from 'react-native';
+import { AppState } from 'react-native';
 import { connect } from 'react-redux';
 import { StatusBar, View } from 'react-native';
-import { 
-  activateApp, 
-  setAppState, 
-  setTimeInactive 
-} from '../../handlers/StatusHandlers';
+import { activateApp } from '../../handlers/StatusHandlers';
+import { updateStats } from '../../handlers/StatsHandlers';
 import createStyles, { Color, Screen } from '../../styles';
 
 const styles = createStyles({
@@ -29,17 +26,21 @@ class LTStatus extends React.Component
 
   _handleAppStateChange = nextAppState => {
     const willBeInactive = nextAppState.match(/inactive|background/);
-    const isInactive = this.props.status.appState.match(/inactive|background/);
+    const isInactive = this.props.stats.appState.match(/inactive|background/);
+
+    let update = {
+      appState: nextAppState,
+    };
 
     if (isInactive && nextAppState === 'active') {
-      this.props.activateApp(this.props.status.timeInactive);
+      this.props.activateApp();
     } 
     
-    if (this.props.status.appState === 'active' && willBeInactive) {
-      this.props.setTimeInactive();
+    if (this.props.stats.appState === 'active' && willBeInactive) {
+      update.timeInactive = Date.now();
     }
 
-    this.props.setAppState(nextAppState);
+    this.props.updateStats(update);
   };
 
   render() {
@@ -52,13 +53,13 @@ class LTStatus extends React.Component
 };
 
 const mapStateToProps = state => ({
+  stats: state.stats,
   status: state.status,
 });
 
 const mapDispatchToProps = dispatch => ({
   activateApp: timeInactive => activateApp(dispatch, timeInactive),
-  setAppState: appState => setAppState(dispatch, appState),
-  setTimeInactive: () => setTimeInactive(dispatch),
+  updateStats: update => updateStats(dispatch, update),
 });
 
 

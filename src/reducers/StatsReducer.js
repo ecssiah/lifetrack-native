@@ -3,15 +3,21 @@ import {
   UPDATE_UNTRACKED,
 } from "../constants/Stats";
 
-function statsReducer(state = {}, action) {
+const initialState = {
+  appState: '',
+};
+
+function statsReducer(state = initialState, action) {
   let newState = {...state};
 
   switch (action.type) {
     case UPDATE_STATS: {
-      return action.stats;
+      Object.assign(newState, action.update);
+
+      return newState;
     }
     case UPDATE_UNTRACKED: {
-      newState.untracked += 1; 
+      newState.untracked += action.elapsed;
 
       return newState;
     }

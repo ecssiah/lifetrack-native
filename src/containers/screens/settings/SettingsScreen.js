@@ -117,14 +117,22 @@ class SettingsScreen extends React.Component
       '',
       [
         { text: 'Cancel', onPress: null },
-        { text: 'Confirm', onPress: this._handleLogout },
+        { text: 'Confirm', onPress: this._onLogoutConfirm },
       ],
     );
   };
 
-  _handleLogout = () => {
+  _onLogoutConfirm = () => {
     for (const key in this.props.focuses) {
       clearInterval(this.props.focuses[key].timer);
+    }
+
+    if (this.props.stats.timeInactive) {
+      const elapsed = Math.floor(
+        (Date.now() - this.props.stats.timeInactive) / 1000
+      );
+
+      this.props.updateUntracked(elapsed);
     }
 
     this.props.signOut();
@@ -202,6 +210,7 @@ const mapStateToProps = state => ({
   focus: state.focus,
   focuses: state.focuses,
   settings: state.settings,
+  stats: state.stats,
 });
 
 const mapDispatchToProps = dispatch => ({

@@ -5,8 +5,8 @@ import {
 } from 'react-native';
 import { 
   addCategory, 
-  updateCategory,
-  deleteCategory 
+  deleteCategory, 
+  setCategoryName
 } from '../../../handlers/CategoryHandlers';
 import { UNCATEGORIZED } from '../../../constants/Categories';
 import createStyles, { FontSize } from '../../../styles'; 
@@ -92,7 +92,7 @@ class CategoriesScreen extends React.Component
     });
   };
 
-  _handleCategoryDelete = () => {
+  _onCategoryDeleteConfirm = () => {
     this.props.deleteCategory(this.state.categoryName);
 
     this.setState({
@@ -105,8 +105,8 @@ class CategoriesScreen extends React.Component
       'Are you sure you want to delete ' + this.state.categoryName + '?',
       '',
       [
-        { text: 'Cancel', onPress: null, },
-        { text: 'Confirm', onPress: this._handleCategoryDelete, },
+        { text: 'Cancel', onPress: null },
+        { text: 'Confirm', onPress: this._onCategoryDeleteConfirm },
       ],
     );
   };
@@ -141,8 +141,7 @@ class CategoriesScreen extends React.Component
         newCategoryName: this.state.categoryName,
       });
     } else {
-      this.props.updateCategory(
-        {...this.props.categories[this.state.categoryName]},
+      this.props.setCategoryName(
         this.state.categoryName, 
         this.state.newCategoryName, 
       );
@@ -227,10 +226,8 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   addCategory: name => addCategory(dispatch, name),
-  updateCategory: (category, name, newName) => {
-    return updateCategory(dispatch, category, name, newName);
-  },
   deleteCategory: name => deleteCategory(dispatch, name),
+  setCategoryName: (name, newName) => setCategoryName(dispatch, name, newName),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(CategoriesScreen);

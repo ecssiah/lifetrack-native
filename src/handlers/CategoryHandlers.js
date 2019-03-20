@@ -1,69 +1,68 @@
 import { db, auth } from '../config/fbConfig';
+import { err } from '../utils';
 import firebase from 'firebase';
 import { 
+  UNCATEGORIZED,
   ADD_CATEGORY, 
   UPDATE_CATEGORY,
   DELETE_CATEGORY,
-  SET_CATEGORY_SHOW,
-  UNCATEGORIZED,
+  SET_CATEGORY_NAME,
 } from "../constants/Categories";
 import { updateFocusCategories } from './FocusesHandlers';
 
 export function addCategory(dispatch, name) {
-  const categoryUpdate = {};
-  categoryUpdate[name] = { 
-    show: true 
+  const dbUpdate = {
+    [name]: { show: true },
   };
   
   db.collection('categories').doc(auth.currentUser.uid).update(
-    categoryUpdate
+    dbUpdate
   ).then(() => {
     dispatch({ type: ADD_CATEGORY, name });
-  }).catch(error => {
-    console.error(error);
-  });
+  }).catch(err);
 };
 
-export function updateCategory(dispatch, category, name, newName) {
-  const categoryUpdate = {};
-  categoryUpdate[newName] = category; 
-  categoryUpdate[name] = firebase.firestore.FieldValue.delete();
+export function updateCategory(dispatch, name, update) {
+  const dbUpdate = {
+    [name]: update,
+  };
 
   db.collection('categories').doc(auth.currentUser.uid).update(
-    categoryUpdate
+    dbUpdate
   ).then(() => {
-    dispatch({ type: UPDATE_CATEGORY, category, name, newName });
-
-    updateFocusCategories(dispatch, name, newName);
-  }).catch(error => {
-    console.error(error);
-  });
+    dispatch({ type: UPDATE_CATEGORY, name, update });
+  }).catch(err);
 };
 
 export function deleteCategory(dispatch, name) {
-  const categoryUpdate = {};
-  categoryUpdate[name] = firebase.firestore.FieldValue.delete();
+  const dbUpdate = {
+    [name]: firebase.firestore.FieldValue.delete(),
+  }
   
   db.collection('categories').doc(auth.currentUser.uid).update(
-    categoryUpdate
+    dbUpdate
   ).then(() => {
     dispatch({ type: DELETE_CATEGORY, name });
-
     updateFocusCategories(dispatch, name, UNCATEGORIZED);
-  }).catch(error => {
-    console.error(error);
-  });
+  }).catch(err);
 };
 
-export function setCategoryShow(dispatch, name, show) {
-  const categoryUpdate = {};
-  categoryUpdate[name] = { show };
+export function setCategoryName(dispatch, name, newName) {
+  const categoryRef = db.collection('categories').doc(auth.currentUser.uid);
 
-  db.collection('categories').doc(auth.currentUser.uid).update(
-    categoryUpdate
-  ).then(() => {
-    dispatch({ type: SET_CATEGORY_SHOW, name, show });
-  }).catch(error => {
-    console.error(error);
-  }); 
+  db.runTransaction(transaction => {
+    return transaction.get(categoryRef).then(doc => {
+      const currentCategory = doc.get(name);
+
+      transaction.update(
+        categoryRef,
+        { 
+          [newName]: currentCategory, 
+          [name]: firebase.firestore.FieldValue.delete(),
+        },
+      );
+    }).then(() => {
+      dispatch({ type: SET_CATEGORY_NAME, name, newName });
+    }).catch(err);
+  });
 };

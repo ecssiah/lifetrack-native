@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { auth } from '../../../config/fbConfig';
 import { UNCATEGORIZED } from '../../../constants/Categories';
 import { addFocus } from '../../../handlers/FocusesHandlers';
-import { setCategoryShow } from '../../../handlers/CategoryHandlers';
+import { setCategoryShow, updateCategory } from '../../../handlers/CategoryHandlers';
 import createStyles from '../../../styles';
 
 import LTIcon from '../../../components/LT/LTIcon';
@@ -87,10 +87,11 @@ class FocusesScreen extends React.Component
   };
 
   _onCategorySelect = categoryName => {
-    this.props.setCategoryShow(
-      categoryName, 
-      !this.props.categories[categoryName].show
-    );
+    const update = {
+      show: !this.props.categories[categoryName].show,
+    };
+
+    this.props.updateCategory(categoryName, update);
   };
 
   _onFocusSelect = id => {
@@ -119,10 +120,7 @@ class FocusesScreen extends React.Component
       if (category.show) {
         for (const key in this.props.focuses) {
           if (this.props.focuses[key].category === categoryName) {
-            data.push({
-              id: key,
-              ...this.props.focuses[key],
-            });
+            data.push({ id: key, ...this.props.focuses[key] });
           }
         }
 
@@ -173,7 +171,7 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
   setId: id => dispatch({ type: SET_ID, id }),
   addFocus: focus => addFocus(dispatch, focus), 
-  setCategoryShow: (name, show) => setCategoryShow(dispatch, name, show),
+  updateCategory: (name, update) => updateCategory(dispatch, name, update),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(FocusesScreen);

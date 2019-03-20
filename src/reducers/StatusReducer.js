@@ -1,22 +1,15 @@
 import { 
-  SET_APP_STATE, 
+  UPDATE_STATUS,
   INC_TRACKED,
   DEC_TRACKED,
-  SET_TIME_INACTIVE,
-  SET_TRACKED, 
 } from "../constants/Status";
 
-const initialState = {
-  appState: 'active',
-  tracked: 0,
-};
-
-function statusReducer(state = initialState, action) {
+function statusReducer(state = {}, action) {
   let newState = {...state};
 
   switch(action.type) {
-    case SET_APP_STATE: {
-      newState.appState = action.appState;
+    case UPDATE_STATUS: {
+      Object.assign(newState, action.update);
 
       return newState;
     }
@@ -27,16 +20,6 @@ function statusReducer(state = initialState, action) {
     }
     case DEC_TRACKED: {
       newState.tracked--;
-
-      return newState;
-    }
-    case SET_TRACKED: {
-      newState.tracked = action.tracked;
-
-      return newState;
-    }
-    case SET_TIME_INACTIVE: {
-      newState.timeInactive = action.timeInactive;
 
       return newState;
     }
