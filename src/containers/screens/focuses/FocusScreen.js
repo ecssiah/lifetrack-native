@@ -46,10 +46,10 @@ class FocusScreen extends React.Component
     const focus = this.props.focuses[this.props.focus.id];
 
     if (focus.active) {
+      clearInterval(focus.timer);
+
       if (focus.working) {
         update.active = false;
-
-        clearInterval(focus.timer);
 
         if (this.props.status.tracked === 1) {
           this.props.updateStats({ timeInactive: Date.now() });
@@ -59,8 +59,11 @@ class FocusScreen extends React.Component
       } else {
         update.working = true;
         update.time = focus.workPeriod * 60;
+        update.timer = setInterval(this._updateTimer, 1000);
       }
     } else {
+      update.timer = setInterval(this._updateTimer, 1000);
+
       if (focus.working) {
         update.active = true;
 
@@ -70,8 +73,6 @@ class FocusScreen extends React.Component
 
         this.props.incTracked();
       } 
-
-      update.timer = setInterval(this._updateTimer, 1000);
     }
 
     this.props.updateFocus(this.props.focus.id, update); 

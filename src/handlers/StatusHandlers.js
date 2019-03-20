@@ -6,45 +6,46 @@ import { UPDATE_FOCUS } from "../constants/Focuses";
 import { updateUntracked } from "./StatsHandlers";
 import { updateExperience } from "./FocusesHandlers";
 
-export function activateApp(dispatch) {
-  db.collection('stats').doc(auth.currentUser.uid).get().then(docSnapshot => {
-    searchForActiveFocuses(dispatch, docSnapshot.data().timeInactive);
-  }).catch(err);
+export async function activateApp(dispatch) {
+  const doc = db.collection('stats').doc(auth.currentUser.uid);
+  const docSnapshot = await doc.get().catch(err);
+
+  searchForActiveFocuses(dispatch, docSnapshot.data().timeInactive);
 };
 
-function searchForActiveFocuses(dispatch, timeInactive) {
+async function searchForActiveFocuses(dispatch, timeInactive) {
   let query = db.collection('focuses');
   query = query.where('userId', '==', auth.currentUser.uid);
   query = query.where('active', '==', true);
   query = query.where('working', '==', true);
 
-  query.get().then(querySnapshot => {
-    const elapsed = getElapsed(timeInactive);
+  const elapsed = getElapsed(timeInactive);
 
-    if (querySnapshot.empty) {
-      updateUntracked(dispatch, elapsed);
-      return;
-    }
+  const querySnapshot = await query.get().catch(err);
 
-    const batch = db.batch();
+  if (querySnapshot.empty) {
+    updateUntracked(dispatch, elapsed);
+    return;
+  }
 
-    querySnapshot.forEach(docSnapshot => {
-      clearInterval(docSnapshot.data().timer);
-      batch.update(docSnapshot.ref, { active: false });
+  const batch = db.batch();
+
+  querySnapshot.forEach(docSnapshot => {
+    clearInterval(docSnapshot.data().timer);
+    batch.update(docSnapshot.ref, { active: false });
+  });
+
+  await batch.commit().catch(err);
+  
+  dispatch({ type: UPDATE_STATUS, update: { tracked: 0 } });
+
+  querySnapshot.forEach(docSnapshot => {
+    dispatch({ 
+      type: UPDATE_FOCUS, id: docSnapshot.id, update: { active: false }
     });
+  });
 
-    batch.commit().then(() => {
-      dispatch({ type: UPDATE_STATUS, update: { tracked: 0 } });
-
-      querySnapshot.forEach(docSnapshot => {
-        dispatch({ 
-          type: UPDATE_FOCUS, id: docSnapshot.id, update: { active: false }
-        });
-      });
-    }).catch(err);
-
-    requestFocusUpdate(dispatch, elapsed, querySnapshot);
-  }).catch(err);
+  requestFocusUpdate(dispatch, elapsed, querySnapshot);
 };
 
 function requestFocusUpdate(dispatch, elapsed, querySnapshot) {

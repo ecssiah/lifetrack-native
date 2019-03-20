@@ -10,59 +10,46 @@ import {
 } from "../constants/Categories";
 import { updateFocusCategories } from './FocusesHandlers';
 
-export function addCategory(dispatch, name) {
-  const dbUpdate = {
-    [name]: { show: true },
-  };
-  
-  db.collection('categories').doc(auth.currentUser.uid).update(
-    dbUpdate
-  ).then(() => {
-    dispatch({ type: ADD_CATEGORY, name });
-  }).catch(err);
+export async function addCategory(dispatch, name) {
+  const doc = db.collection('categories').doc(auth.currentUser.uid);
+
+  await doc.update({ [name]: { show: true } }).catch(err);
+
+  dispatch({ type: ADD_CATEGORY, name });
 };
 
-export function updateCategory(dispatch, name, update) {
-  const dbUpdate = {
-    [name]: update,
-  };
+export async function updateCategory(dispatch, name, update) {
+  const doc = db.collection('categories').doc(auth.currentUser.uid)
 
-  db.collection('categories').doc(auth.currentUser.uid).update(
-    dbUpdate
-  ).then(() => {
-    dispatch({ type: UPDATE_CATEGORY, name, update });
-  }).catch(err);
+  await doc.update({ [name]: update }).catch(err);
+
+  dispatch({ type: UPDATE_CATEGORY, name, update });
 };
 
-export function deleteCategory(dispatch, name) {
-  const dbUpdate = {
-    [name]: firebase.firestore.FieldValue.delete(),
-  }
-  
-  db.collection('categories').doc(auth.currentUser.uid).update(
-    dbUpdate
-  ).then(() => {
-    dispatch({ type: DELETE_CATEGORY, name });
-    updateFocusCategories(dispatch, name, UNCATEGORIZED);
+export async function deleteCategory(dispatch, name) {
+  const doc = db.collection('categories').doc(auth.currentUser.uid)
+
+  await doc.update({ 
+    [name]: firebase.firestore.FieldValue.delete() 
   }).catch(err);
+
+  await updateFocusCategories(dispatch, name, UNCATEGORIZED).catch(err);
+
+  dispatch({ type: DELETE_CATEGORY, name });
 };
 
-export function setCategoryName(dispatch, name, newName) {
+export async function setCategoryName(dispatch, name, newName) {
   const categoryRef = db.collection('categories').doc(auth.currentUser.uid);
 
-  db.runTransaction(transaction => {
-    return transaction.get(categoryRef).then(doc => {
-      const currentCategory = doc.get(name);
+  await db.runTransaction(async transaction => {
+    const doc = await transaction.get(categoryRef).catch(err);
+    const currentCategory = doc.get(name);
 
-      transaction.update(
-        categoryRef,
-        { 
-          [newName]: currentCategory, 
-          [name]: firebase.firestore.FieldValue.delete(),
-        },
-      );
-    }).then(() => {
-      dispatch({ type: SET_CATEGORY_NAME, name, newName });
-    }).catch(err);
-  });
+    transaction.update(categoryRef, {
+      [newName]: currentCategory,
+      [name]: firebase.firestore.FieldValue.delete(),
+    });
+  }).catch(err);
+
+  dispatch({ type: SET_CATEGORY_NAME, name, newName });
 };

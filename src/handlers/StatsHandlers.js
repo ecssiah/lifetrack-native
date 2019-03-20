@@ -5,19 +5,17 @@ import {
   UPDATE_UNTRACKED 
 } from "../constants/Stats";
 
-export function updateStats(dispatch, update) {
-  return new Promise(resolve => {
+export async function updateStats(dispatch, update) {
+  return new Promise(async resolve => {
     const doc = db.collection('stats').doc(auth.currentUser.uid);
+    await doc.update(update).catch(err);
 
-    doc.update(update).then(() => {
-      dispatch({ type: UPDATE_STATS, update });
-
-      resolve();
-    }).catch(err);
+    dispatch({ type: UPDATE_STATS, update });
+    resolve();
   });
 };
 
-export function updateUntracked(dispatch, elapsed) {
+export async function updateUntracked(dispatch, elapsed) {
   if (elapsed < 30) {
     return;
   } else {
@@ -26,12 +24,12 @@ export function updateUntracked(dispatch, elapsed) {
 
   const statsRef = db.collection('stats').doc(auth.currentUser.uid);
 
-  db.runTransaction(async transaction => {
+  await db.runTransaction(async transaction => {
     const doc = await transaction.get(statsRef);
     const untracked = Math.floor(doc.data().untracked + elapsed);
 
     transaction.update(statsRef, { untracked });
-  }).then(() => {
-    dispatch({ type: UPDATE_UNTRACKED, elapsed });
   }).catch(err);
+  
+  dispatch({ type: UPDATE_UNTRACKED, elapsed });
 };

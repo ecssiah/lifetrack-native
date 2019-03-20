@@ -8,59 +8,59 @@ import {
   EXPERIENCE_PER_SECOND,
 } from "../constants/Focuses";
 
-export function addFocus(dispatch, focus) {
-  db.collection('focuses').add(focus).then(doc => {
-    dispatch({ type: ADD_FOCUS, id: doc.id, focus });
-  }).catch(err);
+export async function addFocus(dispatch, focus) {
+  const doc = await db.collection('focuses').add(focus).catch(err);
+
+  dispatch({ type: ADD_FOCUS, id: doc.id, focus });
 };
 
-export function deleteFocus(dispatch, id) {
-  db.collection('focuses').doc(id).delete().then(() => {
-    dispatch({ type: DELETE_FOCUS, id });
+export async function deleteFocus(dispatch, id) {
+  await db.collection('focuses').doc(id).delete().catch(err);
 
-    NavigationService.navigate('Focuses');
-  }).catch(err);
+  dispatch({ type: DELETE_FOCUS, id });
+
+  NavigationService.navigate('Focuses');
 };
 
-export function updateFocus(dispatch, id, update) {
-  db.collection('focuses').doc(id).update(update).then(() => {
-    dispatch({ type: UPDATE_FOCUS, id, update }); 
-  }).catch(err);
+export async function updateFocus(dispatch, id, update) {
+  await db.collection('focuses').doc(id).update(update).catch(err);
+
+  dispatch({ type: UPDATE_FOCUS, id, update }); 
 };
 
-export function updateFocusCategories(dispatch, name, newName) {
-  let query;
-  query = db.collection('focuses');
-  query = query.where('userId', '==', auth.currentUser.uid);
-  query = query.where('category', '==', name);
+export async function updateFocusCategories(dispatch, name, newName) {
+    let query;
+    query = db.collection('focuses');
+    query = query.where('userId', '==', auth.currentUser.uid);
+    query = query.where('category', '==', name);
 
-  query.get().then(querySnapshot => {
-    let batch = db.batch();
+    const querySnapshot = await query.get().catch(err);
+
+    const batch = db.batch();
 
     querySnapshot.forEach(docSnapshot => {
       const focusRef = db.collection('focuses').doc(docSnapshot.id);
       batch.update(focusRef, { category: newName });
     });
 
-    batch.commit().then(() => {
-      querySnapshot.forEach(docSnapshot => {
-        dispatch({ 
-          type: UPDATE_FOCUS, 
-          id: docSnapshot.id, 
-          focus: {...docSnapshot.data(), category: newName }
-        });
-      })
-    }).catch(err);
-  });
+    await batch.commit().catch(err);
+
+    querySnapshot.forEach(docSnapshot => {
+      dispatch({ 
+        type: UPDATE_FOCUS, 
+        id: docSnapshot.id, 
+        focus: {...docSnapshot.data(), category: newName }
+      });
+    });
 };
 
-export function updateExperience(dispatch, elapsed, querySnapshot) {
+export async function updateExperience(dispatch, elapsed, querySnapshot) {
   let update = {};
   let promises = [];
   
   querySnapshot.forEach(docSnapshot => {
     const transactionPromise = db.runTransaction(async transaction => {
-      const doc = await transaction.get(docSnapshot.ref);
+      const doc = await transaction.get(docSnapshot.ref).catch(err);
       const deltaExp = EXPERIENCE_PER_SECOND * elapsed;
 
       update[doc.id] = {
@@ -74,14 +74,14 @@ export function updateExperience(dispatch, elapsed, querySnapshot) {
       }
 
       transaction.update(docSnapshot.ref, update[doc.id]);
-    }).catch(err);
+    });
 
     promises.push(transactionPromise);
   });
 
-  Promise.all(promises).then(() => {
-    for (const id in update) {
-      dispatch({ type: UPDATE_FOCUS, id, update: update[id] });
-    }
-  }).catch(err);
+  await Promise.all(promises).catch(err);
+
+  for (const id in update) {
+    dispatch({ type: UPDATE_FOCUS, id, update: update[id] });
+  }
 };
