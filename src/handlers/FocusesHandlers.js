@@ -52,3 +52,35 @@ export function updateFocusCategories(dispatch, name, newName) {
     }).catch(err);
   });
 };
+
+export function updateExperience(dispatch, elapsed, querySnapshot) {
+  const batch = db.batch();
+
+  let update = {};
+  let focuses = {};
+
+  querySnapshot.forEach(docSnapshot => {
+    const docId = docSnapshot.id;
+
+    update[docId] = {};
+    focuses[docId] = {...docSnapshot.data()};
+
+    const deltaExp = EXPERIENCE_PER_SECOND * elapsed;
+
+    update[docId].level = focuses[docId].level;
+    update[docId].experience = focuses[docId].experience + deltaExp;
+
+    while (update[docId].experience >= 100) {
+      update[docId].level += 1;
+      update[docId].experience -= 100;
+    }
+
+    batch.update(db.collection('focuses').doc(docId), update[docId]);
+  });
+
+  batch.commit().then(() => {
+    for (const id in update) {
+      dispatch({ type: UPDATE_FOCUS, id, update: update[id] });
+    }
+  }).catch(err);
+};

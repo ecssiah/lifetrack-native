@@ -92,7 +92,6 @@ export function signUp(dispatch, email, password) {
     };
 
     const stats = {
-      newUser: true,
       timeInactive: null,
       untracked: 0,
     };

@@ -5,11 +5,13 @@ import { updateUntracked } from "./StatsHandlers";
 import { 
   UPDATE_STATUS,
 } from "../constants/Status";
-import { 
-  EXPERIENCE_PER_SECOND, 
-  UPDATE_FOCUS
-} from "../constants/Focuses";
-import { updateFocus } from "./FocusesHandlers";
+import { updateFocus, updateExperience } from "./FocusesHandlers";
+
+export function activateApp(dispatch) {
+  db.collection('stats').doc(auth.currentUser.uid).get().then(docSnapshot => {
+    searchForActiveFocuses(dispatch, docSnapshot.data().timeInactive);
+  }).catch(err);
+};
 
 function searchForActiveFocuses(dispatch, timeInactive) {
   let query = db.collection('focuses');
@@ -45,67 +47,33 @@ function searchForActiveFocuses(dispatch, timeInactive) {
       });
     }).catch(err);
 
-    const title = 'Update Focuses?';
-
-    let message = '';
-    message += 'These focuses have \n'
-    message += `been active for ${displayTime(elapsed)}.\n`; 
-    message += '\n';
-    message += activeFocusNames;
-    message += '\n';
-    message += 'Is this correct?';
-
-    Alert.alert(
-      title,
-      message,
-      [
-        { 
-          text: 'Cancel', 
-          onPress: () => updateUntracked(dispatch, elapsed) 
-        },
-        { 
-          text: 'Confirm', 
-          onPress: () => updateExperience(dispatch, elapsed, querySnapshot) 
-        },
-      ],
-    )
+    requestFocusUpdate(dispatch, elapsed, activeFocusNames);
   }).catch(err);
 };
 
-export function activateApp(dispatch) {
-  db.collection('stats').doc(auth.currentUser.uid).get().then(docSnapshot => {
-    searchForActiveFocuses(dispatch, docSnapshot.data().timeInactive);
-  }).catch(err);
-};
+function requestFocusUpdate(dispatch, elapsed, activeFocusNames) {
+  const title = 'Update Focuses?';
 
-function updateExperience(dispatch, elapsed, querySnapshot) {
-  const batch = db.batch();
+  let message = '';
+  message += 'These focuses have \n'
+  message += `been active for ${displayTime(elapsed)}.\n`; 
+  message += '\n';
+  message += activeFocusNames;
+  message += '\n';
+  message += 'Is this correct?';
 
-  let update = {};
-  let focuses = {};
-
-  querySnapshot.forEach(docSnapshot => {
-    const docId = docSnapshot.id;
-
-    update[docId] = {};
-    focuses[docId] = {...docSnapshot.data()};
-
-    const deltaExp = EXPERIENCE_PER_SECOND * elapsed;
-
-    update[docId].level = focuses[docId].level;
-    update[docId].experience = focuses[docId].experience + deltaExp;
-
-    while (update[docId].experience >= 100) {
-      update[docId].level += 1;
-      update[docId].experience -= 100;
-    }
-
-    batch.update(db.collection('focuses').doc(docId), update[docId]);
-  });
-
-  batch.commit().then(() => {
-    for (const id in update) {
-      dispatch({ type: UPDATE_FOCUS, id, update: update[id] });
-    }
-  }).catch(err);
+  Alert.alert(
+    title,
+    message,
+    [
+      { 
+        text: 'Cancel', 
+        onPress: () => updateUntracked(dispatch, elapsed) 
+      },
+      { 
+        text: 'Confirm', 
+        onPress: () => updateExperience(dispatch, elapsed, querySnapshot) 
+      },
+    ],
+  );
 };
