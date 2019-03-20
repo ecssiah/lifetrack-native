@@ -11,7 +11,7 @@ import {
 export function addFocus(dispatch, focus) {
   db.collection('focuses').add(focus).then(doc => {
     dispatch({ type: ADD_FOCUS, id: doc.id, focus });
-  }).catch(error => err(error));
+  }).catch(err);
 };
 
 export function deleteFocus(dispatch, id) {
@@ -19,13 +19,13 @@ export function deleteFocus(dispatch, id) {
     dispatch({ type: DELETE_FOCUS, id });
 
     NavigationService.navigate('Focuses');
-  }).catch(error => err(error));
+  }).catch(err);
 };
 
 export function updateFocus(dispatch, id, update) {
   db.collection('focuses').doc(id).update(update).then(() => {
     dispatch({ type: UPDATE_FOCUS, id, update }); 
-  }).catch(error => err(error));
+  }).catch(err);
 };
 
 export function updateFocusCategories(dispatch, name, newName) {
@@ -50,7 +50,7 @@ export function updateFocusCategories(dispatch, name, newName) {
           focus: {...docSnapshot.data(), category: newName }
         });
       })
-    }).catch(error => err(error));
+    }).catch(err);
   });
 };
 
@@ -74,7 +74,7 @@ export function updateExperience(dispatch, elapsed, querySnapshot) {
       }
 
       transaction.update(docSnapshot.ref, update[doc.id]);
-    }).catch(error => err(error));
+    }).catch(err);
 
     promises.push(transactionPromise);
   });
@@ -83,5 +83,5 @@ export function updateExperience(dispatch, elapsed, querySnapshot) {
     for (const id in update) {
       dispatch({ type: UPDATE_FOCUS, id, update: update[id] });
     }
-  }).catch(error => err(error));
+  }).catch(err);
 };

@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import { auth } from '../../config/fbConfig';
 import { View, Text } from 'react-native';
 import { loadUser } from '../../handlers/AuthHandlers';
-import { updateStats } from '../../handlers/StatsHandlers';
 import createStyles, { Color, FontSize } from '../../styles';
 
 const styles = createStyles({
@@ -48,7 +47,6 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   loadUser: () => loadUser(dispatch),
-  updateStats: update => updateStats(dispatch, update),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(SplashScreen);

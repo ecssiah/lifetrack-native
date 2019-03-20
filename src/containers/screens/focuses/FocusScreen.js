@@ -12,6 +12,7 @@ import FocusTitle from '../../../components/focuses/FocusTitle';
 import FocusTimer from '../../../components/focuses/FocusTimer';
 import FocusGoal from '../../../components/focuses/FocusGoal';
 import FocusExperience from '../../../components/focuses/FocusExperience';
+import { getElapsed } from '../../../utils';
 
 const styles = createStyles({ 
   container: {
@@ -64,13 +65,7 @@ class FocusScreen extends React.Component
         update.active = true;
 
         if (this.props.status.tracked === 0 && this.props.stats.timeInactive) {
-          const elapsed = Math.floor(
-            (Date.now() - this.props.stats.timeInactive) / 1000
-          );
-
-          this.props.updateUntracked(elapsed, () => {
-            this.props.updateStats({ timeInactive: null });
-          });
+          this.props.updateUntracked(getElapsed(this.props.stats.timeInactive));
         }
 
         this.props.incTracked();
@@ -154,7 +149,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  updateStats: (update, callback) => updateStats(dispatch, update, callback),
+  updateStats: update => updateStats(dispatch, update),
   updateFocus: (id, update) => updateFocus(dispatch, id, update),
   updateUntracked: elapsed => updateUntracked(dispatch, elapsed),
   incTracked: () => dispatch({ type: INC_TRACKED }),

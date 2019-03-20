@@ -5,39 +5,33 @@ import {
   UPDATE_UNTRACKED 
 } from "../constants/Stats";
 
-export function updateStats(dispatch, update, callback = null) {
-  db.collection('stats').doc(auth.currentUser.uid).update(
-    update
-  ).then(() => {
-    if (callback) {
-      callback();
-    }
+export function updateStats(dispatch, update) {
+  return new Promise(resolve => {
+    const doc = db.collection('stats').doc(auth.currentUser.uid);
 
-    dispatch({ type: UPDATE_STATS, update });
-  }).catch(error => err(error));
+    doc.update(update).then(() => {
+      dispatch({ type: UPDATE_STATS, update });
+
+      resolve();
+    }).catch(err);
+  });
 };
 
-export function updateUntracked(dispatch, elapsed, callback = null) {
+export function updateUntracked(dispatch, elapsed) {
   if (elapsed < 30) {
-    if (callback) {
-      callback();
-    }
-
     return;
+  } else {
+    elapsed -= 30;
   }
 
   const statsRef = db.collection('stats').doc(auth.currentUser.uid);
 
   db.runTransaction(async transaction => {
     const doc = await transaction.get(statsRef);
-    const newUntracked = Math.floor(doc.data().untracked + elapsed);
+    const untracked = Math.floor(doc.data().untracked + elapsed);
 
-    transaction.update(statsRef, { untracked: newUntracked });
+    transaction.update(statsRef, { untracked });
   }).then(() => {
-    if (callback) {
-      callback();
-    }
-
     dispatch({ type: UPDATE_UNTRACKED, elapsed });
-  }).catch(error => err(error));
+  }).catch(err);
 };

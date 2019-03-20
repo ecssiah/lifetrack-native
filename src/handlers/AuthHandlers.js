@@ -1,4 +1,5 @@
 import { db, auth } from '../config/fbConfig';
+import { err } from '../utils';
 import NavigationService from '../services/NavigationService';
 import { 
   DEFAULT_WORK_PERIOD, 
@@ -10,74 +11,6 @@ import { UPDATE_CATEGORIES, UNCATEGORIZED } from '../constants/Categories';
 import { UPDATE_SETTINGS } from '../constants/Settings';
 import { UPDATE_STATS } from '../constants/Stats';
 import { updateStats } from './StatsHandlers';
-import { err } from '../utils';
-
-export function loadUserData() {
-  const settingsPromise = db.collection('settings').doc(
-    auth.currentUser.uid
-  ).get(); 
-
-  const categoriesPromise = db.collection('categories').doc(
-    auth.currentUser.uid
-  ).get();
-
-  const statsPromise = db.collection('stats').doc(
-    auth.currentUser.uid
-  ).get();
-
-  let focusesQuery;
-  focusesQuery = db.collection('focuses');
-  focusesQuery = focusesQuery.where('userId', '==', auth.currentUser.uid);
-
-  const focusesPromise = focusesQuery.get();
-
-  return Promise.all([
-    settingsPromise,
-    categoriesPromise,
-    statsPromise,
-    focusesPromise,
-  ]);
-};
-
-export function createUserData(settings, categories, stats) {
-  const settingsPromise = db.collection('settings').doc(
-    auth.currentUser.uid
-  ).set(settings); 
-
-  const categoriesPromise = db.collection('categories').doc(
-    auth.currentUser.uid
-  ).set(categories);
-
-  const statsPromise = db.collection('stats').doc(
-    auth.currentUser.uid
-  ).set(stats);
-
-  return Promise.all([
-    settingsPromise,
-    categoriesPromise,
-    statsPromise,
-  ]);
-};
-
-export function loadUser(dispatch) {
-  loadUserData().then(values => {
-    const settings = values[0].data();
-    const categories = values[1].data();
-    const stats = values[2].data();
-
-    const focusesSnapshot = values[3];
-
-    let focuses = {};
-    focusesSnapshot.forEach(doc => focuses[doc.id] = doc.data());
-
-    dispatch({ type: UPDATE_SETTINGS, settings });
-    dispatch({ type: UPDATE_CATEGORIES, categories });
-    dispatch({ type: UPDATE_STATS, stats });
-    dispatch({ type: UPDATE_FOCUSES, focuses });
-
-    NavigationService.navigate('App');
-  }).catch(error => err(error));
-};
 
 export function signUp(dispatch, email, password) {
   auth.createUserWithEmailAndPassword(email, password).then(() => {
@@ -96,36 +29,20 @@ export function signUp(dispatch, email, password) {
       untracked: 0,
     };
 
-    createUserData(settings, categories, stats).then(() => {
+    setUserData(settings, categories, stats).then(() => {
       dispatch({ type: UPDATE_SETTINGS, settings });
       dispatch({ type: UPDATE_CATEGORIES, categories });
       dispatch({ type: UPDATE_STATS, stats });
 
       NavigationService.navigate('App');
-    }).catch(error => err(error));
-  }).catch(error => err(error));
+    }).catch(err);
+  }).catch(err);
 };
 
 export function signIn(dispatch, email, password) {
   auth.signInWithEmailAndPassword(email, password).then(() => {
-    loadUserData().then(values => {
-      const settings = values[0].data();
-      const categories = values[1].data();
-      const stats = values[2].data();
-
-      const focusesSnapshot = values[3];
-
-      let focuses = {};
-      focusesSnapshot.forEach(doc => focuses[doc.id] = doc.data());
-
-      dispatch({ type: UPDATE_SETTINGS, settings });
-      dispatch({ type: UPDATE_CATEGORIES, categories });
-      dispatch({ type: UPDATE_STATS, stats });
-      dispatch({ type: UPDATE_FOCUSES, focuses });
-
-      NavigationService.navigate('App');
-    }).catch(error => err(error));
-  }).catch(error => err(error));
+    loadUser(dispatch);
+  }).catch(err);
 };
 
 export function signOut(dispatch) {
@@ -152,11 +69,81 @@ export function signOut(dispatch) {
     });
 
     Promise.all(promises).then(() => {
-      updateStats(
-        dispatch, 
-        { timeInactive: Date.now() }, 
-        () => auth.signOut().catch(error => err(error))
-      );
-    }).catch(error => err(error));
-  }).catch(error => err(error));
+      updateStats(dispatch, { timeInactive: Date.now() } ).then(() => {
+        auth.signOut().catch(err);
+      });
+    }).catch(err);
+  }).catch(err);
+};
+
+export async function loadUser(dispatch) {
+  try {
+    const userData = await loadUserData();
+
+    const settings = userData[0].data();
+    const categories = userData[1].data();
+    const stats = userData[2].data();
+
+    const focusesSnapshot = userData[3];
+
+    let focuses = {};
+    focusesSnapshot.forEach(doc => focuses[doc.id] = doc.data());
+
+    dispatch({ type: UPDATE_SETTINGS, settings });
+    dispatch({ type: UPDATE_CATEGORIES, categories });
+    dispatch({ type: UPDATE_STATS, stats });
+    dispatch({ type: UPDATE_FOCUSES, focuses });
+
+    NavigationService.navigate('App');
+  }
+  catch (error) {
+    err(error);
+  }
+};
+
+function loadUserData() {
+  const settingsPromise = db.collection('settings').doc(
+    auth.currentUser.uid
+  ).get(); 
+
+  const categoriesPromise = db.collection('categories').doc(
+    auth.currentUser.uid
+  ).get();
+
+  const statsPromise = db.collection('stats').doc(
+    auth.currentUser.uid
+  ).get();
+
+  let focusesQuery;
+  focusesQuery = db.collection('focuses');
+  focusesQuery = focusesQuery.where('userId', '==', auth.currentUser.uid);
+
+  const focusesPromise = focusesQuery.get();
+
+  return Promise.all([
+    settingsPromise,
+    categoriesPromise,
+    statsPromise,
+    focusesPromise,
+  ]);
+};
+
+function setUserData(settings, categories, stats) {
+  const settingsPromise = db.collection('settings').doc(
+    auth.currentUser.uid
+  ).set(settings); 
+
+  const categoriesPromise = db.collection('categories').doc(
+    auth.currentUser.uid
+  ).set(categories);
+
+  const statsPromise = db.collection('stats').doc(
+    auth.currentUser.uid
+  ).set(stats);
+
+  return Promise.all([
+    settingsPromise,
+    categoriesPromise,
+    statsPromise,
+  ]);
 };

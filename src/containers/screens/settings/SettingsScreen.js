@@ -13,6 +13,7 @@ import createStyles, { Color, FontSize } from '../../../styles';
 import LTText from '../../../components/LT/LTText';
 import SettingList from '../../../components/setting/SettingList';
 import SettingsModal from '../../../components/modals/SettingsModal';
+import { getElapsed } from '../../../utils';
 
 const styles = createStyles({
   logout: {
@@ -128,11 +129,7 @@ class SettingsScreen extends React.Component
     }
 
     if (this.props.stats.timeInactive) {
-      const elapsed = Math.floor(
-        (Date.now() - this.props.stats.timeInactive) / 1000
-      );
-
-      this.props.updateUntracked(elapsed);
+      this.props.updateUntracked(getElapsed(this.props.stats.timeInactive));
     }
 
     this.props.signOut();

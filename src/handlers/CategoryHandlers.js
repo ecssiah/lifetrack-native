@@ -19,7 +19,7 @@ export function addCategory(dispatch, name) {
     dbUpdate
   ).then(() => {
     dispatch({ type: ADD_CATEGORY, name });
-  }).catch(error => err(error));
+  }).catch(err);
 };
 
 export function updateCategory(dispatch, name, update) {
@@ -31,7 +31,7 @@ export function updateCategory(dispatch, name, update) {
     dbUpdate
   ).then(() => {
     dispatch({ type: UPDATE_CATEGORY, name, update });
-  }).catch(error => err(error));
+  }).catch(err);
 };
 
 export function deleteCategory(dispatch, name) {
@@ -44,7 +44,7 @@ export function deleteCategory(dispatch, name) {
   ).then(() => {
     dispatch({ type: DELETE_CATEGORY, name });
     updateFocusCategories(dispatch, name, UNCATEGORIZED);
-  }).catch(error => err(error));
+  }).catch(err);
 };
 
 export function setCategoryName(dispatch, name, newName) {
@@ -63,6 +63,6 @@ export function setCategoryName(dispatch, name, newName) {
       );
     }).then(() => {
       dispatch({ type: SET_CATEGORY_NAME, name, newName });
-    }).catch(error => err(error));
+    }).catch(err);
   });
 };

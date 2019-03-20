@@ -1,6 +1,6 @@
 import { db, auth } from "../config/fbConfig";
 import { Alert } from 'react-native';
-import { displayTime, err } from "../utils";
+import { displayTime, err, getElapsed } from "../utils";
 import { UPDATE_STATUS } from "../constants/Status";
 import { UPDATE_FOCUS } from "../constants/Focuses";
 import { updateUntracked } from "./StatsHandlers";
@@ -19,7 +19,7 @@ function searchForActiveFocuses(dispatch, timeInactive) {
   query = query.where('working', '==', true);
 
   query.get().then(querySnapshot => {
-    const elapsed = (Date.now() - timeInactive) / 1000;
+    const elapsed = getElapsed(timeInactive);
 
     if (querySnapshot.empty) {
       updateUntracked(dispatch, elapsed);

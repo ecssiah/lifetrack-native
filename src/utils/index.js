@@ -3,6 +3,12 @@ export function err(error) {
   console.error(error);
 };
 
+export function getElapsed(timeInactive) {
+  return Math.floor(
+    (Date.now() - timeInactive) / 1000
+  );
+};
+
 export function getToday() {
   let d = new Date();
 
