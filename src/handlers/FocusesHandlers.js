@@ -1,29 +1,38 @@
 import { db, auth } from "../config/firebaseConfig";
 import { err } from "../utils";
-import NavigationService from "../services/NavigationService";
 import { 
   EXPERIENCE_PER_SECOND,
   ADD_FOCUS, UPDATE_FOCUS, DELETE_FOCUS,
 } from "../constants/Focuses";
 
 export async function addFocus(dispatch, focus) {
-  const doc = await db.collection('focuses').add(focus).catch(err);
+  return new Promise(async resolve => {
+    const doc = await db.collection('focuses').add(focus).catch(err);
 
-  dispatch({ type: ADD_FOCUS, id: doc.id, focus });
+    dispatch({ type: ADD_FOCUS, id: doc.id, focus });
+
+    resolve();
+  });
 };
 
 export async function deleteFocus(dispatch, id) {
-  await db.collection('focuses').doc(id).delete().catch(err);
+  return new Promise(async resolve => {
+    await db.collection('focuses').doc(id).delete().catch(err);
 
-  dispatch({ type: DELETE_FOCUS, id });
+    dispatch({ type: DELETE_FOCUS, id });
 
-  NavigationService.navigate('Focuses');
+    resolve();
+  });
 };
 
 export async function updateFocus(dispatch, id, update) {
-  await db.collection('focuses').doc(id).update(update).catch(err);
+  return new Promise(async resolve => {
+    await db.collection('focuses').doc(id).update(update).catch(err);
 
-  dispatch({ type: UPDATE_FOCUS, id, update }); 
+    dispatch({ type: UPDATE_FOCUS, id, update }); 
+
+    resolve();
+  });
 };
 
 export async function updateFocusCategories(dispatch, name, newName) {

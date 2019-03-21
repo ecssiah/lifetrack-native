@@ -1,4 +1,5 @@
 import { 
+  SET_CATEGORIES,
   UPDATE_CATEGORIES, 
   ADD_CATEGORY, UPDATE_CATEGORY, DELETE_CATEGORY, 
   UPDATE_CATEGORY_NAME,
@@ -8,6 +9,9 @@ function categoriesReducer(state = {}, action) {
   let newState = {...state};
 
   switch (action.type) {
+    case SET_CATEGORIES: {
+      return action.categories;
+    }
     case UPDATE_CATEGORIES: {
       Object.assign(newState, action.update);
 

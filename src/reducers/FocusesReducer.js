@@ -1,4 +1,5 @@
 import { 
+  SET_FOCUSES,
   UPDATE_FOCUSES, 
   ADD_FOCUS, UPDATE_FOCUS, DELETE_FOCUS, 
 } from "../constants/Focuses";
@@ -7,6 +8,9 @@ function focusesReducer(state = {}, action) {
   let newState = {...state};
 
   switch (action.type) {
+    case SET_FOCUSES: {
+      return action.focuses;
+    }
     case UPDATE_FOCUSES: {
       Object.assign(newState, action.update);
 

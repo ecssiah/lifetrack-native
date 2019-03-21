@@ -4,6 +4,7 @@ import { auth } from '../../config/firebaseConfig';
 import { View, Text } from 'react-native';
 import { loadUser } from '../../handlers/AuthHandlers';
 import createStyles, { Color, FontSize } from '../../styles';
+import { err } from '../../utils';
 
 const styles = createStyles({
   container: {
@@ -24,9 +25,11 @@ const styles = createStyles({
 class SplashScreen extends React.Component 
 {
   componentDidMount() {
-    auth.onAuthStateChanged(user => {
+    auth.onAuthStateChanged(async user => {
       if (user) {
-        this.props.loadUser();
+        await this.props.loadUser().catch(err);
+
+        this.props.navigation.navigate('App');
       } else {
         this.props.navigation.navigate('Auth');
       }

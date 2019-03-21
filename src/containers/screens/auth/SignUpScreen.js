@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { Alert, Button, View, TextInput } from 'react-native';
 import createStyles, { FontSize } from '../../../styles';
 import { signUp } from '../../../handlers/AuthHandlers';
+import { err } from '../../../utils';
 
 const styles = createStyles({
   container: {
@@ -54,12 +55,11 @@ class SignUpScreen extends React.Component
     title: 'Sign Up',
   });
 
-  _onPressSignUp = () => {
+  _onPressSignUp = async () => {
     if (this.state.password === this.state.confirm) {
-      this.props.signUp(
-        this.state.email,
-        this.state.password,
-      );
+      await this.props.signUp(this.state.email, this.state.password).catch(err);
+
+      this.props.navigation.navigate('App');
     } else {
       Alert.alert(
         'Password confirmation \ndoes not match.',
@@ -68,12 +68,12 @@ class SignUpScreen extends React.Component
           { text: 'Confirm', onPress: null },
         ],
       );
-    }
 
-    this.setState({
-      password: '',
-      confirm: '',
-    });
+      this.setState({
+        password: '',
+        confirm: '',
+      });
+    }
   };
 
   render() {

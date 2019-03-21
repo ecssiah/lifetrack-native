@@ -1,42 +1,44 @@
 import { err } from '../utils';
 import { db, auth } from '../config/firebaseConfig';
-import NavigationService from '../services/NavigationService';
 import { 
   DEFAULT_WORK_PERIOD, DEFAULT_WORK_GOAL, DEFAULT_BREAK_PERIOD 
 } from '../constants/Focus';
-import { UPDATE_FOCUSES } from '../constants/Focuses';
-import { UPDATE_CATEGORIES, UNCATEGORIZED } from '../constants/Categories';
-import { UPDATE_SETTINGS } from '../constants/Settings';
-import { UPDATE_STATS } from '../constants/Stats';
+import { SET_FOCUSES } from '../constants/Focuses';
+import { UNCATEGORIZED, SET_CATEGORIES } from '../constants/Categories';
+import { SET_SETTINGS } from '../constants/Settings';
+import { SET_STATS } from '../constants/Stats';
 import { updateStats } from './StatsHandlers';
 
 export async function signUp(dispatch, email, password) {
-  await auth.createUserWithEmailAndPassword(email, password).catch(err);
+  return new Promise(async resolve => {
+    await auth.createUserWithEmailAndPassword(email, password).catch(err);
 
-  const settings = {
-    workPeriod: DEFAULT_WORK_PERIOD,
-    workGoal: DEFAULT_WORK_GOAL,
-    breakPeriod: DEFAULT_BREAK_PERIOD,
-  };
+    const settings = {
+      workPeriod: DEFAULT_WORK_PERIOD,
+      workGoal: DEFAULT_WORK_GOAL,
+      breakPeriod: DEFAULT_BREAK_PERIOD,
+    };
 
-  const categories = {
-    [UNCATEGORIZED]: { show: true },
-  };
+    const categories = {
+      [UNCATEGORIZED]: { show: true },
+    };
 
-  const stats = {
-    newUser: true,
-    appState: 'active',
-    timeInactive: null,
-    untracked: 0,
-  };
+    const stats = {
+      newUser: true,
+      appState: 'active',
+      timeInactive: null,
+      untracked: 0,
+    };
 
-  await setUserData(settings, categories, stats).catch(err);
+    await setUserData(settings, categories, stats).catch(err);
 
-  dispatch({ type: UPDATE_SETTINGS, update: settings });
-  dispatch({ type: UPDATE_CATEGORIES, update: categories });
-  dispatch({ type: UPDATE_STATS, update: stats });
+    dispatch({ type: SET_SETTINGS, settings });
+    dispatch({ type: SET_CATEGORIES, categories });
+    dispatch({ type: SET_STATS, stats });
+    dispatch({ type: SET_FOCUSES, focuses: {} });
 
-  NavigationService.navigate('App');
+    resolve();
+  });
 };
 
 export async function signIn(dispatch, email, password) {
@@ -78,23 +80,25 @@ export async function signOut(dispatch) {
 };
 
 export async function loadUser(dispatch) {
-  const userData = await loadUserData().catch(err);
+  return new Promise(async resolve => {
+    const userData = await loadUserData().catch(err);
 
-  const settings = userData[0].data();
-  const categories = userData[1].data();
-  const stats = userData[2].data();
+    const settings = userData[0].data();
+    const categories = userData[1].data();
+    const stats = userData[2].data();
 
-  const focusesSnapshot = userData[3];
+    const focusesSnapshot = userData[3];
 
-  let focuses = {};
-  focusesSnapshot.forEach(doc => focuses[doc.id] = doc.data());
+    let focuses = {};
+    focusesSnapshot.forEach(doc => focuses[doc.id] = doc.data());
 
-  dispatch({ type: UPDATE_SETTINGS, update: settings });
-  dispatch({ type: UPDATE_CATEGORIES, update: categories });
-  dispatch({ type: UPDATE_STATS, update: stats });
-  dispatch({ type: UPDATE_FOCUSES, update: focuses });
+    dispatch({ type: SET_SETTINGS, settings });
+    dispatch({ type: SET_CATEGORIES, categories });
+    dispatch({ type: SET_STATS, stats });
+    dispatch({ type: SET_FOCUSES, focuses });
 
-  NavigationService.navigate('App');
+    resolve();
+  });
 };
 
 function loadUserData() {
