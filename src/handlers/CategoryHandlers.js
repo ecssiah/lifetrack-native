@@ -9,54 +9,86 @@ import {
 import { updateFocusCategories } from './FocusesHandlers';
 
 export async function addCategory(dispatch, name) {
-  const doc = db.collection('categories').doc(auth.currentUser.uid);
+  return new Promise(async (resolve, reject) => {
+    const doc = db.collection('categories').doc(auth.currentUser.uid);
 
-  const category = {
-    [name]: { show: true }
-  };
+    const category = {
+      [name]: { show: true }
+    };
 
-  await doc.update(category).catch(err);
+    await doc.update(category).catch(error => {
+      reject({ name, error });
+    });
 
-  dispatch({ type: ADD_CATEGORY, name, category });
+    dispatch({ type: ADD_CATEGORY, name, category });
+
+    resolve();
+  });
 };
 
 export async function updateCategory(dispatch, name, update) {
-  const doc = db.collection('categories').doc(auth.currentUser.uid);
+  return new Promise(async (resolve, reject) => {
+    const doc = db.collection('categories').doc(auth.currentUser.uid);
 
-  await doc.update({ [name]: update }).catch(err);
+    await doc.update({ [name]: update }).catch(error => {
+      reject({ name, update, error });
+    });
 
-  dispatch({ type: UPDATE_CATEGORY, name, update });
+    dispatch({ type: UPDATE_CATEGORY, name, update });
+
+    resolve();
+  });
 };
 
 export async function deleteCategory(dispatch, name) {
-  const doc = db.collection('categories').doc(auth.currentUser.uid);
-
-  const update = {
-    [name]: firebase.firestore.FieldValue.delete(),
-  };
-
-  await doc.update(update).catch(err);
-  await updateFocusCategories(dispatch, name, UNCATEGORIZED).catch(err);
-
-  dispatch({ type: DELETE_CATEGORY, name });
-};
-
-export async function updateCategoryName(dispatch, name, newName) {
-  const categoriesRef = db.collection('categories').doc(auth.currentUser.uid);
-
-  await db.runTransaction(async transaction => {
-    const doc = await transaction.get(categoriesRef).catch(err);
-    const category = doc.get(name);
+  return new Promise(async (resolve, reject) => {
+    const doc = db.collection('categories').doc(auth.currentUser.uid);
 
     const update = {
-      [newName]: category,
       [name]: firebase.firestore.FieldValue.delete(),
     };
 
-    transaction.update(categoryRef, update);
-  }).catch(err);
+    await doc.update(update).catch(error => {
+      reject({ name, update, error });
+    });
+    await updateFocusCategories(dispatch, name, UNCATEGORIZED).catch(error => {
+      reject(error);
+    });
 
-  await updateFocusCategories(dispatch, name, newName).catch(err);
+    dispatch({ type: DELETE_CATEGORY, name });
 
-  dispatch({ type: UPDATE_CATEGORY_NAME, name, newName });
+    resolve();
+  });
+};
+
+export async function updateCategoryName(dispatch, name, newName) {
+  return new Promise(async (resolve, reject) => {
+    const categoriesRef = db.collection('categories').doc(auth.currentUser.uid);
+
+    const transactionUpdateFunc = async transaction => {
+      const doc = await transaction.get(categoriesRef).catch(error => {
+        reject({ name, newName, error });
+      });
+
+      const category = doc.get(name);
+      const update = {
+        [newName]: category,
+        [name]: firebase.firestore.FieldValue.delete(),
+      };
+
+      transaction.update(categoryRef, update);
+    };
+
+    await db.runTransaction(transactionUpdateFunc).catch(error => {
+      reject({ name, newName, error });
+    });
+
+    await updateFocusCategories(dispatch, name, newName).catch(error => {
+      reject({ name, newName, error });
+    });
+
+    dispatch({ type: UPDATE_CATEGORY_NAME, name, newName });
+
+    resolve();
+  });
 };

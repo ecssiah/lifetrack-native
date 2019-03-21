@@ -1,14 +1,16 @@
 import { db, auth } from "../config/firebaseConfig";
-import { err } from "../utils";
 import { 
   UPDATE_STATS,
-  UPDATE_UNTRACKED 
+  UPDATE_UNTRACKED, 
+  UNTRACKED_MINIMUM
 } from "../constants/Stats";
 
 export async function updateStats(dispatch, update) {
-  return new Promise(async resolve => {
+  return new Promise(async (resolve, reject) => {
     const doc = db.collection('stats').doc(auth.currentUser.uid);
-    await doc.update(update).catch(err);
+    await doc.update(update).catch(error => {
+      reject({update, error});
+    });
 
     dispatch({ type: UPDATE_STATS, update });
 
@@ -17,21 +19,30 @@ export async function updateStats(dispatch, update) {
 };
 
 export async function updateUntracked(dispatch, elapsed) {
-  return new Promise(async resolve => {
-    if (elapsed > 30) {
-      elapsed -= 30;
+  if (elapsed <= UNTRACKED_MINIMUM) {
+    return;
+  } 
 
-      const statsRef = db.collection('stats').doc(auth.currentUser.uid);
+  elapsed -= UNTRACKED_MINIMUM;
 
-      await db.runTransaction(async transaction => {
-        const doc = await transaction.get(statsRef).catch(err);
-        const untracked = Math.floor(doc.data().untracked + elapsed);
+  return new Promise(async (resolve, reject) => {
+    const statsRef = db.collection('stats').doc(auth.currentUser.uid);
 
-        transaction.update(statsRef, { untracked });
-      }).catch(err);
+    const transactionUpdateFunc = async transaction => {
+      const doc = await transaction.get(statsRef).catch(error => {
+        reject(error);
+      });
 
-      dispatch({ type: UPDATE_UNTRACKED, elapsed });
-    }
+      const untracked = Math.floor(doc.data().untracked + elapsed);
+
+      transaction.update(statsRef, { untracked });
+    };
+
+    await db.runTransaction(transactionUpdateFunc).catch(error => {
+      reject(error);
+    });
+
+    dispatch({ type: UPDATE_UNTRACKED, elapsed });
 
     resolve();
   });

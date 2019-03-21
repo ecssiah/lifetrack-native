@@ -2,12 +2,14 @@ import { db, auth } from "../config/firebaseConfig";
 import { err } from "../utils";
 import { 
   EXPERIENCE_PER_SECOND,
-  ADD_FOCUS, UPDATE_FOCUS, DELETE_FOCUS,
+  ADD_FOCUS, UPDATE_FOCUS, DELETE_FOCUS, UPDATE_FOCUSES,
 } from "../constants/Focuses";
 
 export async function addFocus(dispatch, focus) {
-  return new Promise(async resolve => {
-    const doc = await db.collection('focuses').add(focus).catch(err);
+  return new Promise(async (resolve, reject) => {
+    const doc = await db.collection('focuses').add(focus).catch(error =>{
+      reject({focus, error});
+    });
 
     dispatch({ type: ADD_FOCUS, id: doc.id, focus });
 
@@ -16,8 +18,10 @@ export async function addFocus(dispatch, focus) {
 };
 
 export async function deleteFocus(dispatch, id) {
-  return new Promise(async resolve => {
-    await db.collection('focuses').doc(id).delete().catch(err);
+  return new Promise(async (resolve, reject) => {
+    await db.collection('focuses').doc(id).delete().catch(error => {
+      reject(error);
+    });
 
     dispatch({ type: DELETE_FOCUS, id });
 
@@ -26,8 +30,10 @@ export async function deleteFocus(dispatch, id) {
 };
 
 export async function updateFocus(dispatch, id, update) {
-  return new Promise(async resolve => {
-    await db.collection('focuses').doc(id).update(update).catch(err);
+  return new Promise(async (resolve, reject) => {
+    await db.collection('focuses').doc(id).update(update).catch(error => {
+      reject({update, error});
+    });
 
     dispatch({ type: UPDATE_FOCUS, id, update }); 
 
@@ -51,7 +57,7 @@ export async function updateFocusCategories(dispatch, name, newName) {
   querySnapshot.forEach(doc => {
     dispatch({ 
       type: UPDATE_FOCUS, id: doc.id, 
-      focus: {...doc.data(), category: newName }
+      focus: { ...doc.data(), category: newName }
     });
   });
 };
@@ -61,7 +67,7 @@ export async function updateExperience(dispatch, querySnapshot, elapsed) {
   let promises = [];
   
   querySnapshot.forEach(doc => {
-    const transactionPromise = db.runTransaction(async transaction => {
+    const transactionUpdateFunc = async transaction => {
       const deltaExp = EXPERIENCE_PER_SECOND * elapsed;
       const docSnapshot = await transaction.get(doc.ref).catch(err);
 
@@ -76,14 +82,18 @@ export async function updateExperience(dispatch, querySnapshot, elapsed) {
       }
 
       transaction.update(docSnapshot.ref, update[docSnapshot.id]);
-    });
+    };
+
+    const transactionPromise = db.runTransaction(transactionUpdateFunc);
 
     promises.push(transactionPromise);
   });
 
   await Promise.all(promises).catch(err);
 
-  for (const id in update) {
-    dispatch({ type: UPDATE_FOCUS, id, update: update[id] });
-  }
+  dispatch({ type: UPDATE_FOCUSES, update });
+
+  // for (const id in update) {
+  //   dispatch({ type: UPDATE_FOCUS, id, update: update[id] });
+  // }
 };
