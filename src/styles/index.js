@@ -1,12 +1,9 @@
-import { StyleSheet, Platform, Dimensions } from 'react-native';
+import { StyleSheet, Dimensions } from 'react-native';
 
 export const Screen = {
   h: Dimensions.get('window').height,
   w: Dimensions.get('window').width,
 };
-
-export const STATUSBAR_HEIGHT = Platform.OS === 'ios' ? 20 : StatusBar.currentHeight;
-export const APPBAR_HEIGHT = Platform.OS === 'ios' ? 44 : 56;  
 
 export const Color  = {
   primary: '#343434',
@@ -39,7 +36,13 @@ export const FontSize = {
 };
 
 const BaseStyles = {
-  container: {
+  headerStyle: {
+    backgroundColor: Color.primary,
+  },
+  headerTitleStyle: {
+    fontFamily: Font.primary,
+    fontSize: FontSize.headerTitle,
+    fontWeight: 'bold',
   },
 };
 

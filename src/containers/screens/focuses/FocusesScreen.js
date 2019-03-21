@@ -1,17 +1,17 @@
 import React from 'react';
 import { View } from 'react-native';
 import { connect } from 'react-redux';
-import { auth } from '../../../config/fbConfig';
+import { auth } from '../../../config/firebaseConfig';
+import { getToday } from '../../../utils';
 import { UNCATEGORIZED } from '../../../constants/Categories';
+import { SET_ID } from '../../../constants/Focus';
 import { addFocus } from '../../../handlers/FocusesHandlers';
-import { setCategoryShow, updateCategory } from '../../../handlers/CategoryHandlers';
+import { updateCategory } from '../../../handlers/CategoryHandlers';
 import createStyles from '../../../styles';
 
 import LTIcon from '../../../components/LT/LTIcon';
 import FocusList from '../../../components/focuses/FocusList';
 import FocusAddModal from '../../../components/modals/FocusAddModal';
-import { SET_ID } from '../../../constants/Focus';
-import { getToday } from '../../../utils';
 
 const styles = createStyles({
 });

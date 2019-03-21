@@ -1,11 +1,9 @@
-import { db, auth } from "../config/fbConfig";
+import { db, auth } from "../config/firebaseConfig";
 import { err } from "../utils";
 import NavigationService from "../services/NavigationService";
 import { 
-  ADD_FOCUS, 
-  UPDATE_FOCUS, 
-  DELETE_FOCUS,
   EXPERIENCE_PER_SECOND,
+  ADD_FOCUS, UPDATE_FOCUS, DELETE_FOCUS,
 } from "../constants/Focuses";
 
 export async function addFocus(dispatch, focus) {
@@ -29,51 +27,46 @@ export async function updateFocus(dispatch, id, update) {
 };
 
 export async function updateFocusCategories(dispatch, name, newName) {
-    let query;
-    query = db.collection('focuses');
-    query = query.where('userId', '==', auth.currentUser.uid);
-    query = query.where('category', '==', name);
+  let query;
+  query = db.collection('focuses');
+  query = query.where('userId', '==', auth.currentUser.uid);
+  query = query.where('category', '==', name);
 
-    const querySnapshot = await query.get().catch(err);
+  const querySnapshot = await query.get().catch(err);
 
-    const batch = db.batch();
+  const batch = db.batch();
+  querySnapshot.forEach(doc => batch.update(doc.ref, { category: newName }));
 
-    querySnapshot.forEach(docSnapshot => {
-      const focusRef = db.collection('focuses').doc(docSnapshot.id);
-      batch.update(focusRef, { category: newName });
+  await batch.commit().catch(err);
+
+  querySnapshot.forEach(doc => {
+    dispatch({ 
+      type: UPDATE_FOCUS, id: doc.id, 
+      focus: {...doc.data(), category: newName }
     });
-
-    await batch.commit().catch(err);
-
-    querySnapshot.forEach(docSnapshot => {
-      dispatch({ 
-        type: UPDATE_FOCUS, 
-        id: docSnapshot.id, 
-        focus: {...docSnapshot.data(), category: newName }
-      });
-    });
+  });
 };
 
-export async function updateExperience(dispatch, elapsed, querySnapshot) {
+export async function updateExperience(dispatch, querySnapshot, elapsed) {
   let update = {};
   let promises = [];
   
-  querySnapshot.forEach(docSnapshot => {
+  querySnapshot.forEach(doc => {
     const transactionPromise = db.runTransaction(async transaction => {
-      const doc = await transaction.get(docSnapshot.ref).catch(err);
       const deltaExp = EXPERIENCE_PER_SECOND * elapsed;
+      const docSnapshot = await transaction.get(doc.ref).catch(err);
 
-      update[doc.id] = {
-        level: doc.data().level,
-        experience: doc.data().experience + deltaExp,
+      update[docSnapshot.id] = {
+        level: docSnapshot.data().level,
+        experience: docSnapshot.data().experience + deltaExp,
       };
 
-      while (update[doc.id].experience >= 100) {
-        update[doc.id].level++;
-        update[doc.id].experience -= 100;
+      while (update[docSnapshot.id].experience >= 100) {
+        update[docSnapshot.id].level++;
+        update[docSnapshot.id].experience -= 100;
       }
 
-      transaction.update(docSnapshot.ref, update[doc.id]);
+      transaction.update(docSnapshot.ref, update[docSnapshot.id]);
     });
 
     promises.push(transactionPromise);

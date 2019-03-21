@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { auth } from '../../config/fbConfig';
+import { auth } from '../../config/firebaseConfig';
 import { View, Text } from 'react-native';
 import { loadUser } from '../../handlers/AuthHandlers';
 import createStyles, { Color, FontSize } from '../../styles';

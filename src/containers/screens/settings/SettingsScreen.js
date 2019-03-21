@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { getElapsed } from '../../../utils';
 import { 
   Alert, TouchableOpacity, View 
 } from 'react-native';
@@ -7,13 +8,13 @@ import {
   WORK_PERIOD, WORK_GOAL, BREAK_PERIOD,
 } from '../../../constants/Focus';
 import { signOut } from '../../../handlers/AuthHandlers';
+import { updateStats } from '../../../handlers/StatsHandlers';
 import { updateSettings } from '../../../handlers/SettingsHandlers';
 import createStyles, { Color, FontSize } from '../../../styles'; 
 
 import LTText from '../../../components/LT/LTText';
 import SettingList from '../../../components/setting/SettingList';
 import SettingsModal from '../../../components/modals/SettingsModal';
-import { getElapsed } from '../../../utils';
 
 const styles = createStyles({
   logout: {
@@ -123,13 +124,17 @@ class SettingsScreen extends React.Component
     );
   };
 
-  _onLogoutConfirm = () => {
+  _onLogoutConfirm = async () => {
     for (const key in this.props.focuses) {
       clearInterval(this.props.focuses[key].timer);
     }
 
     if (this.props.stats.timeInactive) {
-      this.props.updateUntracked(getElapsed(this.props.stats.timeInactive));
+      await this.props.updateUntracked(
+        getElapsed(this.props.stats.timeInactive)
+      );
+
+      this.props.updateStats({ timeInactive: null });
     }
 
     this.props.signOut();
@@ -212,6 +217,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   signOut: () => signOut(dispatch),
+  updateStats: update => updateStats(dispatch, update),
   updateSettings: settings => updateSettings(dispatch, settings),
 });
 

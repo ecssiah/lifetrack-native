@@ -7,7 +7,9 @@ function settingsReducer(state = {}, action) {
 
   switch (action.type) {
     case UPDATE_SETTINGS: {
-      return action.settings;
+      Object.assign(newState, action.update);
+
+      return newState;
     }
     default: {
       return newState;

@@ -3,11 +3,7 @@ import {
   UPDATE_UNTRACKED,
 } from "../constants/Stats";
 
-const initialState = {
-  appState: '',
-};
-
-function statsReducer(state = initialState, action) {
+function statsReducer(state = {}, action) {
   let newState = {...state};
 
   switch (action.type) {

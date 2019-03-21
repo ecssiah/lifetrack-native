@@ -1,16 +1,14 @@
 import { err } from '../utils';
-import { db, auth } from '../config/fbConfig';
-import { updateStats } from './StatsHandlers';
+import { db, auth } from '../config/firebaseConfig';
 import NavigationService from '../services/NavigationService';
 import { 
-  DEFAULT_WORK_PERIOD, 
-  DEFAULT_WORK_GOAL, 
-  DEFAULT_BREAK_PERIOD 
+  DEFAULT_WORK_PERIOD, DEFAULT_WORK_GOAL, DEFAULT_BREAK_PERIOD 
 } from '../constants/Focus';
 import { UPDATE_FOCUSES } from '../constants/Focuses';
 import { UPDATE_CATEGORIES, UNCATEGORIZED } from '../constants/Categories';
 import { UPDATE_SETTINGS } from '../constants/Settings';
 import { UPDATE_STATS } from '../constants/Stats';
+import { updateStats } from './StatsHandlers';
 
 export async function signUp(dispatch, email, password) {
   await auth.createUserWithEmailAndPassword(email, password).catch(err);
@@ -26,15 +24,17 @@ export async function signUp(dispatch, email, password) {
   };
 
   const stats = {
+    newUser: true,
+    appState: 'active',
     timeInactive: null,
     untracked: 0,
   };
 
   await setUserData(settings, categories, stats).catch(err);
 
-  dispatch({ type: UPDATE_SETTINGS, settings });
-  dispatch({ type: UPDATE_CATEGORIES, categories });
-  dispatch({ type: UPDATE_STATS, stats });
+  dispatch({ type: UPDATE_SETTINGS, update: settings });
+  dispatch({ type: UPDATE_CATEGORIES, update: categories });
+  dispatch({ type: UPDATE_STATS, update: stats });
 
   NavigationService.navigate('App');
 };
@@ -55,8 +55,10 @@ export async function signOut(dispatch) {
 
   const querySnapshot = await query.get().catch(err);
 
-  querySnapshot.forEach(docSnapshot => {
+  querySnapshot.forEach(doc => {
     const transactionPromise = db.runTransaction(async transaction => {
+      const docSnapshot = transaction.get(doc.ref).catch(err);
+
       const update = {
         active: false,
         working: true,
@@ -87,10 +89,10 @@ export async function loadUser(dispatch) {
   let focuses = {};
   focusesSnapshot.forEach(doc => focuses[doc.id] = doc.data());
 
-  dispatch({ type: UPDATE_SETTINGS, settings });
-  dispatch({ type: UPDATE_CATEGORIES, categories });
-  dispatch({ type: UPDATE_STATS, stats });
-  dispatch({ type: UPDATE_FOCUSES, focuses });
+  dispatch({ type: UPDATE_SETTINGS, update: settings });
+  dispatch({ type: UPDATE_CATEGORIES, update: categories });
+  dispatch({ type: UPDATE_STATS, update: stats });
+  dispatch({ type: UPDATE_FOCUSES, update: focuses });
 
   NavigationService.navigate('App');
 };

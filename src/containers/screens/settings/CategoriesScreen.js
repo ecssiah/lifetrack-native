@@ -6,7 +6,7 @@ import {
 import { 
   addCategory, 
   deleteCategory, 
-  setCategoryName
+  updateCategoryName,
 } from '../../../handlers/CategoryHandlers';
 import { UNCATEGORIZED } from '../../../constants/Categories';
 import createStyles, { FontSize } from '../../../styles'; 
@@ -141,7 +141,7 @@ class CategoriesScreen extends React.Component
         newCategoryName: this.state.categoryName,
       });
     } else {
-      this.props.setCategoryName(
+      this.props.updateCategoryName(
         this.state.categoryName, 
         this.state.newCategoryName, 
       );
@@ -227,7 +227,9 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
   addCategory: name => addCategory(dispatch, name),
   deleteCategory: name => deleteCategory(dispatch, name),
-  setCategoryName: (name, newName) => setCategoryName(dispatch, name, newName),
+  updateCategoryName: (name, newName) => {
+    return updateCategoryName(dispatch, name, newName)
+  },
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(CategoriesScreen);

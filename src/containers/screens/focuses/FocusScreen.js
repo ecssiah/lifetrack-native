@@ -1,4 +1,5 @@
 import React from 'react';
+import { getElapsed, err } from '../../../utils';
 import { connect } from 'react-redux';
 import { View } from 'react-native';
 import { EXPERIENCE_PER_SECOND } from '../../../constants/Focuses';
@@ -12,7 +13,6 @@ import FocusTitle from '../../../components/focuses/FocusTitle';
 import FocusTimer from '../../../components/focuses/FocusTimer';
 import FocusGoal from '../../../components/focuses/FocusGoal';
 import FocusExperience from '../../../components/focuses/FocusExperience';
-import { getElapsed } from '../../../utils';
 
 const styles = createStyles({ 
   container: {
@@ -41,7 +41,11 @@ class FocusScreen extends React.Component
     ),
   });
 
-  _onActivate = () => {
+  _onActivate = async () => {
+    if (this.props.stats.newUser) {
+      await this.props.updateStats({ newUser: false }).catch(err);
+    }
+
     let update = {};
     const focus = this.props.focuses[this.props.focus.id];
 
@@ -52,7 +56,7 @@ class FocusScreen extends React.Component
         update.active = false;
 
         if (this.props.status.tracked === 1) {
-          this.props.updateStats({ timeInactive: Date.now() });
+          await this.props.updateStats({ timeInactive: Date.now() }).catch(err);
         }
 
         this.props.decTracked();
@@ -67,8 +71,11 @@ class FocusScreen extends React.Component
       if (focus.working) {
         update.active = true;
 
-        if (this.props.status.tracked === 0 && this.props.stats.timeInactive) {
-          this.props.updateUntracked(getElapsed(this.props.stats.timeInactive));
+        if (!this.props.stats.newUser && this.props.status.tracked === 0) {
+          const elapsed = getElapsed(this.props.stats.timeInactive);
+
+          await this.props.updateUntracked(elapsed).catch(err); 
+          await this.props.updateStats({ timeInactive: null }).catch(err);
         }
 
         this.props.incTracked();
@@ -151,8 +158,8 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   updateStats: update => updateStats(dispatch, update),
-  updateFocus: (id, update) => updateFocus(dispatch, id, update),
   updateUntracked: elapsed => updateUntracked(dispatch, elapsed),
+  updateFocus: (id, update) => updateFocus(dispatch, id, update),
   incTracked: () => dispatch({ type: INC_TRACKED }),
   decTracked: () => dispatch({ type: DEC_TRACKED }),
 });

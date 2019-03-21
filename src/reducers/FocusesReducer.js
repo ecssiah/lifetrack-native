@@ -8,7 +8,9 @@ function focusesReducer(state = {}, action) {
 
   switch (action.type) {
     case UPDATE_FOCUSES: {
-      return action.focuses;
+      Object.assign(newState, action.update);
+
+      return newState;
     }
     case ADD_FOCUS: {
       newState[action.id] = action.focus;

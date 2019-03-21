@@ -1,4 +1,4 @@
-import { db, auth } from "../config/fbConfig";
+import { db, auth } from "../config/firebaseConfig";
 import { err } from "../utils";
 import { 
   UPDATE_STATS,
@@ -11,25 +11,28 @@ export async function updateStats(dispatch, update) {
     await doc.update(update).catch(err);
 
     dispatch({ type: UPDATE_STATS, update });
+
     resolve();
   });
 };
 
 export async function updateUntracked(dispatch, elapsed) {
-  if (elapsed < 30) {
-    return;
-  } else {
-    elapsed -= 30;
-  }
+  return new Promise(async resolve => {
+    if (elapsed > 30) {
+      elapsed -= 30;
 
-  const statsRef = db.collection('stats').doc(auth.currentUser.uid);
+      const statsRef = db.collection('stats').doc(auth.currentUser.uid);
 
-  await db.runTransaction(async transaction => {
-    const doc = await transaction.get(statsRef);
-    const untracked = Math.floor(doc.data().untracked + elapsed);
+      await db.runTransaction(async transaction => {
+        const doc = await transaction.get(statsRef).catch(err);
+        const untracked = Math.floor(doc.data().untracked + elapsed);
 
-    transaction.update(statsRef, { untracked });
-  }).catch(err);
-  
-  dispatch({ type: UPDATE_UNTRACKED, elapsed });
+        transaction.update(statsRef, { untracked });
+      }).catch(err);
+
+      dispatch({ type: UPDATE_UNTRACKED, elapsed });
+    }
+
+    resolve();
+  });
 };
