@@ -17,8 +17,18 @@ import SettingList from '../../../components/setting/SettingList';
 import SettingsModal from '../../../components/modals/SettingsModal';
 
 const styles = createStyles({
+  container: {
+    flex: 1,
+  },
+  userProfile: {
+    fontSize: FontSize.modalTitle,
+    color: Color.highlight,
+    textAlign: 'center',
+    margin: 6,
+  },
   logout: {
     fontSize: FontSize.subtitle,
+    fontWeight: 'bold',
     color: Color.highlight,
     textAlign: 'center',
     margin: 6,
@@ -129,12 +139,12 @@ class SettingsScreen extends React.Component
       clearInterval(this.props.focuses[key].timer);
     }
 
-    if (this.props.stats.timeInactive) {
+    if (this.props.stats.inactiveStart) {
       await this.props.updateUntracked(
-        getElapsed(this.props.stats.timeInactive)
+        getElapsed(this.props.stats.inactiveStart)
       );
 
-      this.props.updateStats({ timeInactive: null });
+      this.props.updateStats({ inactiveStart: null });
     }
 
     this.props.signOut();
@@ -155,14 +165,27 @@ class SettingsScreen extends React.Component
     );
   };
 
+  _renderUsername = ({item, index}) => {
+    return (
+      <TouchableOpacity
+        key={index}
+        onPress={() => this.props.navigation.navigate('User')}
+      >
+        <LTText style={styles.userProfile}>
+          {item.name}
+        </LTText>
+      </TouchableOpacity>
+    );
+  };
+
   _getSectionData = () => {
     const sectionData = [
       {
-        title: '',
+        title: 'Profile',
         data: [
-          { name: 'Logout', value: ''},
+          { name: this.props.user.email, value: ''},
         ], 
-        renderItem: this._renderLogout,
+        renderItem: this._renderUsername,
       },
       {
         title: 'General',
@@ -180,7 +203,14 @@ class SettingsScreen extends React.Component
       },
       {
         title: '',
-        data: [ ],
+        data: [
+          { name: 'Logout', value: ''},
+        ], 
+        renderItem: this._renderLogout,
+      },
+      {
+        title: '',
+        data: [],
       },
     ];
 
@@ -209,6 +239,7 @@ class SettingsScreen extends React.Component
 };
 
 const mapStateToProps = state => ({
+  user: state.user,
   focus: state.focus,
   focuses: state.focuses,
   settings: state.settings,

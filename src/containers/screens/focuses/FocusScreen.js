@@ -13,6 +13,8 @@ import FocusTitle from '../../../components/focuses/FocusTitle';
 import FocusTimer from '../../../components/focuses/FocusTimer';
 import FocusGoal from '../../../components/focuses/FocusGoal';
 import FocusExperience from '../../../components/focuses/FocusExperience';
+import { reject } from 'rsvp';
+import { updateUser } from '../../../handlers/UserHandlers';
 
 const styles = createStyles({ 
   container: {
@@ -42,8 +44,10 @@ class FocusScreen extends React.Component
   });
 
   _onActivate = async () => {
-    if (this.props.stats.newUser) {
-      await this.props.updateStats({ newUser: false }).catch(err);
+    if (this.props.user.newUser) {
+      await this.props.updateUser({ newUser: false }).catch(error => {
+        reject(error);
+      });
     }
 
     let update = {};
@@ -56,7 +60,7 @@ class FocusScreen extends React.Component
         update.active = false;
 
         if (this.props.status.tracked === 1) {
-          await this.props.updateStats({ timeInactive: Date.now() }).catch(err);
+          await this.props.updateStats({ inactiveStart: Date.now() }).catch(err);
         }
 
         this.props.decTracked();
@@ -72,10 +76,10 @@ class FocusScreen extends React.Component
         update.active = true;
 
         if (!this.props.stats.newUser && this.props.status.tracked === 0) {
-          const elapsed = getElapsed(this.props.stats.timeInactive);
+          const elapsed = getElapsed(this.props.stats.inactiveStart);
 
           await this.props.updateUntracked(elapsed).catch(err); 
-          await this.props.updateStats({ timeInactive: null }).catch(err);
+          await this.props.updateStats({ inactiveStart: null }).catch(err);
         }
 
         this.props.incTracked();
@@ -149,6 +153,7 @@ class FocusScreen extends React.Component
 };
 
 const mapStateToProps = state => ({
+  user: state.user,
   status: state.status,
   focus: state.focus,
   focuses: state.focuses,
@@ -157,6 +162,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
+  updateUser: update => updateUser(dispatch, update),
   updateStats: update => updateStats(dispatch, update),
   updateUntracked: elapsed => updateUntracked(dispatch, elapsed),
   updateFocus: (id, update) => updateFocus(dispatch, id, update),

@@ -5,7 +5,7 @@ import {
 } from "../constants/Stats";
 
 function statsReducer(state = {}, action) {
-  let newState = {...state};
+  let newState = { ...state };
 
   switch (action.type) {
     case SET_STATS: {

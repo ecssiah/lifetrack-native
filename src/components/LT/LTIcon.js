@@ -7,6 +7,7 @@ const styles = createStyles({
   iconBase: {
     width: 38, 
     alignItems: 'center',
+    marginHorizontal: 4, 
   },
 });
 

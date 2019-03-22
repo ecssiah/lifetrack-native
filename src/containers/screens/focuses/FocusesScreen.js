@@ -14,6 +14,9 @@ import FocusList from '../../../components/focuses/FocusList';
 import FocusAddModal from '../../../components/modals/FocusAddModal';
 
 const styles = createStyles({
+  container: {
+    flex: 1,
+  },
 });
 
 class FocusesScreen extends React.Component 

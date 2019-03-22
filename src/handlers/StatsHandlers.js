@@ -6,26 +6,26 @@ import {
 } from "../constants/Stats";
 
 export async function updateStats(dispatch, update) {
-  return new Promise(async (resolve, reject) => {
+  const executor = async (resolve, reject) => {
     const doc = db.collection('stats').doc(auth.currentUser.uid);
-    await doc.update(update).catch(error => {
-      reject({update, error});
-    });
+    await doc.update(update).catch(error => reject({update, error}));
 
     dispatch({ type: UPDATE_STATS, update });
 
     resolve();
-  });
+  };
+
+  return new Promise(executor);
 };
 
 export async function updateUntracked(dispatch, elapsed) {
   if (elapsed <= UNTRACKED_MINIMUM) {
     return;
-  } 
+  } else {
+    elapsed -= UNTRACKED_MINIMUM;
+  }
 
-  elapsed -= UNTRACKED_MINIMUM;
-
-  return new Promise(async (resolve, reject) => {
+  const executor = async (resolve, reject) => {
     const statsRef = db.collection('stats').doc(auth.currentUser.uid);
 
     const transactionUpdateFunc = async transaction => {
@@ -45,5 +45,7 @@ export async function updateUntracked(dispatch, elapsed) {
     dispatch({ type: UPDATE_UNTRACKED, elapsed });
 
     resolve();
-  });
+  };
+
+  return new Promise(executor);
 };

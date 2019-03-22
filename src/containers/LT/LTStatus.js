@@ -5,6 +5,7 @@ import { StatusBar, View } from 'react-native';
 import { updateStats } from '../../handlers/StatsHandlers';
 import { onAppForeground, onAppBackground } from '../../handlers/StatusHandlers';
 import createStyles, { Color, Screen } from '../../styles';
+import { UPDATE_STATUS } from '../../constants/Status';
 
 const styles = createStyles({
   statusBar: {
@@ -25,11 +26,11 @@ class LTStatus extends React.Component
   };
 
   _onAppStateChange = async nextAppState => {
-    this.props.updateStats({ appState: nextAppState });
+    this.props.updateStatus({ appState: nextAppState });
 
-    if (!this.props.stats.newUser && !this.props.stats.timeInactive) {
+    if (!this.props.user.newUser && !this.props.stats.inactiveStart) {
       const willBeBackground = (
-        this.props.stats.appState === 'active' && 
+        this.props.status.appState === 'active' && 
         nextAppState.match(/inactive|background/)
       );
 
@@ -38,9 +39,9 @@ class LTStatus extends React.Component
       }
     } 
     
-    if (this.props.stats.timeInactive) {
+    if (this.props.stats.inactiveStart) {
       const willBeForeground = (
-        this.props.stats.appState.match(/inactive|background/) &&
+        this.props.status.appState.match(/inactive|background/) &&
         nextAppState === 'active'
       );
 
@@ -60,14 +61,14 @@ class LTStatus extends React.Component
 };
 
 const mapStateToProps = state => ({
+  user: state.user,
   stats: state.stats,
 });
 
 const mapDispatchToProps = dispatch => ({
   onAppForeground: () => onAppForeground(dispatch),
   onAppBackground: () => onAppBackground(dispatch),
-  updateStats: update => updateStats(dispatch, update),
+  updateStatus: update => dispatch({ type: UPDATE_STATUS, update }),
 });
-
 
 export default connect(mapStateToProps, mapDispatchToProps)(LTStatus);

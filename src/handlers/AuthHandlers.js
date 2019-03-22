@@ -1,13 +1,14 @@
 import { db, auth } from '../config/firebaseConfig';
+import { err } from '../utils';
 import { 
   DEFAULT_WORK_PERIOD, DEFAULT_WORK_GOAL, DEFAULT_BREAK_PERIOD 
 } from '../constants/Focus';
 import { SET_FOCUSES } from '../constants/Focuses';
-import { UNCATEGORIZED, SET_CATEGORIES } from '../constants/Categories';
+import { SET_CATEGORIES, UNCATEGORIZED } from '../constants/Categories';
 import { SET_SETTINGS } from '../constants/Settings';
 import { SET_STATS } from '../constants/Stats';
+import { SET_USER } from '../constants/User';
 import { updateStats } from './StatsHandlers';
-import { err } from '../utils';
 
 export async function signUp(dispatch, email, password) {
   const executor = async (resolve, reject) => {
@@ -15,33 +16,35 @@ export async function signUp(dispatch, email, password) {
       reject(error);
     });
 
-    const settings = {
-      workPeriod: DEFAULT_WORK_PERIOD,
-      workGoal: DEFAULT_WORK_GOAL,
-      breakPeriod: DEFAULT_BREAK_PERIOD,
+    const userData = {
+      user: {
+        newUser: true,
+        email,
+      },
+      settings: {
+        workPeriod: DEFAULT_WORK_PERIOD,
+        workGoal: DEFAULT_WORK_GOAL,
+        breakPeriod: DEFAULT_BREAK_PERIOD,
+      },
+      categories: {
+        [UNCATEGORIZED]: { show: true },
+      },
+      stats: {
+        inactiveStart: null,
+        untracked: 0,
+      },
+      focuses: { },
     };
 
-    const categories = {
-      [UNCATEGORIZED]: { show: true },
-    };
-
-    const stats = {
-      newUser: true,
-      appState: 'active',
-      timeInactive: null,
-      untracked: 0,
-    };
-
-    const focuses = {};
-
-    await setUserData(settings, categories, stats, focuses).catch(error => {
-      reject({ settings, categories, stats, focuses, error });
+    await setUserData(userData).catch(error => {
+      reject({ userData, error });
     });
 
-    dispatch({ type: SET_SETTINGS, settings });
-    dispatch({ type: SET_CATEGORIES, categories });
-    dispatch({ type: SET_STATS, stats });
-    dispatch({ type: SET_FOCUSES, focuses });
+    dispatch({ type: SET_USER, user: userData.user });
+    dispatch({ type: SET_SETTINGS, settings: userData.settings });
+    dispatch({ type: SET_CATEGORIES, categories: userData.categories });
+    dispatch({ type: SET_STATS, stats: userData.stats });
+    dispatch({ type: SET_FOCUSES, focuses: userData.focuses });
 
     resolve();
   }
@@ -95,7 +98,7 @@ export async function signOut(dispatch) {
     });
 
     await Promise.all(promises).catch(error => reject(error));
-    await updateStats(dispatch, { timeInactive: Date.now() }).catch(error => {
+    await updateStats(dispatch, { inactiveStart: Date.now() }).catch(error => {
       reject(error);
     });
     await auth.signOut().catch(error => reject(error));
@@ -110,26 +113,29 @@ export async function loadUser(dispatch) {
   const executor = async (resolve, reject) => {
     const userData = await loadUserData().catch(error => reject(error));
 
-    const settings = userData[0].data();
-    const categories = userData[1].data();
-    const stats = userData[2].data();
-    const focusesSnapshot = userData[3];
+    const user = userData[0].data();
+    const settings = userData[1].data();
+    const categories = userData[2].data();
+    const stats = userData[3].data();
 
     let focuses = {};
+    const focusesSnapshot = userData[4];
     focusesSnapshot.forEach(doc => focuses[doc.id] = doc.data());
 
+    dispatch({ type: SET_USER, user });
     dispatch({ type: SET_SETTINGS, settings });
     dispatch({ type: SET_CATEGORIES, categories });
     dispatch({ type: SET_STATS, stats });
     dispatch({ type: SET_FOCUSES, focuses });
 
-    resolve({ settings, categories, stats, focuses });
+    resolve({ user, settings, categories, stats, focuses });
   };
 
   return new Promise(executor);
 };
 
-function loadUserData() {
+async function loadUserData() {
+  const userDoc = db.collection('user').doc(auth.currentUser.uid);
   const settingsDoc = db.collection('settings').doc(auth.currentUser.uid);
   const categoriesDoc = db.collection('categories').doc(auth.currentUser.uid);
   const statsDoc = db.collection('stats').doc(auth.currentUser.uid);
@@ -140,17 +146,20 @@ function loadUserData() {
 
   try {
     return Promise.all([
+      userDoc.get(),
       settingsDoc.get(),
       categoriesDoc.get(),
       statsDoc.get(),
       focusesQuery.get()
     ]);
-  } catch (error) {
-    err(error);    
+  }
+  catch (error) {
+    return err(error);
   }
 };
 
-function setUserData(settings, categories, stats, focuses) {
+async function setUserData(userData) {
+  const userDoc = db.collection('user').doc(auth.currentUser.uid);
   const settingsDoc = db.collection('settings').doc(auth.currentUser.uid); 
   const categoriesDoc = db.collection('categories').doc(auth.currentUser.uid);
   const statsDoc = db.collection('stats').doc(auth.currentUser.uid);
@@ -158,13 +167,14 @@ function setUserData(settings, categories, stats, focuses) {
 
   try {
     return Promise.all([
-      settingsDoc.set(settings),
-      categoriesDoc.set(categories),
-      statsDoc.set(stats),
-      focusesDoc.set(focuses)
+      userDoc.set(userData.user),
+      settingsDoc.set(userData.settings),
+      categoriesDoc.set(userData.categories),
+      statsDoc.set(userData.stats),
+      focusesDoc.set(userData.focuses)
     ]);
   }
   catch (error) {
-    err(error);
+    return err(error);
   }
 };

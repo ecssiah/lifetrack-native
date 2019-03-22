@@ -3,9 +3,9 @@ export function err(error) {
   console.error(error);
 };
 
-export function getElapsed(timeInactive) {
+export function getElapsed(inactiveStart) {
   return Math.floor(
-    (Date.now() - timeInactive) / 1000
+    (Date.now() - inactiveStart) / 1000
   );
 };
 

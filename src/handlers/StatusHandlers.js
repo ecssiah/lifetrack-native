@@ -7,7 +7,7 @@ import { updateStats } from "./StatsHandlers";
 import { updateExperience } from "./FocusesHandlers";
 
 export async function onAppBackground(dispatch) {
-  await updateStats(dispatch, { timeInactive: Date.now() }).catch(err);
+  await updateStats(dispatch, { inactiveStart: Date.now() }).catch(err);
 };
 
 export async function onAppForeground(dispatch) {
@@ -19,7 +19,7 @@ export async function onAppForeground(dispatch) {
     requestFocusUpdate(dispatch, querySnapshot, elapsed);
 
     await deactivateFocuses(dispatch, querySnapshot).catch(err);
-    await updateStats(dispatch, { timeInactive: Date.now() }).catch(err);
+    await updateStats(dispatch, { inactiveStart: Date.now() }).catch(err);
   }
 };
 
@@ -27,7 +27,7 @@ async function calculateElapsed() {
   const docRef = db.collection('stats').doc(auth.currentUser.uid);
   const doc = await docRef.get().catch(err);
 
-  return getElapsed(doc.data().timeInactive);
+  return getElapsed(doc.data().inactiveStart);
 };
 
 async function searchForActiveFocuses() {

@@ -16,7 +16,11 @@ import SettingsModal from '../../../components/modals/SettingsModal';
 import DeleteFocusModal from '../../../components/modals/DeleteFocusModal';
 import FocusEditList from '../../../components/focuses/FocusEditList';
 
-const styles = createStyles();
+const styles = createStyles({
+  container: {
+    flex: 1,
+  },
+});
 
 class FocusEditScreen extends React.Component 
 {
@@ -109,6 +113,11 @@ class FocusEditScreen extends React.Component
     switch (this.state.settingName) {
       case WORK_PERIOD: {
         update.workPeriod = parseInt(this.state.settingValue);
+
+        if (this.props.focuses[this.props.focus.id].working) {
+          update.time = 60 * update.workPeriod;
+        }
+
         break;
       }
       case WORK_GOAL: {
