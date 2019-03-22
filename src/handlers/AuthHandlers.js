@@ -7,6 +7,7 @@ import { UNCATEGORIZED, SET_CATEGORIES } from '../constants/Categories';
 import { SET_SETTINGS } from '../constants/Settings';
 import { SET_STATS } from '../constants/Stats';
 import { updateStats } from './StatsHandlers';
+import { err } from '../utils';
 
 export async function signUp(dispatch, email, password) {
   const executor = async (resolve, reject) => {
@@ -87,7 +88,7 @@ export async function signOut(dispatch) {
           time: docSnapshot.data().workPeriod * 60,
         };
 
-        transaction.update(docSnapshot.ref, update);
+        transaction.update(doc.ref, update);
       };
 
       promises.push(db.runTransaction(transactionUpdateFunc));
@@ -137,24 +138,33 @@ function loadUserData() {
   focusesQuery = db.collection('focuses');
   focusesQuery = focusesQuery.where('userId', '==', auth.currentUser.uid);
 
-  return Promise.all([
-    settingsDoc.get(),
-    categoriesDoc.get(),
-    statsDoc.get(),
-    focusesQuery.get(),
-  ]);
+  try {
+    return Promise.all([
+      settingsDoc.get(),
+      categoriesDoc.get(),
+      statsDoc.get(),
+      focusesQuery.get()
+    ]);
+  } catch (error) {
+    err(error);    
+  }
 };
 
-function setUserData(settings, categories, stats) {
+function setUserData(settings, categories, stats, focuses) {
   const settingsDoc = db.collection('settings').doc(auth.currentUser.uid); 
   const categoriesDoc = db.collection('categories').doc(auth.currentUser.uid);
   const statsDoc = db.collection('stats').doc(auth.currentUser.uid);
   const focusesDoc = db.collection('focuses').doc(auth.currentUser.uid);
 
-  return Promise.all([
-    settingsDoc.set(settings),
-    categoriesDoc.set(categories),
-    statsDoc.set(stats),
-    focusesDoc.set(focuses),
-  ]);
+  try {
+    return Promise.all([
+      settingsDoc.set(settings),
+      categoriesDoc.set(categories),
+      statsDoc.set(stats),
+      focusesDoc.set(focuses)
+    ]);
+  }
+  catch (error) {
+    err(error);
+  }
 };

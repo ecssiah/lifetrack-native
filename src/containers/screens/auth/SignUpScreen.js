@@ -1,9 +1,9 @@
 import React from 'react';
+import { err } from '../../../utils';
 import { connect } from 'react-redux';
+import { signUp } from '../../../handlers/AuthHandlers';
 import { Alert, Button, View, TextInput } from 'react-native';
 import createStyles, { FontSize } from '../../../styles';
-import { signUp } from '../../../handlers/AuthHandlers';
-import { err } from '../../../utils';
 
 const styles = createStyles({
   container: {

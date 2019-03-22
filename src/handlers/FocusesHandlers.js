@@ -6,7 +6,7 @@ import {
 } from "../constants/Focuses";
 
 export async function addFocus(dispatch, focus) {
-  return new Promise(async (resolve, reject) => {
+  const executor = async (resolve, reject) => {
     const doc = await db.collection('focuses').add(focus).catch(error =>{
       reject({focus, error});
     });
@@ -14,11 +14,13 @@ export async function addFocus(dispatch, focus) {
     dispatch({ type: ADD_FOCUS, id: doc.id, focus });
 
     resolve();
-  });
+  };
+
+  return new Promise(executor);
 };
 
 export async function deleteFocus(dispatch, id) {
-  return new Promise(async (resolve, reject) => {
+  const executor = async (resolve, reject) => {
     await db.collection('focuses').doc(id).delete().catch(error => {
       reject(error);
     });
@@ -26,11 +28,13 @@ export async function deleteFocus(dispatch, id) {
     dispatch({ type: DELETE_FOCUS, id });
 
     resolve();
-  });
+  };
+
+  return new Promise(executor);
 };
 
 export async function updateFocus(dispatch, id, update) {
-  return new Promise(async (resolve, reject) => {
+  const executor = async (resolve, reject) => {
     await db.collection('focuses').doc(id).update(update).catch(error => {
       reject({update, error});
     });
@@ -38,62 +42,75 @@ export async function updateFocus(dispatch, id, update) {
     dispatch({ type: UPDATE_FOCUS, id, update }); 
 
     resolve();
-  });
+  };
+
+  return new Promise(executor);
 };
 
 export async function updateFocusCategories(dispatch, name, newName) {
-  let query;
-  query = db.collection('focuses');
-  query = query.where('userId', '==', auth.currentUser.uid);
-  query = query.where('category', '==', name);
+  const executor = async (resolve, reject) => {
+    let query;
+    query = db.collection('focuses');
+    query = query.where('userId', '==', auth.currentUser.uid);
+    query = query.where('category', '==', name);
 
-  const querySnapshot = await query.get().catch(err);
+    let update = {};
+    const batch = db.batch();
 
-  const batch = db.batch();
-  querySnapshot.forEach(doc => batch.update(doc.ref, { category: newName }));
-
-  await batch.commit().catch(err);
-
-  querySnapshot.forEach(doc => {
-    dispatch({ 
-      type: UPDATE_FOCUS, id: doc.id, 
-      focus: { ...doc.data(), category: newName }
+    const querySnapshot = await query.get().catch(error => {
+      reject({name, error })
     });
-  });
+
+    querySnapshot.forEach(doc => {
+      update[doc.id] = { category: newName }; 
+      batch.update(doc.ref, update[doc.id]);
+    });
+
+    await batch.commit().catch(error => reject({ update, error }));
+
+    dispatch({ type: UPDATE_FOCUSES, update });
+
+    resolve();
+  };
+
+  return new Promise(executor);
 };
 
 export async function updateExperience(dispatch, querySnapshot, elapsed) {
-  let update = {};
-  let promises = [];
-  
-  querySnapshot.forEach(doc => {
-    const transactionUpdateFunc = async transaction => {
-      const deltaExp = EXPERIENCE_PER_SECOND * elapsed;
-      const docSnapshot = await transaction.get(doc.ref).catch(err);
+  const executor = async (resolve, reject) => {
+    let update = {};
+    let promises = [];
+    
+    querySnapshot.forEach(doc => {
+      const transactionUpdateFunc = async transaction => {
+        const deltaExp = EXPERIENCE_PER_SECOND * elapsed;
 
-      update[docSnapshot.id] = {
-        level: docSnapshot.data().level,
-        experience: docSnapshot.data().experience + deltaExp,
+        const docSnapshot = await transaction.get(doc.ref).catch(error => {
+          reject(error);
+        });
+
+        update[docSnapshot.id] = {
+          level: docSnapshot.data().level,
+          experience: docSnapshot.data().experience + deltaExp,
+        };
+
+        while (update[docSnapshot.id].experience >= 100) {
+          update[docSnapshot.id].level++;
+          update[docSnapshot.id].experience -= 100;
+        }
+
+        transaction.update(doc.ref, update[docSnapshot.id]);
       };
 
-      while (update[docSnapshot.id].experience >= 100) {
-        update[docSnapshot.id].level++;
-        update[docSnapshot.id].experience -= 100;
-      }
+      promises.push(db.runTransaction(transactionUpdateFunc));
+    });
 
-      transaction.update(docSnapshot.ref, update[docSnapshot.id]);
-    };
+    await Promise.all(promises).catch(err);
 
-    const transactionPromise = db.runTransaction(transactionUpdateFunc);
+    dispatch({ type: UPDATE_FOCUSES, update });
 
-    promises.push(transactionPromise);
-  });
+    resolve();
+  };
 
-  await Promise.all(promises).catch(err);
-
-  dispatch({ type: UPDATE_FOCUSES, update });
-
-  // for (const id in update) {
-  //   dispatch({ type: UPDATE_FOCUS, id, update: update[id] });
-  // }
+  return new Promise(executor);
 };

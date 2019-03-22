@@ -1,5 +1,4 @@
 import { db, auth } from '../config/firebaseConfig';
-import { err } from '../utils';
 import firebase from 'firebase';
 import { 
   UNCATEGORIZED,
@@ -17,10 +16,10 @@ export async function addCategory(dispatch, name) {
     };
 
     await doc.update(category).catch(error => {
-      reject({ name, error });
+      reject({ name, category, error });
     });
 
-    dispatch({ type: ADD_CATEGORY, name, category });
+    dispatch({ type: ADD_CATEGORY, name, category: category[name] });
 
     resolve();
   });
