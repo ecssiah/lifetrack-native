@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Button, View, TextInput } from 'react-native';
+import { Alert, Button, View, TextInput } from 'react-native';
 import createStyles, { FontSize } from '../../../styles';
 import { signIn } from '../../../handlers/AuthHandlers';
 
@@ -44,12 +44,23 @@ class SignInScreen extends React.Component
     title: 'Sign In',
   });
 
-  _onPressSignIn = () => {
-    this.props.signIn(this.state.email, this.state.password);
+  _onPressSignIn = async () => {
+    try {
+      await this.props.signIn(this.state.email, this.state.password);
+    }
+    catch (error) {
+      Alert.alert(
+        'Password is incorrect. Try again.',
+        '',
+        [
+          { text: 'Confirm', onPress: null },
+        ],
+      );
 
-    this.setState({
-      password: '',
-    });
+      this.setState({
+        password: '',
+      });
+    }
   };
 
   render() {

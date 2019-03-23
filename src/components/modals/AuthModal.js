@@ -57,7 +57,7 @@ class AuthModal extends React.Component
         'Password incorrect. Try again.',
         '',
         [
-          { type: 'confirm', onPress: () => this.setState({ password: '' })},
+          { text: 'Confirm', onPress: () => this.setState({ password: '' })},
         ],
       );
     }
