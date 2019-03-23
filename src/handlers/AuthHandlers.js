@@ -85,7 +85,16 @@ export async function loadUser(dispatch) {
 
   let focuses = {};
   const focusesSnapshot = userData[4];
-  focusesSnapshot.forEach(doc => focuses[doc.id] = doc.data());
+  focusesSnapshot.forEach(doc => {
+    let focus = { ...doc.data() };
+
+    focus.active = false;
+    focus.working = true;
+    focus.time = 60 * settings.workPeriod;
+    focus.timer = null;
+
+    focuses[doc.id] = focus;
+  });
 
   dispatch({ type: SET_USER, user });
   dispatch({ type: SET_SETTINGS, settings });

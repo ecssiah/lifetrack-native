@@ -88,19 +88,19 @@ class SettingsScreen extends React.Component
   };
 
   _onSettingConfirm = () => {
-    const settings = {...this.props.settings};
+    let update = {};
 
     switch (this.state.settingName) {
       case WORK_PERIOD: {
-        settings.workPeriod = parseInt(this.state.settingValue);
+        update.workPeriod = parseInt(this.state.settingValue);
         break;
       }
       case BREAK_PERIOD: {
-        settings.breakPeriod = parseInt(this.state.settingValue);
+        update.breakPeriod = parseInt(this.state.settingValue);
         break;
       }
       case WORK_GOAL: {
-        settings.workGoal = parseInt(this.state.settingValue);
+        update.workGoal = parseInt(this.state.settingValue);
         break;
       }
       default: {
@@ -108,7 +108,7 @@ class SettingsScreen extends React.Component
       }
     }
 
-    this.props.updateSettings(settings);
+    this.props.updateSettings(update);
 
     this.setState({
       settingsModalShow: false,
@@ -247,7 +247,7 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
   signOut: () => signOut(dispatch),
   updateStats: update => updateStats(dispatch, update),
-  updateSettings: settings => updateSettings(dispatch, settings),
+  updateSettings: update => updateSettings(dispatch, update),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(SettingsScreen);

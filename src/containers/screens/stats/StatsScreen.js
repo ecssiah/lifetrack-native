@@ -4,6 +4,7 @@ import { View } from 'react-native';
 import createStyles from '../../../styles';
 
 import LTText from '../../../components/LT/LTText';
+import { displayTime } from '../../../utils';
 
 const styles = createStyles({
 });
@@ -18,7 +19,7 @@ class StatsScreen extends React.Component
     return (
       <View style={styles.container}>
         <LTText>
-          {this.props.stats.untracked}
+          {displayTime(this.props.stats.untracked)}
         </LTText>
       </View>
     );
