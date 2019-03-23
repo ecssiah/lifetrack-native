@@ -1,12 +1,20 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { View } from 'react-native';
-import createStyles from '../../../styles';
+import createStyles, { FontSize } from '../../../styles';
 
 import LTText from '../../../components/LT/LTText';
 import { displayTime } from '../../../utils';
 
 const styles = createStyles({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  mainText: {
+    fontSize: FontSize.modalTitle,
+  },
 });
 
 class StatsScreen extends React.Component 
@@ -15,11 +23,23 @@ class StatsScreen extends React.Component
     title: 'Stats',
   };
 
+  _getUntrackedLifePercentage() {
+    const userTimeLeft = (80 - this.props.user.age) * 365 * 24 * 60 * 60;
+    const percentageUsed = this.props.stats.untracked / userTimeLeft; 
+    const formattedOutput = percentageUsed.toFixed(2) + '%';
+
+    return formattedOutput;
+  };
+
   render() {
     return (
       <View style={styles.container}>
         <LTText>
-          {displayTime(this.props.stats.untracked)}
+          Untracked Time: {displayTime(this.props.stats.untracked)}
+        </LTText>
+
+        <LTText>
+          Untracked Percentage: {this._getUntrackedLifePercentage()}
         </LTText>
       </View>
     );
@@ -27,6 +47,7 @@ class StatsScreen extends React.Component
 };
 
 const mapStateToProps = state => ({
+  user: state.user,
   stats: state.stats,
 });
 

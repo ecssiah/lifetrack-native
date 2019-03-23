@@ -68,7 +68,7 @@ class FocusScreen extends React.Component
       if (focus.working) {
         update.active = true;
 
-        if (!this.props.user.newUser && this.props.status.tracked === 0) {
+        if (this.props.status.tracked === 0 && this.props.stats.inactiveStart) {
           const elapsed = getElapsed(this.props.stats.inactiveStart);
 
           await this.props.updateUntracked(elapsed); 

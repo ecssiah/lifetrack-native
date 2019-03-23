@@ -1,5 +1,5 @@
 import { db, auth } from "../config/firebaseConfig";
-import { getElapsed, err } from "../utils";
+import { getElapsed } from "../utils";
 import { 
   UPDATE_STATS, UPDATE_UNTRACKED, UNTRACKED_MINIMUM
 } from "../constants/Stats";

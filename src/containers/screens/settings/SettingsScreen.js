@@ -137,12 +137,8 @@ class SettingsScreen extends React.Component
       clearInterval(this.props.focuses[key].timer);
     }
 
-    if (this.props.stats.inactiveStart) {
-      await this.props.updateUntracked(
-        getElapsed(this.props.stats.inactiveStart)
-      );
-
-      this.props.updateStats({ inactiveStart: null });
+    if (!this.props.stats.inactiveStart) {
+      await this.props.updateStats({ inactiveStart: Date.now() });
     }
 
     this.props.signOut();
