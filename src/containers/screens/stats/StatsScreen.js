@@ -27,12 +27,10 @@ class StatsScreen extends React.Component
   _getUntrackedLifePercentage() {
     const currentYear = new Date().getFullYear();
     const userAge = currentYear - this.props.user.birthYear;
-    const yearsLeft = LIFE_EXPECTANCY - userAge;
-    const secondsLeft = yearsLeft * SECONDS_IN_YEAR;
+    const secondsLeft = (LIFE_EXPECTANCY - userAge) * SECONDS_IN_YEAR;
     const percentageUsed = this.props.stats.untracked / secondsLeft; 
-    const formattedOutput = percentageUsed.toFixed(2) + '%';
 
-    return formattedOutput;
+    return percentageUsed.toFixed(2) + '%';
   };
 
   render() {

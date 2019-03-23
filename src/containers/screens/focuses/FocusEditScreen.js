@@ -13,7 +13,6 @@ import createStyles from '../../../styles';
 import LTIcon from '../../../components/LT/LTIcon';
 import CategoryModal from '../../../components/modals/CategoryModal';
 import SettingsModal from '../../../components/modals/SettingsModal';
-import DeleteFocusModal from '../../../components/modals/DeleteFocusModal';
 import FocusEditList from '../../../components/focuses/FocusEditList';
 
 const styles = createStyles({
@@ -237,12 +236,6 @@ class FocusEditScreen extends React.Component
           onConfirm={this._onSettingConfirm}
           onCancel={this._onSettingCancel}
           onSettingValueChange={value => this._onSettingValueChange(value)}
-        />
-
-        <DeleteFocusModal
-          show={this.state.deleteModalShow}
-          onConfirm={this._onDeleteConfirm}
-          onCancel={this._onDeleteCancel}
         />
       </View>
     );

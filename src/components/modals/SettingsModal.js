@@ -9,7 +9,7 @@ import LTSpacer from '../LT/LTSpacer';
 
 const styles = createStyles({
   container: {
-    height: '78%',
+    height: '100%',
   },
   title: {
     fontSize: FontSize.modalTitle,
