@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { Alert, View } from 'react-native';
 import { 
   WORK_PERIOD, WORK_GOAL, BREAK_PERIOD,
-} from '../../../constants/Focus';
+} from '../../../constants/Focuses';
 import { 
   updateFocus, 
   deleteFocus 
@@ -28,8 +28,8 @@ class FocusEditScreen extends React.Component
 
     this.state = {
       nameInputStyle: styles.nameInputBlur,
-      name: props.focuses[props.focus.id].name,
-      categoryName: props.focuses[props.focus.id].category,
+      name: props.focuses[props.selection.id].name,
+      categoryName: props.focuses[props.selection.id].category,
       settingName: '',
       settingValue: 1,
       categoryModalShow: false,
@@ -56,7 +56,7 @@ class FocusEditScreen extends React.Component
   };
 
   _onEditNameConfirm = () => {
-    this.props.updateFocus(this.props.focus.id, { name: this.state.name });
+    this.props.updateFocus(this.props.selection.id, { name: this.state.name });
   };
 
   _onEditNameFocus = () => {
@@ -73,7 +73,7 @@ class FocusEditScreen extends React.Component
 
   _onSettingSelect = settingName => {
     let settingValue;
-    const focus = this.props.focuses[this.props.focus.id];
+    const focus = this.props.focuses[this.props.selection.id];
 
     switch (settingName) {
       case WORK_PERIOD: {
@@ -107,13 +107,13 @@ class FocusEditScreen extends React.Component
   };
 
   _onSettingConfirm = () => {
-    let update = {};
+    const update = {};
 
     switch (this.state.settingName) {
       case WORK_PERIOD: {
         update.workPeriod = parseInt(this.state.settingValue);
 
-        if (this.props.focuses[this.props.focus.id].working) {
+        if (this.props.focuses[this.props.selection.id].working) {
           update.time = 60 * update.workPeriod;
         }
 
@@ -132,7 +132,7 @@ class FocusEditScreen extends React.Component
       }
     }
 
-    this.props.updateFocus(this.props.focus.id, update);
+    this.props.updateFocus(this.props.selection.id, update);
 
     this.setState({
       settingsModalShow: false,
@@ -159,7 +159,7 @@ class FocusEditScreen extends React.Component
 
   _onCategoryConfirm = () => {
     this.props.updateFocus(
-      this.props.focus.id, 
+      this.props.selection.id, 
       { category: this.state.categoryName }
     );
 
@@ -171,13 +171,13 @@ class FocusEditScreen extends React.Component
 
   _onCategoryCancel = () => {
     this.setState({
-      categoryName: this.props.focuses[this.props.focus.id].category,
+      categoryName: this.props.focuses[this.props.selection.id].category,
       categoryModalShow: false,
     });
   };
 
   _onDeleteSelect = () => {
-    const focusName = this.props.focuses[this.props.focus.id].name;
+    const focusName = this.props.focuses[this.props.selection.id].name;
 
     Alert.alert(
       'Are you sure you want to delete ' + focusName + '?',
@@ -190,9 +190,9 @@ class FocusEditScreen extends React.Component
   };
 
   _onDeleteConfirm = async () => {
-    clearInterval(this.props.focuses[this.props.focus.id].timer);
+    clearInterval(this.props.focuses[this.props.selection.id].timer);
 
-    await this.props.deleteFocus(this.props.focus.id);
+    await this.props.deleteFocus(this.props.selection.id);
 
     this.props.navigation.navigate('Focuses');
   };
@@ -204,7 +204,7 @@ class FocusEditScreen extends React.Component
   };
 
   render() {
-    const focus = this.props.focuses[this.props.focus.id];
+    const focus = this.props.focuses[this.props.selection.id];
 
     if (!focus) return null;
 
@@ -212,7 +212,7 @@ class FocusEditScreen extends React.Component
       <View style={styles.container}>
         <FocusEditList
           name={this.state.name}
-          focus={this.props.focuses[this.props.focus.id]}
+          focus={this.props.focuses[this.props.selection.id]}
           onEditNameChange={this._onEditNameChange}
           onEditNameConfirm={this._onEditNameConfirm}
           onSettingSelect={this._onSettingSelect} 
@@ -243,7 +243,7 @@ class FocusEditScreen extends React.Component
 };
 
 const mapStateToProps = state => ({
-  focus: state.focus,
+  selection: state.selection,
   focuses: state.focuses,
   categories: state.categories,
 });

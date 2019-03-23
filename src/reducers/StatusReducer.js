@@ -5,7 +5,7 @@ import {
 } from "../constants/Status";
 
 function statusReducer(state = {}, action) {
-  let newState = {...state};
+  const newState = { ...state };
 
   switch(action.type) {
     case UPDATE_STATUS: {

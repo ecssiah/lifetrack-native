@@ -219,7 +219,7 @@ class CategoriesScreen extends React.Component
 };
 
 const mapStateToProps = state => ({
-  focus: state.focus,
+  selection: state.selection,
   focuses: state.focuses,
   categories: state.categories,
 });

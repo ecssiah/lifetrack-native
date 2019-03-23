@@ -1,7 +1,9 @@
 import React from 'react';
 import { TouchableOpacity } from 'react-native';
 import createStyles, { FontSize, Color } from '../../styles';
-import { WORK_PERIOD, WORK_GOAL, BREAK_PERIOD } from '../../constants/Focus';
+import { 
+  WORK_PERIOD, WORK_GOAL, BREAK_PERIOD 
+} from '../../constants/Focuses';
 
 import LTText from '../LT/LTText';
 import LTEdit from '../LT/LTEdit';

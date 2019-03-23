@@ -1,7 +1,7 @@
 import { db, auth } from '../config/firebaseConfig';
 import { 
   DEFAULT_WORK_PERIOD, DEFAULT_WORK_GOAL, DEFAULT_BREAK_PERIOD 
-} from '../constants/Focus';
+} from '../constants/Selection';
 import { updateFocuses } from './FocusesHandlers';
 import { SET_CATEGORIES, UNCATEGORIZED } from '../constants/Categories';
 import { SET_SETTINGS } from '../constants/Settings';
@@ -14,8 +14,8 @@ export async function signUp(dispatch, email, password) {
 
   const userData = {
     user: {
-      newUser: true,
       email,
+      birthYear: 'unset',
     },
     settings: {
       workPeriod: DEFAULT_WORK_PERIOD,
@@ -49,8 +49,7 @@ export async function signOut(dispatch) {
   query = query.where('userId', '==', auth.currentUser.uid);
   query = query.where('active', '==', true);
 
-  let promises = [];
-
+  const promises = [];
   const querySnapshot = await query.get();
 
   querySnapshot.forEach(doc => {
@@ -70,9 +69,8 @@ export async function signOut(dispatch) {
   });
 
   await Promise.all(promises);
-
   await updateStats(dispatch, { inactiveStart: Date.now() });
-  await auth.signOut().catch(error => reject(error));
+  await auth.signOut();
 };
 
 export async function loadUser(dispatch) {
@@ -88,16 +86,14 @@ export async function loadUser(dispatch) {
   dispatch({ type: SET_CATEGORIES, categories });
   dispatch({ type: SET_STATS, stats });
 
-  let focuses = {};
-  const focusesSnapshot = userData[4];
-  focusesSnapshot.forEach(doc => {
-    let focus = { ...doc.data() };
+  const focuses = {}; 
+
+  userData[4].forEach(doc => {
+    const focus = { ...doc.data() };
 
     focus.active = false;
     focus.working = true;
     focus.time = 60 * settings.workPeriod;
-
-    clearInterval(focus.timer);
     focus.timer = null;
 
     focuses[doc.id] = focus;

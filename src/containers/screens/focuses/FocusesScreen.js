@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { auth } from '../../../config/firebaseConfig';
 import { getToday } from '../../../utils';
 import { UNCATEGORIZED } from '../../../constants/Categories';
-import { SET_ID } from '../../../constants/Focus';
+import { UPDATE_SELECTION } from '../../../constants/Selection';
 import { addFocus } from '../../../handlers/FocusesHandlers';
 import { updateCategory } from '../../../handlers/CategoryHandlers';
 import createStyles from '../../../styles';
@@ -56,20 +56,22 @@ class FocusesScreen extends React.Component
 
   _onAddConfirm = () => {
     const focus = {
-      userId: auth.currentUser.uid,
       name: this.state.newFocusName,
       category: this.state.categoryName,
-      time: this.props.settings.workPeriod * 60,
+      userId: auth.currentUser.uid,
       active: false,
       working: true,
-      timer: null,
       periods: 0,
       level: 0,
       experience: 0.0,
+      timer: null,
+      time: this.props.settings.workPeriod * 60,
       workPeriod: this.props.settings.workPeriod,
       workGoal: this.props.settings.workGoal,
       breakPeriod: this.props.settings.breakPeriod,
-      history: { [getToday()]: 0 },
+      history: { 
+        [getToday()]: 0 
+      },
     };
 
     this.props.addFocus(focus);
@@ -98,7 +100,7 @@ class FocusesScreen extends React.Component
   };
 
   _onFocusSelect = id => {
-    this.props.setId(id);
+    this.props.updateSelection({ id });
     this.props.navigation.navigate('Focus');
   };
 
@@ -129,8 +131,8 @@ class FocusesScreen extends React.Component
       }
 
       if (name === UNCATEGORIZED) {
-        if (data.length > 0) {
-          result.push({ title: name, show: category.show, data });
+        if (!category.show || data.length > 0) {
+          result.push({ title: UNCATEGORIZED, show: category.show, data });
         }
       } else {
         result.push({ title: name, show: category.show, data });
@@ -168,14 +170,14 @@ class FocusesScreen extends React.Component
 
 const mapStateToProps = state => ({
   categories: state.categories,
-  focus: state.focus,
-  focuses: state.focuses,
   settings: state.settings,
+  selection: state.selection,
+  focuses: state.focuses,
 });
 
 const mapDispatchToProps = dispatch => ({
-  setId: id => dispatch({ type: SET_ID, id }),
   addFocus: focus => addFocus(dispatch, focus), 
+  updateSelection: update => dispatch({ type: UPDATE_SELECTION, update }),
   updateCategory: (name, update) => updateCategory(dispatch, name, update),
 });
 

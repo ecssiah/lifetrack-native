@@ -8,7 +8,7 @@ export async function updateUser(dispatch, update) {
 };
 
 export async function updateUserEmail(dispatch, email) {
-  let user = auth.currentUser;
+  const user = auth.currentUser;
 
   await user.updateEmail(email);
   await updateUser(dispatch, { email });

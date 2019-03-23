@@ -4,7 +4,7 @@ import {
 } from "../constants/User";
 
 function userReducer(state = {}, action) {
-  let newState = { ...state };
+  const newState = { ...state };
 
   switch (action.type) {
     case SET_USER: {

@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { Alert, TouchableOpacity, View } from 'react-native';
 import { 
   WORK_PERIOD, WORK_GOAL, BREAK_PERIOD,
-} from '../../../constants/Focus';
+} from '../../../constants/Focuses';
 import { signOut } from '../../../handlers/AuthHandlers';
 import { updateStats } from '../../../handlers/StatsHandlers';
 import { updateSettings } from '../../../handlers/SettingsHandlers';
@@ -87,7 +87,7 @@ class SettingsScreen extends React.Component
   };
 
   _onSettingConfirm = () => {
-    let update = {};
+    const update = {};
 
     switch (this.state.settingName) {
       case WORK_PERIOD: {
@@ -233,7 +233,7 @@ class SettingsScreen extends React.Component
 
 const mapStateToProps = state => ({
   user: state.user,
-  focus: state.focus,
+  selection: state.selection,
   focuses: state.focuses,
   settings: state.settings,
   stats: state.stats,

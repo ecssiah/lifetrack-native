@@ -6,7 +6,7 @@ import {
 } from "../constants/Categories";
 
 function categoriesReducer(state = {}, action) {
-  let newState = {...state};
+  const newState = { ...state };
 
   switch (action.type) {
     case SET_CATEGORIES: {

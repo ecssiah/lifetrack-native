@@ -1,7 +1,7 @@
 import { combineReducers } from 'redux';
 
 import statusReducer from './StatusReducer';
-import focusReducer from './FocusReducer';
+import selectionReducer from './SelectionReducer';
 import focusesReducer from './FocusesReducer';
 import categoriesReducer from './CategoriesReducer';
 import settingsReducer from './SettingsReducer';
@@ -10,7 +10,7 @@ import userReducer from './UserReducer';
 
 const RootReducer = combineReducers({
   status: statusReducer,
-  focus: focusReducer,
+  selection: selectionReducer,
   focuses: focusesReducer,
   categories: categoriesReducer,
   settings: settingsReducer,

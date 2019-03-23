@@ -45,7 +45,7 @@ export async function updateFocusCategories(dispatch, name, newName) {
   query = query.where('userId', '==', auth.currentUser.uid);
   query = query.where('category', '==', name);
 
-  let update = {};
+  const update = {};
   const batch = db.batch();
 
   const querySnapshot = await query.get();
@@ -129,8 +129,8 @@ function requestFocusUpdate(dispatch, querySnapshot, elapsed) {
 };
 
 async function updateExperience(dispatch, querySnapshot, elapsed) {
-  let update = {};
-  let promises = [];
+  const update = {};
+  const promises = [];
   
   querySnapshot.forEach(doc => {
     const transactionUpdateFunc = async transaction => {

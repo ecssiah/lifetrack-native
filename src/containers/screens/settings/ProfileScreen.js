@@ -2,10 +2,12 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { TextInput, View } from 'react-native';
 import createStyles, { FontSize } from '../../../styles';
+import { updateUser, updateUserEmail } from '../../../handlers/UserHandlers';
+
 import LTText from '../../../components/LT/LTText';
 import LTIcon from '../../../components/LT/LTIcon';
-import { updateUser, updateUserEmail } from '../../../handlers/UserHandlers';
 import AuthModal from '../../../components/modals/AuthModal';
+import { formatSpace } from '../../../utils';
 
 const styles = createStyles({
   container: {
@@ -72,7 +74,20 @@ class ProfileScreen extends React.Component
   };
 
   _onBirthYearSubmit = async () => {
-    this.props.updateUser({ birthYear: this.state.birthYear });
+    if (isNaN(this.state.birthYear)) {
+      this.props.updateUser({ birthYear: 'None' });
+      this.setState({ birthYear: 'None' });
+    } else {
+      const currentYear = new Date().getFullYear();
+      const birthYearCandidate = parseInt(this.state.birthYear);
+
+      if (birthYearCandidate > 1890 && birthYearCandidate <= currentYear) {
+        this.props.updateUser({ birthYear: this.state.birthYear });
+      } else {
+        this.props.updateUser({ birthYear: 'None' });
+        this.setState({ birthYear: 'None' });
+      }
+    }
   };
 
   _onAuthConfirm = async () => {
@@ -100,7 +115,7 @@ class ProfileScreen extends React.Component
 
           <TextInput
             style={styles.profileInput}
-            value={this.state.email}
+            value={formatSpace(this.state.email)}
             onChangeText={this._onEmailChange} 
             onSubmitEditing={this._onEmailSubmit}
           />
@@ -113,7 +128,7 @@ class ProfileScreen extends React.Component
 
           <TextInput
             style={styles.profileInput}
-            value={this.state.birthYear.toString()}
+            value={formatSpace(this.state.birthYear)}
             onChangeText={this._onBirthYearChange} 
             onSubmitEditing={this._onBirthYearSubmit}
           /> 

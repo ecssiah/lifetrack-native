@@ -43,8 +43,8 @@ class FocusScreen extends React.Component
   });
 
   _onActivate = async () => {
-    let update = {};
-    const focus = this.props.focuses[this.props.focus.id];
+    const update = {};
+    const focus = this.props.focuses[this.props.selection.id];
 
     if (focus.active) {
       clearInterval(focus.timer);
@@ -79,16 +79,12 @@ class FocusScreen extends React.Component
       } 
     }
 
-    if (this.props.user.newUser) {
-      await this.props.updateUser({ newUser: false });
-    }
-
-    this.props.updateFocus(this.props.focus.id, update); 
+    this.props.updateFocus(this.props.selection.id, update); 
   };
 
   _updateTimer = () => {
-    let update = {};
-    const focus = this.props.focuses[this.props.focus.id];
+    const update = {};
+    const focus = this.props.focuses[this.props.selection.id];
 
     if (focus.time > 0) {
       update.time = focus.time - 1;
@@ -112,15 +108,15 @@ class FocusScreen extends React.Component
       }
     }
 
-    this.props.updateFocus(this.props.focus.id, update);
+    this.props.updateFocus(this.props.selection.id, update);
   };
 
   _onGoalPress = () => {
-    this.props.updateFocus(this.props.focus.id, { periods: 0 });
+    this.props.updateFocus(this.props.selection.id, { periods: 0 });
   };
 
   render() {
-    const focus = this.props.focuses[this.props.focus.id];
+    const focus = this.props.focuses[this.props.selection.id];
 
     if (!focus) return null;
 
@@ -154,7 +150,7 @@ const mapStateToProps = state => ({
   user: state.user,
   stats: state.stats,
   settings: state.settings,
-  focus: state.focus,
+  selection: state.selection,
   focuses: state.focuses,
 });
 

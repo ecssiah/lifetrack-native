@@ -1,6 +1,6 @@
 import React from 'react';
 import { 
-  TouchableOpacity, Text, View, ProgressViewIOS 
+  ProgressViewIOS, TouchableOpacity, View,  
 } from 'react-native';
 import createStyles, { Color, FontSize } from '../../styles'; 
 

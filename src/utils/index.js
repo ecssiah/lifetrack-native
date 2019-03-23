@@ -1,4 +1,9 @@
 
+// https://github.com/facebook/react-native/issues/10218
+export function formatSpace(str) {
+  return str.replace(/\u0020/, '\u00a0')
+};
+
 export function getElapsed(start) {
   return Math.floor((Date.now() - start) / 1000);
 };

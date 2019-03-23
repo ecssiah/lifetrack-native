@@ -5,18 +5,24 @@ import { Size } from '../../styles';
 class LTSpacer extends React.Component
 {
   _getStyle() {
-    let style = { width: Size.small, height: Size.small };
+    const style = { 
+      width: Size.medium, 
+      height: Size.medium, 
+    };
 
     if (this.props.small) {
-      style = { width: Size.small, height: Size.small };
+      style.width = Size.small;
+      style.height = Size.small;
     }
 
     if (this.props.medium) {
-      style = { width: Size.medium, height: Size.medium };
+      style.width = Size.medium;
+      style.height = Size.medium;
     }
 
     if (this.props.large) {
-      style = { width: Size.large, height: Size.large };
+      style.width = Size.large;
+      style.height = Size.large;
     }
 
     if (this.props.width) {

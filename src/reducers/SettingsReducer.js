@@ -4,7 +4,7 @@ import {
 } from "../constants/Settings";
 
 function settingsReducer(state = {}, action) {
-  let newState = {...state};
+  const newState = { ...state };
 
   switch (action.type) {
     case SET_SETTINGS: {

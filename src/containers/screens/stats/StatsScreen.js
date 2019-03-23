@@ -25,12 +25,16 @@ class StatsScreen extends React.Component
   };
 
   _getUntrackedLifePercentage() {
-    const currentYear = new Date().getFullYear();
-    const userAge = currentYear - this.props.user.birthYear;
-    const secondsLeft = (LIFE_EXPECTANCY - userAge) * SECONDS_IN_YEAR;
-    const percentageUsed = this.props.stats.untracked / secondsLeft; 
+    if (isNaN(this.props.user.birthYear)) {
+      return 'Birth Year Unset';
+    } else {
+      const currentYear = new Date().getFullYear();
+      const userAge = currentYear - parseInt(this.props.user.birthYear);
+      const secondsLeft = (LIFE_EXPECTANCY - userAge) * SECONDS_IN_YEAR;
+      const percentageUsed = this.props.stats.untracked / secondsLeft; 
 
-    return percentageUsed.toFixed(2) + '%';
+      return percentageUsed.toFixed(2) + '%';
+    }
   };
 
   render() {
