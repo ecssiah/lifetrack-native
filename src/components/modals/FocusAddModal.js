@@ -8,7 +8,7 @@ import LTSpacer from '../LT/LTSpacer';
 
 const styles = createStyles({
   container: {
-    height: '100%',
+    height: 346,
   },
   nameInput: {
     width: '86%',

@@ -9,7 +9,7 @@ import LTConfirm from '../LT/LTConfirm';
 
 const styles = createStyles({
   container: {
-    height: '100%',
+    height: 212,
   },
   categoryEdit: {
     width: '92%',

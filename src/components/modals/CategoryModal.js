@@ -7,7 +7,7 @@ import LTConfirm from '../LT/LTConfirm';
 
 const styles = createStyles({
   container: {
-    height: '100%',
+    height: 286,
   },
   input: {
     width: '86%',

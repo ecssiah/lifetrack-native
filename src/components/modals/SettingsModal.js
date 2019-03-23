@@ -1,15 +1,15 @@
 import React from 'react';
-import { Picker, Text } from 'react-native';
+import { Picker } from 'react-native';
 import createStyles, { FontSize, Font } from '../../styles';
 
 import LTText from '../LT/LTText';
 import LTModal from '../LT/LTModal';
-import LTConfirm from '../LT/LTConfirm';
 import LTSpacer from '../LT/LTSpacer';
+import LTConfirm from '../LT/LTConfirm';
 
 const styles = createStyles({
   container: {
-    height: '100%',
+    height: 312,
   },
   title: {
     fontSize: FontSize.modalTitle,
