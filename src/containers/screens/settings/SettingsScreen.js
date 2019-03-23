@@ -1,6 +1,5 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { getElapsed } from '../../../utils';
 import { Alert, TouchableOpacity, View } from 'react-native';
 import { 
   WORK_PERIOD, WORK_GOAL, BREAK_PERIOD,

@@ -9,7 +9,7 @@ import LTConfirm from '../LT/LTConfirm';
 
 const styles = createStyles({
   container: {
-    height: 312,
+    height: 332,
   },
   title: {
     fontSize: FontSize.modalTitle,
@@ -42,7 +42,7 @@ class SettingsModal extends React.Component
         show={this.props.show}
         onPressBackdrop={this.props.onCancel}
       >
-        <LTSpacer medium />
+        <LTSpacer large />
 
         <LTText style={styles.title}>
           {this.props.settingName}

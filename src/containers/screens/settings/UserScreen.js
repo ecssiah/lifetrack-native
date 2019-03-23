@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { View } from 'react-native';
 import createStyles, { FontSize } from '../../../styles';
 import LTText from '../../../components/LT/LTText';
+import LTIcon from '../../../components/LT/LTIcon';
 
 const styles = createStyles({
   container: {
@@ -21,9 +22,16 @@ const styles = createStyles({
 
 class UserScreen extends React.Component 
 {
-  static navigationOptions = {
+  static navigationOptions = ({navigation}) => ({
     title: 'Profile',
-  };
+    headerLeft: (
+      <LTIcon
+        type='ios-arrow-back'
+        size={32}
+        onPress={() => navigation.goBack()}
+      />
+    ),
+  });
 
   render() {
     return (
