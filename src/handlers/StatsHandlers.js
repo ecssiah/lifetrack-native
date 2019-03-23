@@ -1,13 +1,7 @@
 import { db, auth } from "../config/firebaseConfig";
-import { getElapsed } from "../utils";
 import { 
   UPDATE_STATS, UPDATE_UNTRACKED, UNTRACKED_MINIMUM
 } from "../constants/Stats";
-import { 
-  searchForWorkingFocuses, 
-  deactivateFocuses,
-  requestFocusUpdate, 
-} from "./FocusesHandlers";
 
 export async function updateStats(dispatch, update) {
   await db.collection('stats').doc(auth.currentUser.uid).update(update);
@@ -34,16 +28,4 @@ export async function updateUntracked(dispatch, elapsed) {
   await db.runTransaction(transactionUpdateFunc);
 
   dispatch({ type: UPDATE_UNTRACKED, elapsed });
-};
-
-export async function updateActiveFocuses(dispatch, activeStart) {
-  const querySnapshot = await searchForWorkingFocuses();
-
-  if (!querySnapshot.empty) {
-    const elapsed = getElapsed(activeStart);
-
-    requestFocusUpdate(dispatch, querySnapshot, elapsed);
-
-    await deactivateFocuses(dispatch, querySnapshot);
-  }
 };

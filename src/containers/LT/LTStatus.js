@@ -3,7 +3,7 @@ import { AppState } from 'react-native';
 import { connect } from 'react-redux';
 import { StatusBar, View } from 'react-native';
 import { UPDATE_STATUS } from '../../constants/Status';
-import { updateActiveFocuses } from '../../handlers/StatsHandlers';
+import { updateActiveFocuses } from '../../handlers/FocusesHandlers';
 import createStyles, { Color, Screen } from '../../styles';
 
 const styles = createStyles({
@@ -58,7 +58,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   updateStatus: update => dispatch({ type: UPDATE_STATUS, update }),
-  updateActiveFocuses: start => updateActiveFocuses(dispatch, start),
+  updateActiveFocuses: elapsed => updateActiveFocuses(dispatch, elapsed),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(LTStatus);

@@ -1,6 +1,6 @@
 import { Alert } from 'react-native';
 import { db, auth } from "../config/firebaseConfig";
-import { displayTime } from "../utils";
+import { displayTime, getElapsed } from "../utils";
 import { 
   EXP_PER_SECOND,
   UPDATE_FOCUSES,
@@ -60,7 +60,75 @@ export async function updateFocusCategories(dispatch, name, newName) {
   dispatch({ type: UPDATE_FOCUSES, update });
 };
 
-export async function updateExperience(dispatch, querySnapshot, elapsed) {
+export async function updateActiveFocuses(dispatch, activeStart) {
+  const querySnapshot = await searchForWorkingFocuses();
+
+  if (!querySnapshot.empty) {
+    const elapsed = getElapsed(activeStart);
+
+    requestFocusUpdate(dispatch, querySnapshot, elapsed);
+
+    await deactivateFocuses(dispatch, querySnapshot);
+  }
+};
+
+async function searchForWorkingFocuses() {
+  let query = db.collection('focuses');
+  query = query.where('userId', '==', auth.currentUser.uid);
+  query = query.where('active', '==', true);
+  query = query.where('working', '==', true);
+
+  return await query.get();
+};
+
+async function deactivateFocuses(dispatch, querySnapshot) { 
+  dispatch({ type: UPDATE_STATUS, update: { tracked: 0 } });
+
+  const batch = db.batch();
+
+  querySnapshot.forEach(doc => batch.update(doc.ref, { active: false }));
+
+  await batch.commit();
+
+  querySnapshot.forEach(doc => {
+    clearInterval(doc.data().timer);
+    dispatch({
+      type: UPDATE_FOCUS, id: doc.id, update: { active: false }
+    });
+  });
+};
+
+function requestFocusUpdate(dispatch, querySnapshot, elapsed) {
+  const title = 'Update Experience?';
+
+  let message = '';
+  message += 'These focuses have \n';
+  message += `been active for ${displayTime(elapsed)}.\n`; 
+  message += '\n';
+
+  querySnapshot.forEach(doc => message += doc.data().name + '\n');
+
+  message += '\n';
+  message += 'Is this correct?';
+
+  Alert.alert(
+    title, message,
+    [
+      { 
+        text: 'Cancel', 
+        onPress: () => {
+          updateStats(dispatch, { inactiveStart: Date.now() - 1000 * elapsed });
+        },
+      },
+      { 
+        text: 'Confirm', 
+        onPress: () => updateExperience(dispatch, querySnapshot, elapsed),
+      },
+    ],
+  );
+};
+
+async function updateExperience(dispatch, querySnapshot, elapsed) {
   let update = {};
   let promises = [];
   
@@ -88,60 +156,4 @@ export async function updateExperience(dispatch, querySnapshot, elapsed) {
   await updateStats(dispatch, { inactiveStart: Date.now() });
 
   dispatch({ type: UPDATE_FOCUSES, update });
-};
-
-export async function searchForWorkingFocuses() {
-  let query = db.collection('focuses');
-  query = query.where('userId', '==', auth.currentUser.uid);
-  query = query.where('active', '==', true);
-  query = query.where('working', '==', true);
-
-  return await query.get();
-};
-
-export async function deactivateFocuses(dispatch, querySnapshot) { 
-  dispatch({ type: UPDATE_STATUS, update: { tracked: 0 } });
-
-  const batch = db.batch();
-
-  querySnapshot.forEach(doc => batch.update(doc.ref, { active: false }));
-
-  await batch.commit();
-
-  querySnapshot.forEach(doc => {
-    clearInterval(doc.data().timer);
-    dispatch({
-      type: UPDATE_FOCUS, id: doc.id, update: { active: false }
-    });
-  });
-};
-
-export function requestFocusUpdate(dispatch, querySnapshot, elapsed) {
-  const title = 'Update Focuses?';
-
-  let message = '';
-  message += 'These focuses have \n';
-  message += `been active for ${displayTime(elapsed)}.\n`; 
-  message += '\n';
-
-  querySnapshot.forEach(doc => message += doc.data().name + '\n');
-
-  message += '\n';
-  message += 'Is this correct?';
-
-  Alert.alert(
-    title, message,
-    [
-      { 
-        text: 'Cancel', 
-        onPress: () => {
-          updateStats(dispatch, { inactiveStart: Date.now() - 1000 * elapsed });
-        },
-      },
-      { 
-        text: 'Confirm', 
-        onPress: () => updateExperience(dispatch, querySnapshot, elapsed),
-      },
-    ],
-  );
 };

@@ -121,9 +121,9 @@ class FocusesScreen extends React.Component
       const category = this.props.categories[categoryName];
 
       if (category.show) {
-        for (const key in this.props.focuses) {
-          if (this.props.focuses[key].category === categoryName) {
-            data.push({ id: key, ...this.props.focuses[key] });
+        for (const id in this.props.focuses) {
+          if (this.props.focuses[id].category === categoryName) {
+            data.push({ id, ...this.props.focuses[id] });
           }
         }
 
@@ -136,6 +136,17 @@ class FocusesScreen extends React.Component
         data,
       };
     });
+
+    const uncategorizedIndex = sectionData.findIndex(categoryData => {
+      const isUncategorized = categoryData.title === UNCATEGORIZED;
+      const hasNoData = categoryData.data.length === 0;
+
+      return isUncategorized && hasNoData;
+    });
+
+    if (uncategorizedIndex !== -1) {
+      sectionData.splice(uncategorizedIndex, 1);
+    }
 
     return sectionData;
   };
