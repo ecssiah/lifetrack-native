@@ -21,14 +21,14 @@ const styles = createStyles({
     fontSize: FontSize.modalTitle,
     color: Color.highlight,
     textAlign: 'center',
-    margin: 6,
+    margin: 8,
   },
   logout: {
     fontSize: FontSize.subtitle,
     fontWeight: 'bold',
     color: Color.highlight,
     textAlign: 'center',
-    margin: 6,
+    margin: 8,
   },
 });
 
@@ -162,7 +162,7 @@ class SettingsScreen extends React.Component
     return (
       <TouchableOpacity
         key={index}
-        onPress={() => this.props.navigation.navigate('User')}
+        onPress={() => this.props.navigation.navigate('Profile')}
       >
         <LTText style={styles.userProfile}>
           {item.name}

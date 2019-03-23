@@ -6,3 +6,12 @@ export async function updateUser(dispatch, update) {
 
   dispatch({ type: UPDATE_USER, update });
 };
+
+export async function updateUserEmail(dispatch, email) {
+  let user = auth.currentUser;
+
+  await user.updateEmail(email);
+  await updateUser(dispatch, { email });
+
+  dispatch({ type: UPDATE_USER, update: { email }});
+};
