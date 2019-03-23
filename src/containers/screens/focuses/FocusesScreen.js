@@ -111,12 +111,10 @@ class FocusesScreen extends React.Component
   _getSectionData = () => {
     let categoryNames = Object.keys(this.props.categories);
     categoryNames.sort((a, b) => a.localeCompare(b));
-    categoryNames = categoryNames.filter(categoryName => {
-      return categoryName !== UNCATEGORIZED;
-    });
+    categoryNames = categoryNames.filter(name => name !== UNCATEGORIZED);
     categoryNames.push(UNCATEGORIZED);
 
-    const categoryReducer = (result, name) => {
+    const categoryReducerFunc = (result, name) => {
       let data = [];
       const category = this.props.categories[name];
 
@@ -141,9 +139,7 @@ class FocusesScreen extends React.Component
       return result;
     };
 
-    const sectionData = categoryNames.reduce(categoryReducer, []);
-
-    return sectionData;
+    return categoryNames.reduce(categoryReducerFunc, []);
   };
 
   render() {

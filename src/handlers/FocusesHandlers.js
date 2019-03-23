@@ -12,7 +12,7 @@ import { updateStats } from './StatsHandlers';
 export async function updateFocuses(dispatch, update) {
   const batch = db.batch();
 
-  for (const id of Object.keys(update)) {
+  for (const id in update) {
     const doc = await db.collection('focuses').doc(id);
     batch.update(doc, update[id]);
   }
