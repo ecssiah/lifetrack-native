@@ -58,9 +58,11 @@ class ProfileScreen extends React.Component
   };
 
   _onEmailSubmit = async () => {
-    this.setState({
-      authModalShow: true,
-    });
+    if (this.state.email !== this.props.user.email) {
+      this.setState({
+        authModalShow: true,
+      });
+    }
   };
 
   _onBirthYearChange = birthYear => {
