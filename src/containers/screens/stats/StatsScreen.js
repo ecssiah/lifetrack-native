@@ -1,10 +1,11 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { View } from 'react-native';
-import createStyles, { FontSize } from '../../../styles';
+import { displayTime } from '../../../utils';
+import { LIFE_EXPECTANCY, SECONDS_IN_YEAR } from '../../../constants/User';
+import createStyles from '../../../styles';
 
 import LTText from '../../../components/LT/LTText';
-import { displayTime } from '../../../utils';
 
 const styles = createStyles({
   container: {
@@ -13,7 +14,7 @@ const styles = createStyles({
     alignItems: 'center',
   },
   mainText: {
-    fontSize: FontSize.modalTitle,
+    fontSize: 22,
   },
 });
 
@@ -24,8 +25,11 @@ class StatsScreen extends React.Component
   };
 
   _getUntrackedLifePercentage() {
-    const userTimeLeft = (80 - this.props.user.age) * 365 * 24 * 60 * 60;
-    const percentageUsed = this.props.stats.untracked / userTimeLeft; 
+    const currentYear = new Date().getFullYear();
+    const userAge = currentYear - this.props.user.birthYear;
+    const yearsLeft = LIFE_EXPECTANCY - userAge;
+    const secondsLeft = yearsLeft * SECONDS_IN_YEAR;
+    const percentageUsed = this.props.stats.untracked / secondsLeft; 
     const formattedOutput = percentageUsed.toFixed(2) + '%';
 
     return formattedOutput;
@@ -34,11 +38,11 @@ class StatsScreen extends React.Component
   render() {
     return (
       <View style={styles.container}>
-        <LTText>
+        <LTText style={styles.mainText}>
           Untracked Time: {displayTime(this.props.stats.untracked)}
         </LTText>
 
-        <LTText>
+        <LTText style={styles.mainText}>
           Untracked Percentage: {this._getUntrackedLifePercentage()}
         </LTText>
       </View>

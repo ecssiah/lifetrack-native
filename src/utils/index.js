@@ -11,8 +11,8 @@ export function getToday() {
 
 export function displayTime(time) {
   const hours = Math.floor(time / 60 / 60);
-  const minutes = Math.floor((time / 60) - hours * 60).toFixed(0);
-  const seconds = (time - (hours * 60 * 60) - (minutes * 60)).toFixed(0);
+  const minutes = Math.floor((time / 60) - hours * 60);
+  const seconds = Math.floor(time - (hours * 60 * 60) - (minutes * 60));
 
   const displayMinutes = minutes < 10 ? '0' + minutes : minutes;
   const displaySeconds = seconds < 10 ? '0' + seconds : seconds;
