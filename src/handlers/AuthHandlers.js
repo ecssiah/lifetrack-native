@@ -2,6 +2,7 @@ import { db, auth } from '../config/firebaseConfig';
 import { 
   DEFAULT_WORK_PERIOD, DEFAULT_WORK_GOAL, DEFAULT_BREAK_PERIOD 
 } from '../constants/Focus';
+import { updateFocuses } from './FocusesHandlers';
 import { SET_FOCUSES } from '../constants/Focuses';
 import { SET_CATEGORIES, UNCATEGORIZED } from '../constants/Categories';
 import { SET_SETTINGS } from '../constants/Settings';
@@ -83,6 +84,11 @@ export async function loadUser(dispatch) {
   const categories = userData[2].data();
   const stats = userData[3].data();
 
+  dispatch({ type: SET_USER, user });
+  dispatch({ type: SET_SETTINGS, settings });
+  dispatch({ type: SET_CATEGORIES, categories });
+  dispatch({ type: SET_STATS, stats });
+
   let focuses = {};
   const focusesSnapshot = userData[4];
   focusesSnapshot.forEach(doc => {
@@ -91,16 +97,14 @@ export async function loadUser(dispatch) {
     focus.active = false;
     focus.working = true;
     focus.time = 60 * settings.workPeriod;
+
+    clearInterval(focus.timer);
     focus.timer = null;
 
     focuses[doc.id] = focus;
   });
 
-  dispatch({ type: SET_USER, user });
-  dispatch({ type: SET_SETTINGS, settings });
-  dispatch({ type: SET_CATEGORIES, categories });
-  dispatch({ type: SET_STATS, stats });
-  dispatch({ type: SET_FOCUSES, focuses });
+  updateFocuses(dispatch, focuses);
 };
 
 async function loadUserData() {

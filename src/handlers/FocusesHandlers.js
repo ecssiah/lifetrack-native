@@ -9,6 +9,19 @@ import {
 import { UPDATE_STATUS } from "../constants/Status";
 import { updateStats } from './StatsHandlers';
 
+export async function updateFocuses(dispatch, update) {
+  const batch = db.batch();
+
+  for (const id of Object.keys(update)) {
+    const doc = await db.collection('focuses').doc(id);
+    batch.update(doc, update[id]);
+  }
+
+  await batch.commit();
+  
+  dispatch({ type: UPDATE_FOCUSES, update });
+};
+
 export async function addFocus(dispatch, focus) {
   const doc = await db.collection('focuses').add(focus);
 

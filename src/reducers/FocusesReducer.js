@@ -12,8 +12,8 @@ function focusesReducer(state = {}, action) {
       return action.focuses;
     }
     case UPDATE_FOCUSES: {
-      for (const key in action.update) {
-        Object.assign(newState[key], action.update[key]);
+      for (const key of Object.keys(action.update)) {
+        newState[key] = Object.assign({}, newState[key], action.update[key]);
       }
 
       return newState;
