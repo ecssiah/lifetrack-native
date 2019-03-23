@@ -85,6 +85,7 @@ export async function updateExperience(dispatch, querySnapshot, elapsed) {
   });
 
   await Promise.all(promises);
+  await updateStats(dispatch, { inactiveStart: Date.now() });
 
   dispatch({ type: UPDATE_FOCUSES, update });
 };
