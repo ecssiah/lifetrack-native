@@ -116,13 +116,13 @@ class FocusesScreen extends React.Component
     });
     categoryNames.push(UNCATEGORIZED);
 
-    const sectionData = categoryNames.map(categoryName => {
+    const categoryReducer = (result, name) => {
       let data = [];
-      const category = this.props.categories[categoryName];
+      const category = this.props.categories[name];
 
       if (category.show) {
         for (const id in this.props.focuses) {
-          if (this.props.focuses[id].category === categoryName) {
+          if (this.props.focuses[id].category === name) {
             data.push({ id, ...this.props.focuses[id] });
           }
         }
@@ -130,23 +130,18 @@ class FocusesScreen extends React.Component
         data.sort((a, b) => a.name.localeCompare(b.name));
       }
 
-      return {
-        title: categoryName,
-        show: category.show,
-        data,
-      };
-    });
+      if (name === UNCATEGORIZED) {
+        if (data.length > 0) {
+          result.push({ title: name, show: category.show, data });
+        }
+      } else {
+        result.push({ title: name, show: category.show, data });
+      }
 
-    const uncategorizedIndex = sectionData.findIndex(categoryData => {
-      const isUncategorized = categoryData.title === UNCATEGORIZED;
-      const hasNoData = categoryData.data.length === 0;
+      return result;
+    };
 
-      return isUncategorized && hasNoData;
-    });
-
-    if (uncategorizedIndex !== -1) {
-      sectionData.splice(uncategorizedIndex, 1);
-    }
+    const sectionData = categoryNames.reduce(categoryReducer, []);
 
     return sectionData;
   };
