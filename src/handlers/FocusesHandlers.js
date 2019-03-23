@@ -1,116 +1,133 @@
+import { Alert } from 'react-native';
 import { db, auth } from "../config/firebaseConfig";
-import { err } from "../utils";
+import { displayTime } from "../utils";
 import { 
-  EXPERIENCE_PER_SECOND,
-  ADD_FOCUS, UPDATE_FOCUS, DELETE_FOCUS, UPDATE_FOCUSES,
+  EXP_PER_SECOND,
+  UPDATE_FOCUSES,
+  ADD_FOCUS, UPDATE_FOCUS, DELETE_FOCUS, 
 } from "../constants/Focuses";
+import { UPDATE_STATUS } from "../constants/Status";
+import { updateStats } from './StatsHandlers';
 
 export async function addFocus(dispatch, focus) {
-  const executor = async (resolve, reject) => {
-    const doc = await db.collection('focuses').add(focus).catch(error =>{
-      reject({focus, error});
-    });
+  const doc = await db.collection('focuses').add(focus);
 
-    dispatch({ type: ADD_FOCUS, id: doc.id, focus });
-
-    resolve();
-  };
-
-  return new Promise(executor);
+  dispatch({ type: ADD_FOCUS, id: doc.id, focus });
 };
 
 export async function deleteFocus(dispatch, id) {
-  const executor = async (resolve, reject) => {
-    await db.collection('focuses').doc(id).delete().catch(error => {
-      reject(error);
-    });
+  await db.collection('focuses').doc(id).delete();
 
-    dispatch({ type: DELETE_FOCUS, id });
-
-    resolve();
-  };
-
-  return new Promise(executor);
+  dispatch({ type: DELETE_FOCUS, id });
 };
 
 export async function updateFocus(dispatch, id, update) {
-  const executor = async (resolve, reject) => {
-    await db.collection('focuses').doc(id).update(update).catch(error => {
-      reject({update, error});
-    });
+  await db.collection('focuses').doc(id).update(update);
 
-    dispatch({ type: UPDATE_FOCUS, id, update }); 
-
-    resolve();
-  };
-
-  return new Promise(executor);
+  dispatch({ type: UPDATE_FOCUS, id, update }); 
 };
 
 export async function updateFocusCategories(dispatch, name, newName) {
-  const executor = async (resolve, reject) => {
-    let query;
-    query = db.collection('focuses');
-    query = query.where('userId', '==', auth.currentUser.uid);
-    query = query.where('category', '==', name);
+  let query = db.collection('focuses');
+  query = query.where('userId', '==', auth.currentUser.uid);
+  query = query.where('category', '==', name);
 
-    let update = {};
-    const batch = db.batch();
+  let update = {};
+  const batch = db.batch();
 
-    const querySnapshot = await query.get().catch(error => {
-      reject({name, error })
-    });
+  const querySnapshot = await query.get();
 
-    querySnapshot.forEach(doc => {
-      update[doc.id] = { category: newName }; 
-      batch.update(doc.ref, update[doc.id]);
-    });
+  querySnapshot.forEach(doc => {
+    update[doc.id] = { category: newName }; 
+    batch.update(doc.ref, update[doc.id]);
+  });
 
-    await batch.commit().catch(error => reject({ update, error }));
+  await batch.commit();
 
-    dispatch({ type: UPDATE_FOCUSES, update });
-
-    resolve();
-  };
-
-  return new Promise(executor);
+  dispatch({ type: UPDATE_FOCUSES, update });
 };
 
 export async function updateExperience(dispatch, querySnapshot, elapsed) {
-  const executor = async (resolve, reject) => {
-    let update = {};
-    let promises = [];
-    
-    querySnapshot.forEach(doc => {
-      const transactionUpdateFunc = async transaction => {
-        const deltaExp = EXPERIENCE_PER_SECOND * elapsed;
+  let update = {};
+  let promises = [];
+  
+  querySnapshot.forEach(doc => {
+    const transactionUpdateFunc = async transaction => {
+      const docSnapshot = await transaction.get(doc.ref);
 
-        const docSnapshot = await transaction.get(doc.ref).catch(error => {
-          reject(error);
-        });
-
-        update[docSnapshot.id] = {
-          level: docSnapshot.data().level,
-          experience: docSnapshot.data().experience + deltaExp,
-        };
-
-        while (update[docSnapshot.id].experience >= 100) {
-          update[docSnapshot.id].level++;
-          update[docSnapshot.id].experience -= 100;
-        }
-
-        transaction.update(doc.ref, update[docSnapshot.id]);
+      update[docSnapshot.id] = {
+        level: docSnapshot.data().level,
+        experience: docSnapshot.data().experience + EXP_PER_SECOND * elapsed,
       };
 
-      promises.push(db.runTransaction(transactionUpdateFunc));
+      while (update[docSnapshot.id].experience >= 100) {
+        update[docSnapshot.id].level++;
+        update[docSnapshot.id].experience -= 100;
+      }
+
+      transaction.update(doc.ref, update[docSnapshot.id]);
+    };
+
+    promises.push(db.runTransaction(transactionUpdateFunc));
+  });
+
+  await Promise.all(promises);
+
+  dispatch({ type: UPDATE_FOCUSES, update });
+};
+
+export async function searchForWorkingFocuses() {
+  let query = db.collection('focuses');
+  query = query.where('userId', '==', auth.currentUser.uid);
+  query = query.where('active', '==', true);
+  query = query.where('working', '==', true);
+
+  return await query.get();
+};
+
+export async function deactivateFocuses(dispatch, querySnapshot) { 
+  dispatch({ type: UPDATE_STATUS, update: { tracked: 0 } });
+
+  const batch = db.batch();
+
+  querySnapshot.forEach(doc => batch.update(doc.ref, { active: false }));
+
+  await batch.commit();
+
+  querySnapshot.forEach(doc => {
+    clearInterval(doc.data().timer);
+    dispatch({
+      type: UPDATE_FOCUS, id: doc.id, update: { active: false }
     });
+  });
+};
 
-    await Promise.all(promises).catch(err);
+export function requestFocusUpdate(dispatch, querySnapshot, elapsed) {
+  const title = 'Update Focuses?';
 
-    dispatch({ type: UPDATE_FOCUSES, update });
+  let message = '';
+  message += 'These focuses have \n';
+  message += `been active for ${displayTime(elapsed)}.\n`; 
+  message += '\n';
 
-    resolve();
-  };
+  querySnapshot.forEach(doc => message += doc.data().name + '\n');
 
-  return new Promise(executor);
+  message += '\n';
+  message += 'Is this correct?';
+
+  Alert.alert(
+    title, message,
+    [
+      { 
+        text: 'Cancel', 
+        onPress: () => {
+          updateStats(dispatch, { inactiveStart: Date.now() - 1000 * elapsed });
+        },
+      },
+      { 
+        text: 'Confirm', 
+        onPress: () => updateExperience(dispatch, querySnapshot, elapsed),
+      },
+    ],
+  );
 };

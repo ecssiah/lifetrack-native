@@ -1,4 +1,4 @@
-export const EXPERIENCE_PER_SECOND = 40 / 60.0;
+export const EXP_PER_SECOND = 40 / 60.0;
 
 export const SET_FOCUSES = 'focuses:set-focuses';
 export const UPDATE_FOCUSES = 'focuses:update-focuses';

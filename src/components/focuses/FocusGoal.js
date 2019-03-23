@@ -1,5 +1,5 @@
 import React from 'react';
-import { ProgressViewIOS, Text, TouchableOpacity } from 'react-native';
+import { ProgressViewIOS, TouchableOpacity } from 'react-native';
 import createStyles, { Color, FontSize } from '../../styles';
 
 import LTText from '../LT/LTText';
@@ -30,7 +30,7 @@ class FocusGoal extends React.PureComponent
       <TouchableOpacity
         activeOpacity={0.7}
         style={styles.container}
-        onPress={this.props.onGoalClick}
+        onPress={this.props.onGoalPress}
       >
         <LTText style={styles.heading}>
           Goal: {this.props.goal}

@@ -1,12 +1,6 @@
 
-export function err(error) {
-  console.error(error);
-};
-
-export function getElapsed(inactiveStart) {
-  return Math.floor(
-    (Date.now() - inactiveStart) / 1000
-  );
+export function getElapsed(start) {
+  return Math.floor((Date.now() - start) / 1000);
 };
 
 export function getToday() {

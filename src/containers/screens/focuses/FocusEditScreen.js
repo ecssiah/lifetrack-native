@@ -81,12 +81,12 @@ class FocusEditScreen extends React.Component
         settingValue = focus.workPeriod.toString();
         break;
       }
-      case WORK_GOAL: {
-        settingValue = focus.workGoal.toString();
-        break;
-      }
       case BREAK_PERIOD: {
         settingValue = focus.breakPeriod.toString();
+        break;
+      }
+      case WORK_GOAL: {
+        settingValue = focus.workGoal.toString();
         break;
       }
       default: {
@@ -120,12 +120,12 @@ class FocusEditScreen extends React.Component
 
         break;
       }
-      case WORK_GOAL: {
-        update.workGoal = parseInt(this.state.settingValue);
-        break;
-      }
       case BREAK_PERIOD: {
         update.breakPeriod = parseInt(this.state.settingValue);
+        break;
+      }
+      case WORK_GOAL: {
+        update.workGoal = parseInt(this.state.settingValue);
         break;
       }
       default: {

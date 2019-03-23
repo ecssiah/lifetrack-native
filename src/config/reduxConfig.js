@@ -3,6 +3,7 @@ import RootReducer from '../reducers/RootReducer';
 
 const initialState = {
   status: {
+    appState: 'active',
     tracked: 0,
   },
 };

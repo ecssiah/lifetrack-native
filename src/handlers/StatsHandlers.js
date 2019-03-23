@@ -1,21 +1,18 @@
 import { db, auth } from "../config/firebaseConfig";
+import { getElapsed, err } from "../utils";
 import { 
-  UPDATE_STATS,
-  UPDATE_UNTRACKED, 
-  UNTRACKED_MINIMUM
+  UPDATE_STATS, UPDATE_UNTRACKED, UNTRACKED_MINIMUM
 } from "../constants/Stats";
+import { 
+  searchForWorkingFocuses, 
+  deactivateFocuses,
+  requestFocusUpdate, 
+} from "./FocusesHandlers";
 
 export async function updateStats(dispatch, update) {
-  const executor = async (resolve, reject) => {
-    const doc = db.collection('stats').doc(auth.currentUser.uid);
-    await doc.update(update).catch(error => reject({update, error}));
+  await db.collection('stats').doc(auth.currentUser.uid).update(update);
 
-    dispatch({ type: UPDATE_STATS, update });
-
-    resolve();
-  };
-
-  return new Promise(executor);
+  dispatch({ type: UPDATE_STATS, update });
 };
 
 export async function updateUntracked(dispatch, elapsed) {
@@ -25,27 +22,28 @@ export async function updateUntracked(dispatch, elapsed) {
     elapsed -= UNTRACKED_MINIMUM;
   }
 
-  const executor = async (resolve, reject) => {
-    const statsRef = db.collection('stats').doc(auth.currentUser.uid);
+  const statsRef = db.collection('stats').doc(auth.currentUser.uid);
 
-    const transactionUpdateFunc = async transaction => {
-      const doc = await transaction.get(statsRef).catch(error => {
-        reject(error);
-      });
+  const transactionUpdateFunc = async transaction => {
+    const doc = await transaction.get(statsRef);
+    const untracked = Math.floor(doc.data().untracked + elapsed);
 
-      const untracked = Math.floor(doc.data().untracked + elapsed);
-
-      transaction.update(statsRef, { untracked });
-    };
-
-    await db.runTransaction(transactionUpdateFunc).catch(error => {
-      reject(error);
-    });
-
-    dispatch({ type: UPDATE_UNTRACKED, elapsed });
-
-    resolve();
+    transaction.update(statsRef, { untracked });
   };
 
-  return new Promise(executor);
+  await db.runTransaction(transactionUpdateFunc);
+
+  dispatch({ type: UPDATE_UNTRACKED, elapsed });
+};
+
+export async function updateActiveFocuses(dispatch, activeStart) {
+  const querySnapshot = await searchForWorkingFocuses();
+
+  if (!querySnapshot.empty) {
+    const elapsed = getElapsed(activeStart);
+
+    requestFocusUpdate(dispatch, querySnapshot, elapsed);
+
+    await deactivateFocuses(dispatch, querySnapshot);
+  }
 };

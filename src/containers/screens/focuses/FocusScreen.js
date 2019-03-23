@@ -1,8 +1,8 @@
 import React from 'react';
-import { getElapsed, err } from '../../../utils';
+import { getElapsed } from '../../../utils';
 import { connect } from 'react-redux';
 import { View } from 'react-native';
-import { EXPERIENCE_PER_SECOND } from '../../../constants/Focuses';
+import { EXP_PER_SECOND } from '../../../constants/Focuses';
 import { INC_TRACKED, DEC_TRACKED } from '../../../constants/Status';
 import { updateFocus } from '../../../handlers/FocusesHandlers';
 import { updateStats, updateUntracked } from '../../../handlers/StatsHandlers';
@@ -13,7 +13,6 @@ import FocusTitle from '../../../components/focuses/FocusTitle';
 import FocusTimer from '../../../components/focuses/FocusTimer';
 import FocusGoal from '../../../components/focuses/FocusGoal';
 import FocusExperience from '../../../components/focuses/FocusExperience';
-import { reject } from 'rsvp';
 import { updateUser } from '../../../handlers/UserHandlers';
 
 const styles = createStyles({ 
@@ -44,12 +43,6 @@ class FocusScreen extends React.Component
   });
 
   _onActivate = async () => {
-    if (this.props.user.newUser) {
-      await this.props.updateUser({ newUser: false }).catch(error => {
-        reject(error);
-      });
-    }
-
     let update = {};
     const focus = this.props.focuses[this.props.focus.id];
 
@@ -60,7 +53,7 @@ class FocusScreen extends React.Component
         update.active = false;
 
         if (this.props.status.tracked === 1) {
-          await this.props.updateStats({ inactiveStart: Date.now() }).catch(err);
+          this.props.updateStats({ inactiveStart: Date.now() });
         }
 
         this.props.decTracked();
@@ -75,15 +68,19 @@ class FocusScreen extends React.Component
       if (focus.working) {
         update.active = true;
 
-        if (!this.props.stats.newUser && this.props.status.tracked === 0) {
+        if (!this.props.user.newUser && this.props.status.tracked === 0) {
           const elapsed = getElapsed(this.props.stats.inactiveStart);
 
-          await this.props.updateUntracked(elapsed).catch(err); 
-          await this.props.updateStats({ inactiveStart: null }).catch(err);
+          await this.props.updateUntracked(elapsed); 
+          await this.props.updateStats({ inactiveStart: null });
         }
 
         this.props.incTracked();
       } 
+    }
+
+    if (this.props.user.newUser) {
+      await this.props.updateUser({ newUser: false });
     }
 
     this.props.updateFocus(this.props.focus.id, update); 
@@ -97,7 +94,7 @@ class FocusScreen extends React.Component
       update.time = focus.time - 1;
 
       if (focus.working) {
-        update.experience = focus.experience + EXPERIENCE_PER_SECOND;
+        update.experience = focus.experience + EXP_PER_SECOND;
 
         if (update.experience >= 100) {
           update.level = focus.level + 1;
@@ -118,7 +115,7 @@ class FocusScreen extends React.Component
     this.props.updateFocus(this.props.focus.id, update);
   };
 
-  _onGoalClick = () => {
+  _onGoalPress = () => {
     this.props.updateFocus(this.props.focus.id, { periods: 0 });
   };
 
@@ -141,7 +138,7 @@ class FocusScreen extends React.Component
         <FocusGoal 
           periods={focus.periods} 
           goal={focus.workGoal} 
-          onGoalClick={this._onGoalClick}
+          onGoalPress={this._onGoalPress}
         />
         <FocusExperience 
           level={focus.level}
@@ -153,21 +150,21 @@ class FocusScreen extends React.Component
 };
 
 const mapStateToProps = state => ({
-  user: state.user,
   status: state.status,
+  user: state.user,
+  stats: state.stats,
+  settings: state.settings,
   focus: state.focus,
   focuses: state.focuses,
-  settings: state.settings,
-  stats: state.stats,
 });
 
 const mapDispatchToProps = dispatch => ({
+  incTracked: () => dispatch({ type: INC_TRACKED }),
+  decTracked: () => dispatch({ type: DEC_TRACKED }),
   updateUser: update => updateUser(dispatch, update),
   updateStats: update => updateStats(dispatch, update),
   updateUntracked: elapsed => updateUntracked(dispatch, elapsed),
   updateFocus: (id, update) => updateFocus(dispatch, id, update),
-  incTracked: () => dispatch({ type: INC_TRACKED }),
-  decTracked: () => dispatch({ type: DEC_TRACKED }),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(FocusScreen);

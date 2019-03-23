@@ -1,5 +1,4 @@
 import React from 'react';
-import { err } from '../../utils';
 import { connect } from 'react-redux';
 import { auth } from '../../config/firebaseConfig';
 import { View, Text } from 'react-native';
@@ -27,7 +26,7 @@ class SplashScreen extends React.Component
   componentDidMount() {
     auth.onAuthStateChanged(async user => {
       if (user) {
-        await this.props.loadUser().catch(err);
+        await this.props.loadUser();
 
         this.props.navigation.navigate('App');
       } else {

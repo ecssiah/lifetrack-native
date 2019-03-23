@@ -1,9 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { getElapsed } from '../../../utils';
-import { 
-  Alert, TouchableOpacity, View 
-} from 'react-native';
+import { Alert, TouchableOpacity, View } from 'react-native';
 import { 
   WORK_PERIOD, WORK_GOAL, BREAK_PERIOD,
 } from '../../../constants/Focus';
@@ -69,12 +67,12 @@ class SettingsScreen extends React.Component
         settingValue = this.props.settings.workPeriod.toString();
         break;
       }
-      case WORK_GOAL: {
-        settingValue = this.props.settings.workGoal.toString();
-        break;
-      }
       case BREAK_PERIOD: {
         settingValue = this.props.settings.breakPeriod.toString();
+        break;
+      }
+      case WORK_GOAL: {
+        settingValue = this.props.settings.workGoal.toString();
         break;
       }
       default: {
@@ -97,12 +95,12 @@ class SettingsScreen extends React.Component
         settings.workPeriod = parseInt(this.state.settingValue);
         break;
       }
-      case WORK_GOAL: {
-        settings.workGoal = parseInt(this.state.settingValue);
-        break;
-      }
       case BREAK_PERIOD: {
         settings.breakPeriod = parseInt(this.state.settingValue);
+        break;
+      }
+      case WORK_GOAL: {
+        settings.workGoal = parseInt(this.state.settingValue);
         break;
       }
       default: {
@@ -191,8 +189,8 @@ class SettingsScreen extends React.Component
         title: 'General',
         data: [ 
           { name: WORK_PERIOD, value: this.props.settings.workPeriod },
-          { name: WORK_GOAL, value: this.props.settings.workGoal },
           { name: BREAK_PERIOD, value: this.props.settings.breakPeriod },
+          { name: WORK_GOAL, value: this.props.settings.workGoal },
         ],
       },
       {

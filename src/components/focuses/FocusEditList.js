@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, TouchableOpacity } from 'react-native';
+import { TouchableOpacity } from 'react-native';
 import createStyles, { FontSize, Color } from '../../styles';
 import { WORK_PERIOD, WORK_GOAL, BREAK_PERIOD } from '../../constants/Focus';
 
@@ -73,8 +73,8 @@ class FocusEditList extends React.Component
         title: '',
         data: [ 
           { name: WORK_PERIOD, value: this.props.focus.workPeriod },
-          { name: WORK_GOAL, value: this.props.focus.workGoal },
           { name: BREAK_PERIOD, value: this.props.focus.breakPeriod },
+          { name: WORK_GOAL, value: this.props.focus.workGoal },
         ],
       },
       {

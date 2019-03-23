@@ -57,7 +57,7 @@ class SignUpScreen extends React.Component
 
   _onPressSignUp = async () => {
     if (this.state.password === this.state.confirm) {
-      await this.props.signUp(this.state.email, this.state.password).catch(err);
+      await this.props.signUp(this.state.email, this.state.password);
 
       this.props.navigation.navigate('App');
     } else {

@@ -165,9 +165,9 @@ class FocusesScreen extends React.Component
 };
 
 const mapStateToProps = state => ({
+  categories: state.categories,
   focus: state.focus,
   focuses: state.focuses,
-  categories: state.categories,
   settings: state.settings,
 });
 
