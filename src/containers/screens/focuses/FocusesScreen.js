@@ -25,7 +25,7 @@ class FocusesScreen extends React.Component
     super(props);
 
     this.state = {
-      newFocusName: '',
+      focusName: '',
       categoryName: UNCATEGORIZED,
       addModalShow: false,
     };
@@ -37,26 +37,26 @@ class FocusesScreen extends React.Component
       <LTIcon
         type='ios-add'
         size={42}
-        onPress={() => navigation.state.params.addModalToggle()}
+        onPress={() => navigation.getParam('addFocusSelect')()}
       />
     ),
   });
 
   componentDidMount() {
     this.props.navigation.setParams({
-      addModalToggle: this._onAddModalToggle,
+      addFocusSelect: this._onAddFocusSelect,
     });
   };
 
-  _onAddModalToggle = () => {
+  _onAddFocusSelect = () => {
     this.setState({
-      addModalShow: !this.state.addModalShow,
+      addModalShow: true,
     });
   };
 
-  _onAddConfirm = () => {
+  _onAddFocusConfirm = () => {
     const focus = {
-      name: this.state.newFocusName,
+      name: this.state.focusName,
       category: this.state.categoryName,
       userId: auth.currentUser.uid,
       active: false,
@@ -78,25 +78,17 @@ class FocusesScreen extends React.Component
 
     this.setState({
       addModalShow: false,
-      newFocusName: '',
+      focusName: '',
       categoryName: this.state.categoryName,
     });
   };
 
-  _onAddCancel = () => {
+  _onAddFocusCancel = () => {
     this.setState({
       addModalShow: false,
-      newFocusName: '',
+      focusName: '',
       categoryName: UNCATEGORIZED,
     });
-  };
-
-  _onCategorySelect = categoryName => {
-    const update = {
-      show: !this.props.categories[categoryName].show,
-    };
-
-    this.props.updateCategory(categoryName, update);
   };
 
   _onFocusSelect = id => {
@@ -110,73 +102,32 @@ class FocusesScreen extends React.Component
     });
   };
 
-  _findCategoryFocuses = name => {
-    const focuses = [];
+  _onCategorySelect = categoryName => {
+    const update = {
+      show: !this.props.categories[categoryName].show,
+    };
 
-    for (const id in this.props.focuses) {
-      if (this.props.focuses[id].category === name) {
-        focuses.push({ id, ...this.props.focuses[id] });
-      }
-    }
-
-    return focuses;
-  };
-
-  _sectionDataReducer = (result, name) => {
-    const category = this.props.categories[name];
-    const sectionData = { title: name, show: category.show, data: [] };
-
-    if (name === UNCATEGORIZED) {
-      const focuses = this._findCategoryFocuses(name);
-
-      if (focuses.length > 0) {
-        if (category.show) {
-          focuses.sort((a, b) => a.name.localeCompare(b.name));
-          result.push({ ...sectionData, data: focuses });
-        } else {
-          result.push(sectionData);
-        }
-      }
-    } else {
-      if (category.show) {
-        const focuses = this._findCategoryFocuses(name);
-
-        focuses.sort((a, b) => a.name.localeCompare(b.name));
-        result.push({ ...sectionData, data: focuses });
-      } else {
-        result.push(sectionData);
-      }
-    }
-
-    return result;
-  };
-
-  _getSectionData = () => {
-    let categoryNames = Object.keys(this.props.categories);
-    categoryNames = categoryNames.filter(name => name !== UNCATEGORIZED);
-    categoryNames.sort((a, b) => a.localeCompare(b));
-    categoryNames.push(UNCATEGORIZED);
-
-    return categoryNames.reduce(this._sectionDataReducer, []);
+    this.props.updateCategory(categoryName, update);
   };
 
   render() {
     return (
       <View style={styles.container}>
         <FocusList
-          sections={this._getSectionData()}
-          onCategorySelect={this._onCategorySelect}
+          focuses={this.props.focuses}
+          categories={this.props.categories}
           onFocusSelect={this._onFocusSelect}
+          onCategorySelect={this._onCategorySelect}
         />
 
         <FocusAddModal
           categories={this.props.categories}
           show={this.state.addModalShow}
           categoryName={this.state.categoryName}
-          newFocusName={this.state.newFocusName}
-          onConfirm={this._onAddConfirm}
-          onCancel={this._onAddCancel}
-          onFocusNameChange={text => this.setState({newFocusName: text})}
+          focusName={this.state.focusName}
+          onConfirm={this._onAddFocusConfirm}
+          onCancel={this._onAddFocusCancel}
+          onFocusNameChange={text => this.setState({ focusName: text })}
           onCategoryValueChange={value => this._onCategoryValueChange(value)}
         />
       </View>

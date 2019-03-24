@@ -3,8 +3,8 @@ import { Picker, TextInput } from 'react-native';
 import createStyles, { FontSize, Font } from '../../styles';
 
 import LTModal from '../LT/LTModal';
-import LTConfirm from '../LT/LTConfirm';
 import LTSpacer from '../LT/LTSpacer';
+import LTConfirm from '../LT/LTConfirm';
 
 const styles = createStyles({
   container: {
@@ -55,7 +55,7 @@ class FocusAddModal extends React.Component
 
         <TextInput
           style={styles.nameInput}
-          value={this.props.newFocusName}
+          value={this.props.focusName}
           placeholder={'New Focus'}
           textAlign='center'
           maxLength={24}

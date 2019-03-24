@@ -171,8 +171,8 @@ class SettingsScreen extends React.Component
     );
   };
 
-  _getSectionData = () => {
-    const sectionData = [
+  _getSections = () => {
+    return [
       {
         title: 'Profile',
         data: [
@@ -206,15 +206,13 @@ class SettingsScreen extends React.Component
         data: [],
       },
     ];
-
-    return sectionData;
   };
 
   render() {
     return (
       <View style={styles.container}>
         <SettingList
-          sectionData={this._getSectionData()} 
+          sections={this._getSections()} 
           onSettingSelect={this._onSettingSelect}
         />
         

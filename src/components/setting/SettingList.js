@@ -23,7 +23,7 @@ class SettingList extends React.Component
   render() {
     return (
       <SectionList
-        sections={this.props.sectionData}
+        sections={this.props.sections}
         keyExtractor={(item, index) => item.name + index}
         ItemSeparatorComponent={LTSeparator}
         renderSectionHeader={({section}) => this._renderHeader(section)}

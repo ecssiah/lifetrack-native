@@ -55,8 +55,8 @@ class FocusEditList extends React.Component
     );
   };
 
-  _getSectionData = () => {
-    const sectionData = [
+  _getSections = () => {
+    return [
       {
         title: '',
         data: [
@@ -91,14 +91,12 @@ class FocusEditList extends React.Component
         data: [],
       },
     ];
-
-    return sectionData;
   };
 
   render() {
     return (
       <SettingList
-        sectionData={this._getSectionData()} 
+        sections={this._getSections()} 
         onSettingSelect={this.props.onSettingSelect}
       />
     );
