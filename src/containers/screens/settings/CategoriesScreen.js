@@ -128,7 +128,9 @@ class CategoriesScreen extends React.Component
         ],
       );
 
-      this.setState({ newCategoryName: this.state.categoryName });
+      this.setState({ 
+        newCategoryName: this.state.categoryName 
+      });
     } else {
       this.props.updateCategoryName(
         this.state.categoryName, 

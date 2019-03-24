@@ -40,9 +40,10 @@ class AuthModal extends React.Component
     };
   };
 
-  _onReAuthAttempt = async () => {
+  _onReauthorizationAttempt = async () => {
     try {
       const user = auth.currentUser;
+
       const credential = firebase.auth.EmailAuthProvider.credential(
         user.email,
         this.state.password
@@ -53,11 +54,15 @@ class AuthModal extends React.Component
       this.props.onConfirm();
     }
     catch (error) {
+      this.setState({
+        password: '',
+      });
+
       Alert.alert(
         'Password incorrect. Try again.',
         '',
         [
-          { text: 'Confirm', onPress: () => this.setState({ password: '' })},
+          { text: 'Confirm', onPress: null },
         ],
       );
     }
@@ -91,7 +96,7 @@ class AuthModal extends React.Component
 
         <LTConfirm
           onPressLeft={this.props.onCancel} 
-          onPressRight={this._onReAuthAttempt}
+          onPressRight={this._onReauthorizationAttempt}
         />
       </LTModal>
     );
