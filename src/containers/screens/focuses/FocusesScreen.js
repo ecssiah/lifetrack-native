@@ -110,38 +110,54 @@ class FocusesScreen extends React.Component
     });
   };
 
+  _findCategoryFocuses = name => {
+    const focuses = [];
+
+    for (const id in this.props.focuses) {
+      if (this.props.focuses[id].category === name) {
+        focuses.push({ id, ...this.props.focuses[id] });
+      }
+    }
+
+    return focuses;
+  };
+
+  _sectionDataReducer = (result, name) => {
+    const category = this.props.categories[name];
+    const sectionData = { title: name, show: category.show, data: [] };
+
+    if (name === UNCATEGORIZED) {
+      const focuses = this._findCategoryFocuses(name);
+
+      if (focuses.length > 0) {
+        if (category.show) {
+          focuses.sort((a, b) => a.name.localeCompare(b.name));
+          result.push({ ...sectionData, data: focuses });
+        } else {
+          result.push(sectionData);
+        }
+      }
+    } else {
+      if (category.show) {
+        const focuses = this._findCategoryFocuses(name);
+
+        focuses.sort((a, b) => a.name.localeCompare(b.name));
+        result.push({ ...sectionData, data: focuses });
+      } else {
+        result.push(sectionData);
+      }
+    }
+
+    return result;
+  };
+
   _getSectionData = () => {
     let categoryNames = Object.keys(this.props.categories);
-    categoryNames.sort((a, b) => a.localeCompare(b));
     categoryNames = categoryNames.filter(name => name !== UNCATEGORIZED);
+    categoryNames.sort((a, b) => a.localeCompare(b));
     categoryNames.push(UNCATEGORIZED);
 
-    const categoryReducerFunc = (result, name) => {
-      let data = [];
-      const category = this.props.categories[name];
-
-      if (category.show) {
-        for (const id in this.props.focuses) {
-          if (this.props.focuses[id].category === name) {
-            data.push({ id, ...this.props.focuses[id] });
-          }
-        }
-
-        data.sort((a, b) => a.name.localeCompare(b.name));
-      }
-
-      if (name === UNCATEGORIZED) {
-        if (!category.show || data.length > 0) {
-          result.push({ title: UNCATEGORIZED, show: category.show, data });
-        }
-      } else {
-        result.push({ title: name, show: category.show, data });
-      }
-
-      return result;
-    };
-
-    return categoryNames.reduce(categoryReducerFunc, []);
+    return categoryNames.reduce(this._sectionDataReducer, []);
   };
 
   render() {
