@@ -14,7 +14,7 @@ const styles = createStyles({
     alignItems: 'center',
   },
   mainText: {
-    fontSize: 22,
+    fontSize: 18,
   },
 });
 
@@ -26,7 +26,7 @@ class StatsScreen extends React.Component
 
   _getUntrackedLifePercentage() {
     if (isNaN(this.props.user.birthYear)) {
-      return 'Birth Year Unset';
+      return 'Requires Birth Year';
     } else {
       const currentYear = new Date().getFullYear();
       const userAge = currentYear - parseInt(this.props.user.birthYear);

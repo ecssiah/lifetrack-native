@@ -15,7 +15,7 @@ export async function signUp(dispatch, email, password) {
   const userData = {
     user: {
       email,
-      birthYear: 'unset',
+      birthYear: 'None',
     },
     settings: {
       workPeriod: DEFAULT_WORK_PERIOD,

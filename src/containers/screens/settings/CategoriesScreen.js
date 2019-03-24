@@ -52,7 +52,7 @@ class CategoriesScreen extends React.Component
       <LTIcon
         type='ios-add'
         size={42}
-        onPress={() => navigation.state.params.addModalToggle()}
+        onPress={() => navigation.getParam('addModalToggle')()}
       />
     ),
   });

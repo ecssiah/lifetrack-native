@@ -102,8 +102,8 @@ function requestFocusUpdate(dispatch, querySnapshot, elapsed) {
   const title = 'Update Experience?';
 
   let message = '';
-  message += 'These focuses have \n';
-  message += `been active for ${displayTime(elapsed)}.\n`; 
+  message += 'These focuses have been active \n';
+  message += `for ${displayTime(elapsed)} in the background.\n`; 
   message += '\n';
 
   querySnapshot.forEach(doc => message += doc.data().name + '\n');
