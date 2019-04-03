@@ -27,6 +27,7 @@ export async function signUp(dispatch, email, password) {
     },
     stats: {
       untracked: 0,
+      untrackedHistory: {},
       inactiveStart: null,
     },
   }
