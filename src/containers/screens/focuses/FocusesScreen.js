@@ -1,35 +1,35 @@
-import React from 'react';
-import { View } from 'react-native';
-import { connect } from 'react-redux';
-import { auth } from '../../../config/firebaseConfig';
-import { getToday } from '../../../utils';
-import { UNCATEGORIZED } from '../../../constants/Categories';
-import { UPDATE_SELECTION } from '../../../constants/Selection';
-import { addFocus } from '../../../handlers/FocusesHandlers';
-import { updateCategory } from '../../../handlers/CategoryHandlers';
-import createStyles from '../../../styles';
+import React from 'react'
+import { View } from 'react-native'
+import { connect } from 'react-redux'
+import { auth } from '../../../config/firebaseConfig'
+import { getToday } from '../../../../lib/utils'
+import { UNCATEGORIZED } from '../../../constants/Categories'
+import { UPDATE_SELECTION } from '../../../constants/Selection'
+import { addFocus } from '../../../handlers/FocusesHandlers'
+import { updateCategory } from '../../../handlers/CategoryHandlers'
+import createStyles from '../../../styles'
 
-import LTIcon from '../../../components/LT/LTIcon';
-import FocusList from '../../../components/focuses/FocusList';
-import FocusAddModal from '../../../components/modals/FocusAddModal';
+import LTIcon from '../../../components/LT/LTIcon'
+import FocusList from '../../../components/focuses/FocusList'
+import FocusAddModal from '../../../components/modals/FocusAddModal'
 
 const styles = createStyles({
   container: {
     flex: 1,
   },
-});
+})
 
 class FocusesScreen extends React.Component 
 {
   constructor(props) {
-    super(props);
+    super(props)
 
     this.state = {
       focusName: '',
       categoryName: UNCATEGORIZED,
       addModalShow: false,
-    };
-  };
+    }
+  }
 
   static navigationOptions = ({ navigation }) => ({
     title: 'Focuses',
@@ -40,19 +40,19 @@ class FocusesScreen extends React.Component
         onPress={() => navigation.getParam('addFocusSelect')()}
       />
     ),
-  });
+  })
 
   componentDidMount() {
     this.props.navigation.setParams({
       addFocusSelect: this._onAddFocusSelect,
-    });
-  };
+    })
+  }
 
   _onAddFocusSelect = () => {
     this.setState({
       addModalShow: true,
-    });
-  };
+    })
+  }
 
   _onAddFocusConfirm = () => {
     const focus = {
@@ -69,46 +69,44 @@ class FocusesScreen extends React.Component
       workPeriod: this.props.settings.workPeriod,
       workGoal: this.props.settings.workGoal,
       breakPeriod: this.props.settings.breakPeriod,
-      history: { 
-        [getToday()]: 0 
-      },
-    };
+      history: {},
+    }
 
-    this.props.addFocus(focus);
+    this.props.addFocus(focus)
 
     this.setState({
       addModalShow: false,
       focusName: '',
       categoryName: this.state.categoryName,
-    });
-  };
+    })
+  }
 
   _onAddFocusCancel = () => {
     this.setState({
       addModalShow: false,
       focusName: '',
       categoryName: UNCATEGORIZED,
-    });
-  };
+    })
+  }
 
   _onFocusSelect = id => {
-    this.props.updateSelection({ id });
-    this.props.navigation.navigate('Focus');
-  };
+    this.props.updateSelection({ id })
+    this.props.navigation.navigate('Focus')
+  }
 
   _onCategoryValueChange = categoryName => {
     this.setState({
       categoryName,
-    });
-  };
+    })
+  }
 
   _onCategorySelect = categoryName => {
     const update = {
       show: !this.props.categories[categoryName].show,
-    };
+    }
 
-    this.props.updateCategory(categoryName, update);
-  };
+    this.props.updateCategory(categoryName, update)
+  }
 
   render() {
     return (
@@ -131,21 +129,21 @@ class FocusesScreen extends React.Component
           onCategoryValueChange={value => this._onCategoryValueChange(value)}
         />
       </View>
-    );
-  };
-};
+    )
+  }
+}
 
 const mapStateToProps = state => ({
   categories: state.categories,
   settings: state.settings,
   selection: state.selection,
   focuses: state.focuses,
-});
+})
 
 const mapDispatchToProps = dispatch => ({
   addFocus: focus => addFocus(dispatch, focus), 
   updateSelection: update => dispatch({ type: UPDATE_SELECTION, update }),
   updateCategory: (name, update) => updateCategory(dispatch, name, update),
-});
+})
 
-export default connect(mapStateToProps, mapDispatchToProps)(FocusesScreen);
+export default connect(mapStateToProps, mapDispatchToProps)(FocusesScreen)

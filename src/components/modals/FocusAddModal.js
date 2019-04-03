@@ -1,10 +1,10 @@
-import React from 'react';
-import { Picker, TextInput } from 'react-native';
-import createStyles, { FontSize, Font } from '../../styles';
+import React from 'react'
+import { Picker, TextInput } from 'react-native'
+import createStyles, { FontSize, Font } from '../../styles'
 
-import LTModal from '../LT/LTModal';
-import LTSpacer from '../LT/LTSpacer';
-import LTConfirm from '../LT/LTConfirm';
+import LTModal from '../LT/LTModal'
+import LTSpacer from '../LT/LTSpacer'
+import LTConfirm from '../LT/LTConfirm'
 
 const styles = createStyles({
   container: {
@@ -26,12 +26,12 @@ const styles = createStyles({
   picker: {
     width: '72%',
   },
-});
+})
 
 class FocusAddModal extends React.Component 
 {
   _getCategoryItems = () => {
-    const categoryNames = Object.keys(this.props.categories);
+    const categoryNames = Object.keys(this.props.categories)
 
     const categoryItems = categoryNames.map((categoryName, idx) => 
       <Picker.Item 
@@ -39,10 +39,10 @@ class FocusAddModal extends React.Component
         label={categoryName} 
         value={categoryName}
       />
-    );
+    )
 
-    return categoryItems;
-  };
+    return categoryItems
+  }
 
   render() {
     return (
@@ -78,8 +78,8 @@ class FocusAddModal extends React.Component
           onPressRight={this.props.onConfirm}
         />
       </LTModal>
-    );
-  };
-};
+    )
+  }
+}
 
-export default FocusAddModal;
+export default FocusAddModal

@@ -1,17 +1,17 @@
-import { createStackNavigator } from 'react-navigation';
-import createStyles from '../../styles';
+import { createStackNavigator } from 'react-navigation'
+import createStyles from '../../styles'
 
-import FocusesScreen from '../screens/focuses/FocusesScreen';
-import FocusScreen from '../screens/focuses/FocusScreen';
-import FocusEditScreen from '../screens/focuses/FocusEditScreen';
+import FocusesScreen from '../screens/focuses/FocusesScreen'
+import FocusScreen from '../screens/focuses/FocusScreen'
+import FocusEditScreen from '../screens/focuses/FocusEditScreen'
 
-const styles = createStyles({});
+const styles = createStyles({})
 
 const routeConfig = {
   Focuses: FocusesScreen,
   Focus: FocusScreen,
   FocusEdit: FocusEditScreen,
-};
+}
 
 const navConfig = {
   initialRouteName: 'Focuses',
@@ -21,6 +21,6 @@ const navConfig = {
     headerStyle: styles.headerStyle,
     headerTitleStyle: styles.headerTitleStyle,
   },
-};
+}
 
-export default createStackNavigator(routeConfig, navConfig);
+export default createStackNavigator(routeConfig, navConfig)

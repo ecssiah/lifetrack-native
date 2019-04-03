@@ -1,13 +1,13 @@
-import { createStackNavigator } from 'react-navigation';
-import createStyles from '../../styles';
+import { createStackNavigator } from 'react-navigation'
+import createStyles from '../../styles'
 
-import StatsScreen from '../screens/stats/StatsScreen';
+import StatsScreen from '../screens/stats/StatsScreen'
 
-const styles = createStyles({});
+const styles = createStyles({})
 
 const routeConfig = {
   Stats: StatsScreen,
-};
+}
 
 const navConfig = {
   initialRouteName: 'Stats',
@@ -17,6 +17,6 @@ const navConfig = {
     headerStyle: styles.headerStyle,
     headerTitleStyle: styles.headerTitleStyle,
   },
-};
+}
 
-export default createStackNavigator(routeConfig, navConfig);
+export default createStackNavigator(routeConfig, navConfig)

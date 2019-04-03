@@ -1,10 +1,10 @@
-import React from 'react';
+import React from 'react'
 import { 
   View 
-} from 'react-native';
-import createStyles, { FontSize } from '../../styles'; 
+} from 'react-native'
+import createStyles, { FontSize } from '../../styles' 
 
-import LTText from '../LT/LTText';
+import LTText from '../LT/LTText'
 
 const styles = createStyles({
   container: {
@@ -20,7 +20,7 @@ const styles = createStyles({
     marginLeft: 4,
     marginVertical: 2,
   },
-});
+})
 
 class SettingsHeader extends React.PureComponent 
 {
@@ -31,8 +31,8 @@ class SettingsHeader extends React.PureComponent
           {this.props.title}
         </LTText>
       </View>
-    );
-  };
-};
+    )
+  }
+}
 
-export default SettingsHeader;
+export default SettingsHeader

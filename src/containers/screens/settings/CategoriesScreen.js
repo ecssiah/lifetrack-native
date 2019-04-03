@@ -1,34 +1,34 @@
-import React from 'react';
-import { connect } from 'react-redux';
+import React from 'react'
+import { connect } from 'react-redux'
 import { 
   Alert, View 
-} from 'react-native';
+} from 'react-native'
 import { 
   addCategory, 
   deleteCategory, 
   updateCategoryName,
-} from '../../../handlers/CategoryHandlers';
-import createStyles from '../../../styles'; 
+} from '../../../handlers/CategoryHandlers'
+import createStyles from '../../../styles' 
 
-import LTIcon from '../../../components/LT/LTIcon';
-import CategoryAddModal from '../../../components/modals/CategoryAddModal';
-import CategoryEditModal from '../../../components/modals/CategoryEditModal';
-import CategoryList from '../../../components/setting/CategoryList';
+import LTIcon from '../../../components/LT/LTIcon'
+import CategoryAddModal from '../../../components/modals/CategoryAddModal'
+import CategoryEditModal from '../../../components/modals/CategoryEditModal'
+import CategoryList from '../../../components/setting/CategoryList'
 
-const styles = createStyles({ });
+const styles = createStyles({ })
 
 class CategoriesScreen extends React.Component 
 {
   constructor(props) {
-    super(props);
+    super(props)
 
     this.state = {
       categoryName: '',
       newCategoryName: '',
       addModalShow: false,
       editModalShow: false,
-    };
-  };
+    }
+  }
 
   static navigationOptions = ({ navigation }) => ({
     title: 'Categories',
@@ -46,50 +46,50 @@ class CategoriesScreen extends React.Component
         onPress={() => navigation.getParam('addCategorySelect')()}
       />
     ),
-  });
+  })
 
   componentDidMount() {
     this.props.navigation.setParams({
       addCategorySelect: this._onAddCategorySelect,
-    });
-  };
+    })
+  }
 
   _onAddCategorySelect = () => {
     this.setState({
       addModalShow: true,
-    });
-  };
+    })
+  }
 
   _onCategoryAddConfirm = () => {
-    this.props.addCategory(this.state.newCategoryName);
+    this.props.addCategory(this.state.newCategoryName)
 
     this.setState({
       newCategoryName: '',
       addModalShow: false,
-    });
-  };
+    })
+  }
 
   _onCategoryAddCancel = () => {
     this.setState({
       addModalShow: false,
-    });
-  };
+    })
+  }
 
   _onCategorySelect = categoryName => {
     this.setState({
       categoryName,
       newCategoryName: categoryName,
       editModalShow: true,
-    });
-  };
+    })
+  }
 
   _onCategoryDeleteConfirm = () => {
-    this.props.deleteCategory(this.state.categoryName);
+    this.props.deleteCategory(this.state.categoryName)
 
     this.setState({
       editModalShow: false,
-    });
-  };
+    })
+  }
 
   _onCategoryDelete = () => {
     Alert.alert(
@@ -99,24 +99,24 @@ class CategoriesScreen extends React.Component
         { text: 'Cancel', onPress: null },
         { text: 'Confirm', onPress: this._onCategoryDeleteConfirm },
       ],
-    );
-  };
+    )
+  }
 
   _onCategoryConfirm = () => {
     this.setState({
       editModalShow: false,
-    });
-  };
+    })
+  }
 
   _onCategoryCancel = () => {
     this.setState({
       editModalShow: false,
-    });
-  };
+    })
+  }
 
   _onCategoryNameEditConfirm = () => {
     if (this.state.categoryName === this.state.newCategoryName) {
-      return;
+      return
     }
 
     if (this.props.categories.hasOwnProperty(this.state.newCategoryName)) {
@@ -126,18 +126,18 @@ class CategoriesScreen extends React.Component
         [
           { text: 'Confirm', onPress: null },
         ],
-      );
+      )
 
       this.setState({ 
         newCategoryName: this.state.categoryName 
-      });
+      })
     } else {
       this.props.updateCategoryName(
         this.state.categoryName, 
         this.state.newCategoryName, 
-      );
+      )
     }
-  };
+  }
 
   render() {
     return (
@@ -164,15 +164,15 @@ class CategoriesScreen extends React.Component
           onSubmitEditing={this._onCategoryNameEditConfirm}
         />
       </View>
-    );
-  };
-};
+    )
+  }
+}
 
 const mapStateToProps = state => ({
   selection: state.selection,
   focuses: state.focuses,
   categories: state.categories,
-});
+})
 
 const mapDispatchToProps = dispatch => ({
   addCategory: name => addCategory(dispatch, name),
@@ -180,6 +180,6 @@ const mapDispatchToProps = dispatch => ({
   updateCategoryName: (name, newName) => {
     return updateCategoryName(dispatch, name, newName)
   },
-});
+})
 
-export default connect(mapStateToProps, mapDispatchToProps)(CategoriesScreen);
+export default connect(mapStateToProps, mapDispatchToProps)(CategoriesScreen)

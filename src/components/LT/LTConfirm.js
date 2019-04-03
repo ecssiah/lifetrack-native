@@ -1,8 +1,8 @@
-import React from 'react';
-import { Text, TouchableOpacity, View } from 'react-native';
-import createStyles, { Color } from '../../styles';
+import React from 'react'
+import { Text, TouchableOpacity, View } from 'react-native'
+import createStyles, { Color } from '../../styles'
 
-import LTText from '../LT/LTText';
+import LTText from '../LT/LTText'
 
 const styles = createStyles({
   container: {
@@ -39,14 +39,14 @@ const styles = createStyles({
     paddingVertical: '10%',
     textAlign: 'center',
   },
-});
+})
 
 class LTConfirm extends React.Component 
 {
   static defaultProps = {
     leftContent: 'Cancel',
     rightContent: 'Confirm',
-  };
+  }
 
   render() {
     return (
@@ -71,8 +71,8 @@ class LTConfirm extends React.Component
           </LTText>
         </TouchableOpacity>
       </View>
-    );
-  };
-};
+    )
+  }
+}
 
-export default LTConfirm;
+export default LTConfirm

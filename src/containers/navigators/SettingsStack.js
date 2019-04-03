@@ -1,17 +1,17 @@
-import { createStackNavigator } from 'react-navigation';
-import createStyles from '../../styles';
+import { createStackNavigator } from 'react-navigation'
+import createStyles from '../../styles'
 
-import SettingsScreen from '../screens/settings/SettingsScreen';
-import CategoriesScreen from '../screens/settings/CategoriesScreen';
-import ProfileScreen from '../screens/settings/ProfileScreen';
+import SettingsScreen from '../screens/settings/SettingsScreen'
+import CategoriesScreen from '../screens/settings/CategoriesScreen'
+import ProfileScreen from '../screens/settings/ProfileScreen'
 
-const styles = createStyles({});
+const styles = createStyles({})
 
 const routeConfig = {
   Settings: SettingsScreen,
   Categories: CategoriesScreen,
   Profile: ProfileScreen,
-};
+}
 
 const navConfig = {
   initialRouteName: 'Settings',
@@ -21,6 +21,6 @@ const navConfig = {
     headerStyle: styles.headerStyle,
     headerTitleStyle: styles.headerTitleStyle,
   },
-};
+}
 
-export default createStackNavigator(routeConfig, navConfig);
+export default createStackNavigator(routeConfig, navConfig)

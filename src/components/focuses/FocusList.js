@@ -1,10 +1,10 @@
-import React from 'react';
-import { SectionList } from 'react-native';
-import { UNCATEGORIZED } from '../../constants/Categories';
+import React from 'react'
+import { SectionList } from 'react-native'
+import { UNCATEGORIZED } from '../../constants/Categories'
 
-import FocusHeader from './FocusHeader';
-import FocusItem from './FocusItem';
-import LTSeparator from '../LT/LTSeparator';
+import FocusHeader from './FocusHeader'
+import FocusItem from './FocusItem'
+import LTSeparator from '../LT/LTSeparator'
 
 class FocusList extends React.Component 
 {
@@ -15,8 +15,8 @@ class FocusList extends React.Component
         active={section.show}
         onCategorySelect={this.props.onCategorySelect}
       />
-    );
-  }; 
+    )
+  } 
 
   _renderItem = item => {
     return (
@@ -24,58 +24,58 @@ class FocusList extends React.Component
         focus={item} 
         onFocusSelect={this.props.onFocusSelect} 
       />
-    );
-  };
+    )
+  }
 
   _findCategoryFocuses = name => {
-    const focuses = [];
+    const focuses = []
 
     for (const id in this.props.focuses) {
       if (this.props.focuses[id].category === name) {
-        focuses.push({ id, ...this.props.focuses[id] });
+        focuses.push({ id, ...this.props.focuses[id] })
       }
     }
 
-    return focuses;
-  };
+    return focuses
+  }
 
   _sectionsReducer = (result, name) => {
-    const category = this.props.categories[name];
-    const section = { title: name, show: category.show, data: [] };
+    const category = this.props.categories[name]
+    const section = { title: name, show: category.show, data: [] }
 
     if (name === UNCATEGORIZED) {
-      const focuses = this._findCategoryFocuses(name);
+      const focuses = this._findCategoryFocuses(name)
 
       if (focuses.length > 0) {
         if (category.show) {
-          focuses.sort((a, b) => a.name.localeCompare(b.name));
-          result.push({ ...section, data: focuses });
+          focuses.sort((a, b) => a.name.localeCompare(b.name))
+          result.push({ ...section, data: focuses })
         } else {
-          result.push(section);
+          result.push(section)
         }
       }
     } else {
       if (category.show) {
-        const focuses = this._findCategoryFocuses(name);
+        const focuses = this._findCategoryFocuses(name)
 
-        focuses.sort((a, b) => a.name.localeCompare(b.name));
-        result.push({ ...section, data: focuses });
+        focuses.sort((a, b) => a.name.localeCompare(b.name))
+        result.push({ ...section, data: focuses })
       } else {
-        result.push(section);
+        result.push(section)
       }
     }
 
-    return result;
-  };
+    return result
+  }
 
   _getSections = () => {
-    let categoryNames = Object.keys(this.props.categories);
-    categoryNames = categoryNames.filter(name => name !== UNCATEGORIZED);
-    categoryNames.sort((a, b) => a.localeCompare(b));
-    categoryNames.push(UNCATEGORIZED);
+    let categoryNames = Object.keys(this.props.categories)
+    categoryNames = categoryNames.filter(name => name !== UNCATEGORIZED)
+    categoryNames.sort((a, b) => a.localeCompare(b))
+    categoryNames.push(UNCATEGORIZED)
 
-    return categoryNames.reduce(this._sectionsReducer, []);
-  };
+    return categoryNames.reduce(this._sectionsReducer, [])
+  }
 
 
   render() {
@@ -87,8 +87,8 @@ class FocusList extends React.Component
         renderSectionHeader={({section}) => this._renderHeader(section)}
         renderItem={({item}) => this._renderItem(item)}
       />
-    );
-  };
-};
+    )
+  }
+}
 
-export default FocusList;
+export default FocusList

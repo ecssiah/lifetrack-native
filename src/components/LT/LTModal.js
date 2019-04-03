@@ -1,6 +1,6 @@
-import React from 'react';
-import { Modal, TouchableHighlight, View } from 'react-native';
-import createStyles from '../../styles';
+import React from 'react'
+import { Modal, TouchableHighlight, View } from 'react-native'
+import createStyles from '../../styles'
 
 const styles = createStyles({
   backdrop: {
@@ -24,7 +24,7 @@ const styles = createStyles({
     borderColor: '#aaaaaa',
     backgroundColor: 'white',
   },
-});
+})
 
 class LTModal extends React.Component 
 {
@@ -48,8 +48,8 @@ class LTModal extends React.Component
           </TouchableHighlight>
         </TouchableHighlight>
       </Modal>
-    );
-  };
-};
+    )
+  }
+}
 
-export default LTModal;
+export default LTModal

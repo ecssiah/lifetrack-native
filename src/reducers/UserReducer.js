@@ -1,24 +1,24 @@
 import { 
   SET_USER,
   UPDATE_USER,
-} from "../constants/User";
+} from "../constants/User"
 
 function userReducer(state = {}, action) {
-  const newState = { ...state };
+  const newState = { ...state }
 
   switch (action.type) {
     case SET_USER: {
-      return action.user;
+      return action.user
     }
     case UPDATE_USER: {
-      Object.assign(newState, action.update);
+      Object.assign(newState, action.update)
 
-      return newState;
+      return newState
     }
     default: {
-      return newState;
+      return newState
     }
-  };
-};
+  }
+}
 
-export default userReducer;
+export default userReducer

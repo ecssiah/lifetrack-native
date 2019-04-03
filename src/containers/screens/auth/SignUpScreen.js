@@ -1,9 +1,8 @@
-import React from 'react';
-import { err } from '../../../utils';
-import { connect } from 'react-redux';
-import { signUp } from '../../../handlers/AuthHandlers';
-import { Alert, Button, View, TextInput } from 'react-native';
-import createStyles, { FontSize } from '../../../styles';
+import React from 'react'
+import { connect } from 'react-redux'
+import { signUp } from '../../../handlers/AuthHandlers'
+import { Alert, Button, View, TextInput } from 'react-native'
+import createStyles, { FontSize } from '../../../styles'
 
 const styles = createStyles({
   container: {
@@ -37,29 +36,29 @@ const styles = createStyles({
     borderColor: 'gray', 
     marginTop: 14,
   },
-});
+})
 
 class SignUpScreen extends React.Component 
 {
   constructor(props) {
-    super(props);
+    super(props)
 
     this.state = {
       email: '',
       password: '',
       confirm: '',
-    };
-  };
+    }
+  }
 
   static navigationOptions = ({ navigation }) => ({
     title: 'Sign Up',
-  });
+  })
 
   _onPressSignUp = async () => {
     if (this.state.password === this.state.confirm) {
-      await this.props.signUp(this.state.email, this.state.password);
+      await this.props.signUp(this.state.email, this.state.password)
 
-      this.props.navigation.navigate('App');
+      this.props.navigation.navigate('App')
     } else {
       Alert.alert(
         'Password confirmation \ndoes not match.',
@@ -67,14 +66,14 @@ class SignUpScreen extends React.Component
         [
           { text: 'Confirm', onPress: null },
         ],
-      );
+      )
 
       this.setState({
         password: '',
         confirm: '',
-      });
+      })
     }
-  };
+  }
 
   render() {
     return (
@@ -118,15 +117,15 @@ class SignUpScreen extends React.Component
           color="#841584"
         />
       </View>
-    );
-  };
-};
+    )
+  }
+}
 
 const mapStateToProps = state => ({
-});
+})
 
 const mapDispatchToProps = dispatch => ({
   signUp: (email, password) => signUp(dispatch, email, password),
-});
+})
 
-export default connect(mapStateToProps, mapDispatchToProps)(SignUpScreen);
+export default connect(mapStateToProps, mapDispatchToProps)(SignUpScreen)

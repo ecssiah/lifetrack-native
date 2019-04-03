@@ -3,45 +3,45 @@ import {
   UPDATE_CATEGORIES, 
   ADD_CATEGORY, UPDATE_CATEGORY, DELETE_CATEGORY, 
   UPDATE_CATEGORY_NAME,
-} from "../constants/Categories";
+} from "../constants/Categories"
 
 function categoriesReducer(state = {}, action) {
-  const newState = { ...state };
+  const newState = { ...state }
 
   switch (action.type) {
     case SET_CATEGORIES: {
-      return action.categories;
+      return action.categories
     }
     case UPDATE_CATEGORIES: {
-      Object.assign(newState, action.update);
+      Object.assign(newState, action.update)
 
-      return newState;
+      return newState
     }
     case ADD_CATEGORY: {
-      newState[action.name] = action.category;
+      newState[action.name] = action.category
 
-      return newState;
+      return newState
     }
     case UPDATE_CATEGORY: {
-      Object.assign(newState[action.name], action.update);
+      Object.assign(newState[action.name], action.update)
 
-      return newState;
+      return newState
     }
     case DELETE_CATEGORY: {
-      delete newState[action.name];
+      delete newState[action.name]
         
-      return newState;
+      return newState
     }
     case UPDATE_CATEGORY_NAME: {
-      newState[action.newName] = newState[action.name];
-      delete newState[action.name];
+      newState[action.newName] = newState[action.name]
+      delete newState[action.name]
 
-      return newState;
+      return newState
     }
     default: {
-      return newState;
+      return newState
     }
   }
-};
+}
 
-export default categoriesReducer;
+export default categoriesReducer

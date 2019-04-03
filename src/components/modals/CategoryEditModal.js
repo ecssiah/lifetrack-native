@@ -1,11 +1,11 @@
-import React from 'react';
-import { TouchableOpacity, View } from 'react-native';
-import createStyles, { FontSize, Color } from '../../styles';
+import React from 'react'
+import { TouchableOpacity, View } from 'react-native'
+import createStyles, { FontSize, Color } from '../../styles'
 
-import LTText from '../LT/LTText';
-import LTEdit from '../LT/LTEdit';
-import LTModal from '../LT/LTModal';
-import LTConfirm from '../LT/LTConfirm';
+import LTText from '../LT/LTText'
+import LTEdit from '../LT/LTEdit'
+import LTModal from '../LT/LTModal'
+import LTConfirm from '../LT/LTConfirm'
 
 const styles = createStyles({
   container: {
@@ -21,7 +21,7 @@ const styles = createStyles({
     color: Color.highlight,
     margin: 16,
   },
-});
+})
 
 class CategoryEditModal extends React.Component 
 {
@@ -55,8 +55,8 @@ class CategoryEditModal extends React.Component
           />
         </LTModal>
       </View>
-    );
-  };
-};
+    )
+  }
+}
 
-export default CategoryEditModal;
+export default CategoryEditModal

@@ -1,7 +1,7 @@
-import React from 'react';
-import { Text, TouchableOpacity } from 'react-native';
-import createStyles, { Color, Font, FontSize } from '../../styles';
-import { displayTime } from '../../utils';
+import React from 'react'
+import { Text, TouchableOpacity } from 'react-native'
+import { displayTime } from '../../../lib/utils'
+import createStyles, { Color, Font, FontSize } from '../../styles'
 
 const styles = createStyles({
   working: {
@@ -22,17 +22,17 @@ const styles = createStyles({
     textAlign: 'center',
     color: Color.break,
   },
-});
+})
 
 class FocusTimer extends React.PureComponent 
 {
   _getTimerStyle() {
     if (this.props.working) {
-      return this.props.active ? styles.working : styles.paused;
+      return this.props.active ? styles.working : styles.paused
     } else {
-      return styles.break;
+      return styles.break
     }
-  };
+  }
 
   render() {
     return (
@@ -44,8 +44,8 @@ class FocusTimer extends React.PureComponent
           {displayTime(this.props.time)}
         </Text>
       </TouchableOpacity>
-    );
-  };
-};
+    )
+  }
+}
 
-export default FocusTimer;
+export default FocusTimer

@@ -1,10 +1,10 @@
-import React from 'react';
+import React from 'react'
 import { 
   ProgressViewIOS, TouchableOpacity, View,  
-} from 'react-native';
-import createStyles, { Color, FontSize } from '../../styles'; 
+} from 'react-native'
+import createStyles, { Color, FontSize } from '../../styles' 
 
-import LTText from '../LT/LTText';
+import LTText from '../LT/LTText'
 
 const styles = createStyles({
   container: {
@@ -46,7 +46,7 @@ const styles = createStyles({
       { scaleY: 6.0 },
     ],
   },
-});
+})
 
 class FocusItem extends React.Component 
 {
@@ -74,8 +74,8 @@ class FocusItem extends React.Component
           />
         </View>
       </TouchableOpacity>
-    );
-  };
-};
+    )
+  }
+}
 
-export default FocusItem;
+export default FocusItem

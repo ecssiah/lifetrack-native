@@ -1,13 +1,13 @@
-import React from 'react';
-import { connect } from 'react-redux';
-import { TextInput, View } from 'react-native';
-import createStyles, { FontSize } from '../../../styles';
-import { updateUser, updateUserEmail } from '../../../handlers/UserHandlers';
+import React from 'react'
+import { connect } from 'react-redux'
+import { TextInput, View } from 'react-native'
+import { formatSpace } from '../../../../lib/utils'
+import { updateUser, updateUserEmail } from '../../../handlers/UserHandlers'
+import createStyles from '../../../styles'
 
-import LTText from '../../../components/LT/LTText';
-import LTIcon from '../../../components/LT/LTIcon';
-import AuthModal from '../../../components/modals/AuthModal';
-import { formatSpace } from '../../../utils';
+import LTText from '../../../components/LT/LTText'
+import LTIcon from '../../../components/LT/LTIcon'
+import AuthModal from '../../../components/modals/AuthModal'
 
 const styles = createStyles({
   container: {
@@ -28,19 +28,19 @@ const styles = createStyles({
     fontSize: 18,
     textAlign: 'right',
   },
-});
+})
 
 class ProfileScreen extends React.Component 
 {
   constructor(props) {
-    super(props);
+    super(props)
 
     this.state = {
       authModalShow: false,
       email: props.user.email,
       birthYear: props.user.birthYear,
-    };
-  };
+    }
+  }
 
   static navigationOptions = ({navigation}) => ({
     title: 'Profile',
@@ -51,59 +51,59 @@ class ProfileScreen extends React.Component
         onPress={() => navigation.goBack()}
       />
     ),
-  });
+  })
 
   _onEmailChange = email => {
     this.setState({
       email,
-    });
-  };
+    })
+  }
 
   _onEmailSubmit = async () => {
     if (this.state.email !== this.props.user.email) {
       this.setState({
         authModalShow: true,
-      });
+      })
     }
-  };
+  }
 
   _onBirthYearChange = birthYear => {
     this.setState({
       birthYear,
-    });
-  };
+    })
+  }
 
   _onBirthYearSubmit = async () => {
     if (isNaN(this.state.birthYear)) {
-      this.props.updateUser({ birthYear: 'None' });
-      this.setState({ birthYear: 'None' });
+      this.props.updateUser({ birthYear: 'None' })
+      this.setState({ birthYear: 'None' })
     } else {
-      const currentYear = new Date().getFullYear();
-      const birthYearCandidate = parseInt(this.state.birthYear);
+      const currentYear = new Date().getFullYear()
+      const birthYearCandidate = parseInt(this.state.birthYear)
 
       if (birthYearCandidate > 1890 && birthYearCandidate <= currentYear) {
-        this.props.updateUser({ birthYear: this.state.birthYear });
+        this.props.updateUser({ birthYear: this.state.birthYear })
       } else {
-        this.props.updateUser({ birthYear: 'None' });
-        this.setState({ birthYear: 'None' });
+        this.props.updateUser({ birthYear: 'None' })
+        this.setState({ birthYear: 'None' })
       }
     }
-  };
+  }
 
   _onAuthConfirm = async () => {
-    await this.props.updateUserEmail(this.state.email); 
+    await this.props.updateUserEmail(this.state.email) 
 
     this.setState({
       authModalShow: false,
-    });
-  };
+    })
+  }
 
   _onAuthCancel = () => {
     this.setState({
       authModalShow: false,
       email: this.props.user.email, 
-    });
-  };
+    })
+  }
 
   render() {
     return (
@@ -141,17 +141,17 @@ class ProfileScreen extends React.Component
           onCancel={this._onAuthCancel} 
         />
       </View>
-    );
-  };
-};
+    )
+  }
+}
 
 const mapStateToProps = state => ({
   user: state.user,
-});
+})
 
 const mapDispatchToProps = dispatch => ({
   updateUser: update => updateUser(dispatch, update),
   updateUserEmail: email => updateUserEmail(dispatch, email),
-});
+})
 
-export default connect(mapStateToProps, mapDispatchToProps)(ProfileScreen);
+export default connect(mapStateToProps, mapDispatchToProps)(ProfileScreen)

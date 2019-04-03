@@ -1,24 +1,24 @@
 import { 
   SET_SETTINGS,
   UPDATE_SETTINGS,
-} from "../constants/Settings";
+} from "../constants/Settings"
 
 function settingsReducer(state = {}, action) {
-  const newState = { ...state };
+  const newState = { ...state }
 
   switch (action.type) {
     case SET_SETTINGS: {
-      return action.settings;
+      return action.settings
     }
     case UPDATE_SETTINGS: {
-      Object.assign(newState, action.update);
+      Object.assign(newState, action.update)
 
-      return newState;
+      return newState
     }
     default: {
-      return newState;
+      return newState
     }
   }
-};
+}
 
-export default settingsReducer;
+export default settingsReducer

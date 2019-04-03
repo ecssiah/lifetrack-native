@@ -1,9 +1,9 @@
-import React from 'react';
-import { Picker, TextInput } from 'react-native';
-import createStyles, { FontSize, Font } from '../../styles';
+import React from 'react'
+import { Picker, TextInput } from 'react-native'
+import createStyles, { FontSize, Font } from '../../styles'
 
-import LTModal from '../LT/LTModal';
-import LTConfirm from '../LT/LTConfirm';
+import LTModal from '../LT/LTModal'
+import LTConfirm from '../LT/LTConfirm'
 
 const styles = createStyles({
   container: {
@@ -22,12 +22,12 @@ const styles = createStyles({
   picker: {
     width: '86%',
   },
-});
+})
 
 class CategoryModal extends React.Component 
 {
   _getCategoryItems = () => {
-    const categories = Object.keys(this.props.categories);
+    const categories = Object.keys(this.props.categories)
 
     const categoryItems = categories.map((categoryName, idx) => 
       <Picker.Item 
@@ -35,10 +35,10 @@ class CategoryModal extends React.Component
         label={categoryName} 
         value={categoryName}
       />
-    );
+    )
 
-    return categoryItems;
-  };
+    return categoryItems
+  }
 
   render() {
     return (
@@ -61,8 +61,8 @@ class CategoryModal extends React.Component
           onPressRight={this.props.onConfirm}
         />
       </LTModal>
-    );
-  };
-};
+    )
+  }
+}
 
-export default CategoryModal;
+export default CategoryModal

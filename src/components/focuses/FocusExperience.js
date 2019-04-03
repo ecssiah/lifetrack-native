@@ -1,8 +1,8 @@
-import React from 'react';
-import { Text, View, ProgressViewIOS } from 'react-native';
-import createStyles, { Color, FontSize } from '../../styles';
+import React from 'react'
+import { Text, View, ProgressViewIOS } from 'react-native'
+import createStyles, { Color, FontSize } from '../../styles'
 
-import LTText from '../LT/LTText';
+import LTText from '../LT/LTText'
 
 const styles = createStyles({
   container: {
@@ -21,7 +21,7 @@ const styles = createStyles({
     paddingHorizontal: 20,
     marginVertical: 10,
   }
-});
+})
 
 class FocusExperience extends React.PureComponent 
 {
@@ -38,8 +38,8 @@ class FocusExperience extends React.PureComponent
           progress={this.props.experience / 100}
         />
       </View>
-    );
-  };
-};
+    )
+  }
+}
 
-export default FocusExperience;
+export default FocusExperience

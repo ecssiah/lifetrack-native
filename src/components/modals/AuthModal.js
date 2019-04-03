@@ -1,14 +1,14 @@
-import React from 'react';
-import { connect } from 'react-redux';
-import { auth } from '../../config/firebaseConfig';
-import firebase from 'firebase';
-import { Alert, TextInput } from 'react-native';
-import createStyles, { FontSize, Font } from '../../styles';
+import React from 'react'
+import { connect } from 'react-redux'
+import { auth } from '../../config/firebaseConfig'
+import firebase from 'firebase'
+import { Alert, TextInput } from 'react-native'
+import createStyles, { FontSize, Font } from '../../styles'
 
-import LTText from '../LT/LTText';
-import LTModal from '../LT/LTModal';
-import LTSpacer from '../LT/LTSpacer';
-import LTConfirm from '../LT/LTConfirm';
+import LTText from '../LT/LTText'
+import LTModal from '../LT/LTModal'
+import LTSpacer from '../LT/LTSpacer'
+import LTConfirm from '../LT/LTConfirm'
 
 const styles = createStyles({
   container: {
@@ -28,35 +28,35 @@ const styles = createStyles({
     borderColor: 'gray', 
     marginTop: 14,
   },
-});
+})
 
 class AuthModal extends React.Component 
 {
   constructor(props) {
-    super(props);
+    super(props)
 
     this.state = {
       password: ''
-    };
-  };
+    }
+  }
 
   _onReauthorizationAttempt = async () => {
     try {
-      const user = auth.currentUser;
+      const user = auth.currentUser
 
       const credential = firebase.auth.EmailAuthProvider.credential(
         user.email,
         this.state.password
-      );
+      )
 
-      await user.reauthenticateAndRetrieveDataWithCredential(credential);
+      await user.reauthenticateAndRetrieveDataWithCredential(credential)
 
-      this.props.onConfirm();
+      this.props.onConfirm()
     }
     catch (error) {
       this.setState({
         password: '',
-      });
+      })
 
       Alert.alert(
         'Password incorrect. Try again.',
@@ -64,9 +64,9 @@ class AuthModal extends React.Component
         [
           { text: 'Confirm', onPress: null },
         ],
-      );
+      )
     }
-  };
+  }
 
   render() {
     return (
@@ -99,16 +99,16 @@ class AuthModal extends React.Component
           onPressRight={this._onReauthorizationAttempt}
         />
       </LTModal>
-    );
-  };
-};
+    )
+  }
+}
 
 const mapStateToProps = state => ({
   user: state.user,
-});
+})
 
 const mapDispatchToProps = dispatch => ({
 
-});
+})
 
-export default connect(mapStateToProps, mapDispatchToProps)(AuthModal);
+export default connect(mapStateToProps, mapDispatchToProps)(AuthModal)

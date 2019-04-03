@@ -1,9 +1,9 @@
-import React from 'react';
-import { TextInput } from 'react-native';
-import createStyles, { FontSize, Color, Font } from '../../styles';
+import React from 'react'
+import { TextInput } from 'react-native'
+import createStyles, { FontSize, Color, Font } from '../../styles'
 
-import LTModal from '../LT/LTModal';
-import LTConfirm from '../LT/LTConfirm';
+import LTModal from '../LT/LTModal'
+import LTConfirm from '../LT/LTConfirm'
 
 const styles = createStyles({
   container: {
@@ -23,7 +23,7 @@ const styles = createStyles({
     paddingHorizontal: 10,
     marginTop: 14,
   },
-});
+})
 
 class CategoryAddModal extends React.Component 
 {
@@ -50,8 +50,8 @@ class CategoryAddModal extends React.Component
           onPressRight={this.props.onConfirm}
         />
       </LTModal>
-    );
-  };
-};
+    )
+  }
+}
 
-export default CategoryAddModal;
+export default CategoryAddModal

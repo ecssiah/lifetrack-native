@@ -1,10 +1,10 @@
-import React from 'react';
+import React from 'react'
 import { 
   TouchableOpacity, View 
-} from 'react-native';
-import createStyles, { FontSize } from '../../styles'; 
+} from 'react-native'
+import createStyles, { FontSize } from '../../styles' 
 
-import LTText from '../LT/LTText';
+import LTText from '../LT/LTText'
 
 const styles = createStyles({
   containerActive: {
@@ -33,17 +33,17 @@ const styles = createStyles({
     marginLeft: 4,
     marginVertical: 2,
   },
-});
+})
 
 class FocusHeader extends React.Component 
 {
   _getContainerStyle = () => {
-    return this.props.active ? styles.containerActive : styles.container;
-  };
+    return this.props.active ? styles.containerActive : styles.container
+  }
 
   _getHeaderStyle = () => {
-    return this.props.active ? styles.headerActive : styles.header;
-  };
+    return this.props.active ? styles.headerActive : styles.header
+  }
 
   render() {
     return (
@@ -57,8 +57,8 @@ class FocusHeader extends React.Component
           </LTText>
         </TouchableOpacity>
       </View>
-    );
-  };
-};
+    )
+  }
+}
 
-export default FocusHeader;
+export default FocusHeader

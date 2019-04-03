@@ -1,11 +1,11 @@
-import React from 'react';
-import { Picker } from 'react-native';
-import createStyles, { FontSize, Font } from '../../styles';
+import React from 'react'
+import { Picker } from 'react-native'
+import createStyles, { FontSize, Font } from '../../styles'
 
-import LTText from '../LT/LTText';
-import LTModal from '../LT/LTModal';
-import LTSpacer from '../LT/LTSpacer';
-import LTConfirm from '../LT/LTConfirm';
+import LTText from '../LT/LTText'
+import LTModal from '../LT/LTModal'
+import LTSpacer from '../LT/LTSpacer'
+import LTConfirm from '../LT/LTConfirm'
 
 const styles = createStyles({
   container: {
@@ -17,12 +17,12 @@ const styles = createStyles({
   picker: {
     width: '86%',
   },
-});
+})
 
 class SettingsModal extends React.Component 
 {
   _getSettingItems = (start, end) => {
-    const settingArray = Array(start + end  - 1).fill();
+    const settingArray = Array(start + end  - 1).fill()
 
     const settingItems = settingArray.map((_, i) => 
       <Picker.Item 
@@ -30,10 +30,10 @@ class SettingsModal extends React.Component
         label={(i + start).toString()} 
         value={(i + start).toString()} 
       />
-    );
+    )
 
-    return settingItems;
-  };
+    return settingItems
+  }
 
   render() {
     return (
@@ -62,8 +62,8 @@ class SettingsModal extends React.Component
           onPressRight={this.props.onConfirm}
         />
       </LTModal>
-    );
-  };
-};
+    )
+  }
+}
 
-export default SettingsModal;
+export default SettingsModal

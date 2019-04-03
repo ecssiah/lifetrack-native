@@ -1,10 +1,10 @@
-import React from 'react';
-import { Provider } from 'react-redux';
+import React from 'react'
+import { Provider } from 'react-redux'
 
-import reduxStore from './src/config/reduxConfig';
+import reduxStore from './src/config/reduxConfig'
 
-import LTStatus from './src/containers/LT/LTStatus';
-import LTContainer from './src/containers/LT/LTContainer';
+import LTStatus from './src/containers/LT/LTStatus'
+import LTContainer from './src/containers/LT/LTContainer'
 
 class App extends React.Component 
 {
@@ -14,8 +14,8 @@ class App extends React.Component
         <LTStatus />
         <LTContainer />
       </Provider>
-    );
-  };
-};
+    )
+  }
+}
 
-export default App;
+export default App

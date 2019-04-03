@@ -1,14 +1,14 @@
-import React from 'react';
-import { TouchableOpacity } from 'react-native';
-import createStyles, { FontSize, Color } from '../../styles';
+import React from 'react'
+import { TouchableOpacity } from 'react-native'
+import createStyles, { FontSize, Color } from '../../styles'
 import { 
   WORK_PERIOD, WORK_GOAL, BREAK_PERIOD 
-} from '../../constants/Focuses';
+} from '../../constants/Focuses'
 
-import LTText from '../LT/LTText';
-import LTEdit from '../LT/LTEdit';
-import SettingItem from '../setting/SettingItem';
-import SettingList from '../setting/SettingList';
+import LTText from '../LT/LTText'
+import LTEdit from '../LT/LTEdit'
+import SettingItem from '../setting/SettingItem'
+import SettingList from '../setting/SettingList'
 
 const styles = createStyles({
   deleteText: {
@@ -18,7 +18,7 @@ const styles = createStyles({
     color: Color.highlight,
     margin: 16,
   },
-});
+})
 
 class FocusEditList extends React.Component
 {
@@ -29,8 +29,8 @@ class FocusEditList extends React.Component
         onChangeText={this.props.onEditNameChange}
         onSubmitEditing={this.props.onEditNameConfirm}
       />
-    );
-  };
+    )
+  }
 
   _renderCategory = ({item}) => {
     return (
@@ -38,8 +38,8 @@ class FocusEditList extends React.Component
         setting={item} 
         onSettingSelect={this.props.onCategorySelect} 
       />
-    );
-  };
+    )
+  }
 
   _renderDelete = ({item, index}) => {
     return (
@@ -52,8 +52,8 @@ class FocusEditList extends React.Component
           {item.name}
         </LTText>
       </TouchableOpacity> 
-    );
-  };
+    )
+  }
 
   _getSections = () => {
     return [
@@ -90,8 +90,8 @@ class FocusEditList extends React.Component
         title: '',
         data: [],
       },
-    ];
-  };
+    ]
+  }
 
   render() {
     return (
@@ -99,8 +99,8 @@ class FocusEditList extends React.Component
         sections={this._getSections()} 
         onSettingSelect={this.props.onSettingSelect}
       />
-    );
-  };
-};
+    )
+  }
+}
 
-export default FocusEditList;
+export default FocusEditList

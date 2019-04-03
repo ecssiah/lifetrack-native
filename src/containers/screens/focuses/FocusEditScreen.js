@@ -1,30 +1,30 @@
-import React from 'react';
-import { connect } from 'react-redux';
-import { Alert, View } from 'react-native';
+import React from 'react'
+import { connect } from 'react-redux'
+import { Alert, View } from 'react-native'
 import { 
   WORK_PERIOD, WORK_GOAL, BREAK_PERIOD,
-} from '../../../constants/Focuses';
+} from '../../../constants/Focuses'
 import { 
   updateFocus, 
   deleteFocus 
-} from '../../../handlers/FocusesHandlers';
-import createStyles from '../../../styles';
+} from '../../../handlers/FocusesHandlers'
+import createStyles from '../../../styles'
 
-import LTIcon from '../../../components/LT/LTIcon';
-import CategoryModal from '../../../components/modals/CategoryModal';
-import SettingsModal from '../../../components/modals/SettingsModal';
-import FocusEditList from '../../../components/focuses/FocusEditList';
+import LTIcon from '../../../components/LT/LTIcon'
+import CategoryModal from '../../../components/modals/CategoryModal'
+import SettingsModal from '../../../components/modals/SettingsModal'
+import FocusEditList from '../../../components/focuses/FocusEditList'
 
 const styles = createStyles({
   container: {
     flex: 1,
   },
-});
+})
 
 class FocusEditScreen extends React.Component 
 {
   constructor(props) {
-    super(props);
+    super(props)
 
     this.state = {
       nameInputStyle: styles.nameInputBlur,
@@ -35,8 +35,8 @@ class FocusEditScreen extends React.Component
       categoryModalShow: false,
       settingsModalShow: false,
       deleteModalShow: false,
-    };
-  };
+    }
+  }
 
   static navigationOptions = ({ navigation }) => ({
     title: 'Edit Focus',
@@ -47,49 +47,49 @@ class FocusEditScreen extends React.Component
         onPress={() => navigation.goBack()}
       />
     ),
-  });
+  })
 
   _onEditNameChange = name => {
     this.setState({
       name,
-    });
-  };
+    })
+  }
 
   _onEditNameConfirm = () => {
-    this.props.updateFocus(this.props.selection.id, { name: this.state.name });
-  };
+    this.props.updateFocus(this.props.selection.id, { name: this.state.name })
+  }
 
   _onEditNameFocus = () => {
     this.setState({
       nameInputStyle: styles.nameInputFocus,
-    });
-  };
+    })
+  }
 
   _onEditNameBlur = () => {
     this.setState({
       nameInputStyle: styles.nameInputBlur,
-    });
-  };
+    })
+  }
 
   _onSettingSelect = settingName => {
-    let settingValue;
-    const focus = this.props.focuses[this.props.selection.id];
+    let settingValue
+    const focus = this.props.focuses[this.props.selection.id]
 
     switch (settingName) {
       case WORK_PERIOD: {
-        settingValue = focus.workPeriod.toString();
-        break;
+        settingValue = focus.workPeriod.toString()
+        break
       }
       case BREAK_PERIOD: {
-        settingValue = focus.breakPeriod.toString();
-        break;
+        settingValue = focus.breakPeriod.toString()
+        break
       }
       case WORK_GOAL: {
-        settingValue = focus.workGoal.toString();
-        break;
+        settingValue = focus.workGoal.toString()
+        break
       }
       default: {
-        console.error('Invalid setting: ' + settingName);
+        console.error('Invalid setting: ' + settingName)
       }
     }
 
@@ -97,87 +97,87 @@ class FocusEditScreen extends React.Component
       settingName,
       settingValue,
       settingsModalShow: true,
-    });
-  };
+    })
+  }
 
   _onSettingValueChange = settingValue => {
     this.setState({
       settingValue,
-    });
-  };
+    })
+  }
 
   _onSettingConfirm = () => {
-    const update = {};
+    const update = {}
 
     switch (this.state.settingName) {
       case WORK_PERIOD: {
-        update.workPeriod = parseInt(this.state.settingValue);
+        update.workPeriod = parseInt(this.state.settingValue)
 
         if (this.props.focuses[this.props.selection.id].working) {
-          update.time = 60 * update.workPeriod;
+          update.time = 60 * update.workPeriod
         }
 
-        break;
+        break
       }
       case BREAK_PERIOD: {
-        update.breakPeriod = parseInt(this.state.settingValue);
-        break;
+        update.breakPeriod = parseInt(this.state.settingValue)
+        break
       }
       case WORK_GOAL: {
-        update.workGoal = parseInt(this.state.settingValue);
-        break;
+        update.workGoal = parseInt(this.state.settingValue)
+        break
       }
       default: {
-        console.error('Invalid setting: ' + this.state.settingValue);
+        console.error('Invalid setting: ' + this.state.settingValue)
       }
     }
 
-    this.props.updateFocus(this.props.selection.id, update);
+    this.props.updateFocus(this.props.selection.id, update)
 
     this.setState({
       settingsModalShow: false,
-    });
-  };
+    })
+  }
 
   _onSettingCancel = () => {
     this.setState({
       settingsModalShow: false,
-    });
-  };
+    })
+  }
 
   _onCategorySelect = () => {
     this.setState({
       categoryModalShow: true, 
-    });
-  };
+    })
+  }
 
   _onCategoryValueChange = categoryName => {
     this.setState({
       categoryName,
-    });
-  };
+    })
+  }
 
   _onCategoryConfirm = () => {
     this.props.updateFocus(
       this.props.selection.id, 
       { category: this.state.categoryName }
-    );
+    )
 
     this.setState({
       categoryName: this.state.categoryName,
       categoryModalShow: false,
-    });
-  };
+    })
+  }
 
   _onCategoryCancel = () => {
     this.setState({
       categoryName: this.props.focuses[this.props.selection.id].category,
       categoryModalShow: false,
-    });
-  };
+    })
+  }
 
   _onDeleteSelect = () => {
-    const focusName = this.props.focuses[this.props.selection.id].name;
+    const focusName = this.props.focuses[this.props.selection.id].name
 
     Alert.alert(
       'Are you sure you want to delete ' + focusName + '?',
@@ -186,27 +186,27 @@ class FocusEditScreen extends React.Component
         { text: 'Cancel', onPress: null },
         { text: 'Confirm', onPress: this._onDeleteConfirm },
       ],
-    );
-  };
+    )
+  }
 
   _onDeleteConfirm = async () => {
-    clearInterval(this.props.focuses[this.props.selection.id].timer);
+    clearInterval(this.props.focuses[this.props.selection.id].timer)
 
-    await this.props.deleteFocus(this.props.selection.id);
+    await this.props.deleteFocus(this.props.selection.id)
 
-    this.props.navigation.navigate('Focuses');
-  };
+    this.props.navigation.navigate('Focuses')
+  }
 
   _onDeleteCancel = () => {
     this.setState({
       deleteModalShow: false,
-    });
-  };
+    })
+  }
 
   render() {
-    const focus = this.props.focuses[this.props.selection.id];
+    const focus = this.props.focuses[this.props.selection.id]
 
-    if (!focus) return null;
+    if (!focus) return null
 
     return (
       <View style={styles.container}>
@@ -238,19 +238,19 @@ class FocusEditScreen extends React.Component
           onSettingValueChange={value => this._onSettingValueChange(value)}
         />
       </View>
-    );
-  };
-};
+    )
+  }
+}
 
 const mapStateToProps = state => ({
   selection: state.selection,
   focuses: state.focuses,
   categories: state.categories,
-});
+})
 
 const mapDispatchToProps = dispatch => ({
   updateFocus: (id, update) => updateFocus(dispatch, id, update),
   deleteFocus: id => deleteFocus(dispatch, id),
-});
+})
 
-export default connect(mapStateToProps, mapDispatchToProps)(FocusEditScreen);
+export default connect(mapStateToProps, mapDispatchToProps)(FocusEditScreen)

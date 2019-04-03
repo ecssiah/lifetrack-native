@@ -1,8 +1,8 @@
-import React from 'react';
-import { connect } from 'react-redux';
-import { Alert, Button, View, TextInput } from 'react-native';
-import createStyles, { FontSize } from '../../../styles';
-import { signIn } from '../../../handlers/AuthHandlers';
+import React from 'react'
+import { connect } from 'react-redux'
+import { Alert, Button, View, TextInput } from 'react-native'
+import createStyles, { FontSize } from '../../../styles'
+import { signIn } from '../../../handlers/AuthHandlers'
 
 const styles = createStyles({
   container: {
@@ -27,26 +27,26 @@ const styles = createStyles({
     borderColor: 'gray', 
     marginTop: 14,
   },
-});
+})
 
 class SignInScreen extends React.Component 
 {
   constructor(props) {
-    super(props);
+    super(props)
 
     this.state = {
       email: '',
       password: '',
-    };
-  };
+    }
+  }
 
   static navigationOptions = ({ navigation }) => ({
     title: 'Sign In',
-  });
+  })
 
   _onPressSignIn = async () => {
     try {
-      await this.props.signIn(this.state.email, this.state.password);
+      await this.props.signIn(this.state.email, this.state.password)
     }
     catch (error) {
       Alert.alert(
@@ -55,13 +55,13 @@ class SignInScreen extends React.Component
         [
           { text: 'Confirm', onPress: null },
         ],
-      );
+      )
 
       this.setState({
         password: '',
-      });
+      })
     }
-  };
+  }
 
   render() {
     return (
@@ -100,15 +100,15 @@ class SignInScreen extends React.Component
           onPress={() => this.props.navigation.navigate('SignUp')} 
         />
       </View>
-    );
-  };
-};
+    )
+  }
+}
 
 const mapStateToProps = state => ({
-});
+})
 
 const mapDispatchToProps = dispatch => ({
   signIn: (email, password) => signIn(dispatch, email, password),
-});
+})
 
-export default connect(mapStateToProps, mapDispatchToProps)(SignInScreen);
+export default connect(mapStateToProps, mapDispatchToProps)(SignInScreen)

@@ -1,12 +1,12 @@
-import React from 'react';
-import { Text } from 'react-native';
-import createStyles, { Font } from '../../styles';
+import React from 'react'
+import { Text } from 'react-native'
+import createStyles, { Font } from '../../styles'
 
 const styles = createStyles({
   LTText: {
     fontFamily: Font.primary,
   },
-});
+})
 
 class LTText extends React.Component
 {
@@ -15,8 +15,8 @@ class LTText extends React.Component
       <Text style={[styles.LTText, this.props.style]}>
         {this.props.children}
       </Text>
-    );
-  };
-};
+    )
+  }
+}
 
-export default LTText;
+export default LTText

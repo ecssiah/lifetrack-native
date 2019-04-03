@@ -1,7 +1,7 @@
-import React from 'react';
-import { TouchableOpacity } from 'react-native';
-import Ionicon from 'react-native-vector-icons/Ionicons';
-import createStyles from '../../styles';
+import React from 'react'
+import { TouchableOpacity } from 'react-native'
+import Ionicon from 'react-native-vector-icons/Ionicons'
+import createStyles from '../../styles'
 
 const styles = createStyles({
   iconBase: {
@@ -9,7 +9,7 @@ const styles = createStyles({
     alignItems: 'center',
     marginHorizontal: 4, 
   },
-});
+})
 
 class LTIcon extends React.Component 
 {
@@ -26,8 +26,8 @@ class LTIcon extends React.Component
           size={this.props.size} 
         />
       </TouchableOpacity>
-    );
-  };
-};
+    )
+  }
+}
 
-export default LTIcon;
+export default LTIcon

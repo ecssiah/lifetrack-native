@@ -1,6 +1,6 @@
-import React from 'react';
-import { TextInput } from 'react-native';
-import createStyles, { Color, FontSize, Font } from '../../styles';
+import React from 'react'
+import { TextInput } from 'react-native'
+import createStyles, { Color, FontSize, Font } from '../../styles'
 
 const styles = createStyles({
   focus: {
@@ -27,29 +27,29 @@ const styles = createStyles({
     paddingHorizontal: 14,
     margin: 12,
   },
-});
+})
 
 class LTEdit extends React.Component 
 {
   static defaultProps = {
     placeholder: '',
-  };
+  }
 
   constructor(props) {
-    super(props);
+    super(props)
 
     this.state = {
       style: styles.blur,
-    };
-  };
+    }
+  }
 
   _onFocus = () => {
-    this.setState({style: styles.focus});
-  };
+    this.setState({style: styles.focus})
+  }
 
   _onBlur = () => {
-    this.setState({style: styles.blur});
-  };
+    this.setState({style: styles.blur})
+  }
 
   render() {
     return (
@@ -67,8 +67,8 @@ class LTEdit extends React.Component
         onChangeText={this.props.onChangeText}
         onSubmitEditing={this.props.onSubmitEditing}
       />
-    );
-  };
-};
+    )
+  }
+}
 
-export default LTEdit;
+export default LTEdit

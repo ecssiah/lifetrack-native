@@ -1,1 +1,1 @@
-export const UPDATE_SELECTION = 'selection:update-selection';
+export const UPDATE_SELECTION = 'selection:update-selection'

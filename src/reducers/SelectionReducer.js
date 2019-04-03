@@ -1,20 +1,20 @@
 import { 
   UPDATE_SELECTION,
-} from "../constants/Selection";
+} from "../constants/Selection"
 
 function selectionReducer(state = {}, action) {
-  const newState = { ...state };
+  const newState = { ...state }
 
   switch (action.type) {
     case UPDATE_SELECTION: {
-      Object.assign(newState, action.update); 
+      Object.assign(newState, action.update) 
 
-      return newState;
+      return newState
     }
     default: {
-      return newState;
+      return newState
     } 
   }
-};
+}
 
-export default selectionReducer;
+export default selectionReducer

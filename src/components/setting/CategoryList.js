@@ -1,9 +1,9 @@
-import React from 'react';
-import { FlatList } from 'react-native';
-import { UNCATEGORIZED } from '../../constants/Categories';
+import React from 'react'
+import { FlatList } from 'react-native'
+import { UNCATEGORIZED } from '../../constants/Categories'
 
-import LTSeparator from '../LT/LTSeparator';
-import SettingItem from './SettingItem';
+import LTSeparator from '../LT/LTSeparator'
+import SettingItem from './SettingItem'
 
 class CategoryList extends React.Component 
 {
@@ -12,21 +12,21 @@ class CategoryList extends React.Component
       setting={item} 
       onSettingSelect={this.props.onCategorySelect} 
     />
-  );
+  )
 
   _getCategoryData = () => {
-    const categoryNames = Object.keys(this.props.categories);
+    const categoryNames = Object.keys(this.props.categories)
 
     const data = categoryNames.filter(name => {
-      return name !== UNCATEGORIZED;
+      return name !== UNCATEGORIZED
     }).sort((a, b) => {
-      return a.localeCompare(b);
+      return a.localeCompare(b)
     }).map(name => {
-      return { name, value: '' };
-    });
+      return { name, value: '' }
+    })
 
-    return data;
-  };
+    return data
+  }
 
   render() {
     return (
@@ -36,8 +36,8 @@ class CategoryList extends React.Component
         ItemSeparatorComponent={LTSeparator}
         renderItem={({item}) => this._renderItem(item)}
       />
-    );
-  };
-};
+    )
+  }
+}
 
-export default CategoryList;
+export default CategoryList

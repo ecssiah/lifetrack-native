@@ -1,8 +1,8 @@
-import React from 'react';
-import { Text, View } from 'react-native';
-import createStyles, { Color } from '../../styles';
+import React from 'react'
+import { Text, View } from 'react-native'
+import createStyles, { Color } from '../../styles'
 
-import LTText from '../LT/LTText';
+import LTText from '../LT/LTText'
 
 const styles = createStyles({
   background: {
@@ -23,7 +23,7 @@ const styles = createStyles({
     paddingHorizontal: 4,
     paddingVertical: 12,
   },
-});
+})
 
 class FocusTitle extends React.PureComponent 
 {
@@ -34,8 +34,8 @@ class FocusTitle extends React.PureComponent
           {this.props.name}
         </LTText>
       </View>
-    );
+    )
   }
-};
+}
 
-export default FocusTitle;
+export default FocusTitle

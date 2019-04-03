@@ -1,10 +1,10 @@
-import React from 'react';
+import React from 'react'
 import { 
   TouchableOpacity, View,
-} from 'react-native';
-import createStyles, { FontSize } from '../../styles'; 
+} from 'react-native'
+import createStyles, { FontSize } from '../../styles' 
 
-import LTText from '../LT/LTText';
+import LTText from '../LT/LTText'
 
 const styles = createStyles({
   container: {
@@ -36,7 +36,7 @@ const styles = createStyles({
     fontSize: FontSize.settingItem,
     alignItems: 'center',
   },
-});
+})
 
 class SettingItem extends React.Component 
 {
@@ -59,8 +59,8 @@ class SettingItem extends React.Component
           </LTText>
         </View>
       </TouchableOpacity>
-    );
-  };
-};
+    )
+  }
+}
 
-export default SettingItem;
+export default SettingItem

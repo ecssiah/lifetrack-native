@@ -2,29 +2,29 @@ import {
   SET_STATS,
   UPDATE_STATS, 
   UPDATE_UNTRACKED,
-} from "../constants/Stats";
+} from "../constants/Stats"
 
 function statsReducer(state = {}, action) {
-  const newState = { ...state };
+  const newState = { ...state }
 
   switch (action.type) {
     case SET_STATS: {
-      return action.stats;
+      return action.stats
     }
     case UPDATE_STATS: {
-      Object.assign(newState, action.update);
+      Object.assign(newState, action.update)
 
-      return newState;
+      return newState
     }
     case UPDATE_UNTRACKED: {
-      newState.untracked += action.elapsed;
+      newState.untracked += action.elapsed
 
-      return newState;
+      return newState
     }
     default: {
-      return newState;
+      return newState
     }
   }
-};
+}
 
-export default statsReducer;
+export default statsReducer

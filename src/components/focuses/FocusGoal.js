@@ -1,8 +1,8 @@
-import React from 'react';
-import { ProgressViewIOS, TouchableOpacity } from 'react-native';
-import createStyles, { Color, FontSize } from '../../styles';
+import React from 'react'
+import { ProgressViewIOS, TouchableOpacity } from 'react-native'
+import createStyles, { Color, FontSize } from '../../styles'
 
-import LTText from '../LT/LTText';
+import LTText from '../LT/LTText'
 
 const styles = createStyles({
   container: {
@@ -21,7 +21,7 @@ const styles = createStyles({
       { scaleY: 12.0 },
     ],
   },
-});
+})
 
 class FocusGoal extends React.PureComponent 
 {
@@ -42,8 +42,8 @@ class FocusGoal extends React.PureComponent
           progress={this.props.periods / this.props.goal}
         />
       </TouchableOpacity>
-    );
-  };
-};
+    )
+  }
+}
 
-export default FocusGoal;
+export default FocusGoal

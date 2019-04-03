@@ -1,19 +1,19 @@
-import React from 'react';
-import { createBottomTabNavigator } from 'react-navigation';
-import Icon from 'react-native-vector-icons/Ionicons';
-import createStyles from '../../styles';
+import React from 'react'
+import { createBottomTabNavigator } from 'react-navigation'
+import Icon from 'react-native-vector-icons/Ionicons'
+import createStyles from '../../styles'
 
-import StatsStack from './StatsStack';
-import FocusStack from './FocusStack';
-import SettingsStack from './SettingsStack';
+import StatsStack from './StatsStack'
+import FocusStack from './FocusStack'
+import SettingsStack from './SettingsStack'
 
-const styles = createStyles({});
+const styles = createStyles({})
 
 const routeConfig = {
   Stats: StatsStack,
   Focuses: FocusStack,
   Settings: SettingsStack,
-};
+}
 
 const navConfig = {
   initialRouteName: 'Focuses',
@@ -27,20 +27,20 @@ const navConfig = {
     tabBarIcon: ({ focused, horizontal, tintColor }) => {
       switch (navigation.state.routeName) {
         case 'Focuses': {
-          return <Icon name={'ios-eye'} size={35} color={tintColor} />;
+          return <Icon name={'ios-eye'} size={35} color={tintColor} />
         }
         case 'Settings': {
-          return <Icon name={'md-settings'} size={35} color={tintColor} />;
+          return <Icon name={'md-settings'} size={35} color={tintColor} />
         }
         case 'Stats': {
-          return <Icon name={'ios-podium'} size={35} color={tintColor} />;
+          return <Icon name={'ios-podium'} size={35} color={tintColor} />
         }
         default: {
-          console.error('unhandled routeName: ' + navigation.state.routeName);
+          console.error('unhandled routeName: ' + navigation.state.routeName)
         }
       }
     },
   }),
-};
+}
 
-export default createBottomTabNavigator(routeConfig, navConfig);
+export default createBottomTabNavigator(routeConfig, navConfig)
