@@ -72,7 +72,7 @@ export async function updateUntracked(dispatch, elapsed) {
     dispatch({ 
       type: UPDATE_UNTRACKED_HISTORY, 
       time: getToday(), 
-      elapsed: untrackedHistory[getToday(0)], 
+      elapsed: untrackedHistory[getToday()], 
     })
   }
 
