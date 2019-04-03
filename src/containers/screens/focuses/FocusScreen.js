@@ -83,13 +83,14 @@ class FocusScreen extends React.Component
   }
 
   _updateTimer = () => {
+    const update = {}
     const focus = this.props.focuses[this.props.selection.id]
-    const update = { history: { ...focus.history } }
 
     if (focus.time > 0) {
-      update.time = focus.time - 1
-
       const today = getToday()
+
+      update.time = focus.time - 1
+      update.history = { ...focus.history }
 
       if (focus.history[today]) {
         update.history[today] = focus.history[today] + 1
