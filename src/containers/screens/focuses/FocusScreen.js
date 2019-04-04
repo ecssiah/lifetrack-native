@@ -6,6 +6,7 @@ import { EXP_PER_SECOND } from '../../../constants/Focuses'
 import { INC_TRACKED, DEC_TRACKED } from '../../../constants/Status'
 import { updateFocus } from '../../../handlers/FocusesHandlers'
 import { updateStats, updateUntracked } from '../../../handlers/StatsHandlers'
+import { updateUser } from '../../../handlers/UserHandlers'
 import createStyles from '../../../styles'
 
 import LTIcon from '../../../components/LT/LTIcon'
@@ -13,7 +14,6 @@ import FocusTitle from '../../../components/focuses/FocusTitle'
 import FocusTimer from '../../../components/focuses/FocusTimer'
 import FocusGoal from '../../../components/focuses/FocusGoal'
 import FocusExperience from '../../../components/focuses/FocusExperience'
-import { updateUser } from '../../../handlers/UserHandlers'
 
 const styles = createStyles({ 
   container: {

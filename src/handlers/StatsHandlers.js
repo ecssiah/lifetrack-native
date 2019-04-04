@@ -14,7 +14,7 @@ export async function updateStats(dispatch, update) {
 
 function getUpdatedUntrackedHistory(doc, elapsed) {
   const history = { ...doc.data().untrackedHistory }
-  const currentTime = new Date().getTime()
+  const currentTime = Date.now()
   const elapsedTime = currentTime + elapsed * 1000
   const today = getToday()
   const tomorrow = getToday(1)

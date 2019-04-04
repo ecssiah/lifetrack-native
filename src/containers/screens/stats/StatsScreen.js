@@ -32,7 +32,7 @@ class StatsScreen extends React.Component
       time - (days * 24 * 60 * 60) - (hours * 60 * 60) - (minutes * 60)
     )
 
-    const displayMinutes = minutes < 10 ? '0' + minutes : minutes
+    const displayMinutes = minutes < 10 ? '' + minutes : minutes
     const displaySeconds = seconds < 10 ? '0' + seconds : seconds
 
     let fullTime = ''
@@ -46,7 +46,7 @@ class StatsScreen extends React.Component
     if (hours > 0) {
       fullTime += `${hours}:${displayMinutes}:${displaySeconds}`
     } else {
-      fullTime += `${displayMinutes}:${displaySeconds}`
+      fullTime += `${minutes}:${displaySeconds}`
     }
 
     return fullTime
