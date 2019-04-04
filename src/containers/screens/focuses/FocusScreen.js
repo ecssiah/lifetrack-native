@@ -1,11 +1,9 @@
 import React from 'react'
-import { getElapsed, getToday } from '../../../../lib/utils'
+import { getToday } from '../../../../lib/utils'
 import { connect } from 'react-redux'
 import { View } from 'react-native'
 import { EXP_PER_SECOND } from '../../../constants/Focuses'
-import { INC_TRACKED, DEC_TRACKED } from '../../../constants/Status'
 import { updateFocus } from '../../../handlers/FocusesHandlers'
-import { updateStats, updateUntracked } from '../../../handlers/StatsHandlers'
 import { updateUser } from '../../../handlers/UserHandlers'
 import createStyles from '../../../styles'
 
@@ -51,12 +49,6 @@ class FocusScreen extends React.Component
 
       if (focus.working) {
         update.active = false
-
-        if (this.props.status.tracked === 1) {
-          this.props.updateStats({ inactiveStart: Date.now() })
-        }
-
-        this.props.decTracked()
       } else {
         update.working = true
         update.time = focus.workPeriod * 60
@@ -67,15 +59,6 @@ class FocusScreen extends React.Component
 
       if (focus.working) {
         update.active = true
-
-        if (this.props.status.tracked === 0 && this.props.stats.inactiveStart) {
-          const elapsed = getElapsed(this.props.stats.inactiveStart)
-
-          await this.props.updateUntracked(elapsed) 
-          await this.props.updateStats({ inactiveStart: null })
-        }
-
-        this.props.incTracked()
       } 
     }
 
@@ -87,10 +70,10 @@ class FocusScreen extends React.Component
     const focus = this.props.focuses[this.props.selection.id]
 
     if (focus.time > 0) {
-      const today = getToday()
-
       update.time = focus.time - 1
       update.history = { ...focus.history }
+
+      const today = getToday()
 
       if (focus.history[today]) {
         update.history[today] = focus.history[today] + 1
@@ -157,18 +140,13 @@ class FocusScreen extends React.Component
 const mapStateToProps = state => ({
   status: state.status,
   user: state.user,
-  stats: state.stats,
   settings: state.settings,
   selection: state.selection,
   focuses: state.focuses,
 })
 
 const mapDispatchToProps = dispatch => ({
-  incTracked: () => dispatch({ type: INC_TRACKED }),
-  decTracked: () => dispatch({ type: DEC_TRACKED }),
   updateUser: update => updateUser(dispatch, update),
-  updateStats: update => updateStats(dispatch, update),
-  updateUntracked: elapsed => updateUntracked(dispatch, elapsed),
   updateFocus: (id, update) => updateFocus(dispatch, id, update),
 })
 

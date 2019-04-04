@@ -30,8 +30,8 @@ class LTStatus extends React.Component
     }
 
     const willBeForeground = (
-      this.props.status.appState.match(/inactive|background/) &&
-      nextAppState === 'active'
+      nextAppState === 'active' &&
+      this.props.status.appState.match(/inactive|background/)
     )
 
     if (willBeForeground) {
@@ -53,7 +53,6 @@ class LTStatus extends React.Component
 const mapStateToProps = state => ({
   status: state.status,
   user: state.user,
-  stats: state.stats,
 })
 
 const mapDispatchToProps = dispatch => ({

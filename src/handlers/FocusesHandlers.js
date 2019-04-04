@@ -7,7 +7,6 @@ import {
   ADD_FOCUS, UPDATE_FOCUS, DELETE_FOCUS, 
 } from "../constants/Focuses"
 import { UPDATE_STATUS } from "../constants/Status"
-import { updateStats } from './StatsHandlers'
 
 export async function updateFocuses(dispatch, update) {
   const batch = db.batch()
@@ -114,12 +113,7 @@ function requestFocusUpdate(dispatch, querySnapshot, elapsed) {
   Alert.alert(
     title, message,
     [
-      { 
-        text: 'Cancel', 
-        onPress: () => {
-          updateStats(dispatch, { inactiveStart: Date.now() - 1000 * elapsed })
-        },
-      },
+      { text: 'Cancel', onPress: null },
       { 
         text: 'Confirm', 
         onPress: () => updateExperience(dispatch, querySnapshot, elapsed),
@@ -183,7 +177,6 @@ async function updateExperience(dispatch, querySnapshot, elapsed) {
   })
 
   await Promise.all(promises)
-  await updateStats(dispatch, { inactiveStart: Date.now() })
 
   dispatch({ type: UPDATE_FOCUSES, update })
 }

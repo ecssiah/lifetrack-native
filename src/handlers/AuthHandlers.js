@@ -5,9 +5,7 @@ import {
 import { updateFocuses } from './FocusesHandlers'
 import { SET_CATEGORIES, UNCATEGORIZED } from '../constants/Categories'
 import { SET_SETTINGS } from '../constants/Settings'
-import { SET_STATS } from '../constants/Stats'
 import { SET_USER } from '../constants/User'
-import { updateStats } from './StatsHandlers'
 
 export async function signUp(dispatch, email, password) {
   await auth.createUserWithEmailAndPassword(email, password)
@@ -25,11 +23,6 @@ export async function signUp(dispatch, email, password) {
     categories: {
       [UNCATEGORIZED]: { show: true },
     },
-    stats: {
-      untracked: 0,
-      untrackedHistory: {},
-      inactiveStart: null,
-    },
   }
 
   await setUserData(userData)
@@ -37,7 +30,6 @@ export async function signUp(dispatch, email, password) {
   dispatch({ type: SET_USER, user: userData.user })
   dispatch({ type: SET_SETTINGS, settings: userData.settings })
   dispatch({ type: SET_CATEGORIES, categories: userData.categories })
-  dispatch({ type: SET_STATS, stats: userData.stats })
 }
 
 export async function signIn(dispatch, email, password) {
@@ -70,7 +62,6 @@ export async function signOut(dispatch) {
   })
 
   await Promise.all(promises)
-  await updateStats(dispatch, { inactiveStart: Date.now() })
   await auth.signOut()
 }
 
@@ -80,23 +71,14 @@ export async function loadUser(dispatch) {
   const user = userData[0].data()
   const settings = userData[1].data()
   const categories = userData[2].data()
-  const stats = userData[3].data()
-
-  if (stats.inactiveStart == null) {
-    const now = Date.now()
-
-    stats.inactiveStart = now
-    updateStats(dispatch, { inactiveStart: now })
-  }
 
   dispatch({ type: SET_USER, user })
   dispatch({ type: SET_SETTINGS, settings })
   dispatch({ type: SET_CATEGORIES, categories })
-  dispatch({ type: SET_STATS, stats })
 
   const focuses = {} 
 
-  userData[4].forEach(doc => {
+  userData[3].forEach(doc => {
     const focus = { ...doc.data() }
 
     focus.active = false
@@ -114,7 +96,6 @@ async function loadUserData() {
   const userDoc = db.collection('user').doc(auth.currentUser.uid)
   const settingsDoc = db.collection('settings').doc(auth.currentUser.uid)
   const categoriesDoc = db.collection('categories').doc(auth.currentUser.uid)
-  const statsDoc = db.collection('stats').doc(auth.currentUser.uid)
 
   let focusesQuery = db.collection('focuses')
   focusesQuery = focusesQuery.where('userId', '==', auth.currentUser.uid)
@@ -123,7 +104,6 @@ async function loadUserData() {
     userDoc.get(),
     settingsDoc.get(),
     categoriesDoc.get(),
-    statsDoc.get(),
     focusesQuery.get()
   ])
 }
@@ -132,12 +112,10 @@ async function setUserData(userData) {
   const userDoc = db.collection('user').doc(auth.currentUser.uid)
   const settingsDoc = db.collection('settings').doc(auth.currentUser.uid) 
   const categoriesDoc = db.collection('categories').doc(auth.currentUser.uid)
-  const statsDoc = db.collection('stats').doc(auth.currentUser.uid)
 
   return Promise.all([
     userDoc.set(userData.user),
     settingsDoc.set(userData.settings),
     categoriesDoc.set(userData.categories),
-    statsDoc.set(userData.stats),
   ])
 }
