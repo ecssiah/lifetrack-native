@@ -82,6 +82,13 @@ export async function loadUser(dispatch) {
   const categories = userData[2].data()
   const stats = userData[3].data()
 
+  if (stats.inactiveStart == null) {
+    const now = Date.now()
+
+    stats.inactiveStart = now
+    updateStats(dispatch, { inactiveStart: now })
+  }
+
   dispatch({ type: SET_USER, user })
   dispatch({ type: SET_SETTINGS, settings })
   dispatch({ type: SET_CATEGORIES, categories })

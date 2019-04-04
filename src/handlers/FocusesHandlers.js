@@ -129,10 +129,9 @@ function requestFocusUpdate(dispatch, querySnapshot, elapsed) {
 }
 
 
-function getUpdatedHistory(docSnapshot, elapsed) {
-  const history = { ...docSnapshot.data().history }
-  const currentTime = Date.now()
-  const elapsedTime = currentTime + elapsed * 1000
+function getUpdatedHistory(doc, elapsed) {
+  const history = { ...doc.data().history }
+  const elapsedTime = Date.now() + elapsed * 1000
   const today = getToday()
   const tomorrow = getToday(1)
 
