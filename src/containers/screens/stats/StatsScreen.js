@@ -1,6 +1,9 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { View } from 'react-native'
+import { StackedAreaChart } from 'react-native-svg-charts'
+import * as shape from 'd3-shape'
+import { getUniqueColors } from '../../../../lib/utils';
 import { LIFE_EXPECTANCY, SECONDS_IN_YEAR } from '../../../constants/User'
 import createStyles from '../../../styles'
 
@@ -9,12 +12,13 @@ import LTSpacer from '../../../components/LT/LTSpacer'
 
 const styles = createStyles({
   container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
   },
   mainText: {
     fontSize: 18,
+  },
+  mainChart: {
+    height: 320,
+    margin: 12,
   },
 })
 
@@ -65,26 +69,49 @@ class StatsScreen extends React.Component
     }
   }
 
+  _getMainChartData() {
+    const data = []
+
+    for (const focusKey of Object.keys(this.props.focuses)) {
+      const focus = this.props.focuses[focusKey]
+      const historyKeys = Object.keys(focus.history)
+
+      for (let i = 0; i < historyKeys.length; i++) {
+        if (data[i]) {
+          data[i][focusKey] = focus.history[historyKeys[i]]
+        } else {
+          data[i] = { [focusKey]: focus.history[historyKeys[i]]}
+        }
+      }
+    }
+
+    return data
+  }
+
+  _getMainChartKeys() {
+    const keys = [...new Set(Object.keys(this.props.focuses))]
+
+    return keys
+  }
+
+  _getMainChartColors() {
+    const keys = [...new Set(Object.keys(this.props.focuses))]
+    const colors = getUniqueColors(keys.length) 
+
+    return colors
+  }
+
   render() {
     return (
       <View style={styles.container}>
-        <LTText style={styles.mainText}>
-          Untracked Time: 
-        </LTText>
-          
-        <LTText style={styles.mainText}>
-          {this._formatUntrackedTime(this.props.stats.untracked)}
-        </LTText>
-
-        <LTSpacer large />
-
-        <LTText style={styles.mainText}>
-          Untracked Percentage: 
-        </LTText>
-          
-        <LTText style={styles.mainText}>
-          {this._getUntrackedLifePercentage()}
-        </LTText>
+        <StackedAreaChart 
+          style={styles.mainChart}
+          data={this._getMainChartData()}
+          keys={this._getMainChartKeys()}
+          colors={this._getMainChartColors()}
+          curve={shape.curveLinear}
+          showGrid={true}
+        />
       </View>
     )
   }
@@ -93,6 +120,7 @@ class StatsScreen extends React.Component
 const mapStateToProps = state => ({
   user: state.user,
   stats: state.stats,
+  focuses: state.focuses,
 })
 
 const mapDispatchToProps = dispatch => ({
@@ -100,3 +128,21 @@ const mapDispatchToProps = dispatch => ({
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(StatsScreen)
+
+        // <LTText style={styles.mainText}>
+        //   Untracked Time: 
+        // </LTText>
+          
+        // <LTText style={styles.mainText}>
+        //   {this._formatUntrackedTime(this.props.stats.untracked)}
+        // </LTText>
+
+        // <LTSpacer large />
+
+        // <LTText style={styles.mainText}>
+        //   Untracked Percentage: 
+        // </LTText>
+          
+        // <LTText style={styles.mainText}>
+        //   {this._getUntrackedLifePercentage()}
+        // </LTText>
