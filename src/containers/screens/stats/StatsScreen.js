@@ -1,9 +1,9 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { View } from 'react-native'
-import { StackedAreaChart } from 'react-native-svg-charts'
+import { StackedAreaChart, Grid, XAxis } from 'react-native-svg-charts'
 import * as shape from 'd3-shape'
-import { getUniqueColors } from '../../../../lib/utils';
+import { getUniqueColors, getToday } from '../../../../lib/utils';
 import { LIFE_EXPECTANCY, SECONDS_IN_YEAR } from '../../../constants/User'
 import createStyles from '../../../styles'
 
@@ -27,6 +27,7 @@ class StatsScreen extends React.Component
   static navigationOptions = {
     title: 'Stats',
   }
+
 
   _formatUntrackedTime(time) {
     const days = Math.floor(time / 60 / 60 / 24)
@@ -56,6 +57,7 @@ class StatsScreen extends React.Component
     return fullTime
   }
 
+
   _getUntrackedLifePercentage() {
     if (isNaN(this.props.user.birthYear)) {
       return 'Requires Birth Year'
@@ -69,18 +71,43 @@ class StatsScreen extends React.Component
     }
   }
 
+
+  _getDateRange(date1, date2) {
+    const d1 = new Date(date1)
+    const d2 = new Date(date2)
+
+    const dates = []
+    d2.setDate(d2.getDate() + 1)
+
+    while (d1.getTime() != d2.getTime()) {
+      dates.push(d1.getTime())
+      d1.setDate(d1.getDate() + 1)
+    }
+
+    return dates
+  }
+
+
   _getMainChartData() {
     const data = []
+    const dateRange = this._getDateRange('March 31, 2019', 'April 4, 2019') 
 
     for (const focusKey of Object.keys(this.props.focuses)) {
       const focus = this.props.focuses[focusKey]
-      const historyKeys = Object.keys(focus.history)
 
-      for (let i = 0; i < historyKeys.length; i++) {
+      for (let i = 0; i < dateRange.length; i++) {
         if (data[i]) {
-          data[i][focusKey] = focus.history[historyKeys[i]]
+          if (focus.history[dateRange[i]]) {
+            data[i][focusKey] = focus.history[dateRange[i]]
+          } else {
+            data[i][focusKey] = 0
+          }
         } else {
-          data[i] = { [focusKey]: focus.history[historyKeys[i]]}
+          if (focus.history[dateRange[i]]) {
+            data[i] = { [focusKey]: focus.history[dateRange[i]]}
+          } else {
+            data[i] = { [focusKey]: 0 }
+          }
         }
       }
     }
@@ -106,12 +133,15 @@ class StatsScreen extends React.Component
       <View style={styles.container}>
         <StackedAreaChart 
           style={styles.mainChart}
+          contentInset={ { top: 10, bottom: 10 } }
           data={this._getMainChartData()}
           keys={this._getMainChartKeys()}
           colors={this._getMainChartColors()}
           curve={shape.curveLinear}
           showGrid={true}
-        />
+        >
+          <Grid/>
+        </StackedAreaChart>
       </View>
     )
   }
