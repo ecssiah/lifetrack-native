@@ -272,12 +272,17 @@ class StatsScreen extends React.Component
     }
   }
 
+  _getMainChartProperties = () => {
+    return {
+      data: this._getMainChartData(),
+      keys: this._getMainChartKeys(),
+      colors: this._getMainChartColors(),
+      svgs: this._getMainChartSvgs(),
+    }
+  }
 
   render() {
-    const data = this._getMainChartData()
-    const keys = this._getMainChartKeys()
-    const colors = this._getMainChartColors()
-    const svgs = this._getMainChartSvgs()
+    const mainChart = this._getMainChartProperties()
 
     return (
       <View style={styles.container}>
@@ -286,10 +291,10 @@ class StatsScreen extends React.Component
             style={styles.mainChart}
             yMax={SECONDS_IN_DAY}
             contentInset={{ left: 16, right: 12}}
-            data={data}
-            keys={keys}
-            colors={colors}
-            svgs={svgs}
+            data={mainChart.data}
+            keys={mainChart.keys}
+            colors={mainChart.colors}
+            svgs={mainChart.svgs}
             curve={shape.curveNatural}
             showGrid={true}
           >
@@ -298,7 +303,7 @@ class StatsScreen extends React.Component
 
           <XAxis
             style={styles.mainChart}
-            data={data}
+            data={mainChart.data}
             contentInset={{ left: 16, right: 12}}
             xAccessor={({item}) => item.date}
             formatLabel={this._formatMainChartXAxis}
