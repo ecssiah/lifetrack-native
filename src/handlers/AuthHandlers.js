@@ -1,4 +1,5 @@
 import { db, auth } from '../config/firebaseConfig'
+import { getToday } from '../../lib/utils';
 import { 
   DEFAULT_WORK_PERIOD, DEFAULT_WORK_GOAL, DEFAULT_BREAK_PERIOD 
 } from '../constants/Selection'
@@ -13,7 +14,7 @@ export async function signUp(dispatch, email, password) {
   const userData = {
     user: {
       email,
-      birthYear: 'None',
+      startDate: getToday(),
     },
     settings: {
       workPeriod: DEFAULT_WORK_PERIOD,
