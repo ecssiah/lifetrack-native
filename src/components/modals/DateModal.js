@@ -77,7 +77,7 @@ class DateModal extends React.Component
   _getYearItems = () => {
     const yearItems = []
 
-    const start = 2019
+    const start = 2017
     const end = new Date().getFullYear() 
 
     for (let i = start; i < end + 1; i++) {
@@ -154,6 +154,7 @@ class DateModal extends React.Component
             style={styles.yearPicker}
             itemStyle={{ fontFamily: Font.primary }}
             selectedValue={this.props.date.getFullYear()}
+            onValueChange={this._onYearChange}
           >
             {this._getYearItems()}
           </Picker>
