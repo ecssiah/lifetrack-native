@@ -2,7 +2,7 @@ import { db, auth } from '../config/firebaseConfig'
 import { getToday } from '../../lib/utils';
 import { 
   DEFAULT_WORK_PERIOD, DEFAULT_WORK_GOAL, DEFAULT_BREAK_PERIOD 
-} from '../constants/Selection'
+} from '../constants/Settings'
 import { updateFocuses } from './FocusesHandlers'
 import { SET_CATEGORIES, UNCATEGORIZED } from '../constants/Categories'
 import { SET_SETTINGS } from '../constants/Settings'

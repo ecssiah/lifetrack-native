@@ -35,13 +35,13 @@ const styles = createStyles({
     flex: 1,
     width: 120,
     overflow: 'hidden',
+    backgroundColor: '#dddddd',
     textAlign: 'center',
     margin: 4,
     padding: 6,
     borderWidth: 1,
     borderRadius: 6,
     borderColor: 'black',
-    backgroundColor: '#dddddd',
   },
 })
 
@@ -90,8 +90,9 @@ class StatsScreen extends React.Component
   _getMainChartData = () => {
     const data = []
     const dates = this.state.dates
+    const focusKeys = Object.keys(this.props.focuses)
 
-    for (const focusKey of Object.keys(this.props.focuses)) {
+    for (const focusKey of focusKeys) {
       const focus = this.props.focuses[focusKey]
 
       for (let i = 0; i < dates.length; i++) {
