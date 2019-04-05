@@ -38,7 +38,6 @@ class ProfileScreen extends React.Component
     this.state = {
       authModalShow: false,
       email: props.user.email,
-      birthYear: props.user.birthYear,
     }
   }
 
@@ -64,29 +63,6 @@ class ProfileScreen extends React.Component
       this.setState({
         authModalShow: true,
       })
-    }
-  }
-
-  _onBirthYearChange = birthYear => {
-    this.setState({
-      birthYear,
-    })
-  }
-
-  _onBirthYearSubmit = async () => {
-    if (isNaN(this.state.birthYear)) {
-      this.props.updateUser({ birthYear: 'None' })
-      this.setState({ birthYear: 'None' })
-    } else {
-      const currentYear = new Date().getFullYear()
-      const birthYearCandidate = parseInt(this.state.birthYear)
-
-      if (birthYearCandidate > 1890 && birthYearCandidate <= currentYear) {
-        this.props.updateUser({ birthYear: this.state.birthYear })
-      } else {
-        this.props.updateUser({ birthYear: 'None' })
-        this.setState({ birthYear: 'None' })
-      }
     }
   }
 
@@ -119,19 +95,6 @@ class ProfileScreen extends React.Component
             onChangeText={this._onEmailChange} 
             onSubmitEditing={this._onEmailSubmit}
           />
-        </View>
-
-        <View style={styles.profileItem}>
-          <LTText style={styles.profileText} >
-            Birth Year:
-          </LTText>
-
-          <TextInput
-            style={styles.profileInput}
-            value={formatSpace(this.state.birthYear)}
-            onChangeText={this._onBirthYearChange} 
-            onSubmitEditing={this._onBirthYearSubmit}
-          /> 
         </View>
 
         <AuthModal
