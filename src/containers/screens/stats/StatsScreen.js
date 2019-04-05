@@ -10,7 +10,6 @@ import { SECONDS_IN_DAY } from '../../../constants/Stats'
 
 import LTText from '../../../components/LT/LTText'
 import DateModal from '../../../components/modals/DateModal';
-import LTSpacer from '../../../components/LT/LTSpacer';
 
 const styles = createStyles({
   container: {
@@ -22,8 +21,8 @@ const styles = createStyles({
   },
   filterButtonsContainer: {
     flexDirection: 'row',
+    height: 38,
     justifyContent: 'space-between',
-    alignItems: 'flex-start',
   },
   mainText: {
     fontSize: 18,
@@ -34,8 +33,10 @@ const styles = createStyles({
   },
   dateSelectors: {
     flex: 1,
+    width: 120,
+    textAlign: 'center',
     margin: 4,
-    padding: 8,
+    padding: 6,
     borderWidth: 1,
     borderRadius: 6,
     borderColor: 'black',
@@ -49,13 +50,16 @@ class StatsScreen extends React.Component
 
     const startDate = new Date(props.user.startDate)
     let endDate = new Date(props.user.startDate)
-    endDate.setDate(startDate.getDate() + 7)
+    endDate.setDate(startDate.getDate() + 6)
 
     this.state = {
       startDateModalShow: false,
       endDateModalShow: false,
       startDate,
       endDate,
+      startDateSelection: new Date(startDate),
+      endDateSelection: new Date(endDate),
+      dates: this._getDateRange(startDate, endDate),
     }
   }
 
@@ -65,45 +69,45 @@ class StatsScreen extends React.Component
   }
 
 
-  _getDateRange(date1, date2, span=1) {
+  _getDateRange = (date1, date2) => {
+    const dates = []
     const d1 = new Date(date1)
     const d2 = new Date(date2)
 
-    const dates = []
     d2.setDate(d2.getDate() + 1)
 
     while (d1.getTime() != d2.getTime()) {
       dates.push(d1.getTime())
-      d1.setDate(d1.getDate() + span)
+      d1.setDate(d1.getDate() + 1)
     }
 
     return dates
   }
 
 
-  _getMainChartData() {
+  _getMainChartData = () => {
     const data = []
-    const dateRange = this._getDateRange('March 30, 2019', 'April 4, 2019') 
+    const dates = this.state.dates
 
     for (const focusKey of Object.keys(this.props.focuses)) {
       const focus = this.props.focuses[focusKey]
 
-      for (let i = 0; i < dateRange.length; i++) {
+      for (let i = 0; i < dates.length; i++) {
         if (data[i]) {
-          if (focus.history[dateRange[i]]) {
-            data[i][focusKey] = focus.history[dateRange[i]]
+          if (focus.history[dates[i]]) {
+            data[i][focusKey] = focus.history[dates[i]]
           } else {
             data[i][focusKey] = 0
           }
         } else {
-          if (focus.history[dateRange[i]]) {
+          if (focus.history[dates[i]]) {
             data[i] = { 
-              date: dateRange[i],
-              [focusKey]: focus.history[dateRange[i]],
+              date: dates[i],
+              [focusKey]: focus.history[dates[i]],
             }
           } else {
             data[i] = { 
-              date: dateRange[i],
+              date: dates[i],
               [focusKey]: 0, 
             }
           }
@@ -115,14 +119,10 @@ class StatsScreen extends React.Component
   }
 
 
-  _mainChartXAxisAccessor() {
-  }
-
-
-  _formatMainChartXAxis(value, index) {
-    if (index % 2 == 0) {
+  _formatMainChartXAxis = (value, index) => {
+    if (index % Math.round(this.state.dates.length / 6) == 0) {
       const d = new Date(value)
-      const options = { month: 'short', day: 'numeric' }
+      const options = { month: 'numeric', day: 'numeric' }
 
       return d.toLocaleDateString(undefined, options)
     } else {
@@ -131,14 +131,14 @@ class StatsScreen extends React.Component
   }
 
 
-  _getMainChartKeys() {
+  _getMainChartKeys = () => {
     const keys = [...new Set(Object.keys(this.props.focuses))]
 
     return keys
   }
 
 
-  _getMainChartColors() {
+  _getMainChartColors = () => {
     const keys = [...new Set(Object.keys(this.props.focuses))]
     const colors = getUniqueColors(keys.length) 
 
@@ -146,7 +146,7 @@ class StatsScreen extends React.Component
   }
 
 
-  _getMainChartSvgs() {
+  _getMainChartSvgs = () => {
     const keys = [...new Set(Object.keys(this.props.focuses))]
     const svgs = []
 
@@ -160,27 +160,45 @@ class StatsScreen extends React.Component
   }
 
 
-  _onStartDateSelect = () => {
+  _onStartDatePress = () => {
     this.setState({
       startDateModalShow: true,
+      startDateSelection: new Date(this.state.startDate),
     })
   }
 
 
-  _onEndDateSelect = () => {
+  _onEndDatePress = () => {
     this.setState({
       endDateModalShow: true,
+      endDateSelection: new Date(this.state.endDate),
     })
   }
 
 
   _onStartDateChange = date => {
-    console.warn(date)
+    const startDateSelection = new Date(date)
+
+    if (startDateSelection.getTime() >= this.state.endDateSelection.getTime()) {
+      startDateSelection.setMonth(this.state.endDateSelection.getMonth())
+      startDateSelection.setFullYear(this.state.endDateSelection.getFullYear())
+      startDateSelection.setDate(this.state.endDateSelection.getDate() - 1)
+    }
+
+    this.setState({
+      startDateSelection,
+    })
   }
 
 
-  _onStartDateConfirm = () => {
+  _onStartDateSubmit = () => {
+    const startDate = new Date(this.state.startDateSelection)
 
+    this.setState({
+      startDate,
+      dates: this._getDateRange(startDate, this.state.endDate),
+      startDateModalShow: false,
+    })
   }
 
 
@@ -192,12 +210,35 @@ class StatsScreen extends React.Component
 
 
   _onEndDateChange = date => {
-    console.warn(date)
+    const endDateSelection = new Date(date)
+
+    if (endDateSelection.getTime() <= this.state.startDateSelection.getTime()) {
+      endDateSelection.setMonth(this.state.startDateSelection.getMonth())
+      endDateSelection.setFullYear(this.state.startDateSelection.getFullYear())
+      endDateSelection.setDate(this.state.startDateSelection.getDate() + 1)
+    }
+
+    this.setState({
+      endDateSelection,
+    })
+  }
+
+
+  _onEndDateSubmit = () => {
+    const endDate = new Date(this.state.endDateSelection)
+
+    this.setState({
+      endDate,
+      dates: this._getDateRange(this.state.startDate, endDate),
+      endDateModalShow: false,
+    })
   }
 
 
   _onEndDateConfirm = () => {
-
+    this.setState({
+      endDateModalShow: false,
+    })
   }
 
 
@@ -233,6 +274,11 @@ class StatsScreen extends React.Component
 
 
   render() {
+    const data = this._getMainChartData()
+    const keys = this._getMainChartKeys()
+    const colors = this._getMainChartColors()
+    const svgs = this._getMainChartSvgs()
+
     return (
       <View style={styles.container}>
         <View style={styles.mainChartContainer}>
@@ -240,11 +286,11 @@ class StatsScreen extends React.Component
             style={styles.mainChart}
             yMax={SECONDS_IN_DAY}
             contentInset={{ left: 16, right: 12}}
-            data={this._getMainChartData()}
-            keys={this._getMainChartKeys()}
-            colors={this._getMainChartColors()}
-            svgs={this._getMainChartSvgs()}
-            curve={shape.curveLinear}
+            data={data}
+            keys={keys}
+            colors={colors}
+            svgs={svgs}
+            curve={shape.curveNatural}
             showGrid={true}
           >
             <Grid/>
@@ -252,7 +298,7 @@ class StatsScreen extends React.Component
 
           <XAxis
             style={styles.mainChart}
-            data={this._getMainChartData()}
+            data={data}
             contentInset={{ left: 16, right: 12}}
             xAccessor={({item}) => item.date}
             formatLabel={this._formatMainChartXAxis}
@@ -262,7 +308,7 @@ class StatsScreen extends React.Component
 
         <View style={styles.filterButtonsContainer}>
           <TouchableOpacity 
-            onPress={this._onStartDateSelect}
+            onPress={this._onStartDatePress}
           >
             <LTText style={styles.dateSelectors}>
               {this._displayStartDate()}
@@ -270,7 +316,7 @@ class StatsScreen extends React.Component
           </TouchableOpacity> 
 
           <TouchableOpacity 
-            onPress={this._onEndDateSelect}
+            onPress={this._onEndDatePress}
           >
             <LTText style={styles.dateSelectors}>
               {this._displayEndDate()}
@@ -279,18 +325,20 @@ class StatsScreen extends React.Component
         </View>
 
         <DateModal
+          title={'Start Date'}
           show={this.state.startDateModalShow} 
-          date={this.state.startDate}
+          date={this.state.startDateSelection}
           onDateChange={this._onStartDateChange}
-          onConfirm={this._onStartDateConfirm}
+          onConfirm={this._onStartDateSubmit}
           onCancel={this._onStartDateCancel}
         />
 
         <DateModal
+          title={'End Date'}
           show={this.state.endDateModalShow} 
-          date={this.state.endDate}
+          date={this.state.endDateSelection}
           onDateChange={this._onEndDateChange}
-          onConfirm={this._onEndDateConfirm}
+          onConfirm={this._onEndDateSubmit}
           onCancel={this._onEndDateCancel}
         />
       </View>

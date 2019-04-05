@@ -19,17 +19,17 @@ const styles = createStyles({
     flexDirection: 'row',
   },
   monthPicker: {
-    width: 36,
+    width: 62,
   },
   dayPicker: {
-    width: 24,
+    width: 48,
   },
   yearPicker: {
-    width: 48,
+    width: 64,
   },
 })
 
-const months = [
+const MONTHS = [
   'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 
   'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
 ]
@@ -43,7 +43,7 @@ class DateModal extends React.Component
       monthItems.push(
         <Picker.Item 
           key={i} 
-          label={months[i]} 
+          label={MONTHS[i]} 
           value={i} 
         />
       )
@@ -53,24 +53,24 @@ class DateModal extends React.Component
   }
 
 
-  _getDayItems = () => {
-    const dayItems = []
+  _getDateItems = () => {
+    const dateItems = []
 
     const totalDays = daysInMonth(
       this.props.date.getMonth() + 1, this.props.date.getDay()
     ) 
 
-    for (let i = 0; i < totalDays; i++) {
-      dayItems.push(
+    for (let i = 1; i <= totalDays; i++) {
+      dateItems.push(
         <Picker.Item 
           key={i} 
-          label={(i + 1).toString()} 
-          value={(i + 1).toString()} 
+          label={i.toString()} 
+          value={i} 
         />
       )
     }
 
-    return dayItems
+    return dateItems
   }
 
 
@@ -85,7 +85,7 @@ class DateModal extends React.Component
         <Picker.Item 
           key={i} 
           label={i.toString()} 
-          value={i.toString()} 
+          value={i} 
         />
       )
     }
@@ -94,25 +94,25 @@ class DateModal extends React.Component
   }
 
 
-  _onMonthChange = (date, index) => {
-    let d = new Date(this.props.date)
-    d.setMonth(date)
+  _onMonthChange = month => {
+    const d = new Date(this.props.date)
+    d.setMonth(month)
 
     this.props.onDateChange(d)
   }
 
   
-  _onDayChange = (date, index) => {
-    let d = new Date(this.props.date)
+  _onDateChange = date => {
+    const d = new Date(this.props.date)
     d.setDate(date)
 
     this.props.onDateChange(d)
   }
 
 
-  _onYearChange = (date, index) => {
-    let d = new Date(this.props.date)
-    d.setFullYear(date)
+  _onYearChange = year => {
+    const d = new Date(this.props.date)
+    d.setFullYear(year)
 
     this.props.onDateChange(d)
   }
@@ -128,7 +128,7 @@ class DateModal extends React.Component
         <LTSpacer large />
 
         <LTText style={styles.title}>
-          {this.props.dateTitle}
+          {this.props.title}
         </LTText>
 
         <View style={styles.datePickers} >
@@ -144,10 +144,10 @@ class DateModal extends React.Component
           <Picker
             style={styles.dayPicker}
             itemStyle={{ fontFamily: Font.primary }}
-            selectedValue={this.props.date.getDay()}
-            onValueChange={this._onDayChange}
+            selectedValue={this.props.date.getDate()}
+            onValueChange={this._onDateChange}
           >
-            {this._getDayItems()}
+            {this._getDateItems()}
           </Picker>
 
           <Picker
