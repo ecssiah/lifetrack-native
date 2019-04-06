@@ -89,15 +89,15 @@ class StatsScreen extends React.Component
   constructor(props) {
     super(props)
 
+    const startDateSelection = new Date(props.stats.startDate)
+    const endDateSelection = new Date(props.stats.endDate)
+
     this.state = {
-      startDateSelection: new Date(props.stats.startDate),
-      endDateSelection: new Date(props.stats.endDate),
       startDateModalShow: false,
       endDateModalShow: false,
-      dates: this._getDateRange(
-        new Date(props.stats.startDate), 
-        new Date(props.stats.endDate)
-      ),
+      startDateSelection,
+      endDateSelection,
+      dates: this._getDateRange(startDateSelection, endDateSelection),
     }
   }
 

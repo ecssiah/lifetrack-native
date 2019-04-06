@@ -1,6 +1,8 @@
 import React from 'react'
 import { createBottomTabNavigator } from 'react-navigation'
-import Icon from 'react-native-vector-icons/Ionicons'
+import Ionicon from 'react-native-vector-icons/Ionicons'
+import MaterialCommunityIcon 
+from 'react-native-vector-icons/MaterialCommunityIcons'
 import createStyles from '../../styles'
 
 import StatsStack from './StatsStack'
@@ -27,13 +29,31 @@ const navConfig = {
     tabBarIcon: ({ focused, horizontal, tintColor }) => {
       switch (navigation.state.routeName) {
         case 'Focuses': {
-          return <Icon name={'ios-eye'} size={35} color={tintColor} />
+          return (
+            <MaterialCommunityIcon 
+              name={'target'} 
+              size={32} 
+              color={tintColor} 
+            />
+          )
         }
         case 'Settings': {
-          return <Icon name={'md-settings'} size={35} color={tintColor} />
+          return (
+            <Ionicon 
+              name={'md-settings'} 
+              size={35} 
+              color={tintColor} 
+            />
+          )
         }
         case 'Stats': {
-          return <Icon name={'ios-podium'} size={35} color={tintColor} />
+          return (
+            <Ionicon 
+              name={'ios-podium'} 
+              size={35} 
+              color={tintColor} 
+            />
+          )
         }
         default: {
           console.error('unhandled routeName: ' + navigation.state.routeName)
