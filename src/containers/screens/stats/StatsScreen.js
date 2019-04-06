@@ -397,7 +397,7 @@ class StatsScreen extends React.Component
           <StackedAreaChart 
             style={styles.mainChart}
             yMax={SECONDS_IN_DAY}
-            contentInset={{ left: 12, right: 12 }}
+            contentInset={{ left: 10, right: 10 }}
             data={mainChart.data}
             keys={mainChart.keys}
             colors={mainChart.colors}
@@ -411,7 +411,7 @@ class StatsScreen extends React.Component
           <XAxis
             style={styles.mainChart}
             data={mainChart.data}
-            contentInset={{ left: 12, right: 12 }}
+            contentInset={{ left: 10, right: 10 }}
             xAccessor={({item}) => item.date}
             formatLabel={this._formatMainChartXAxis}
             svg={{ fontSize: 10, fill: 'black' }}
