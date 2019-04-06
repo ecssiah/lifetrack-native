@@ -1,15 +1,14 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { ScrollView, Switch, TouchableOpacity, View } from 'react-native'
-import FontAwesome from 'react-native-vector-icons/FontAwesome' 
+import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome' 
 import { StackedAreaChart, Grid, XAxis } from 'react-native-svg-charts'
-import * as scale from 'd3-scale'
 import * as shape from 'd3-shape'
+import { SECONDS_IN_DAY } from '../../../constants/Stats'
 import { getUniqueColors } from '../../../../lib/utils'
 import { updateFocus } from '../../../handlers/FocusesHandlers'
 import { updateStats } from '../../../handlers/StatsHandlers'
 import createStyles, { Color } from '../../../styles'
-import { SECONDS_IN_DAY } from '../../../constants/Stats'
 
 import LTText from '../../../components/LT/LTText'
 import LTSpacer from '../../../components/LT/LTSpacer';
@@ -320,7 +319,7 @@ class StatsScreen extends React.Component
       if (index % 2 == 0) {
         legendItems.push(
           <View key={index} style={styles.legendItem}>
-            <FontAwesome
+            <FontAwesomeIcon
               style={styles.legendIcon}
               color={colors[index]}
               name={'circle'} 
@@ -333,10 +332,7 @@ class StatsScreen extends React.Component
 
             <Switch 
               style={styles.legendSwitch} 
-              trackColor={{
-                true: Color.primary,
-                false: Color.secondary,
-              }}
+              trackColor={{ true: Color.primary, false: Color.secondary }}
               value={this.props.focuses[keys[index]].visible}
               onValueChange={value => {
                 this.props.updateFocus(keys[index], { visible: value })
@@ -353,14 +349,14 @@ class StatsScreen extends React.Component
 
   _getLegendRightColumn = () => {
     const legendItems = []
-    const keys = [...new Set(Object.keys(this.props.focuses))]
+    const keys = this._getMainChartKeys()
     const colors = this._getMainChartColors()
 
     Object.values(this.props.focuses).forEach((focus, index) => {
       if (index % 2 == 1) {
         legendItems.push(
           <View key={index} style={styles.legendItem}>
-            <FontAwesome
+            <FontAwesomeIcon
               style={styles.legendIcon}
               color={colors[index]}
               name={'circle'} 
@@ -373,10 +369,7 @@ class StatsScreen extends React.Component
 
             <Switch 
               style={styles.legendSwitch} 
-              trackColor={{
-                true: Color.primary,
-                false: Color.secondary,
-              }}
+              trackColor={{ true: Color.primary, false: Color.secondary }}
               value={this.props.focuses[keys[index]].visible}
               onValueChange={value => {
                 this.props.updateFocus(keys[index], { visible: value })
@@ -400,7 +393,7 @@ class StatsScreen extends React.Component
           <StackedAreaChart 
             style={styles.mainChart}
             yMax={SECONDS_IN_DAY}
-            contentInset={{ left: 12, right: 12}}
+            contentInset={{ left: 12, right: 12 }}
             data={mainChart.data}
             keys={mainChart.keys}
             colors={mainChart.colors}
@@ -414,7 +407,7 @@ class StatsScreen extends React.Component
           <XAxis
             style={styles.mainChart}
             data={mainChart.data}
-            contentInset={{ left: 12, right: 12}}
+            contentInset={{ left: 12, right: 12 }}
             xAccessor={({item}) => item.date}
             formatLabel={this._formatMainChartXAxis}
             svg={{ fontSize: 10, fill: 'black' }}
