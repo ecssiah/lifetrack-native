@@ -1,9 +1,10 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { ScrollView, Switch, TouchableOpacity, View } from 'react-native'
+import { 
+  VictoryBar, VictoryChart, VictoryAxis, VictoryStack 
+} from 'victory-native'
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome' 
-import { StackedAreaChart, Grid, XAxis } from 'react-native-svg-charts'
-import * as shape from 'd3-shape'
 import { SECONDS_IN_DAY } from '../../../constants/Stats'
 import { getUniqueColors } from '../../../../lib/utils'
 import { updateFocus } from '../../../handlers/FocusesHandlers'
@@ -123,74 +124,6 @@ class StatsScreen extends React.Component
   }
 
 
-  _getMainChartData = () => {
-    const data = []
-    const dates = this.state.dates
-
-    for (const key of this._getMainChartKeys()) {
-      const focus = this.props.focuses[key]
-
-      for (let i = 0; i < dates.length; i++) {
-        if (data[i] === undefined) {
-          data[i] = { date: dates[i] }
-        }
-
-        if (focus.visible && focus.history[dates[i]]) {
-          data[i][key] = focus.history[dates[i]]
-        } else {
-          data[i][key] = 0
-        }
-      }
-    }
-
-    return data
-  }
-
-
-  _getMainChartKeys = () => {
-    const keys = Object.keys(this.props.focuses)
-
-    return keys
-  }
-
-
-  _getMainChartColors = () => {
-    const colors = getUniqueColors(this._getMainChartKeys().length) 
-
-    return colors
-  }
-
-
-  _getMainChartSvgs = () => {
-    const keys = this._getMainChartKeys()
-    const svgs = []
-
-    for (const key of keys) {
-      svgs.push({ 
-        onPress: () => console.warn(this.props.focuses[key].name)
-      })
-    }
-
-    return svgs
-  }
-
-
-  _formatMainChartXAxis = (value, index) => {
-    let options
-    if (this.state.dates.length > 360) {
-      options = { year: 'numeric', month: 'numeric' }
-    } else {
-      options = { month: 'numeric', day: 'numeric' }
-    }
-
-    if (index % Math.round(this.state.dates.length / 6) == 0) {
-      return new Date(value).toLocaleDateString(undefined, options)
-    } else {
-      return ''
-    }
-  }
-
-
   _onStartDatePress = () => {
     this.setState({
       startDateModalShow: true,
@@ -303,7 +236,6 @@ class StatsScreen extends React.Component
       data: this._getMainChartData(),
       keys: this._getMainChartKeys(),
       colors: this._getMainChartColors(),
-      svgs: this._getMainChartSvgs(),
     }
   }
 
@@ -388,34 +320,98 @@ class StatsScreen extends React.Component
   }
 
 
+  _getMainChartKeys = () => {
+    const keys = Object.keys(this.props.focuses)
+
+    return keys
+  }
+
+
+  _getMainChartColors = () => {
+    const colors = getUniqueColors(this._getMainChartKeys().length) 
+
+    return colors
+  }
+
+
+  _getMainChartData = () => {
+    const data = {}
+    const dates = this.state.dates
+
+    for (const key of this._getMainChartKeys()) {
+      data[key] = []
+      const focus = this.props.focuses[key]
+
+      for (let i = 0; i < dates.length; i++) {
+        const focusData = { date: dates[i] } 
+
+        if (focus.visible && focus.history[dates[i]]) {
+          focusData.seconds = focus.history[dates[i]]
+        } else {
+          focusData.seconds = 0
+        }
+
+        data[key].push(focusData)
+      }
+    }
+
+    return data
+  }
+
+
+  _getMainChartStack = data => {
+    const stack = []
+
+    for (const key of this._getMainChartKeys()) {
+      const focus = this.props.focuses[key]
+
+      stack.push(
+        <VictoryBar
+          key={key}
+          data={data[key]}
+          x='date'
+          y='seconds'
+        />
+      )
+    }
+
+    return stack
+  }
+
+  _formatMainChartXAxis = (value, index) => {
+    let options
+    if (this.state.dates.length > 360) {
+      options = { year: 'numeric', month: 'numeric' }
+    } else {
+      options = { month: 'numeric', day: 'numeric' }
+    }
+
+    if (index % Math.round(this.state.dates.length / 6) == 0) {
+      return new Date(value).toLocaleDateString(undefined, options)
+    } else {
+      return ''
+    }
+  }
+
+
   render() {
     const mainChart = this._getMainChartProperties()
 
     return (
       <View style={styles.container}>
         <View style={styles.mainChartContainer}>
-          <StackedAreaChart 
-            style={styles.mainChart}
-            yMax={SECONDS_IN_DAY}
-            contentInset={{ left: 10, right: 10 }}
-            data={mainChart.data}
-            keys={mainChart.keys}
-            colors={mainChart.colors}
-            svgs={mainChart.svgs}
-            curve={shape.curveLinear}
-            showGrid={true}
+          <VictoryChart
+            domainPadding={20}
           >
-            <Grid/>
-          </StackedAreaChart>
+            <VictoryAxis
+              tickValues={this.state.dates}
+              tickFormat={this._formatMainChartXAxis}
+            />
 
-          <XAxis
-            style={styles.mainChart}
-            data={mainChart.data}
-            contentInset={{ left: 10, right: 10 }}
-            xAccessor={({item}) => item.date}
-            formatLabel={this._formatMainChartXAxis}
-            svg={{ fontSize: 10, fill: 'black' }}
-          />
+            <VictoryStack>
+              {this._getMainChartStack(mainChart.data)}
+            </VictoryStack>
+          </VictoryChart>
         </View>
 
         <LTSpacer height={164} />
