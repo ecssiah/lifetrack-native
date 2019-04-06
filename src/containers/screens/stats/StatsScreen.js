@@ -2,7 +2,10 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { ScrollView, Switch, TouchableOpacity, View } from 'react-native'
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome' 
-import { StackedAreaChart, Grid, XAxis } from 'react-native-svg-charts'
+import AntDesignIcon from 'react-native-vector-icons/AntDesign'
+import { 
+  StackedAreaChart, StackedBarChart, Grid, XAxis 
+} from 'react-native-svg-charts'
 import * as shape from 'd3-shape'
 import { SECONDS_IN_DAY } from '../../../constants/Stats'
 import { getUniqueColors } from '../../../../lib/utils'
@@ -62,12 +65,25 @@ const styles = createStyles({
     marginBottom: -6,
     transform: [ { scaleX: .48 }, { scaleY: .48 } ]
   },
+  chartSwitchContainer: {
+    flexDirection: 'row',
+    marginTop: 2,
+  },
+  chartSwitch: {
+    marginLeft: -12,
+    marginRight: -6,
+    marginTop: -5, 
+    marginBottom: -6,
+    transform: [ { scaleX: .48 }, { scaleY: .48 } ],
+  },
   mainText: {
     fontSize: 18,
   },
   mainChart: {
     height: 300,
     margin: 8,
+  },
+  mainChartXAxis: {
   },
   dateSelectors: {
     flex: 1,
@@ -176,17 +192,24 @@ class StatsScreen extends React.Component
 
 
   _formatMainChartXAxis = (value, index) => {
-    let options
-    if (this.state.dates.length > 360) {
-      options = { year: 'numeric', month: 'numeric' }
-    } else {
-      options = { month: 'numeric', day: 'numeric' }
-    }
+    const options = { month: 'numeric' }
 
-    if (index % Math.round(this.state.dates.length / 6) == 0) {
-      return new Date(value).toLocaleDateString(undefined, options)
+    if (this.state.dates.length > 360) {
+      options.year = 'numeric'
+
+      if (index % Math.round(this.state.dates.length / 3) == 0) {
+        return new Date(value).toLocaleDateString(undefined, options)
+      } else {
+        return ''
+      }
     } else {
-      return ''
+      options.day = 'numeric'
+
+      if (index % Math.round(this.state.dates.length / 6) == 0) {
+        return new Date(value).toLocaleDateString(undefined, options)
+      } else {
+        return ''
+      }
     }
   }
 
@@ -388,16 +411,16 @@ class StatsScreen extends React.Component
   }
 
 
-  render() {
+  _getMainChart = () => {
     const mainChart = this._getMainChartProperties()
 
-    return (
-      <View style={styles.container}>
+    if (this.props.stats.chartType == 'bar') {
+      return (
         <View style={styles.mainChartContainer}>
           <StackedAreaChart 
             style={styles.mainChart}
             yMax={SECONDS_IN_DAY}
-            contentInset={{ left: 10, right: 10 }}
+            contentInset={{ left: 20, right: 16 }}
             data={mainChart.data}
             keys={mainChart.keys}
             colors={mainChart.colors}
@@ -409,14 +432,51 @@ class StatsScreen extends React.Component
           </StackedAreaChart>
 
           <XAxis
-            style={styles.mainChart}
+            style={styles.mainChartXAxis}
             data={mainChart.data}
-            contentInset={{ left: 10, right: 10 }}
+            contentInset={{ left: 20, right: 16 }}
             xAccessor={({item}) => item.date}
             formatLabel={this._formatMainChartXAxis}
             svg={{ fontSize: 10, fill: 'black' }}
           />
         </View>
+      )
+    } else {
+      return (
+        <View style={styles.mainChartContainer}>
+          <StackedBarChart 
+            style={styles.mainChart}
+            yMin={0}
+            yMax={SECONDS_IN_DAY}
+            contentInset={{ left: 20, right: 16 }}
+            data={mainChart.data}
+            keys={mainChart.keys}
+            colors={mainChart.colors}
+            svgs={mainChart.svgs}
+            curve={shape.curveLinear}
+            showGrid={true}
+          >
+            <Grid/>
+          </StackedBarChart>
+
+          <XAxis
+            style={styles.mainChartXAxis}
+            data={mainChart.data}
+            contentInset={{ left: 20, right: 16 }}
+            xAccessor={({item}) => item.date}
+            formatLabel={this._formatMainChartXAxis}
+            svg={{ fontSize: 10, fill: 'black' }}
+          />
+        </View>
+      )
+    }
+  }
+
+
+  render() {
+    return (
+      <View style={styles.container}>
+        {this._getMainChart()}
 
         <LTSpacer height={164} />
 
@@ -429,6 +489,29 @@ class StatsScreen extends React.Component
               {this._displayStartDate()}
             </LTText>
           </TouchableOpacity> 
+
+          <View style={styles.chartSwitchContainer}>
+            <AntDesignIcon
+              color={'black'}
+              name={'barschart'} 
+              size={22} 
+            />
+
+            <Switch 
+              style={styles.chartSwitch} 
+              trackColor={{ true: Color.primary, false: Color.primary }}
+              value={this.props.stats.chartType == 'area'}
+              onValueChange={value => {
+                this.props.updateStats({ chartType: value ? 'area': 'bar' })
+              }}
+            />
+
+            <AntDesignIcon
+              color={'black'}
+              name={'areachart'} 
+              size={22} 
+            />
+          </View>
 
           <TouchableOpacity 
             activeOpacity={0.7}
