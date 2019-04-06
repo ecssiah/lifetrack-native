@@ -126,10 +126,9 @@ class StatsScreen extends React.Component
   _getMainChartData = () => {
     const data = []
     const dates = this.state.dates
-    const focusKeys = Object.keys(this.props.focuses)
 
-    for (const focusKey of focusKeys) {
-      const focus = this.props.focuses[focusKey]
+    for (const key of this._getMainChartKeys()) {
+      const focus = this.props.focuses[key]
 
       for (let i = 0; i < dates.length; i++) {
         if (data[i] === undefined) {
@@ -137,9 +136,9 @@ class StatsScreen extends React.Component
         }
 
         if (focus.visible && focus.history[dates[i]]) {
-          data[i][focusKey] = focus.history[dates[i]]
+          data[i][key] = focus.history[dates[i]]
         } else {
-          data[i][focusKey] = 0
+          data[i][key] = 0
         }
       }
     }
@@ -149,22 +148,21 @@ class StatsScreen extends React.Component
 
 
   _getMainChartKeys = () => {
-    const keys = [...new Set(Object.keys(this.props.focuses))]
+    const keys = Object.keys(this.props.focuses)
 
     return keys
   }
 
 
   _getMainChartColors = () => {
-    const keys = [...new Set(Object.keys(this.props.focuses))]
-    const colors = getUniqueColors(keys.length) 
+    const colors = getUniqueColors(this._getMainChartKeys().length) 
 
     return colors
   }
 
 
   _getMainChartSvgs = () => {
-    const keys = [...new Set(Object.keys(this.props.focuses))]
+    const keys = this._getMainChartKeys()
     const svgs = []
 
     for (const key of keys) {
@@ -315,7 +313,10 @@ class StatsScreen extends React.Component
     const keys = this._getMainChartKeys()
     const colors = this._getMainChartColors()
 
-    Object.values(this.props.focuses).forEach((focus, index) => {
+    const focuses = Object.values(Object.assign({}, this.props.focuses))
+    focuses.sort((a, b) => a.name.localeCompare(b.name))
+    
+    Object.values(focuses).forEach((focus, index) => {
       if (index % 2 == 0) {
         legendItems.push(
           <View key={index} style={styles.legendItem}>
@@ -352,7 +353,10 @@ class StatsScreen extends React.Component
     const keys = this._getMainChartKeys()
     const colors = this._getMainChartColors()
 
-    Object.values(this.props.focuses).forEach((focus, index) => {
+    const focuses = Object.values(Object.assign({}, this.props.focuses))
+    focuses.sort((a, b) => a.name.localeCompare(b.name))
+
+    focuses.forEach((focus, index) => {
       if (index % 2 == 1) {
         legendItems.push(
           <View key={index} style={styles.legendItem}>
