@@ -36,7 +36,7 @@ class FocusesScreen extends React.Component
     headerLeft: (
       <LTIcon
         type='md-help'
-        size={28}
+        size={26}
         onPress={() => navigation.getParam('helpSelect')()}
       />
     ),
