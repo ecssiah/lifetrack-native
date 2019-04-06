@@ -61,6 +61,7 @@ class FocusesScreen extends React.Component
       userId: auth.currentUser.uid,
       active: false,
       working: true,
+      visible: true,
       periods: 0,
       level: 0,
       experience: 0.0,

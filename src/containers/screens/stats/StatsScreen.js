@@ -1,28 +1,56 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { TouchableOpacity, View } from 'react-native'
+import { ScrollView, Switch, TouchableOpacity, View } from 'react-native'
+import FontAwesome from 'react-native-vector-icons/FontAwesome' 
 import { StackedAreaChart, Grid, XAxis } from 'react-native-svg-charts'
 import * as scale from 'd3-scale'
 import * as shape from 'd3-shape'
 import { getUniqueColors } from '../../../../lib/utils'
+import { updateFocus } from '../../../handlers/FocusesHandlers'
 import createStyles from '../../../styles'
 import { SECONDS_IN_DAY } from '../../../constants/Stats'
 
 import LTText from '../../../components/LT/LTText'
+import LTSpacer from '../../../components/LT/LTSpacer';
 import DateModal from '../../../components/modals/DateModal';
 
 const styles = createStyles({
   container: {
     flex: 1,
-    flexDirection: 'column',
   },
   mainChartContainer: {
     flex: 1,
   },
   filterButtonsContainer: {
+    height: 28,
     flexDirection: 'row',
-    height: 38,
     justifyContent: 'space-between',
+  },
+  legendContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  legendLeftColumn: {
+
+  },
+  legendRightColumn: {
+
+  },
+  legendItem: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginVertical: 4,
+    marginHorizontal: 8,
+  },
+  legendText: {
+    textAlign: 'center',
+    margin: 3,
+  },
+  legendSwitch: {
+    margin: -4,
+    transform: [
+      { scaleX: .6 }, { scaleY: .6 }
+    ]
   },
   mainText: {
     fontSize: 18,
@@ -33,12 +61,13 @@ const styles = createStyles({
   },
   dateSelectors: {
     flex: 1,
-    width: 120,
+    width: 108,
     overflow: 'hidden',
-    backgroundColor: '#dddddd',
+    backgroundColor: '#dedede',
+    fontSize: 12,
     textAlign: 'center',
     margin: 4,
-    padding: 6,
+    padding: 2,
     borderWidth: 1,
     borderRadius: 6,
     borderColor: 'black',
@@ -55,12 +84,12 @@ class StatsScreen extends React.Component
     endDate.setDate(startDate.getDate() + 6)
 
     this.state = {
-      startDateModalShow: false,
-      endDateModalShow: false,
       startDate,
       endDate,
       startDateSelection: new Date(startDate),
       endDateSelection: new Date(endDate),
+      startDateModalShow: false,
+      endDateModalShow: false,
       dates: this._getDateRange(startDate, endDate),
     }
   }
@@ -100,7 +129,7 @@ class StatsScreen extends React.Component
           data[i] = { date: dates[i] }
         }
 
-        if (focus.history[dates[i]]) {
+        if (focus.visible && focus.history[dates[i]]) {
           data[i][focusKey] = focus.history[dates[i]]
         } else {
           data[i][focusKey] = 0
@@ -109,22 +138,6 @@ class StatsScreen extends React.Component
     }
 
     return data
-  }
-
-
-  _formatMainChartXAxis = (value, index) => {
-    let options
-    if (this.state.dates.length > 360) {
-      options = { year: 'numeric', month: 'numeric' }
-    } else {
-      options = { month: 'numeric', day: 'numeric' }
-    }
-
-    if (index % Math.round(this.state.dates.length / 6) == 0) {
-      return new Date(value).toLocaleDateString(undefined, options)
-    } else {
-      return ''
-    }
   }
 
 
@@ -154,6 +167,22 @@ class StatsScreen extends React.Component
     }
 
     return svgs
+  }
+
+
+  _formatMainChartXAxis = (value, index) => {
+    let options
+    if (this.state.dates.length > 360) {
+      options = { year: 'numeric', month: 'numeric' }
+    } else {
+      options = { month: 'numeric', day: 'numeric' }
+    }
+
+    if (index % Math.round(this.state.dates.length / 6) == 0) {
+      return new Date(value).toLocaleDateString(undefined, options)
+    } else {
+      return ''
+    }
   }
 
 
@@ -271,6 +300,81 @@ class StatsScreen extends React.Component
     }
   }
 
+
+  _getLegendLeftColumn = () => {
+    const legendItems = []
+    const keys = [...new Set(Object.keys(this.props.focuses))]
+    const colors = this._getMainChartColors()
+
+    Object.values(this.props.focuses).forEach((focus, index) => {
+      if (index % 2 == 0) {
+        legendItems.push(
+          <View key={index} style={styles.legendItem}>
+            <FontAwesome
+              color={colors[index]}
+              name={'circle'} 
+              size={20} 
+            />
+
+            <LTText style={styles.legendText}>
+              {focus.name}
+            </LTText>
+
+            <LTSpacer medium />
+
+            <Switch 
+              style={styles.legendSwitch} 
+              value={this.props.focuses[keys[index]].visible}
+              onValueChange={value => {
+                this.props.updateFocus(keys[index], { visible: value })
+              }}
+            />
+          </View>
+        )
+      }
+    })
+
+    return legendItems
+  }
+
+
+  _getLegendRightColumn = () => {
+    const legendItems = []
+    const keys = [...new Set(Object.keys(this.props.focuses))]
+    const colors = this._getMainChartColors()
+
+    Object.values(this.props.focuses).forEach((focus, index) => {
+      if (index % 2 == 1) {
+        legendItems.push(
+          <View key={index} style={styles.legendItem}>
+            <FontAwesome
+              color={colors[index]}
+              name={'circle'} 
+              size={20} 
+            />
+
+            <LTText style={styles.legendText}>
+              {focus.name}
+            </LTText>
+
+            <LTSpacer medium />
+
+            <Switch 
+              style={styles.legendSwitch} 
+              value={this.props.focuses[keys[index]].visible}
+              onValueChange={value => {
+                this.props.updateFocus(keys[index], { visible: value })
+              }}
+            />
+          </View>
+        )
+      }        
+    })
+
+    return legendItems
+  }
+
+
   render() {
     const mainChart = this._getMainChartProperties()
 
@@ -285,7 +389,7 @@ class StatsScreen extends React.Component
             keys={mainChart.keys}
             colors={mainChart.colors}
             svgs={mainChart.svgs}
-            curve={shape.curveNatural}
+            curve={shape.curveLinear}
             showGrid={true}
           >
             <Grid/>
@@ -301,8 +405,11 @@ class StatsScreen extends React.Component
           />
         </View>
 
+        <LTSpacer height={168} />
+
         <View style={styles.filterButtonsContainer}>
           <TouchableOpacity 
+            activeOpacity={0.7}
             onPress={this._onStartDatePress}
           >
             <LTText style={styles.dateSelectors}>
@@ -311,6 +418,7 @@ class StatsScreen extends React.Component
           </TouchableOpacity> 
 
           <TouchableOpacity 
+            activeOpacity={0.7}
             onPress={this._onEndDatePress}
           >
             <LTText style={styles.dateSelectors}>
@@ -318,6 +426,18 @@ class StatsScreen extends React.Component
             </LTText>
           </TouchableOpacity> 
         </View>
+
+        <ScrollView>
+          <View style={styles.legendContainer}>
+            <View style={styles.legendLeftColumn}>
+              {this._getLegendLeftColumn()}
+            </View>
+
+            <View style={styles.legendRightColumn}>
+              {this._getLegendRightColumn()}
+            </View>
+          </View>
+        </ScrollView>
 
         <DateModal
           title={'Start Date'}
@@ -349,7 +469,7 @@ const mapStateToProps = state => ({
 
 
 const mapDispatchToProps = dispatch => ({
-
+  updateFocus: (id, update) => updateFocus(dispatch, id, update),
 })
 
 
