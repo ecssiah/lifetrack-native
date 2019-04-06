@@ -7,7 +7,8 @@ import * as scale from 'd3-scale'
 import * as shape from 'd3-shape'
 import { getUniqueColors } from '../../../../lib/utils'
 import { updateFocus } from '../../../handlers/FocusesHandlers'
-import createStyles from '../../../styles'
+import { updateStats } from '../../../handlers/StatsHandlers'
+import createStyles, { Color } from '../../../styles'
 import { SECONDS_IN_DAY } from '../../../constants/Stats'
 
 import LTText from '../../../components/LT/LTText'
@@ -22,7 +23,11 @@ const styles = createStyles({
     flex: 1,
   },
   filterButtonsContainer: {
-    height: 28,
+    height: 32,
+    backgroundColor: Color.secondary,
+    borderTopWidth: 2,
+    borderBottomWidth: 2,
+    borderColor: Color.primary,
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
@@ -31,10 +36,13 @@ const styles = createStyles({
     justifyContent: 'space-between',
   },
   legendLeftColumn: {
-
+    flex: 1,
   },
   legendRightColumn: {
-
+    flex: 1,
+  },
+  legendIcon: {
+    marginLeft: -2, 
   },
   legendItem: {
     flexDirection: 'row',
@@ -43,14 +51,17 @@ const styles = createStyles({
     marginHorizontal: 8,
   },
   legendText: {
-    textAlign: 'center',
-    margin: 3,
+    textAlign: 'left',
+    width: 120,
+    marginVertical: 2,
+    marginHorizontal: 6,
   },
   legendSwitch: {
-    margin: -4,
-    transform: [
-      { scaleX: .6 }, { scaleY: .6 }
-    ]
+    marginLeft: -12,
+    marginRight: -6,
+    marginTop: -5, 
+    marginBottom: -6,
+    transform: [ { scaleX: .48 }, { scaleY: .48 } ]
   },
   mainText: {
     fontSize: 18,
@@ -79,18 +90,15 @@ class StatsScreen extends React.Component
   constructor(props) {
     super(props)
 
-    const startDate = new Date(props.user.startDate)
-    let endDate = new Date(props.user.startDate)
-    endDate.setDate(startDate.getDate() + 6)
-
     this.state = {
-      startDate,
-      endDate,
-      startDateSelection: new Date(startDate),
-      endDateSelection: new Date(endDate),
+      startDateSelection: new Date(props.stats.startDate),
+      endDateSelection: new Date(props.stats.endDate),
       startDateModalShow: false,
       endDateModalShow: false,
-      dates: this._getDateRange(startDate, endDate),
+      dates: this._getDateRange(
+        new Date(props.stats.startDate), 
+        new Date(props.stats.endDate)
+      ),
     }
   }
 
@@ -189,7 +197,7 @@ class StatsScreen extends React.Component
   _onStartDatePress = () => {
     this.setState({
       startDateModalShow: true,
-      startDateSelection: new Date(this.state.startDate),
+      startDateSelection: new Date(this.props.stats.startDate),
     })
   }
 
@@ -212,10 +220,11 @@ class StatsScreen extends React.Component
   _onStartDateSubmit = () => {
     const startDate = new Date(this.state.startDateSelection)
 
+    this.props.updateStats({ startDate: startDate.getTime() })
+
     this.setState({
-      startDate,
-      dates: this._getDateRange(startDate, this.state.endDate),
       startDateModalShow: false,
+      dates: this._getDateRange(startDate, new Date(this.props.stats.endDate)),
     })
   }
 
@@ -230,7 +239,7 @@ class StatsScreen extends React.Component
   _onEndDatePress = () => {
     this.setState({
       endDateModalShow: true,
-      endDateSelection: new Date(this.state.endDate),
+      endDateSelection: new Date(this.props.stats.endDate),
     })
   }
 
@@ -253,10 +262,11 @@ class StatsScreen extends React.Component
   _onEndDateSubmit = () => {
     const endDate = new Date(this.state.endDateSelection)
 
+    this.props.updateStats({ endDate: endDate.getTime() })
+
     this.setState({
-      endDate,
-      dates: this._getDateRange(this.state.startDate, endDate),
       endDateModalShow: false,
+      dates: this._getDateRange(new Date(this.props.stats.startDate), endDate),
     })
   }
 
@@ -269,26 +279,26 @@ class StatsScreen extends React.Component
 
 
   _displayStartDate = () => {
-    if (this.state.startDate) {
-      const dateString = this.state.startDate.toLocaleDateString(
-        undefined, 
-        {'month': 'short', 'day': 'numeric', 'year': 'numeric'}
-      )
+    const startDate = new Date(this.props.stats.startDate)
 
-      return dateString
-    }
+    const dateString = startDate.toLocaleDateString(
+      undefined, 
+      {'month': 'short', 'day': 'numeric', 'year': 'numeric'}
+    )
+
+    return dateString
   }
 
 
   _displayEndDate = () => {
-    if (this.state.endDate) {
-      const dateString = this.state.endDate.toLocaleDateString(
-        undefined, 
-        {'month': 'short', 'day': 'numeric', 'year': 'numeric'}
-      )
+    const endDate = new Date(this.props.stats.endDate)
 
-      return dateString
-    }
+    const dateString = endDate.toLocaleDateString(
+      undefined, 
+      {'month': 'short', 'day': 'numeric', 'year': 'numeric'}
+    )
+
+    return dateString
   }
 
   _getMainChartProperties = () => {
@@ -303,7 +313,7 @@ class StatsScreen extends React.Component
 
   _getLegendLeftColumn = () => {
     const legendItems = []
-    const keys = [...new Set(Object.keys(this.props.focuses))]
+    const keys = this._getMainChartKeys()
     const colors = this._getMainChartColors()
 
     Object.values(this.props.focuses).forEach((focus, index) => {
@@ -311,6 +321,7 @@ class StatsScreen extends React.Component
         legendItems.push(
           <View key={index} style={styles.legendItem}>
             <FontAwesome
+              style={styles.legendIcon}
               color={colors[index]}
               name={'circle'} 
               size={20} 
@@ -320,10 +331,12 @@ class StatsScreen extends React.Component
               {focus.name}
             </LTText>
 
-            <LTSpacer medium />
-
             <Switch 
               style={styles.legendSwitch} 
+              trackColor={{
+                true: Color.primary,
+                false: Color.secondary,
+              }}
               value={this.props.focuses[keys[index]].visible}
               onValueChange={value => {
                 this.props.updateFocus(keys[index], { visible: value })
@@ -348,6 +361,7 @@ class StatsScreen extends React.Component
         legendItems.push(
           <View key={index} style={styles.legendItem}>
             <FontAwesome
+              style={styles.legendIcon}
               color={colors[index]}
               name={'circle'} 
               size={20} 
@@ -357,10 +371,12 @@ class StatsScreen extends React.Component
               {focus.name}
             </LTText>
 
-            <LTSpacer medium />
-
             <Switch 
               style={styles.legendSwitch} 
+              trackColor={{
+                true: Color.primary,
+                false: Color.secondary,
+              }}
               value={this.props.focuses[keys[index]].visible}
               onValueChange={value => {
                 this.props.updateFocus(keys[index], { visible: value })
@@ -384,7 +400,7 @@ class StatsScreen extends React.Component
           <StackedAreaChart 
             style={styles.mainChart}
             yMax={SECONDS_IN_DAY}
-            contentInset={{ left: 16, right: 12}}
+            contentInset={{ left: 12, right: 12}}
             data={mainChart.data}
             keys={mainChart.keys}
             colors={mainChart.colors}
@@ -398,14 +414,14 @@ class StatsScreen extends React.Component
           <XAxis
             style={styles.mainChart}
             data={mainChart.data}
-            contentInset={{ left: 16, right: 12}}
+            contentInset={{ left: 12, right: 12}}
             xAccessor={({item}) => item.date}
             formatLabel={this._formatMainChartXAxis}
             svg={{ fontSize: 10, fill: 'black' }}
           />
         </View>
 
-        <LTSpacer height={168} />
+        <LTSpacer height={164} />
 
         <View style={styles.filterButtonsContainer}>
           <TouchableOpacity 
@@ -428,6 +444,8 @@ class StatsScreen extends React.Component
         </View>
 
         <ScrollView>
+          <LTSpacer small />
+
           <View style={styles.legendContainer}>
             <View style={styles.legendLeftColumn}>
               {this._getLegendLeftColumn()}
@@ -465,11 +483,13 @@ class StatsScreen extends React.Component
 const mapStateToProps = state => ({
   user: state.user,
   focuses: state.focuses,
+  stats: state.stats,
 })
 
 
 const mapDispatchToProps = dispatch => ({
   updateFocus: (id, update) => updateFocus(dispatch, id, update),
+  updateStats: update => updateStats(dispatch, update),
 })
 
 

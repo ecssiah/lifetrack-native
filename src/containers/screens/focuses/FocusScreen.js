@@ -73,15 +73,16 @@ class FocusScreen extends React.Component
       update.time = focus.time - 1
       update.history = { ...focus.history }
 
-      const today = getToday()
-
-      if (focus.history[today]) {
-        update.history[today] = focus.history[today] + 1
-      } else {
-        update.history[today] = 1
-      }
 
       if (focus.working) {
+        const today = getToday()
+
+        if (focus.history[today]) {
+          update.history[today] = focus.history[today] + 1
+        } else {
+          update.history[today] = 1
+        }
+
         update.experience = focus.experience + EXP_PER_SECOND
 
         if (update.experience >= 100) {
