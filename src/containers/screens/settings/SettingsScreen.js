@@ -186,7 +186,7 @@ class SettingsScreen extends React.Component
       {
         title: '',
         data: [
-          { name: 'Categories', value: '>'},
+          { name: 'Categories', value: ''},
         ],
       },
       {

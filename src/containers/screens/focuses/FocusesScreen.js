@@ -2,7 +2,6 @@ import React from 'react'
 import { View } from 'react-native'
 import { connect } from 'react-redux'
 import { auth } from '../../../config/firebaseConfig'
-import { getToday } from '../../../../lib/utils'
 import { UNCATEGORIZED } from '../../../constants/Categories'
 import { UPDATE_SELECTION } from '../../../constants/Selection'
 import { addFocus } from '../../../handlers/FocusesHandlers'
@@ -31,8 +30,16 @@ class FocusesScreen extends React.Component
     }
   }
 
+
   static navigationOptions = ({ navigation }) => ({
     title: 'Focuses',
+    headerLeft: (
+      <LTIcon
+        type='md-help'
+        size={28}
+        onPress={() => navigation.getParam('helpSelect')()}
+      />
+    ),
     headerRight: (
       <LTIcon
         type='ios-add'
@@ -42,17 +49,26 @@ class FocusesScreen extends React.Component
     ),
   })
 
+
   componentDidMount() {
     this.props.navigation.setParams({
+      helpSelect: this._helpSelect,
       addFocusSelect: this._onAddFocusSelect,
     })
   }
+
+  
+  _helpSelect = () => {
+    this.props.navigation.navigate('Help')
+  }
+
 
   _onAddFocusSelect = () => {
     this.setState({
       addModalShow: true,
     })
   }
+
 
   _onAddFocusConfirm = () => {
     const focus = {
@@ -82,6 +98,7 @@ class FocusesScreen extends React.Component
     })
   }
 
+
   _onAddFocusCancel = () => {
     this.setState({
       addModalShow: false,
@@ -90,16 +107,19 @@ class FocusesScreen extends React.Component
     })
   }
 
+
   _onFocusSelect = id => {
     this.props.updateSelection({ id })
     this.props.navigation.navigate('Focus')
   }
+
 
   _onCategoryValueChange = categoryName => {
     this.setState({
       categoryName,
     })
   }
+
 
   _onCategorySelect = categoryName => {
     const update = {
@@ -108,6 +128,7 @@ class FocusesScreen extends React.Component
 
     this.props.updateCategory(categoryName, update)
   }
+
 
   render() {
     return (
