@@ -66,10 +66,10 @@ const styles = createStyles({
   },
   chartSwitchContainer: {
     flexDirection: 'row',
-    marginTop: 2,
+    marginTop: 3,
   },
   chartSwitch: {
-    marginLeft: -12,
+    marginLeft: -10,
     marginRight: -6,
     marginTop: -5, 
     marginBottom: -6,
@@ -111,6 +111,7 @@ class StatsScreen extends React.Component
       startDateSelection,
       endDateSelection,
       dates: this._getDateRange(startDateSelection, endDateSelection),
+      chartType: props.stats.chartType,
     }
   }
 
@@ -134,6 +135,7 @@ class StatsScreen extends React.Component
 
     return dates
   }
+
 
 
   _onStartDatePress = () => {
@@ -254,13 +256,13 @@ class StatsScreen extends React.Component
 
   _getLegendLeftColumn = () => {
     const legendItems = []
-    const keys = this._getMainChartKeys()
+    const keys = Object.keys(this.props.focuses)
     const colors = this._getMainChartColors()
 
     const focuses = Object.values(Object.assign({}, this.props.focuses))
     focuses.sort((a, b) => a.name.localeCompare(b.name))
     
-    Object.values(focuses).forEach((focus, index) => {
+    focuses.forEach((focus, index) => {
       if (index % 2 == 0) {
         legendItems.push(
           <View key={index} style={styles.legendItem}>
@@ -294,7 +296,7 @@ class StatsScreen extends React.Component
 
   _getLegendRightColumn = () => {
     const legendItems = []
-    const keys = this._getMainChartKeys()
+    const keys = Object.keys(this.props.focuses)
     const colors = this._getMainChartColors()
 
     const focuses = Object.values(Object.assign({}, this.props.focuses))
@@ -340,7 +342,8 @@ class StatsScreen extends React.Component
 
 
   _getMainChartColors = () => {
-    const colors = getUniqueColors(this._getMainChartKeys().length) 
+    const keys = Object.keys(this.props.focuses)
+    const colors = getUniqueColors(keys.length) 
 
     return colors
   }
@@ -422,9 +425,9 @@ class StatsScreen extends React.Component
     return (
       <View style={styles.container}>
         <View style={styles.mainChartContainer}>
-          <VictoryChart
-            domainPadding={20}
-            theme={VictoryTheme.material}
+          <VictoryChart 
+            padding={26}
+            maxDomain={{ y: SECONDS_IN_DAY }}
           >
             <VictoryAxis
               tickValues={this.state.dates}
@@ -461,9 +464,14 @@ class StatsScreen extends React.Component
             <Switch 
               style={styles.chartSwitch} 
               trackColor={{ true: Color.primary, false: Color.primary }}
-              value={this.props.stats.chartType == 'area'}
+              ios_backgroundColor={Color.primary}
+              value={this.state.chartType == 'area'}
               onValueChange={value => {
                 this.props.updateStats({ chartType: value ? 'area': 'bar' })
+
+                this.setState({
+                  chartType: value ? 'area' : 'bar',
+                })
               }}
             />
 

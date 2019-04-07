@@ -1,5 +1,5 @@
 import React from 'react'
-import { getToday } from '../../../../lib/utils'
+import { getToday, getDateString } from '../../../../lib/utils'
 import { connect } from 'react-redux'
 import { View } from 'react-native'
 import { EXP_PER_SECOND } from '../../../constants/Focuses'
@@ -75,7 +75,7 @@ class FocusScreen extends React.Component
 
 
       if (focus.working) {
-        const today = getToday()
+        const today = getDateString()
 
         if (focus.history[today]) {
           update.history[today] = focus.history[today] + 1
