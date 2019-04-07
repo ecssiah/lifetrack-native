@@ -366,8 +366,6 @@ class StatsScreen extends React.Component
       }
     }
 
-    console.warn(data)
-
     return data
   }
 
@@ -430,6 +428,15 @@ class StatsScreen extends React.Component
             <VictoryAxis
               tickValues={this.state.dates}
               tickFormat={this._formatMainChartXAxis}
+            />
+
+            <VictoryAxis
+              dependentAxis
+              tickFormat={() => ''}
+              style={{
+                axis: { stroke: 'none' },
+                grid: { stroke: 'gray' },
+              }}
             />
 
             <VictoryStack
