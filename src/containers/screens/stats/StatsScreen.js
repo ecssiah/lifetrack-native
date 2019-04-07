@@ -137,7 +137,6 @@ class StatsScreen extends React.Component
   }
 
 
-
   _onStartDatePress = () => {
     this.setState({
       startDateModalShow: true,
@@ -150,8 +149,8 @@ class StatsScreen extends React.Component
     const startDateSelection = new Date(date)
 
     if (startDateSelection.getTime() >= this.state.endDateSelection.getTime()) {
-      startDateSelection.setMonth(this.state.endDateSelection.getMonth())
       startDateSelection.setFullYear(this.state.endDateSelection.getFullYear())
+      startDateSelection.setMonth(this.state.endDateSelection.getMonth())
       startDateSelection.setDate(this.state.endDateSelection.getDate() - 1)
     }
 
@@ -192,8 +191,8 @@ class StatsScreen extends React.Component
     const endDateSelection = new Date(date)
 
     if (endDateSelection.getTime() <= this.state.startDateSelection.getTime()) {
-      endDateSelection.setMonth(this.state.startDateSelection.getMonth())
       endDateSelection.setFullYear(this.state.startDateSelection.getFullYear())
+      endDateSelection.setMonth(this.state.startDateSelection.getMonth())
       endDateSelection.setDate(this.state.startDateSelection.getDate() + 1)
     }
 
@@ -256,13 +255,10 @@ class StatsScreen extends React.Component
 
   _getLegendLeftColumn = () => {
     const legendItems = []
-    const keys = Object.keys(this.props.focuses)
+    const keys = this._getMainChartKeys()
     const colors = this._getMainChartColors()
 
-    const focuses = Object.values(Object.assign({}, this.props.focuses))
-    focuses.sort((a, b) => a.name.localeCompare(b.name))
-    
-    focuses.forEach((focus, index) => {
+    Object.values(this.props.focuses).forEach((focus, index) => {
       if (index % 2 == 0) {
         legendItems.push(
           <View key={index} style={styles.legendItem}>
@@ -296,13 +292,10 @@ class StatsScreen extends React.Component
 
   _getLegendRightColumn = () => {
     const legendItems = []
-    const keys = Object.keys(this.props.focuses)
+    const keys = this._getMainChartKeys()
     const colors = this._getMainChartColors()
 
-    const focuses = Object.values(Object.assign({}, this.props.focuses))
-    focuses.sort((a, b) => a.name.localeCompare(b.name))
-
-    focuses.forEach((focus, index) => {
+    Object.values(this.props.focuses).forEach((focus, index) => {
       if (index % 2 == 1) {
         legendItems.push(
           <View key={index} style={styles.legendItem}>
@@ -342,7 +335,7 @@ class StatsScreen extends React.Component
 
 
   _getMainChartColors = () => {
-    const keys = Object.keys(this.props.focuses)
+    const keys = this._getMainChartKeys()
     const colors = getUniqueColors(keys.length) 
 
     return colors
@@ -359,9 +352,12 @@ class StatsScreen extends React.Component
 
       for (let i = 0; i < dates.length; i++) {
         const focusData = { date: dates[i] } 
+        const dateString = new Date(dates[i]).toLocaleDateString(
+          undefined, { 'month': 'numeric', 'day': 'numeric', 'year': 'numeric' }
+        )
 
-        if (focus.visible && focus.history[dates[i]]) {
-          focusData.seconds = focus.history[dates[i]]
+        if (focus.visible && focus.history[dateString]) {
+          focusData.seconds = focus.history[dateString]
         } else {
           focusData.seconds = 0
         }

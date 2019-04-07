@@ -1,5 +1,5 @@
 import { db, auth } from '../config/firebaseConfig'
-import { getToday, getDateString } from '../../lib/utils';
+import { getDay } from '../../lib/utils';
 import { 
   DEFAULT_WORK_PERIOD, DEFAULT_WORK_GOAL, DEFAULT_BREAK_PERIOD 
 } from '../constants/Settings'
@@ -12,7 +12,7 @@ import { SET_STATS } from '../constants/Stats';
 export async function signUp(dispatch, email, password) {
   await auth.createUserWithEmailAndPassword(email, password)
 
-  const today = getDateString()
+  const today = getDay()
 
   const userData = {
     user: {
@@ -28,9 +28,8 @@ export async function signUp(dispatch, email, password) {
       [UNCATEGORIZED]: { show: true },
     },
     stats: {
-      chartType: 'area',
       startDate: today,
-      endDate: getDateString(6),
+      endDate: getDay(6),
     },
   }
 

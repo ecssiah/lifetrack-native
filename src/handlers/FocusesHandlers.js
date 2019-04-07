@@ -1,6 +1,6 @@
 import { Alert } from 'react-native'
 import { db, auth } from "../config/firebaseConfig"
-import { displayTime, getElapsed, getToday, getDateString } from '../../lib/utils'
+import { displayTime, getElapsed, getDay } from '../../lib/utils'
 import { 
   EXP_PER_SECOND,
   UPDATE_FOCUSES,
@@ -126,8 +126,12 @@ function requestFocusUpdate(dispatch, querySnapshot, elapsed) {
 function getUpdatedHistory(doc, elapsed) {
   const history = { ...doc.data().history }
   const elapsedTime = Date.now() + elapsed * 1000
-  const today = getDateString()
-  const tomorrow = getDateString(1)
+  const today = getDay().toLocaleDateString(
+    undefined, { 'month': 'numeric', 'day': 'numeric', 'year': 'numeric' }
+  )
+  const tomorrow = getDay(1).toLocaleDateString(
+    undefined, { 'month': 'numeric', 'day': 'numeric', 'year': 'numeric' }
+  )
 
   if (elapsedTime > tomorrow) {
     const overlapTime = tomorrow - elapsedTime
