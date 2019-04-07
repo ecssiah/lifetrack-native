@@ -35,6 +35,7 @@ class LTEdit extends React.Component
     placeholder: '',
   }
 
+
   constructor(props) {
     super(props)
 
@@ -43,13 +44,16 @@ class LTEdit extends React.Component
     }
   }
 
+
   _onFocus = () => {
     this.setState({style: styles.focus})
   }
 
+
   _onBlur = () => {
     this.setState({style: styles.blur})
   }
+
 
   render() {
     return (
@@ -70,5 +74,6 @@ class LTEdit extends React.Component
     )
   }
 }
+
 
 export default LTEdit

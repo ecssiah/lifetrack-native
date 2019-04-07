@@ -23,6 +23,18 @@ const styles = createStyles({
 
 class FocusEditScreen extends React.Component 
 {
+  static navigationOptions = ({ navigation }) => ({
+    title: 'Edit Focus',
+    headerLeft: (
+      <LTIcon
+        type='ios-arrow-back'
+        size={32}
+        onPress={() => navigation.goBack()}
+      />
+    ),
+  })
+
+
   constructor(props) {
     super(props)
 
@@ -38,16 +50,6 @@ class FocusEditScreen extends React.Component
     }
   }
 
-  static navigationOptions = ({ navigation }) => ({
-    title: 'Edit Focus',
-    headerLeft: (
-      <LTIcon
-        type='ios-arrow-back'
-        size={32}
-        onPress={() => navigation.goBack()}
-      />
-    ),
-  })
 
   _onEditNameChange = name => {
     this.setState({
@@ -55,9 +57,11 @@ class FocusEditScreen extends React.Component
     })
   }
 
+
   _onEditNameConfirm = () => {
     this.props.updateFocus(this.props.selection.id, { name: this.state.name })
   }
+
 
   _onEditNameFocus = () => {
     this.setState({
@@ -65,11 +69,13 @@ class FocusEditScreen extends React.Component
     })
   }
 
+
   _onEditNameBlur = () => {
     this.setState({
       nameInputStyle: styles.nameInputBlur,
     })
   }
+
 
   _onSettingSelect = settingName => {
     let settingValue
@@ -100,11 +106,13 @@ class FocusEditScreen extends React.Component
     })
   }
 
+
   _onSettingValueChange = settingValue => {
     this.setState({
       settingValue,
     })
   }
+
 
   _onSettingConfirm = () => {
     const update = {}
@@ -139,11 +147,13 @@ class FocusEditScreen extends React.Component
     })
   }
 
+
   _onSettingCancel = () => {
     this.setState({
       settingsModalShow: false,
     })
   }
+
 
   _onCategorySelect = () => {
     this.setState({
@@ -151,11 +161,13 @@ class FocusEditScreen extends React.Component
     })
   }
 
+
   _onCategoryValueChange = categoryName => {
     this.setState({
       categoryName,
     })
   }
+
 
   _onCategoryConfirm = () => {
     this.props.updateFocus(
@@ -169,12 +181,14 @@ class FocusEditScreen extends React.Component
     })
   }
 
+
   _onCategoryCancel = () => {
     this.setState({
       categoryName: this.props.focuses[this.props.selection.id].category,
       categoryModalShow: false,
     })
   }
+
 
   _onDeleteSelect = () => {
     const focusName = this.props.focuses[this.props.selection.id].name
@@ -189,6 +203,7 @@ class FocusEditScreen extends React.Component
     )
   }
 
+
   _onDeleteConfirm = async () => {
     clearInterval(this.props.focuses[this.props.selection.id].timer)
 
@@ -197,11 +212,13 @@ class FocusEditScreen extends React.Component
     this.props.navigation.navigate('Focuses')
   }
 
+
   _onDeleteCancel = () => {
     this.setState({
       deleteModalShow: false,
     })
   }
+
 
   render() {
     const focus = this.props.focuses[this.props.selection.id]
@@ -242,15 +259,18 @@ class FocusEditScreen extends React.Component
   }
 }
 
+
 const mapStateToProps = state => ({
   selection: state.selection,
   focuses: state.focuses,
   categories: state.categories,
 })
 
+
 const mapDispatchToProps = dispatch => ({
   updateFocus: (id, update) => updateFocus(dispatch, id, update),
   deleteFocus: id => deleteFocus(dispatch, id),
 })
+
 
 export default connect(mapStateToProps, mapDispatchToProps)(FocusEditScreen)

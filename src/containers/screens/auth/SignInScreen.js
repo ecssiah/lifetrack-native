@@ -31,6 +31,11 @@ const styles = createStyles({
 
 class SignInScreen extends React.Component 
 {
+  static navigationOptions = ({ navigation }) => ({
+    title: 'Sign In',
+  })
+
+
   constructor(props) {
     super(props)
 
@@ -40,9 +45,6 @@ class SignInScreen extends React.Component
     }
   }
 
-  static navigationOptions = ({ navigation }) => ({
-    title: 'Sign In',
-  })
 
   _onPressSignIn = async () => {
     try {
@@ -62,6 +64,7 @@ class SignInScreen extends React.Component
       })
     }
   }
+
 
   render() {
     return (
@@ -104,11 +107,14 @@ class SignInScreen extends React.Component
   }
 }
 
+
 const mapStateToProps = state => ({
 })
+
 
 const mapDispatchToProps = dispatch => ({
   signIn: (email, password) => signIn(dispatch, email, password),
 })
+
 
 export default connect(mapStateToProps, mapDispatchToProps)(SignInScreen)

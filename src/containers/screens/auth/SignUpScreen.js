@@ -40,6 +40,11 @@ const styles = createStyles({
 
 class SignUpScreen extends React.Component 
 {
+  static navigationOptions = ({ navigation }) => ({
+    title: 'Sign Up',
+  })
+
+
   constructor(props) {
     super(props)
 
@@ -50,9 +55,6 @@ class SignUpScreen extends React.Component
     }
   }
 
-  static navigationOptions = ({ navigation }) => ({
-    title: 'Sign Up',
-  })
 
   _onPressSignUp = async () => {
     if (this.state.password === this.state.confirm) {
@@ -74,6 +76,7 @@ class SignUpScreen extends React.Component
       })
     }
   }
+
 
   render() {
     return (
@@ -121,11 +124,14 @@ class SignUpScreen extends React.Component
   }
 }
 
+
 const mapStateToProps = state => ({
 })
+
 
 const mapDispatchToProps = dispatch => ({
   signUp: (email, password) => signUp(dispatch, email, password),
 })
+
 
 export default connect(mapStateToProps, mapDispatchToProps)(SignUpScreen)

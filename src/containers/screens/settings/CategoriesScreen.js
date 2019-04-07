@@ -19,17 +19,6 @@ const styles = createStyles({ })
 
 class CategoriesScreen extends React.Component 
 {
-  constructor(props) {
-    super(props)
-
-    this.state = {
-      categoryName: '',
-      newCategoryName: '',
-      addModalShow: false,
-      editModalShow: false,
-    }
-  }
-
   static navigationOptions = ({ navigation }) => ({
     title: 'Categories',
     headerLeft: (
@@ -48,17 +37,32 @@ class CategoriesScreen extends React.Component
     ),
   })
 
+
+  constructor(props) {
+    super(props)
+
+    this.state = {
+      categoryName: '',
+      newCategoryName: '',
+      addModalShow: false,
+      editModalShow: false,
+    }
+  }
+
+
   componentDidMount() {
     this.props.navigation.setParams({
       addCategorySelect: this._onAddCategorySelect,
     })
   }
 
+
   _onAddCategorySelect = () => {
     this.setState({
       addModalShow: true,
     })
   }
+
 
   _onCategoryAddConfirm = () => {
     this.props.addCategory(this.state.newCategoryName)
@@ -69,11 +73,13 @@ class CategoriesScreen extends React.Component
     })
   }
 
+
   _onCategoryAddCancel = () => {
     this.setState({
       addModalShow: false,
     })
   }
+
 
   _onCategorySelect = categoryName => {
     this.setState({
@@ -83,6 +89,7 @@ class CategoriesScreen extends React.Component
     })
   }
 
+
   _onCategoryDeleteConfirm = () => {
     this.props.deleteCategory(this.state.categoryName)
 
@@ -90,6 +97,7 @@ class CategoriesScreen extends React.Component
       editModalShow: false,
     })
   }
+
 
   _onCategoryDelete = () => {
     Alert.alert(
@@ -102,17 +110,20 @@ class CategoriesScreen extends React.Component
     )
   }
 
+
   _onCategoryConfirm = () => {
     this.setState({
       editModalShow: false,
     })
   }
 
+
   _onCategoryCancel = () => {
     this.setState({
       editModalShow: false,
     })
   }
+
 
   _onCategoryNameEditConfirm = () => {
     if (this.state.categoryName === this.state.newCategoryName) {
@@ -138,6 +149,7 @@ class CategoriesScreen extends React.Component
       )
     }
   }
+
 
   render() {
     return (
@@ -168,11 +180,13 @@ class CategoriesScreen extends React.Component
   }
 }
 
+
 const mapStateToProps = state => ({
   selection: state.selection,
   focuses: state.focuses,
   categories: state.categories,
 })
+
 
 const mapDispatchToProps = dispatch => ({
   addCategory: name => addCategory(dispatch, name),
@@ -181,5 +195,6 @@ const mapDispatchToProps = dispatch => ({
     return updateCategoryName(dispatch, name, newName)
   },
 })
+
 
 export default connect(mapStateToProps, mapDispatchToProps)(CategoriesScreen)

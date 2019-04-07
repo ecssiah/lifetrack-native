@@ -20,17 +20,6 @@ const styles = createStyles({
 
 class FocusesScreen extends React.Component 
 {
-  constructor(props) {
-    super(props)
-
-    this.state = {
-      focusName: '',
-      categoryName: UNCATEGORIZED,
-      addModalShow: false,
-    }
-  }
-
-
   static navigationOptions = ({ navigation }) => ({
     title: 'Focuses',
     headerLeft: (
@@ -48,6 +37,17 @@ class FocusesScreen extends React.Component
       />
     ),
   })
+
+
+  constructor(props) {
+    super(props)
+
+    this.state = {
+      focusName: '',
+      categoryName: UNCATEGORIZED,
+      addModalShow: false,
+    }
+  }
 
 
   componentDidMount() {
@@ -155,12 +155,14 @@ class FocusesScreen extends React.Component
   }
 }
 
+
 const mapStateToProps = state => ({
   categories: state.categories,
   settings: state.settings,
   selection: state.selection,
   focuses: state.focuses,
 })
+
 
 const mapDispatchToProps = dispatch => ({
   addFocus: focus => addFocus(dispatch, focus), 

@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import AntDesignIcon from 'react-native-vector-icons/AntDesign'
 import { ScrollView, Switch, TouchableOpacity, View } from 'react-native'
 import { 
-  VictoryArea, VictoryBar, VictoryChart, VictoryAxis, VictoryStack, VictoryTheme 
+  VictoryArea, VictoryBar, VictoryChart, VictoryAxis, VictoryStack, 
 } from 'victory-native'
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome' 
 import { SECONDS_IN_DAY } from '../../../constants/Stats'
@@ -99,6 +99,11 @@ const styles = createStyles({
 
 class StatsScreen extends React.Component 
 {
+  static navigationOptions = {
+    title: 'Stats',
+  }
+
+
   constructor(props) {
     super(props)
 
@@ -113,11 +118,6 @@ class StatsScreen extends React.Component
       dates: this._getDateRange(startDateSelection, endDateSelection),
       chartType: props.stats.chartType,
     }
-  }
-
-
-  static navigationOptions = {
-    title: 'Stats',
   }
 
 
@@ -365,6 +365,8 @@ class StatsScreen extends React.Component
         data[key].push(focusData)
       }
     }
+
+    console.warn(data)
 
     return data
   }

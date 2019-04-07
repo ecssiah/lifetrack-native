@@ -48,6 +48,7 @@ class LTConfirm extends React.Component
     rightContent: 'Confirm',
   }
 
+
   render() {
     return (
       <View style={styles.container}>
@@ -74,5 +75,6 @@ class LTConfirm extends React.Component
     )
   }
 }
+
 
 export default LTConfirm

@@ -40,6 +40,7 @@ class FocusScreen extends React.Component
     ),
   })
 
+
   _onActivate = async () => {
     const update = {}
     const focus = this.props.focuses[this.props.selection.id]
@@ -64,6 +65,7 @@ class FocusScreen extends React.Component
 
     this.props.updateFocus(this.props.selection.id, update) 
   }
+
 
   _updateTimer = () => {
     const update = {}
@@ -106,9 +108,11 @@ class FocusScreen extends React.Component
     this.props.updateFocus(this.props.selection.id, update)
   }
 
+
   _onGoalPress = () => {
     this.props.updateFocus(this.props.selection.id, { periods: 0 })
   }
+
 
   render() {
     const focus = this.props.focuses[this.props.selection.id]
@@ -140,6 +144,7 @@ class FocusScreen extends React.Component
   }
 }
 
+
 const mapStateToProps = state => ({
   status: state.status,
   user: state.user,
@@ -148,9 +153,11 @@ const mapStateToProps = state => ({
   focuses: state.focuses,
 })
 
+
 const mapDispatchToProps = dispatch => ({
   updateUser: update => updateUser(dispatch, update),
   updateFocus: (id, update) => updateFocus(dispatch, id, update),
 })
+
 
 export default connect(mapStateToProps, mapDispatchToProps)(FocusScreen)

@@ -32,15 +32,6 @@ const styles = createStyles({
 
 class ProfileScreen extends React.Component 
 {
-  constructor(props) {
-    super(props)
-
-    this.state = {
-      authModalShow: false,
-      email: props.user.email,
-    }
-  }
-
   static navigationOptions = ({navigation}) => ({
     title: 'Profile',
     headerLeft: (
@@ -52,11 +43,23 @@ class ProfileScreen extends React.Component
     ),
   })
 
+
+  constructor(props) {
+    super(props)
+
+    this.state = {
+      authModalShow: false,
+      email: props.user.email,
+    }
+  }
+
+
   _onEmailChange = email => {
     this.setState({
       email,
     })
   }
+
 
   _onEmailSubmit = async () => {
     if (this.state.email !== this.props.user.email) {
@@ -66,6 +69,7 @@ class ProfileScreen extends React.Component
     }
   }
 
+
   _onAuthConfirm = async () => {
     await this.props.updateUserEmail(this.state.email) 
 
@@ -74,12 +78,14 @@ class ProfileScreen extends React.Component
     })
   }
 
+
   _onAuthCancel = () => {
     this.setState({
       authModalShow: false,
       email: this.props.user.email, 
     })
   }
+
 
   render() {
     return (
@@ -108,13 +114,16 @@ class ProfileScreen extends React.Component
   }
 }
 
+
 const mapStateToProps = state => ({
   user: state.user,
 })
+
 
 const mapDispatchToProps = dispatch => ({
   updateUser: update => updateUser(dispatch, update),
   updateUserEmail: email => updateUserEmail(dispatch, email),
 })
+
 
 export default connect(mapStateToProps, mapDispatchToProps)(ProfileScreen)

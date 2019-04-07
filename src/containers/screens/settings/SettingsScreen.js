@@ -33,6 +33,11 @@ const styles = createStyles({
 
 class SettingsScreen extends React.Component 
 {
+  static navigationOptions = {
+    title: 'Settings',
+  }
+
+
   constructor(props) {
     super(props)
 
@@ -43,15 +48,13 @@ class SettingsScreen extends React.Component
     }
   }
 
-  static navigationOptions = {
-    title: 'Settings',
-  }
 
   _onSettingValueChange = settingValue => {
     this.setState({
       settingValue,
     })
   }
+
 
   _onSettingSelect = settingName => {
     let settingValue
@@ -85,6 +88,7 @@ class SettingsScreen extends React.Component
     })
   }
 
+
   _onSettingConfirm = () => {
     const update = {}
 
@@ -113,11 +117,13 @@ class SettingsScreen extends React.Component
     })
   }
 
+
   _onSettingCancel = () => {
     this.setState({
       settingsModalShow: false,
     })
   }
+
 
   _onLogout = () => {
     Alert.alert(
@@ -130,6 +136,7 @@ class SettingsScreen extends React.Component
     )
   }
 
+
   _onLogoutConfirm = async () => {
     for (const key in this.props.focuses) {
       clearInterval(this.props.focuses[key].timer)
@@ -137,6 +144,7 @@ class SettingsScreen extends React.Component
 
     this.props.signOut()
   }
+
 
   _renderLogout = ({item, index}) => {
     if (!item) return null
@@ -153,6 +161,7 @@ class SettingsScreen extends React.Component
     )
   }
 
+
   _renderUsername = ({item, index}) => {
     return (
       <TouchableOpacity
@@ -165,6 +174,7 @@ class SettingsScreen extends React.Component
       </TouchableOpacity>
     )
   }
+
 
   _getSections = () => {
     return [
@@ -203,6 +213,7 @@ class SettingsScreen extends React.Component
     ]
   }
 
+
   render() {
     return (
       <View style={styles.container}>
@@ -224,6 +235,7 @@ class SettingsScreen extends React.Component
   }
 }
 
+
 const mapStateToProps = state => ({
   user: state.user,
   selection: state.selection,
@@ -231,9 +243,11 @@ const mapStateToProps = state => ({
   settings: state.settings,
 })
 
+
 const mapDispatchToProps = dispatch => ({
   signOut: () => signOut(dispatch),
   updateSettings: update => updateSettings(dispatch, update),
 })
+
 
 export default connect(mapStateToProps, mapDispatchToProps)(SettingsScreen)
