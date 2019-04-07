@@ -1,8 +1,9 @@
 import React from 'react'
 import { connect } from 'react-redux'
+import AntDesignIcon from 'react-native-vector-icons/AntDesign'
 import { ScrollView, Switch, TouchableOpacity, View } from 'react-native'
 import { 
-  VictoryBar, VictoryChart, VictoryAxis, VictoryStack 
+  VictoryArea, VictoryBar, VictoryChart, VictoryAxis, VictoryStack, VictoryTheme 
 } from 'victory-native'
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome' 
 import { SECONDS_IN_DAY } from '../../../constants/Stats'
@@ -62,6 +63,17 @@ const styles = createStyles({
     marginTop: -5, 
     marginBottom: -6,
     transform: [ { scaleX: .48 }, { scaleY: .48 } ]
+  },
+  chartSwitchContainer: {
+    flexDirection: 'row',
+    marginTop: 2,
+  },
+  chartSwitch: {
+    marginLeft: -12,
+    marginRight: -6,
+    marginTop: -5, 
+    marginBottom: -6,
+    transform: [ { scaleX: .48 }, { scaleY: .48 } ],
   },
   mainText: {
     fontSize: 18,
@@ -363,16 +375,26 @@ class StatsScreen extends React.Component
     const stack = []
 
     for (const key of this._getMainChartKeys()) {
-      const focus = this.props.focuses[key]
-
-      stack.push(
-        <VictoryBar
-          key={key}
-          data={data[key]}
-          x='date'
-          y='seconds'
-        />
-      )
+      if (this.props.stats.chartType == 'area') {
+        stack.push(
+          <VictoryArea
+            key={key}
+            data={data[key]}
+            x='date'
+            y='seconds'
+            interpolation={'basis'}
+          />
+        )
+      } else {
+        stack.push(
+          <VictoryBar
+            key={key}
+            data={data[key]}
+            x='date'
+            y='seconds'
+          />
+        )
+      }
     }
 
     return stack
@@ -402,13 +424,16 @@ class StatsScreen extends React.Component
         <View style={styles.mainChartContainer}>
           <VictoryChart
             domainPadding={20}
+            theme={VictoryTheme.material}
           >
             <VictoryAxis
               tickValues={this.state.dates}
               tickFormat={this._formatMainChartXAxis}
             />
 
-            <VictoryStack>
+            <VictoryStack
+              colorScale={this._getMainChartColors()} 
+            >
               {this._getMainChartStack(mainChart.data)}
             </VictoryStack>
           </VictoryChart>
@@ -425,6 +450,29 @@ class StatsScreen extends React.Component
               {this._displayStartDate()}
             </LTText>
           </TouchableOpacity> 
+
+          <View style={styles.chartSwitchContainer}>
+            <AntDesignIcon
+              color={'black'}
+              name={'barschart'} 
+              size={22} 
+            />
+
+            <Switch 
+              style={styles.chartSwitch} 
+              trackColor={{ true: Color.primary, false: Color.primary }}
+              value={this.props.stats.chartType == 'area'}
+              onValueChange={value => {
+                this.props.updateStats({ chartType: value ? 'area': 'bar' })
+              }}
+            />
+
+            <AntDesignIcon
+              color={'black'}
+              name={'areachart'} 
+              size={22} 
+            />
+          </View>
 
           <TouchableOpacity 
             activeOpacity={0.7}
