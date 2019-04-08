@@ -3,7 +3,6 @@ import { getDay } from '../../lib/utils';
 import { 
   DEFAULT_WORK_PERIOD, DEFAULT_WORK_GOAL, DEFAULT_BREAK_PERIOD 
 } from '../constants/Settings'
-import { updateFocuses } from './FocusesHandlers'
 import { SET_CATEGORIES, UNCATEGORIZED } from '../constants/Categories'
 import { SET_SETTINGS } from '../constants/Settings'
 import { SET_USER } from '../constants/User'

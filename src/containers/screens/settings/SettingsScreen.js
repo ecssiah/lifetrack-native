@@ -228,7 +228,7 @@ class SettingsScreen extends React.Component
           settingValue={this.state.settingValue}
           onConfirm={this._onSettingConfirm} 
           onCancel={this._onSettingCancel}
-          onSettingValueChange={value => this._onSettingValueChange(value)}
+          onSettingValueChange={this._onSettingValueChange}
         />
       </View>
     )
