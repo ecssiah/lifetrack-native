@@ -77,7 +77,7 @@ class StatsChart extends React.Component
 
           <VictoryStack 
             colorScale={this.props.colors} 
-            animate={{ duration: 1000 }}
+            animate={{ duration: 720 }}
           >
             {this._getMainChartStack()}
           </VictoryStack>
