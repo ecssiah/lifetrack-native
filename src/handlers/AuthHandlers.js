@@ -8,16 +8,18 @@ import { SET_CATEGORIES, UNCATEGORIZED } from '../constants/Categories'
 import { SET_SETTINGS } from '../constants/Settings'
 import { SET_USER } from '../constants/User'
 import { SET_STATS } from '../constants/Stats';
+import { SET_FOCUSES } from '../constants/Focuses';
 
 export async function signUp(dispatch, email, password) {
   await auth.createUserWithEmailAndPassword(email, password)
 
-  const today = getDay()
+  const startDate = getDay().getTime()
+  const endDate = getDay(6).getTime()
 
   const userData = {
     user: {
       email,
-      startDate: today, 
+      startDate,
     },
     settings: {
       workPeriod: DEFAULT_WORK_PERIOD,
@@ -28,9 +30,10 @@ export async function signUp(dispatch, email, password) {
       [UNCATEGORIZED]: { show: true },
     },
     stats: {
-      startDate: today,
-      endDate: getDay(6),
+      startDate,
+      endDate,
     },
+    focuses: {},
   }
 
   await setUserData(userData)
@@ -39,6 +42,7 @@ export async function signUp(dispatch, email, password) {
   dispatch({ type: SET_SETTINGS, settings: userData.settings })
   dispatch({ type: SET_CATEGORIES, categories: userData.categories })
   dispatch({ type: SET_STATS, stats: userData.stats })
+  dispatch({ type: SET_FOCUSES, focuses: userData.focuses })
 }
 
 export async function signIn(dispatch, email, password) {
@@ -82,11 +86,6 @@ export async function loadUser(dispatch) {
   const categories = userData[2].data()
   const stats = userData[3].data()
 
-  dispatch({ type: SET_USER, user })
-  dispatch({ type: SET_SETTINGS, settings })
-  dispatch({ type: SET_CATEGORIES, categories })
-  dispatch({ type: SET_STATS, stats })
-
   const focuses = {} 
 
   userData[4].forEach(doc => {
@@ -100,7 +99,11 @@ export async function loadUser(dispatch) {
     focuses[doc.id] = focus
   })
 
-  updateFocuses(dispatch, focuses)
+  dispatch({ type: SET_USER, user })
+  dispatch({ type: SET_SETTINGS, settings })
+  dispatch({ type: SET_CATEGORIES, categories })
+  dispatch({ type: SET_STATS, stats })
+  dispatch({ type: SET_FOCUSES, focuses })
 }
 
 async function loadUserData() {
@@ -126,11 +129,13 @@ async function setUserData(userData) {
   const settingsDoc = db.collection('settings').doc(auth.currentUser.uid) 
   const categoriesDoc = db.collection('categories').doc(auth.currentUser.uid)
   const statsDoc = db.collection('stats').doc(auth.currentUser.uid)
+  const focusesDoc = db.collection('focuses').doc(auth.currentUser.uid)
 
   return Promise.all([
     userDoc.set(userData.user),
     settingsDoc.set(userData.settings),
     categoriesDoc.set(userData.categories),
     statsDoc.set(userData.stats),
+    focusesDoc.set(userData.focuses),
   ])
 }

@@ -172,7 +172,8 @@ class StatsScreen extends React.Component
       for (let i = 0; i < dates.length; i++) {
         const focusData = { date: dates[i] } 
         const dateString = new Date(dates[i]).toLocaleDateString(
-          undefined, { 'month': 'numeric', 'day': 'numeric', 'year': 'numeric' }
+          undefined, 
+          { 'month': 'numeric', 'day': 'numeric', 'year': 'numeric' }
         )
 
         if (focus.visible && focus.history[dateString]) {
@@ -190,12 +191,14 @@ class StatsScreen extends React.Component
 
 
   _onChartTypeChange = value => {
+    const chartType = value ? 'area' : 'bar'
+
     this.props.updateStats({ 
-      chartType: value ? 'area': 'bar', 
+      chartType,
     })
 
     this.setState({
-      chartType: value ? 'area' : 'bar',
+      chartType,
     })
   }
 
