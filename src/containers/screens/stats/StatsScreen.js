@@ -206,12 +206,16 @@ class StatsScreen extends React.Component
   
 
   render() {
+    const data = this._getMainChartData()
+    const keys = this._getMainChartKeys()
+    const colors = this._getMainChartColors()
+
     return (
       <View style={styles.container}>
         <StatsChart
-          data={this._getMainChartData()}
-          keys={this._getMainChartKeys()}
-          colors={this._getMainChartColors()}
+          data={data}
+          keys={keys}
+          colors={colors}
           dates={this.state.dates}
           chartType={this.state.chartType}
         />
@@ -227,8 +231,8 @@ class StatsScreen extends React.Component
 
         <StatsLegend
           focuses={this.props.focuses}
-          keys={this._getMainChartKeys()}
-          colors={this._getMainChartColors()}
+          keys={keys}
+          colors={colors}
           onFocusVisibilityChange={this._onFocusVisibilityChange}
         />
 

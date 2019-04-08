@@ -45,10 +45,8 @@ class StatsLegend extends React.Component
 {
   _getLegendLeftColumn = () => {
     const legendItems = []
-    const keys = this.props.keys
-    const colors = this.props.colors
 
-    keys.forEach((key, index) => {
+    this.props.keys.forEach((key, index) => {
       if (index % 2 == 0) {
         const focus = this.props.focuses[key]
 
@@ -56,9 +54,9 @@ class StatsLegend extends React.Component
           <View key={index} style={styles.item}>
             <FontAwesomeIcon
               style={styles.icon}
-              color={colors[index]}
               name={'circle'} 
               size={20} 
+              color={this.props.colors[index]}
             />
 
             <LTText style={styles.text}>
@@ -67,8 +65,8 @@ class StatsLegend extends React.Component
 
             <Switch 
               style={styles.switch} 
+              value={focus.visible}
               trackColor={{ true: Color.primary, false: Color.secondary }}
-              value={this.props.focuses[keys[index]].visible}
               onValueChange={value => {
                 this.props.onFocusVisibilityChange(key, value)
               }}
@@ -84,10 +82,8 @@ class StatsLegend extends React.Component
 
   _getLegendRightColumn = () => {
     const legendItems = []
-    const keys = this.props.keys
-    const colors = this.props.colors
 
-    keys.forEach((key, index) => {
+    this.props.keys.forEach((key, index) => {
       if (index % 2 == 1) {
         const focus = this.props.focuses[key]
 
@@ -95,9 +91,9 @@ class StatsLegend extends React.Component
           <View key={index} style={styles.item}>
             <FontAwesomeIcon
               style={styles.icon}
-              color={colors[index]}
               name={'circle'} 
               size={20} 
+              color={this.props.colors[index]}
             />
 
             <LTText style={styles.text}>
@@ -106,8 +102,8 @@ class StatsLegend extends React.Component
 
             <Switch 
               style={styles.switch} 
+              value={focus.visible}
               trackColor={{ true: Color.primary, false: Color.secondary }}
-              value={this.props.focuses[key].visible}
               onValueChange={value => {
                 this.props.onFocusVisibilityChange(key, value)
               }}
