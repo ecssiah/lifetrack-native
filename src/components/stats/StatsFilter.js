@@ -6,6 +6,15 @@ import createStyles, { Color } from '../../styles';
 import LTText from '../LT/LTText';
 
 const styles = createStyles({
+  container: {
+    height: 32,
+    backgroundColor: Color.secondary,
+    borderTopWidth: 2,
+    borderBottomWidth: 2,
+    borderColor: Color.primary,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
   chartSwitchContainer: {
     flexDirection: 'row',
     marginTop: 3,
@@ -29,15 +38,6 @@ const styles = createStyles({
     borderWidth: 1,
     borderRadius: 6,
     borderColor: 'black',
-  },
-  filterButtonsContainer: {
-    height: 32,
-    backgroundColor: Color.secondary,
-    borderTopWidth: 2,
-    borderBottomWidth: 2,
-    borderColor: Color.primary,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
   },
 })
 
@@ -69,7 +69,7 @@ class StatsFilter extends React.Component
 
   render() {
     return (
-      <View style={styles.filterButtonsContainer}>
+      <View style={styles.container}>
         <TouchableOpacity 
           activeOpacity={0.7}
           onPress={this.props.onStartDatePress}
@@ -87,7 +87,7 @@ class StatsFilter extends React.Component
           />
 
           <Switch 
-            style={styles.chartSwitch} 
+            style={styles.chartSwitch}
             trackColor={{ true: Color.primary, false: Color.primary }}
             ios_backgroundColor={Color.primary}
             value={this.props.chartType == 'area'}
