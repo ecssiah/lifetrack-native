@@ -11,28 +11,28 @@ const styles = createStyles({
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
-  legendLeftColumn: {
+  leftColumn: {
     flex: 1,
   },
-  legendRightColumn: {
+  rightColumn: {
     flex: 1,
   },
-  legendIcon: {
+  icon: {
     marginLeft: -2, 
   },
-  legendItem: {
+  item: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     marginVertical: 4,
     marginHorizontal: 8,
   },
-  legendText: {
+  text: {
     textAlign: 'left',
     width: 120,
     marginVertical: 2,
     marginHorizontal: 6,
   },
-  legendSwitch: {
+  switch: {
     marginLeft: -12,
     marginRight: -6,
     marginTop: -5, 
@@ -53,23 +53,25 @@ class StatsLegend extends React.Component
         const focus = this.props.focuses[key]
 
         legendItems.push(
-          <View key={index} style={styles.legendItem}>
+          <View key={index} style={styles.item}>
             <FontAwesomeIcon
-              style={styles.legendIcon}
+              style={styles.icon}
               color={colors[index]}
               name={'circle'} 
               size={20} 
             />
 
-            <LTText style={styles.legendText}>
+            <LTText style={styles.text}>
               {focus.name}
             </LTText>
 
             <Switch 
-              style={styles.legendSwitch} 
+              style={styles.switch} 
               trackColor={{ true: Color.primary, false: Color.secondary }}
               value={this.props.focuses[keys[index]].visible}
-              onValueChange={value => this.props.onFocusVisibilityChange(key, value)}
+              onValueChange={value => {
+                this.props.onFocusVisibilityChange(key, value)
+              }}
             />
           </View>
         )
@@ -90,23 +92,25 @@ class StatsLegend extends React.Component
         const focus = this.props.focuses[key]
 
         legendItems.push(
-          <View key={index} style={styles.legendItem}>
+          <View key={index} style={styles.item}>
             <FontAwesomeIcon
-              style={styles.legendIcon}
+              style={styles.icon}
               color={colors[index]}
               name={'circle'} 
               size={20} 
             />
 
-            <LTText style={styles.legendText}>
+            <LTText style={styles.text}>
               {focus.name}
             </LTText>
 
             <Switch 
-              style={styles.legendSwitch} 
+              style={styles.switch} 
               trackColor={{ true: Color.primary, false: Color.secondary }}
               value={this.props.focuses[key].visible}
-              onValueChange={value => this.props.onFocusVisibilityChange(key, value)}
+              onValueChange={value => {
+                this.props.onFocusVisibilityChange(key, value)
+              }}
             />
           </View>
         )
@@ -123,11 +127,11 @@ class StatsLegend extends React.Component
         <LTSpacer small />
 
         <View style={styles.legendContainer}>
-          <View style={styles.legendLeftColumn}>
+          <View style={styles.leftColumn}>
             {this._getLegendLeftColumn()}
           </View>
 
-          <View style={styles.legendRightColumn}>
+          <View style={styles.rightColumn}>
             {this._getLegendRightColumn()}
           </View>
         </View>
