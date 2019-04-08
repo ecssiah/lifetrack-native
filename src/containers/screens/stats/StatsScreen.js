@@ -8,8 +8,8 @@ import createStyles from '../../../styles'
 
 import DateModal from '../../../components/modals/DateModal';
 import StatsChart from '../../../components/stats/StatsChart';
-import StatsFilter from './StatsFilter';
-import StatsLegend from './StatsLegend';
+import StatsFilter from '../../../components/stats/StatsFilter';
+import StatsLegend from '../../../components/stats/StatsLegend';
 
 const styles = createStyles({
   container: {
@@ -41,26 +41,17 @@ class StatsScreen extends React.Component
   }
 
 
-  _getDateRange = (date1, date2) => {
-    const dates = []
-    const d1 = new Date(date1)
-    const d2 = new Date(date2)
-
-    d2.setDate(d2.getDate() + 1)
-
-    while (d1.getTime() != d2.getTime()) {
-      dates.push(d1.getTime())
-      d1.setDate(d1.getDate() + 1)
-    }
-
-    return dates
-  }
-
-
   _onStartDatePress = () => {
     this.setState({
       startDateModalShow: true,
       startDateSelection: new Date(this.props.stats.startDate),
+    })
+  }
+
+
+  _onStartDateCancel = () => {
+    this.setState({
+      startDateModalShow: false,
     })
   }
 
@@ -92,17 +83,17 @@ class StatsScreen extends React.Component
   }
 
 
-  _onStartDateCancel = () => {
-    this.setState({
-      startDateModalShow: false,
-    })
-  }
-
-
   _onEndDatePress = () => {
     this.setState({
       endDateModalShow: true,
       endDateSelection: new Date(this.props.stats.endDate),
+    })
+  }
+
+
+  _onEndDateCancel = () => {
+    this.setState({
+      endDateModalShow: false,
     })
   }
 
@@ -134,10 +125,19 @@ class StatsScreen extends React.Component
   }
 
 
-  _onEndDateCancel = () => {
-    this.setState({
-      endDateModalShow: false,
-    })
+  _getDateRange = (date1, date2) => {
+    const dates = []
+    const d1 = new Date(date1)
+    const d2 = new Date(date2)
+
+    d2.setDate(d2.getDate() + 1)
+
+    while (d1.getTime() != d2.getTime()) {
+      dates.push(d1.getTime())
+      d1.setDate(d1.getDate() + 1)
+    }
+
+    return dates
   }
 
 

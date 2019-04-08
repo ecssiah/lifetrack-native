@@ -1,9 +1,9 @@
 import React from 'react'
 import { Switch, TouchableOpacity, View } from 'react-native'
 import AntDesignIcon from 'react-native-vector-icons/AntDesign'
-import createStyles, { Color } from '../../../styles';
+import createStyles, { Color } from '../../styles';
 
-import LTText from '../../../components/LT/LTText';
+import LTText from '../LT/LTText';
 
 const styles = createStyles({
   chartSwitchContainer: {
