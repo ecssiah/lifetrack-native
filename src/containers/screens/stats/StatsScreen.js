@@ -191,7 +191,7 @@ class StatsScreen extends React.Component
 
   _onChartTypeChange = value => {
     this.props.updateStats({ 
-      chartType: value ? 'area': 'bar' 
+      chartType: value ? 'area': 'bar', 
     })
 
     this.setState({
@@ -238,7 +238,7 @@ class StatsScreen extends React.Component
 
         <DateModal
           title={'Start Date'}
-          show={this.state.startDateModalShow} 
+          show={this.state.startDateModalShow}
           date={this.state.startDateSelection}
           onDateChange={this._onStartDateChange}
           onConfirm={this._onStartDateSubmit}
@@ -247,7 +247,7 @@ class StatsScreen extends React.Component
 
         <DateModal
           title={'End Date'}
-          show={this.state.endDateModalShow} 
+          show={this.state.endDateModalShow}
           date={this.state.endDateSelection}
           onDateChange={this._onEndDateChange}
           onConfirm={this._onEndDateSubmit}
