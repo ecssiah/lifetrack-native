@@ -60,6 +60,7 @@ class StatsChart extends React.Component
           domainPadding={8}
           padding={{ top: 12, bottom: 34, left: 12, right: 12 }}
           maxDomain={{ y: SECONDS_IN_DAY }}
+          animate={{ duration: 1000 }}
         >
           <VictoryAxis
             tickValues={this.props.dates}

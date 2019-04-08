@@ -191,12 +191,7 @@ class SettingsScreen extends React.Component
           { name: WORK_PERIOD, value: this.props.settings.workPeriod },
           { name: BREAK_PERIOD, value: this.props.settings.breakPeriod },
           { name: WORK_GOAL, value: this.props.settings.workGoal },
-        ],
-      },
-      {
-        title: '',
-        data: [
-          { name: 'Categories', value: ''},
+          { name: 'Categories', value: '>'},
         ],
       },
       {

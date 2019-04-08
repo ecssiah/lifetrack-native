@@ -27,6 +27,9 @@ const styles = createStyles({
   yearPicker: {
     width: 64,
   },
+  pickerItem: {
+    fontFamily: Font.primary,
+  },
 })
 
 const MONTHS = [
@@ -56,11 +59,11 @@ class DateModal extends React.Component
   _getDateItems = () => {
     const dateItems = []
 
-    const totalDays = daysInMonth(
+    const numDays = daysInMonth(
       this.props.date.getMonth() + 1, this.props.date.getDay()
     ) 
 
-    for (let i = 1; i <= totalDays; i++) {
+    for (let i = 1; i <= numDays; i++) {
       dateItems.push(
         <Picker.Item 
           key={i} 
@@ -134,7 +137,7 @@ class DateModal extends React.Component
         <View style={styles.datePickers} >
           <Picker
             style={styles.monthPicker}
-            itemStyle={{ fontFamily: Font.primary }}
+            itemStyle={styles.pickerItem}
             selectedValue={this.props.date.getMonth()}
             onValueChange={this._onMonthChange}
           >
@@ -143,7 +146,7 @@ class DateModal extends React.Component
 
           <Picker
             style={styles.dayPicker}
-            itemStyle={{ fontFamily: Font.primary }}
+            itemStyle={styles.pickerItem}
             selectedValue={this.props.date.getDate()}
             onValueChange={this._onDateChange}
           >
@@ -152,7 +155,7 @@ class DateModal extends React.Component
 
           <Picker
             style={styles.yearPicker}
-            itemStyle={{ fontFamily: Font.primary }}
+            itemStyle={styles.pickerItem}
             selectedValue={this.props.date.getFullYear()}
             onValueChange={this._onYearChange}
           >
