@@ -243,7 +243,7 @@ class StatsScreen extends React.Component
           title={'Start Date'}
           show={this.state.startDateModalShow}
           date={this.state.startDateSelection}
-          onDateChange={this._onStartDateChange}
+          onChange={this._onStartDateChange}
           onConfirm={this._onStartDateSubmit}
           onCancel={this._onStartDateCancel}
         />
@@ -252,7 +252,7 @@ class StatsScreen extends React.Component
           title={'End Date'}
           show={this.state.endDateModalShow}
           date={this.state.endDateSelection}
-          onDateChange={this._onEndDateChange}
+          onChange={this._onEndDateChange}
           onConfirm={this._onEndDateSubmit}
           onCancel={this._onEndDateCancel}
         />

@@ -98,7 +98,7 @@ class DateModal extends React.Component
     const d = new Date(this.props.date)
     d.setMonth(month)
 
-    this.props.onDateChange(d)
+    this.props.onChange(d)
   }
 
   
@@ -106,7 +106,7 @@ class DateModal extends React.Component
     const d = new Date(this.props.date)
     d.setDate(date)
 
-    this.props.onDateChange(d)
+    this.props.onChange(d)
   }
 
 
@@ -114,7 +114,7 @@ class DateModal extends React.Component
     const d = new Date(this.props.date)
     d.setFullYear(year)
 
-    this.props.onDateChange(d)
+    this.props.onChange(d)
   }
 
 
