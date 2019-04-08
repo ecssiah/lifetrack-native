@@ -33,7 +33,6 @@ export async function signUp(dispatch, email, password) {
       startDate,
       endDate,
     },
-    focuses: {},
   }
 
   await setUserData(userData)
@@ -42,7 +41,7 @@ export async function signUp(dispatch, email, password) {
   dispatch({ type: SET_SETTINGS, settings: userData.settings })
   dispatch({ type: SET_CATEGORIES, categories: userData.categories })
   dispatch({ type: SET_STATS, stats: userData.stats })
-  dispatch({ type: SET_FOCUSES, focuses: userData.focuses })
+  dispatch({ type: SET_FOCUSES, focuses: {} })
 }
 
 export async function signIn(dispatch, email, password) {
@@ -129,13 +128,11 @@ async function setUserData(userData) {
   const settingsDoc = db.collection('settings').doc(auth.currentUser.uid) 
   const categoriesDoc = db.collection('categories').doc(auth.currentUser.uid)
   const statsDoc = db.collection('stats').doc(auth.currentUser.uid)
-  const focusesDoc = db.collection('focuses').doc(auth.currentUser.uid)
 
   return Promise.all([
     userDoc.set(userData.user),
     settingsDoc.set(userData.settings),
     categoriesDoc.set(userData.categories),
     statsDoc.set(userData.stats),
-    focusesDoc.set(userData.focuses),
   ])
 }
