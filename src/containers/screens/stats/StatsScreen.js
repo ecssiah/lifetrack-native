@@ -263,7 +263,6 @@ class StatsScreen extends React.Component
 
 
 const mapStateToProps = state => ({
-  user: state.user,
   focuses: state.focuses,
   stats: state.stats,
 })
