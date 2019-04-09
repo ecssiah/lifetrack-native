@@ -82,7 +82,7 @@ class StatsScreen extends React.Component
     if (startDateSelection.getTime() >= this.state.endDateSelection.getTime()) {
       startDateSelection.setFullYear(this.state.endDateSelection.getFullYear())
       startDateSelection.setMonth(this.state.endDateSelection.getMonth())
-      startDateSelection.setDate(this.state.endDateSelection.getDate() - 1)
+      startDateSelection.setDate(this.state.endDateSelection.getDate() - 6)
     }
 
     this.setState({
@@ -124,7 +124,7 @@ class StatsScreen extends React.Component
     if (endDateSelection.getTime() <= this.state.startDateSelection.getTime()) {
       endDateSelection.setFullYear(this.state.startDateSelection.getFullYear())
       endDateSelection.setMonth(this.state.startDateSelection.getMonth())
-      endDateSelection.setDate(this.state.startDateSelection.getDate() + 1)
+      endDateSelection.setDate(this.state.startDateSelection.getDate() + 6)
     }
 
     this.setState({

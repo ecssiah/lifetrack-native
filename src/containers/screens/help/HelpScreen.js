@@ -14,13 +14,17 @@ const styles = createStyles({
   container: {
     flex: 1,
   },
+  subtitle: {
+    fontWeight: 'bold',
+    fontSize: 16,
+  },
   introSection: {
   },
   introHeader: {
     flexDirection: 'row',
     backgroundColor: '#777777',
-    padding: 4,
-    paddingLeft: 20,
+    paddingLeft: 8,
+    paddingVertical: 4,
     borderWidth: 1,
     borderColor: Color.secondary,
   },
@@ -190,7 +194,7 @@ class HelpScreen extends React.Component
           </View>
 
           <View style={styles.focusesBody}>
-            <LTText style={{ fontWeight: 'bold' }}>
+            <LTText style={styles.subtitle}>
               Focuses Screen:
             </LTText>
 
@@ -219,7 +223,7 @@ class HelpScreen extends React.Component
 
             <LTSpacer />
 
-            <LTText style={{ fontWeight: 'bold' }}>
+            <LTText style={styles.subtitle}>
               Focus Screen:
             </LTText>
 
@@ -256,7 +260,7 @@ class HelpScreen extends React.Component
 
             <LTSpacer />
               
-            <LTText style={{ fontWeight: 'bold' }}>
+            <LTText style={styles.subtitle}>
               Focus Edit Screen:
             </LTText>
 
@@ -294,7 +298,7 @@ class HelpScreen extends React.Component
           </View>
 
           <View style={styles.statsBody}>
-            <LTText style={{ fontWeight: 'bold' }}>
+            <LTText style={styles.subtitle}>
               Stats Screen:
             </LTText>
 
@@ -367,7 +371,7 @@ class HelpScreen extends React.Component
           </View>
 
           <View style={styles.settingsBody}>
-            <LTText style={{ fontWeight: 'bold' }}>
+            <LTText style={styles.subtitle}>
               Settings Screen:
             </LTText>
 
@@ -396,7 +400,14 @@ class HelpScreen extends React.Component
 
             <LTSpacer />
 
-            <LTText style={{ fontWeight: 'bold' }}>
+            <LTText>
+              At the top left of the Settings Screen, there is a help icon
+              that allows the user to return to this Help Screen.
+            </LTText>
+
+            <LTSpacer />
+
+            <LTText style={styles.subtitle}>
               Profile Screen:
             </LTText>
                 
@@ -408,7 +419,7 @@ class HelpScreen extends React.Component
 
             <LTSpacer />
 
-            <LTText style={{ fontWeight: 'bold' }}>
+            <LTText style={styles.subtitle}>
               Categories Screen:
             </LTText>
 
@@ -419,15 +430,6 @@ class HelpScreen extends React.Component
               automatically moved into the 'Uncategorized' category. This 
               category is only visible when it contains at least one focus.
             </LTText>
-
-            <LTSpacer />
-
-            <LTText>
-              At the top left of the Settings Screen, there is a help icon
-              that allows the user to return to this Help Screen.
-            </LTText>
-
-            <LTSpacer />
           </View>
         </View>
       </ScrollView>
