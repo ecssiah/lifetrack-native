@@ -223,6 +223,11 @@ class StatsScreen extends React.Component
   }
 
 
+  _onCategoryVisiblityChange = (name, value) => {
+
+  }
+
+
   _onFocusVisibilityChange = (key, value) => {
     this.props.updateFocus(key, { visible: value })
   }
@@ -253,9 +258,11 @@ class StatsScreen extends React.Component
         />
 
         <StatsLegend
+          categories={this.props.categories}
           focuses={this.props.focuses}
           keys={keys}
           colors={colors}
+          onCategoryVisibilityChange={this._onCategoryVisiblityChange}
           onFocusVisibilityChange={this._onFocusVisibilityChange}
         />
 
@@ -283,6 +290,7 @@ class StatsScreen extends React.Component
 
 
 const mapStateToProps = state => ({
+  categories: state.categories,
   focuses: state.focuses,
   stats: state.stats,
 })
