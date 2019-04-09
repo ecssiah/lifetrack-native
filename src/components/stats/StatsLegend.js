@@ -21,25 +21,20 @@ const styles = createStyles({
 class StatsLegend extends React.Component
 {
   _getList = () => {
-    const legendItems = []
-
-    this.props.keys.forEach((key, index) => {
+    return this.props.keys.map((key, index) => {
       const focus = this.props.focuses[key]
-      focus.id = key
 
-      legendItems.push(
+      return (
         <LegendItem
           key={key}
           focus={focus}
           color={this.props.colors[index]}
-          onValueChange={value => 
+          onValueChange={value =>
             this.props.onFocusVisibilityChange(key, value)
           }
         />
       )
     })
-
-    return legendItems
   }
 
   render() {

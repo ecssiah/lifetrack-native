@@ -73,11 +73,10 @@ class FocusList extends React.Component
   }
 
   _getSections = () => {
-    let categoryNames = Object.keys(this.props.categories)
-    categoryNames = categoryNames.filter(name => name !== UNCATEGORIZED)
-    categoryNames.sort((a, b) =>
-      a.localeCompare(b, undefined, { numeric: true }
-    ))
+    const categoryNames = Object.keys(this.props.categories)
+      .filter(name => name !== UNCATEGORIZED)
+      .sort((a, b) => a.localeCompare(b, undefined, { numeric: true }))
+
     categoryNames.push(UNCATEGORIZED)
 
     return categoryNames.reduce(this._sectionsReducer, [])

@@ -17,13 +17,10 @@ class CategoryList extends React.Component
   _getCategoryData = () => {
     const categoryNames = Object.keys(this.props.categories)
 
-    const data = categoryNames.filter(name => {
-      return name !== UNCATEGORIZED
-    }).sort((a, b) => {
-      return a.localeCompare(b, undefined, { numeric: true })
-    }).map(name => {
-      return { name, value: '' }
-    })
+    const data = categoryNames
+      .filter(name => name !== UNCATEGORIZED)
+      .sort((a, b) => a.localeCompare(b, undefined, { numeric: true }))
+      .map(name => { return { name, value: '' }})
 
     return data
   }
