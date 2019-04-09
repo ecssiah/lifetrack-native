@@ -299,9 +299,9 @@ class HelpScreen extends React.Component
             </LTText>
 
             <LTText>
-              The Stats Screen is found at the lower left of the bottom 
-              navigation bar. It allows the user to view a chart that displays
-              longterm statistics related to their focus history.
+              The Stats Screen displays the history of the account's focuses. 
+              It can be reached from the graph icon at the lower left of the 
+              bottom navigation bar.
             </LTText>
 
             <Image 

@@ -57,7 +57,7 @@ class StatsChart extends React.Component
     return (
       <View>
         <VictoryChart 
-          domainPadding={8}
+          domainPadding={12}
           padding={{ top: 12, bottom: 34, left: 12, right: 12 }}
           maxDomain={{ y: SECONDS_IN_DAY }}
         >
