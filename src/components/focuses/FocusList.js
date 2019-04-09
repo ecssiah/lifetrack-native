@@ -48,7 +48,9 @@ class FocusList extends React.Component
 
       if (focuses.length > 0) {
         if (category.show) {
-          focuses.sort((a, b) => a.name.localeCompare(b.name))
+          focuses.sort((a, b) => a.name.localeCompare(
+            b.name, undefined, { numeric: true }
+          ))
           result.push({ ...section, data: focuses })
         } else {
           result.push(section)
@@ -58,7 +60,9 @@ class FocusList extends React.Component
       if (category.show) {
         const focuses = this._findCategoryFocuses(name)
 
-        focuses.sort((a, b) => a.name.localeCompare(b.name))
+        focuses.sort((a, b) => a.name.localeCompare(
+          b.name, undefined, { numeric: true }
+        ))
         result.push({ ...section, data: focuses })
       } else {
         result.push(section)
@@ -71,7 +75,9 @@ class FocusList extends React.Component
   _getSections = () => {
     let categoryNames = Object.keys(this.props.categories)
     categoryNames = categoryNames.filter(name => name !== UNCATEGORIZED)
-    categoryNames.sort((a, b) => a.localeCompare(b))
+    categoryNames.sort((a, b) =>
+      a.localeCompare(b, undefined, { numeric: true }
+    ))
     categoryNames.push(UNCATEGORIZED)
 
     return categoryNames.reduce(this._sectionsReducer, [])

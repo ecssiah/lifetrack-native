@@ -195,19 +195,19 @@ class HelpScreen extends React.Component
             </LTText>
 
             <LTText>
-              The Focuses Screen is the first screen loaded after signing in. 
-              It provides a list of the user's focuses organized by category. 
-              Each category name can be selected to hide its focuses. 
-              Selecting any of the focuses will take the user to the Focus 
-              Screen. It can also be found by selecting the target icon in the 
-              middle of the bottom navigation bar.
+              The Focuses Screen is the first screen loaded after signing in. It 
+              provides an interactive list of all focuses. It can be reached by 
+              selecting the target icon in the middle of the bottom navigation 
+              bar. 
             </LTText>
 
             <LTSpacer />
 
             <LTText>
-              At the top right of the Focuses Screen, there is a plus icon
-              that allows the user to create a new focus.
+              Each category can be selected to hide its focuses. Selecting any 
+              of the focuses will take the user to the Focus Screen. At the top 
+              right of the Focuses Screen, there is a plus icon that allows the 
+              user to create a new focus.
             </LTText>
 
             <LTSpacer />
@@ -339,6 +339,15 @@ class HelpScreen extends React.Component
               Each focus also has a switch next to it that allows the user to
               hide its data.
             </LTText>
+
+            <LTSpacer />
+
+            <LTText>
+              At the top left of the Stats Screen, there is a help icon
+              that allows the user to return to this Help Screen.
+            </LTText>
+
+            <LTSpacer />
           </View>
         </View>
 
@@ -413,6 +422,12 @@ class HelpScreen extends React.Component
 
             <LTSpacer />
 
+            <LTText>
+              At the top left of the Settings Screen, there is a help icon
+              that allows the user to return to this Help Screen.
+            </LTText>
+
+            <LTSpacer />
           </View>
         </View>
       </ScrollView>

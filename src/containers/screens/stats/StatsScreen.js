@@ -166,7 +166,7 @@ class StatsScreen extends React.Component
       const nameA = this.props.focuses[a].name
       const nameB = this.props.focuses[b].name
 
-      return nameA.localeCompare(nameB)
+      return nameA.localeCompare(nameB, undefined, { numeric: true })
     })
 
     return keys

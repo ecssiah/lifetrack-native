@@ -20,7 +20,7 @@ class CategoryList extends React.Component
     const data = categoryNames.filter(name => {
       return name !== UNCATEGORIZED
     }).sort((a, b) => {
-      return a.localeCompare(b)
+      return a.localeCompare(b, undefined, { numeric: true })
     }).map(name => {
       return { name, value: '' }
     })
