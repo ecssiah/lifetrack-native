@@ -26,7 +26,7 @@ class FocusesScreen extends React.Component
       <LTIcon
         type='md-help'
         size={26}
-        onPress={() => navigation.getParam('helpSelect')()}
+        onPress={() => navigation.getParam('focusHelpSelect')()}
       />
     ),
     headerRight: (
@@ -52,14 +52,14 @@ class FocusesScreen extends React.Component
 
   componentDidMount() {
     this.props.navigation.setParams({
-      helpSelect: this._helpSelect,
+      focusHelpSelect: this._focusHelpSelect,
       addFocusSelect: this._onAddFocusSelect,
     })
   }
 
   
-  _helpSelect = () => {
-    this.props.navigation.navigate('Help')
+  _focusesHelpSelect = () => {
+    this.props.navigation.navigate('FocusHelp')
   }
 
 

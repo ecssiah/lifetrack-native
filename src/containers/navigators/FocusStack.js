@@ -12,7 +12,7 @@ const routeConfig = {
   Focuses: FocusesScreen,
   Focus: FocusScreen,
   FocusEdit: FocusEditScreen,
-  Help: HelpScreen,
+  FocusHelp: HelpScreen,
 }
 
 const navConfig = {

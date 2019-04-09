@@ -10,6 +10,7 @@ import DateModal from '../../../components/modals/DateModal';
 import StatsChart from '../../../components/stats/StatsChart';
 import StatsFilter from '../../../components/stats/StatsFilter';
 import StatsLegend from '../../../components/stats/StatsLegend';
+import LTIcon from '../../../components/LT/LTIcon';
 
 const styles = createStyles({
   container: {
@@ -19,9 +20,16 @@ const styles = createStyles({
 
 class StatsScreen extends React.Component 
 {
-  static navigationOptions = {
+  static navigationOptions = ({ navigation }) => ({
     title: 'Stats',
-  }
+    headerLeft: (
+      <LTIcon
+        type='md-help'
+        size={26}
+        onPress={() => navigation.getParam('statsHelpSelect')()}
+      />
+    ),
+  })
 
 
   constructor(props) {
@@ -38,6 +46,18 @@ class StatsScreen extends React.Component
       chartType: props.stats.chartType,
       dates: this._getDateRange(startDateSelection, endDateSelection),
     }
+  }
+
+
+  componentDidMount() {
+    this.props.navigation.setParams({
+      statsHelpSelect: this._statsHelpSelect,
+    })
+  }
+
+  
+  _statsHelpSelect = () => {
+    this.props.navigation.navigate('StatsHelp')
   }
 
 

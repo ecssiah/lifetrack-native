@@ -11,6 +11,7 @@ import createStyles, { Color, FontSize } from '../../../styles'
 import LTText from '../../../components/LT/LTText'
 import SettingList from '../../../components/setting/SettingList'
 import SettingsModal from '../../../components/modals/SettingsModal'
+import LTIcon from '../../../components/LT/LTIcon';
 
 const styles = createStyles({
   container: {
@@ -33,9 +34,16 @@ const styles = createStyles({
 
 class SettingsScreen extends React.Component 
 {
-  static navigationOptions = {
+  static navigationOptions = ({ navigation }) => ({
     title: 'Settings',
-  }
+    headerLeft: (
+      <LTIcon
+        type='md-help'
+        size={26}
+        onPress={() => navigation.getParam('settingsHelpSelect')()}
+      />
+    ),
+  })
 
 
   constructor(props) {
@@ -46,6 +54,18 @@ class SettingsScreen extends React.Component
       settingValue: '',
       settingsModalShow: false,
     }
+  }
+
+
+  componentDidMount() {
+    this.props.navigation.setParams({
+      settingsHelpSelect: this._settingsHelpSelect,
+    })
+  }
+
+  
+  _settingsHelpSelect = () => {
+    this.props.navigation.navigate('SettingsHelp')
   }
 
 
