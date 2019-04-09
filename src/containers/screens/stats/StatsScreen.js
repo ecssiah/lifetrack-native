@@ -1,16 +1,16 @@
 import React from 'react'
 import { View } from 'react-native'
 import { connect } from 'react-redux'
-import { getUniqueColors } from '../../../../lib/utils'
+import { GraphColors } from '../../../constants/Stats';
 import { updateFocus } from '../../../handlers/FocusesHandlers'
 import { updateStats } from '../../../handlers/StatsHandlers'
 import createStyles from '../../../styles'
 
+import LTIcon from '../../../components/LT/LTIcon';
 import DateModal from '../../../components/modals/DateModal';
 import StatsChart from '../../../components/stats/StatsChart';
 import StatsFilter from '../../../components/stats/StatsFilter';
 import StatsLegend from '../../../components/stats/StatsLegend';
-import LTIcon from '../../../components/LT/LTIcon';
 
 const styles = createStyles({
   container: {
@@ -173,14 +173,6 @@ class StatsScreen extends React.Component
   }
 
 
-  _getMainChartColors = () => {
-    const keys = this._getMainChartKeys()
-    const colors = getUniqueColors(keys.length) 
-
-    return colors
-  }
-
-
   _getMainChartData = () => {
     const data = {}
     const dates = this.state.dates
@@ -236,14 +228,13 @@ class StatsScreen extends React.Component
   render() {
     const data = this._getMainChartData()
     const keys = this._getMainChartKeys()
-    const colors = this._getMainChartColors()
 
     return (
       <View style={styles.container}>
         <StatsChart
           data={data}
           keys={keys}
-          colors={colors}
+          colors={GraphColors}
           dates={this.state.dates}
           chartType={this.state.chartType}
         />
@@ -261,7 +252,7 @@ class StatsScreen extends React.Component
           categories={this.props.categories}
           focuses={this.props.focuses}
           keys={keys}
-          colors={colors}
+          colors={GraphColors}
           onCategoryVisibilityChange={this._onCategoryVisiblityChange}
           onFocusVisibilityChange={this._onFocusVisibilityChange}
         />
@@ -290,7 +281,6 @@ class StatsScreen extends React.Component
 
 
 const mapStateToProps = state => ({
-  categories: state.categories,
   focuses: state.focuses,
   stats: state.stats,
 })
