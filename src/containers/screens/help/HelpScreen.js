@@ -30,7 +30,7 @@ const styles = createStyles({
     paddingTop: 6,
   },
   introBody: {
-    margin: 6,
+    margin: 12,
   },
   focusesSection: {
 
@@ -54,7 +54,7 @@ const styles = createStyles({
     paddingTop: 6,
   },
   focusesBody: {
-    margin: 6,
+    margin: 12,
   },
   statsSection: {
 
@@ -78,15 +78,15 @@ const styles = createStyles({
     paddingTop: 6,
   },
   statsBody: {
-    flex: 1,
-    margin: 6,
+    margin: 12,
   },
   statsMainChartImage: {
-    maxWidth: Screen.w - 12,
-    height: 220,
+    maxWidth: Screen.w -24,
+    maxHeight: 220,
   },
   statsFilterButtonsImage: {
-    maxWidth: Screen.w - 12,
+    margin: 4,
+    maxWidth: Screen.w - 32,
   },
   settingsSection: {
 
@@ -110,7 +110,7 @@ const styles = createStyles({
     paddingTop: 6,
   },
   settingsBody: {
-    margin: 6,
+    margin: 12,
   },
 })
 
@@ -304,17 +304,17 @@ class HelpScreen extends React.Component
                 Stats Screen:
               </LTText>
 
-              <Image 
-                style={styles.statsMainChartImage}
-                source={require('../../../../assets/images/main-chart.png')} 
-                resizeMode='contain'
-              />
-
               <LTText>
                 The Stats Screen is found at the lower left of the bottom 
                 navigation bar. It allows the user to view a chart that displays
                 longterm statistics related to their focus history.
               </LTText>
+
+              <Image 
+                style={styles.statsMainChartImage}
+                source={require('../../../../assets/images/main-chart.png')} 
+                resizeMode='contain'
+              />
 
               <LTSpacer />
 
