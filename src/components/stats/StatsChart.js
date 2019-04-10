@@ -15,7 +15,7 @@ class StatsChart extends React.Component
       options = { month: 'numeric', day: 'numeric' }
     }
 
-    if (index % Math.round(this.props.dates.length / 6) == 0) {
+    if (index % Math.round(this.props.dates.length / 6) === 0) {
       return new Date(value).toLocaleDateString(undefined, options)
     } else {
       return ''
@@ -27,7 +27,7 @@ class StatsChart extends React.Component
     const stack = []
 
     for (const key of this.props.keys) {
-      if (this.props.chartType == 'area') {
+      if (this.props.chartType === 'area') {
         stack.push(
           <VictoryArea
             key={key}

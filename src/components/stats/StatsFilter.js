@@ -90,7 +90,7 @@ class StatsFilter extends React.Component
             style={styles.chartSwitch}
             trackColor={{ true: Color.primary, false: Color.primary }}
             ios_backgroundColor={Color.primary}
-            value={this.props.chartType == 'area'}
+            value={this.props.chartType === 'area'}
             onValueChange={this.props.onChartTypeChange}
           />
 
