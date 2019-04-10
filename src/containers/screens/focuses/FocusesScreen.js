@@ -122,11 +122,10 @@ class FocusesScreen extends React.Component
 
 
   _onCategorySelect = categoryName => {
-    const update = {
-      show: !this.props.categories[categoryName].show,
-    }
-
-    this.props.updateCategory(categoryName, update)
+    this.props.updateCategory(
+      categoryName, 
+      { show: !this.props.categories[categoryName].show }
+    )
   }
 
 
