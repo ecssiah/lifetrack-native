@@ -5,6 +5,7 @@
 	};
 	objectVersion = 46;
 	objects = {
+
 /* Begin PBXBuildFile section */
 		00C302E51ABCBA2D00DB3ED1 /* libRCTActionSheet.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00C302AC1ABCB8CE00DB3ED1 /* libRCTActionSheet.a */; };
 		00C302E71ABCBA2D00DB3ED1 /* libRCTGeolocation.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00C302BA1ABCB90400DB3ED1 /* libRCTGeolocation.a */; };
@@ -49,6 +50,8 @@
 		7BAD2EB6220A253000F1F3CA /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 7BAD2EB4220A253000F1F3CA /* GoogleService-Info.plist */; };
 		7BAD2EB7220A253000F1F3CA /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 7BAD2EB4220A253000F1F3CA /* GoogleService-Info.plist */; };
 		7BAD2EB8220A253000F1F3CA /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 7BAD2EB4220A253000F1F3CA /* GoogleService-Info.plist */; };
+		7BC76285225EE1770074074F /* libRNSound.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7BC76280225EE13E0074074F /* libRNSound.a */; };
+		7BF402BF225EDCAD0095C402 /* done.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 7BF40294225EDCAD0095C402 /* done.mp3 */; };
 		80E599C5B15D4CD99B55FFEE /* Octicons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = CDB381E8DEBF4B65B13FE8A7 /* Octicons.ttf */; };
 		832341BD1AAA6AB300B99B32 /* libRCTText.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 832341B51AAA6A8300B99B32 /* libRCTText.a */; };
 		8CB449BB8A4D4BD89EA56739 /* FontAwesome5_Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 2C66ABCFC5654A4B94A4AFC4 /* FontAwesome5_Regular.ttf */; };
@@ -325,6 +328,13 @@
 			remoteGlobalIDString = A39873CE1EA65EE60051E01A;
 			remoteInfo = "RNVectorIcons-tvOS";
 		};
+		7BC7627F225EE13E0074074F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 7BC76255225EE13E0074074F /* RNSound.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 19825A1E1BD4A89800EE0337;
+			remoteInfo = RNSound;
+		};
 		7BCDE08D2207CAB600318604 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 146833FF1AC3E56700842450 /* React.xcodeproj */;
@@ -410,6 +420,8 @@
 		78C398B01ACF4ADC00677621 /* RCTLinking.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTLinking.xcodeproj; path = "../node_modules/react-native/Libraries/LinkingIOS/RCTLinking.xcodeproj"; sourceTree = "<group>"; };
 		7B6271DB2255B25B00985A91 /* RNSVG.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RNSVG.xcodeproj; path = "../../../../.nvm/versions/node/v11.7.0/lib/node_modules/react-native-svg/ios/RNSVG.xcodeproj"; sourceTree = "<group>"; };
 		7BAD2EB4220A253000F1F3CA /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		7BC76255225EE13E0074074F /* RNSound.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RNSound.xcodeproj; path = "../node_modules/react-native-sound/RNSound.xcodeproj"; sourceTree = "<group>"; };
+		7BF40294225EDCAD0095C402 /* done.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = done.mp3; path = ../assets/sounds/done.mp3; sourceTree = "<group>"; };
 		832341B01AAA6A8300B99B32 /* RCTText.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTText.xcodeproj; path = "../node_modules/react-native/Libraries/Text/RCTText.xcodeproj"; sourceTree = "<group>"; };
 		885D75790D4B4CBBBAB2F117 /* Foundation.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Foundation.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Foundation.ttf"; sourceTree = "<group>"; };
 		8BC757794EEBEC5D08C3FF98 /* Pods-LifeTrack.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LifeTrack.release.xcconfig"; path = "Pods/Target Support Files/Pods-LifeTrack/Pods-LifeTrack.release.xcconfig"; sourceTree = "<group>"; };
@@ -462,6 +474,7 @@
 				00C302EA1ABCBA2D00DB3ED1 /* libRCTVibration.a in Frameworks */,
 				139FDEF61B0652A700C62182 /* libRCTWebSocket.a in Frameworks */,
 				7B6272472255B54700985A91 /* libRNSVG.a in Frameworks */,
+				7BC76285225EE1770074074F /* libRNSound.a in Frameworks */,
 				2042C74828F04CAF81DE074C /* libRNGestureHandler.a in Frameworks */,
 				BE7DC39E87594AE2831AB174 /* libRNVectorIcons.a in Frameworks */,
 				E79645FC9A70EEB6C24FDAF0 /* libPods-LifeTrack.a in Frameworks */,
@@ -660,12 +673,19 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		7BC76256225EE13E0074074F /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				7BC76280225EE13E0074074F /* libRNSound.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		7BF0BEEF2207F2800082AAAF /* Recovered References */ = {
 			isa = PBXGroup;
 			children = (
 				D12A463F98BA4B9EB968B893 /* libRNGestureHandler.a */,
 				ABAFD1D4598642A5985B038C /* libRNVectorIcons.a */,
-				B4B5896A4A864E10866A9A95 /* libRNGoogleSignin.a */,
 			);
 			name = "Recovered References";
 			sourceTree = "<group>";
@@ -681,6 +701,7 @@
 		832341AE1AAA6A7D00B99B32 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
+				7BC76255225EE13E0074074F /* RNSound.xcodeproj */,
 				7B6271DB2255B25B00985A91 /* RNSVG.xcodeproj */,
 				5E91572D1DD0AC6500FF2AA8 /* RCTAnimation.xcodeproj */,
 				146833FF1AC3E56700842450 /* React.xcodeproj */,
@@ -712,6 +733,7 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
+				7BF40294225EDCAD0095C402 /* done.mp3 */,
 				13B07FAE1A68108700A75B9A /* LifeTrack */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
 				00E356EF1AD99517003FC87E /* LifeTrackTests */,
@@ -947,6 +969,10 @@
 				{
 					ProductGroup = 7BF0BF152207F2810082AAAF /* Products */;
 					ProjectRef = DC962539FC654ED486CD1BB9 /* RNGestureHandler.xcodeproj */;
+				},
+				{
+					ProductGroup = 7BC76256225EE13E0074074F /* Products */;
+					ProjectRef = 7BC76255225EE13E0074074F /* RNSound.xcodeproj */;
 				},
 				{
 					ProductGroup = 7B6271DC2255B25B00985A91 /* Products */;
@@ -1213,6 +1239,13 @@
 			remoteRef = 7BAD2EB2220A24D200F1F3CA /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
+		7BC76280225EE13E0074074F /* libRNSound.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libRNSound.a;
+			remoteRef = 7BC7627F225EE13E0074074F /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
 		7BCDE08E2207CAB600318604 /* libjsi.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
@@ -1284,6 +1317,7 @@
 				0B6B8D85B0CE41E09291E96D /* EvilIcons.ttf in Resources */,
 				4390FE3AC0554347937242B9 /* Feather.ttf in Resources */,
 				1DB8AAF94DEF48F7A3E2BE54 /* FontAwesome.ttf in Resources */,
+				7BF402BF225EDCAD0095C402 /* done.mp3 in Resources */,
 				4E2FC85C88FD4E0C8728B6AF /* FontAwesome5_Brands.ttf in Resources */,
 				8CB449BB8A4D4BD89EA56739 /* FontAwesome5_Regular.ttf in Resources */,
 				E4BC9330EE0F487D9F5CDA3B /* FontAwesome5_Solid.ttf in Resources */,
@@ -1466,9 +1500,7 @@
 				INFOPLIST_FILE = LifeTrackTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-				);
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				OTHER_LDFLAGS = (
 					"-ObjC",
 					"-lc++",
@@ -1495,9 +1527,7 @@
 				INFOPLIST_FILE = LifeTrackTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-				);
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				OTHER_LDFLAGS = (
 					"-ObjC",
 					"-lc++",
@@ -1581,9 +1611,7 @@
 				);
 				INFOPLIST_FILE = "LifeTrack-tvOS/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-				);
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				OTHER_LDFLAGS = (
 					"-ObjC",
 					"-lc++",
@@ -1616,9 +1644,7 @@
 				);
 				INFOPLIST_FILE = "LifeTrack-tvOS/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-				);
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				OTHER_LDFLAGS = (
 					"-ObjC",
 					"-lc++",
@@ -1650,9 +1676,7 @@
 				);
 				INFOPLIST_FILE = "LifeTrack-tvOSTests/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-				);
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				OTHER_LDFLAGS = (
 					"-ObjC",
 					"-lc++",
@@ -1684,9 +1708,7 @@
 				);
 				INFOPLIST_FILE = "LifeTrack-tvOSTests/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-				);
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				OTHER_LDFLAGS = (
 					"-ObjC",
 					"-lc++",

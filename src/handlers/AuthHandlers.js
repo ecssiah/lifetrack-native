@@ -91,7 +91,7 @@ export async function loadUser(dispatch) {
 
     focus.active = false
     focus.working = true
-    focus.time = 60 * settings.workPeriod
+    focus.time = 60 * focus.workPeriod
     focus.timer = null
 
     focuses[doc.id] = focus

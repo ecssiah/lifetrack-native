@@ -2,6 +2,7 @@ import React from 'react'
 import { getDay } from '../../../../lib/utils'
 import { connect } from 'react-redux'
 import { View } from 'react-native'
+import Sound from 'react-native-sound'
 import { EXP_PER_SECOND } from '../../../constants/Focuses'
 import { updateFocus } from '../../../handlers/FocusesHandlers'
 import { updateUser } from '../../../handlers/UserHandlers'
@@ -41,6 +42,30 @@ class FocusScreen extends React.Component
   })
 
 
+  constructor(props) {
+    super(props)
+
+    this.state = {
+      sounds: undefined,
+    }
+  }
+
+  componentDidMount() {
+    this.setState({
+      sounds: {
+        done: new Sound('done.mp3', Sound.MAIN_BUNDLE)
+      },
+    })
+  }
+
+
+  componentWillUnmount() {
+    for (const key of this.state.sounds) {
+      this.state.sounds[key].release()
+    }
+  }
+
+
   _onActivate = async () => {
     const update = {}
     const focus = this.props.focuses[this.props.selection.id]
@@ -75,7 +100,6 @@ class FocusScreen extends React.Component
       update.time = focus.time - 1
       update.history = { ...focus.history }
 
-
       if (focus.working) {
         const today = getDay().toLocaleDateString(
           undefined, { 'month': 'numeric', 'day': 'numeric', 'year': 'numeric' }
@@ -95,6 +119,8 @@ class FocusScreen extends React.Component
         }
       }
     } else {
+      this.state.sounds.done.play()
+
       if (focus.working) {
         update.working = false
         update.periods = focus.periods + 1
