@@ -4,8 +4,8 @@ import {
   Alert, View 
 } from 'react-native'
 import { 
-  addCategory, 
-  deleteCategory, 
+  addCategory, addCategoryDB,
+  deleteCategory, deleteCategoryDB, 
   updateCategoryName,
 } from '../../../handlers/CategoryHandlers'
 import createStyles from '../../../styles' 
@@ -65,7 +65,12 @@ class CategoriesScreen extends React.Component
 
 
   _onCategoryAddConfirm = () => {
-    this.props.addCategory(this.state.newCategoryName)
+    const update = {
+      show: true,
+    }
+
+    this.props.addCategory(this.state.newCategoryName, update)
+    this.props.addCategoryDB(this.state.newCategoryName, update)
 
     this.setState({
       newCategoryName: '',
@@ -92,6 +97,7 @@ class CategoriesScreen extends React.Component
 
   _onCategoryDeleteConfirm = () => {
     this.props.deleteCategory(this.state.categoryName)
+    this.props.deleteCategoryDB(this.state.categoryName)
 
     this.setState({
       editModalShow: false,
@@ -190,7 +196,9 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   addCategory: name => addCategory(dispatch, name),
+  addCategoryDB: name => addCategoryDB(name),
   deleteCategory: name => deleteCategory(dispatch, name),
+  deleteCategoryDB: name => deleteCategoryDB(name),
   updateCategoryName: (name, newName) => {
     return updateCategoryName(dispatch, name, newName)
   },

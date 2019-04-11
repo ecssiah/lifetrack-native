@@ -1,3 +1,4 @@
+export const FOCUS_SAVE_INTERVAL = 10
 export const EXP_PER_SECOND = 40 / 60.0
 
 export const WORK_PERIOD = 'Work Period'

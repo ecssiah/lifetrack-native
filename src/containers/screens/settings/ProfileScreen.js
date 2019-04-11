@@ -2,7 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { TextInput, View } from 'react-native'
 import { formatSpace } from '../../../../lib/utils'
-import { updateUser, updateUserEmail } from '../../../handlers/UserHandlers'
+import { updateUserEmail } from '../../../handlers/UserHandlers'
 import createStyles from '../../../styles'
 
 import LTText from '../../../components/LT/LTText'
@@ -71,7 +71,7 @@ class ProfileScreen extends React.Component
 
 
   _onAuthConfirm = async () => {
-    await this.props.updateUserEmail(this.state.email) 
+    this.props.updateUserEmail(this.state.email) 
 
     this.setState({
       authModalShow: false,
@@ -121,7 +121,6 @@ const mapStateToProps = state => ({
 
 
 const mapDispatchToProps = dispatch => ({
-  updateUser: update => updateUser(dispatch, update),
   updateUserEmail: email => updateUserEmail(dispatch, email),
 })
 

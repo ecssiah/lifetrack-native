@@ -9,6 +9,7 @@ import { SET_USER } from '../constants/User'
 import { SET_STATS } from '../constants/Stats';
 import { SET_FOCUSES } from '../constants/Focuses';
 
+
 export async function signUp(dispatch, email, password) {
   await auth.createUserWithEmailAndPassword(email, password)
 
@@ -34,7 +35,7 @@ export async function signUp(dispatch, email, password) {
     },
   }
 
-  await setUserData(userData)
+  setUserData(userData)
 
   dispatch({ type: SET_USER, user: userData.user })
   dispatch({ type: SET_SETTINGS, settings: userData.settings })
@@ -43,12 +44,14 @@ export async function signUp(dispatch, email, password) {
   dispatch({ type: SET_FOCUSES, focuses: {} })
 }
 
+
 export async function signIn(dispatch, email, password) {
   await auth.signInWithEmailAndPassword(email, password)
-  await loadUser(dispatch)
+  loadUser(dispatch)
 }
 
-export async function signOut(dispatch) {
+
+export async function signOut() {
   let query = db.collection('focuses')
   query = query.where('userId', '==', auth.currentUser.uid)
   query = query.where('active', '==', true)
@@ -73,8 +76,9 @@ export async function signOut(dispatch) {
   })
 
   await Promise.all(promises)
-  await auth.signOut()
+  auth.signOut()
 }
+
 
 export async function loadUser(dispatch) {
   const userData = await loadUserData()
@@ -104,6 +108,7 @@ export async function loadUser(dispatch) {
   dispatch({ type: SET_FOCUSES, focuses })
 }
 
+
 async function loadUserData() {
   const userDoc = db.collection('user').doc(auth.currentUser.uid)
   const settingsDoc = db.collection('settings').doc(auth.currentUser.uid)
@@ -121,6 +126,7 @@ async function loadUserData() {
     focusesQuery.get()
   ])
 }
+
 
 async function setUserData(userData) {
   const userDoc = db.collection('user').doc(auth.currentUser.uid)

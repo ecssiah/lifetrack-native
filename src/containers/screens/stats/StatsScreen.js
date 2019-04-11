@@ -2,8 +2,8 @@ import React from 'react'
 import { View } from 'react-native'
 import { connect } from 'react-redux'
 import { GraphColors } from '../../../constants/Stats';
-import { updateFocus } from '../../../handlers/FocusesHandlers'
-import { updateStats } from '../../../handlers/StatsHandlers'
+import { updateFocus, updateFocusDB } from '../../../handlers/FocusesHandlers'
+import { updateStats, updateStatsDB } from '../../../handlers/StatsHandlers'
 import createStyles from '../../../styles'
 
 import LTIcon from '../../../components/LT/LTIcon';
@@ -43,7 +43,6 @@ class StatsScreen extends React.Component
       endDateModalShow: false,
       startDateSelection,
       endDateSelection,
-      chartType: props.stats.chartType,
       dates: this._getDateRange(startDateSelection, endDateSelection),
     }
   }
@@ -94,7 +93,12 @@ class StatsScreen extends React.Component
   _onStartDateSubmit = () => {
     const startDate = new Date(this.state.startDateSelection)
 
-    this.props.updateStats({ startDate: startDate.getTime() })
+    const update = {
+      startDate: startDate.getTime(),
+    }
+
+    this.props.updateStats(update)
+    this.props.updateStatsDB(update)
 
     this.setState({
       startDateModalShow: false,
@@ -136,7 +140,12 @@ class StatsScreen extends React.Component
   _onEndDateSubmit = () => {
     const endDate = new Date(this.state.endDateSelection)
 
-    this.props.updateStats({ endDate: endDate.getTime() })
+    const update = {
+      endDate: endDate.getTime(),
+    }
+
+    this.props.updateStats(update)
+    this.props.updateStatsDB(update)
 
     this.setState({
       endDateModalShow: false,
@@ -205,23 +214,20 @@ class StatsScreen extends React.Component
   _onChartTypeChange = value => {
     const chartType = value ? 'area' : 'bar'
 
-    this.props.updateStats({ 
+    update = {
       chartType,
-    })
+    }
 
-    this.setState({
-      chartType,
-    })
-  }
-
-
-  _onCategoryVisiblityChange = (name, value) => {
-
+    this.props.updateStats(update)
+    this.props.updateStatsDB(update)
   }
 
 
   _onFocusVisibilityChange = (key, value) => {
-    this.props.updateFocus(key, { visible: value })
+    const update = { visible: value }
+
+    this.props.updateFocus(key, update)
+    this.props.updateFocusDB(key, update)
   }
   
 
@@ -236,7 +242,7 @@ class StatsScreen extends React.Component
           keys={keys}
           colors={GraphColors}
           dates={this.state.dates}
-          chartType={this.state.chartType}
+          chartType={this.props.stats.chartType}
         />
 
         <StatsFilter
@@ -244,7 +250,7 @@ class StatsScreen extends React.Component
           endDate={this.props.stats.endDate}
           onStartDatePress={this._onStartDatePress}
           onEndDatePress={this._onEndDatePress}
-          chartType={this.state.chartType}
+          chartType={this.props.stats.chartType}
           onChartTypeChange={this._onChartTypeChange}
         />
 
@@ -253,7 +259,6 @@ class StatsScreen extends React.Component
           focuses={this.props.focuses}
           keys={keys}
           colors={GraphColors}
-          onCategoryVisibilityChange={this._onCategoryVisiblityChange}
           onFocusVisibilityChange={this._onFocusVisibilityChange}
         />
 
@@ -288,7 +293,9 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   updateFocus: (id, update) => updateFocus(dispatch, id, update),
+  updateFocusDB: (id, update) => updateFocusDB(id, update),
   updateStats: update => updateStats(dispatch, update),
+  updateStatsDB: update => updateStatsDB(update),
 })
 
 

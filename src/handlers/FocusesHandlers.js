@@ -8,7 +8,13 @@ import {
 } from "../constants/Focuses"
 import { UPDATE_STATUS } from "../constants/Status"
 
-export async function updateFocuses(dispatch, update) {
+
+export function updateFocuses(dispatch, update) {
+  dispatch({ type: UPDATE_FOCUSES, update })
+}
+
+
+export async function updateFocusesDB(update) {
   const batch = db.batch()
 
   for (const id in update) {
@@ -16,28 +22,41 @@ export async function updateFocuses(dispatch, update) {
     batch.update(doc, update[id])
   }
 
-  await batch.commit()
-  
-  dispatch({ type: UPDATE_FOCUSES, update })
+  batch.commit()
 }
 
-export async function addFocus(dispatch, focus) {
+
+export function addFocus(dispatch, id, focus) {
+  dispatch({ type: ADD_FOCUS, id, focus })
+}
+
+
+export async function addFocusDB(focus) {
   const doc = await db.collection('focuses').add(focus)
 
-  dispatch({ type: ADD_FOCUS, id: doc.id, focus })
+  return doc.id
 }
 
-export async function deleteFocus(dispatch, id) {
-  await db.collection('focuses').doc(id).delete()
 
+export function deleteFocus(dispatch, id) {
   dispatch({ type: DELETE_FOCUS, id })
 }
 
-export async function updateFocus(dispatch, id, update) {
-  await db.collection('focuses').doc(id).update(update)
 
+export async function deleteFocusDB(id) {
+  db.collection('focuses').doc(id).delete()
+}
+
+
+export function updateFocus(dispatch, id, update) {
   dispatch({ type: UPDATE_FOCUS, id, update }) 
 }
+
+
+export async function updateFocusDB(id, update) {
+  db.collection('focuses').doc(id).update(update)
+}
+
 
 export async function updateFocusCategories(dispatch, name, newName) {
   let query = db.collection('focuses')
@@ -55,9 +74,10 @@ export async function updateFocusCategories(dispatch, name, newName) {
   })
 
   await batch.commit()
-
-  dispatch({ type: UPDATE_FOCUSES, update })
+  
+  updateFocuses(dispatch, update)
 }
+
 
 export async function updateActiveFocuses(dispatch, activeStart) {
   const querySnapshot = await searchForWorkingFocuses()
@@ -67,9 +87,10 @@ export async function updateActiveFocuses(dispatch, activeStart) {
 
     requestFocusUpdate(dispatch, querySnapshot, elapsed)
 
-    await deactivateFocuses(dispatch, querySnapshot)
+    deactivateFocuses(dispatch, querySnapshot)
   }
 }
+
 
 async function searchForWorkingFocuses() {
   let query = db.collection('focuses')
@@ -80,22 +101,23 @@ async function searchForWorkingFocuses() {
   return await query.get()
 }
 
+
 async function deactivateFocuses(dispatch, querySnapshot) { 
   dispatch({ type: UPDATE_STATUS, update: { tracked: 0 } })
 
   const batch = db.batch()
+  const update = { active: false }
 
-  querySnapshot.forEach(doc => batch.update(doc.ref, { active: false }))
+  querySnapshot.forEach(doc => batch.update(doc.ref, update))
 
-  await batch.commit()
+  batch.commit()
 
   querySnapshot.forEach(doc => {
     clearInterval(doc.data().timer)
-    dispatch({
-      type: UPDATE_FOCUS, id: doc.id, update: { active: false }
-    })
+    updateFocus(doc.id, update)
   })
 }
+
 
 function requestFocusUpdate(dispatch, querySnapshot, elapsed) {
   const title = 'Update Experience?'
@@ -182,5 +204,5 @@ async function updateExperience(dispatch, querySnapshot, elapsed) {
 
   await Promise.all(promises)
 
-  dispatch({ type: UPDATE_FOCUSES, update })
+  updateFocuses(dispatch, update)
 }

@@ -7,25 +7,39 @@ import {
 } from "../constants/Categories"
 import { updateFocusCategories } from './FocusesHandlers'
 
-export async function addCategory(dispatch, name) {
-  const category = {
-    [name]: { show: true }
+
+export function addCategory(name, update) {
+  dispatch({ type: ADD_CATEGORY, name, update })
+}
+
+
+export async function addCategoryDB(name, update) {
+  const categoryItem = {
+    [name]: update,
   }
 
   const doc = db.collection('categories').doc(auth.currentUser.uid)
-  await doc.update(category)
-
-  dispatch({ type: ADD_CATEGORY, name, category: category[name] })
+  doc.update(categoryItem)
 }
 
-export async function updateCategory(dispatch, name, update) {
-  const doc = db.collection('categories').doc(auth.currentUser.uid)
-  await doc.update({ [name]: update })
 
+export function updateCategory(name, update) {
   dispatch({ type: UPDATE_CATEGORY, name, update })
 }
 
-export async function deleteCategory(dispatch, name) {
+
+export async function updateCategoryDB(name, update) {
+  const doc = db.collection('categories').doc(auth.currentUser.uid)
+  doc.update({ [name]: update })
+}
+
+
+export function deleteCategory(name) {
+  dispatch({ type: DELETE_CATEGORY, name })
+}
+
+
+export async function deleteCategoryDB(dispatch, name) {
   const update = {
     [name]: firebase.firestore.FieldValue.delete(),
   }
@@ -33,10 +47,9 @@ export async function deleteCategory(dispatch, name) {
   const doc = db.collection('categories').doc(auth.currentUser.uid)
   await doc.update(update)
 
-  await updateFocusCategories(dispatch, name, UNCATEGORIZED)
-
-  dispatch({ type: DELETE_CATEGORY, name })
+  updateFocusCategories(dispatch, name, UNCATEGORIZED)
 }
+
 
 export async function updateCategoryName(dispatch, name, newName) {
   const categoriesRef = db.collection('categories').doc(auth.currentUser.uid)

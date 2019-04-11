@@ -1,17 +1,23 @@
 import { db, auth } from "../config/firebaseConfig"
 import { UPDATE_USER } from "../constants/User"
 
-export async function updateUser(dispatch, update) {
-  await db.collection('user').doc(auth.currentUser.uid).update(update)
 
+export function updateUser(dispatch, update) {
   dispatch({ type: UPDATE_USER, update })
 }
 
-export async function updateUserEmail(dispatch, email) {
-  const user = auth.currentUser
 
-  await user.updateEmail(email)
-  await updateUser(dispatch, { email })
-
-  dispatch({ type: UPDATE_USER, update: { email }})
+export async function updateUserDB(update) {
+  db.collection('user').doc(auth.currentUser.uid).update(update)
 }
+
+
+export async function updateUserEmail(dispatch, email) {
+  const update = { email }
+
+  await auth.currentUser.updateEmail(email)
+
+  updateUser(dispatch, update)
+  updateUserDB(update)
+}
+

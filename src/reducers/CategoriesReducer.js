@@ -18,7 +18,7 @@ function categoriesReducer(state = {}, action) {
       return newState
     }
     case ADD_CATEGORY: {
-      newState[action.name] = action.category
+      newState[action.name] = action.update
 
       return newState
     }

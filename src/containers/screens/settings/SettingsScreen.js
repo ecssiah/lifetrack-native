@@ -5,7 +5,7 @@ import {
   WORK_PERIOD, WORK_GOAL, BREAK_PERIOD,
 } from '../../../constants/Focuses'
 import { signOut } from '../../../handlers/AuthHandlers'
-import { updateSettings } from '../../../handlers/SettingsHandlers'
+import { updateSettings, updateSettingsDB } from '../../../handlers/SettingsHandlers'
 import createStyles, { Color, FontSize } from '../../../styles' 
 
 import LTText from '../../../components/LT/LTText'
@@ -131,6 +131,7 @@ class SettingsScreen extends React.Component
     }
 
     this.props.updateSettings(update)
+    this.props.updateSettingsDB(update)
 
     this.setState({
       settingsModalShow: false,
@@ -262,6 +263,7 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
   signOut: () => signOut(dispatch),
   updateSettings: update => updateSettings(dispatch, update),
+  updateSettingsDB: update => updateSettingsDB(update),
 })
 
 

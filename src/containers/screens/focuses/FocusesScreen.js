@@ -1,16 +1,19 @@
 import React from 'react'
-import { View } from 'react-native'
+import { ActivityIndicator, View } from 'react-native'
 import { connect } from 'react-redux'
 import { auth } from '../../../config/firebaseConfig'
 import { UNCATEGORIZED } from '../../../constants/Categories'
 import { UPDATE_SELECTION } from '../../../constants/Selection'
-import { addFocus } from '../../../handlers/FocusesHandlers'
-import { updateCategory } from '../../../handlers/CategoryHandlers'
+import { addFocus, addFocusDB } from '../../../handlers/FocusesHandlers'
+import { 
+  updateCategory, updateCategoryDB 
+} from '../../../handlers/CategoryHandlers'
 import createStyles from '../../../styles'
 
 import LTIcon from '../../../components/LT/LTIcon'
 import FocusList from '../../../components/focuses/FocusList'
 import FocusAddModal from '../../../components/modals/FocusAddModal'
+import LTLoading from '../../../components/LT/LTLoading';
 
 const styles = createStyles({
   container: {
@@ -70,7 +73,7 @@ class FocusesScreen extends React.Component
   }
 
 
-  _onAddFocusConfirm = () => {
+  _onAddFocusConfirm = async () => {
     const focus = {
       name: this.state.focusName,
       category: this.state.categoryName,
@@ -89,7 +92,8 @@ class FocusesScreen extends React.Component
       history: {},
     }
 
-    this.props.addFocus(focus)
+    const id = await this.props.addFocusDB(focus)
+    this.props.addFocus(id, focus)
 
     this.setState({
       addModalShow: false,
@@ -122,10 +126,12 @@ class FocusesScreen extends React.Component
 
 
   _onCategorySelect = categoryName => {
-    this.props.updateCategory(
-      categoryName, 
-      { show: !this.props.categories[categoryName].show }
-    )
+    const update = {
+      show: !this.props.categories[categoryName].show,
+    }
+
+    this.props.updateCategory(categoryName, update)
+    this.props.updateCategoryDB(categoryName, update)
   }
 
 
@@ -164,9 +170,11 @@ const mapStateToProps = state => ({
 
 
 const mapDispatchToProps = dispatch => ({
-  addFocus: focus => addFocus(dispatch, focus), 
+  addFocus: (id, focus) => addFocus(dispatch, id, focus), 
+  addFocusDB: focus => addFocusDB(focus), 
   updateSelection: update => dispatch({ type: UPDATE_SELECTION, update }),
   updateCategory: (name, update) => updateCategory(dispatch, name, update),
+  updateCategoryDB: (name, update) => updateCategoryDB(name, update),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(FocusesScreen)

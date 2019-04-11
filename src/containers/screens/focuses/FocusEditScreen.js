@@ -5,8 +5,8 @@ import {
   WORK_PERIOD, WORK_GOAL, BREAK_PERIOD,
 } from '../../../constants/Focuses'
 import { 
-  updateFocus, 
-  deleteFocus 
+  updateFocus, updateFocusDB,
+  deleteFocus, deleteFocusDB, 
 } from '../../../handlers/FocusesHandlers'
 import createStyles from '../../../styles'
 
@@ -59,7 +59,10 @@ class FocusEditScreen extends React.Component
 
 
   _onEditNameConfirm = () => {
-    this.props.updateFocus(this.props.selection.id, { name: this.state.name })
+    const update = { name: this.state.name }
+    
+    this.props.updateFocus(this.props.selection.id, update)
+    this.props.updateFocusDB(this.props.selection.id, update)
   }
 
 
@@ -141,6 +144,7 @@ class FocusEditScreen extends React.Component
     }
 
     this.props.updateFocus(this.props.selection.id, update)
+    this.props.updateFocusDB(this.props.selection.id, update)
 
     this.setState({
       settingsModalShow: false,
@@ -170,10 +174,10 @@ class FocusEditScreen extends React.Component
 
 
   _onCategoryConfirm = () => {
-    this.props.updateFocus(
-      this.props.selection.id, 
-      { category: this.state.categoryName }
-    )
+    const update = { category: this.state.categoryName }
+
+    this.props.updateFocus(this.props.selection.id, update)
+    this.props.updateFocusDB(this.props.selection.id, update)
 
     this.setState({
       categoryName: this.state.categoryName,
@@ -207,7 +211,8 @@ class FocusEditScreen extends React.Component
   _onDeleteConfirm = async () => {
     clearInterval(this.props.focuses[this.props.selection.id].timer)
 
-    await this.props.deleteFocus(this.props.selection.id)
+    this.props.deleteFocus(this.props.selection.id)
+    await this.props.deleteFocusDB(this.props.selection.id)
 
     this.props.navigation.navigate('Focuses')
   }
@@ -269,7 +274,9 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   updateFocus: (id, update) => updateFocus(dispatch, id, update),
+  updateFocusDB: (id, update) => updateFocusDB(id, update),
   deleteFocus: id => deleteFocus(dispatch, id),
+  deleteFocusDB: id => deleteFocusDB(id),
 })
 
 

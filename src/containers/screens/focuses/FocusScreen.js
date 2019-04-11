@@ -3,9 +3,8 @@ import { getDay } from '../../../../lib/utils'
 import { connect } from 'react-redux'
 import { View } from 'react-native'
 import Sound from 'react-native-sound'
-import { EXP_PER_SECOND } from '../../../constants/Focuses'
-import { updateFocus } from '../../../handlers/FocusesHandlers'
-import { updateUser } from '../../../handlers/UserHandlers'
+import { EXP_PER_SECOND, FOCUS_SAVE_INTERVAL } from '../../../constants/Focuses'
+import { updateFocus, updateFocusDB } from '../../../handlers/FocusesHandlers'
 import createStyles from '../../../styles'
 
 import LTIcon from '../../../components/LT/LTIcon'
@@ -46,6 +45,7 @@ class FocusScreen extends React.Component
     super(props)
 
     this.state = {
+      saveTimer: FOCUS_SAVE_INTERVAL,
       sounds: undefined,
     }
   }
@@ -60,13 +60,21 @@ class FocusScreen extends React.Component
 
 
   componentWillUnmount() {
-    for (const key of this.state.sounds) {
+    for (const key in this.state.sounds) {
       this.state.sounds[key].release()
     }
   }
 
 
-  _onActivate = async () => {
+  _onGoalPress = () => {
+    const update = { periods: 0 }
+
+    this.props.updateFocus(this.props.selection.id, update)
+    this.props.updateFocusDB(this.props.selection.id, update)
+  }
+
+
+  _onActivate = () => {
     const update = {}
     const focus = this.props.focuses[this.props.selection.id]
 
@@ -89,54 +97,79 @@ class FocusScreen extends React.Component
     }
 
     this.props.updateFocus(this.props.selection.id, update) 
+    this.props.updateFocusDB(this.props.selection.id, update)
   }
 
 
-  _updateTimer = () => {
+  _tickFocus = focus => {
     const update = {}
-    const focus = this.props.focuses[this.props.selection.id]
+    update.time = focus.time - 1
 
-    if (focus.time > 0) {
-      update.time = focus.time - 1
+    if (focus.working) {
+      const today = getDay().toLocaleDateString(
+        undefined, { 'month': 'numeric', 'day': 'numeric', 'year': 'numeric' }
+      )
+
       update.history = { ...focus.history }
 
-      if (focus.working) {
-        const today = getDay().toLocaleDateString(
-          undefined, { 'month': 'numeric', 'day': 'numeric', 'year': 'numeric' }
-        )
-
-        if (focus.history[today]) {
-          update.history[today] = focus.history[today] + 1
-        } else {
-          update.history[today] = 1
-        }
-
-        update.experience = focus.experience + EXP_PER_SECOND
-
-        if (update.experience >= 100) {
-          update.level = focus.level + 1
-          update.experience -= 100
-        }
-      }
-    } else {
-      this.state.sounds.done.play()
-
-      if (focus.working) {
-        update.working = false
-        update.periods = focus.periods + 1
-        update.time = focus.breakPeriod * 60
+      if (focus.history[today]) {
+        update.history[today] = focus.history[today] + 1
       } else {
-        update.working = true
-        update.time = focus.workPeriod * 60
+        update.history[today] = 1
+      }
+
+      update.experience = focus.experience + EXP_PER_SECOND
+
+      if (update.experience >= 100) {
+        update.experience -= 100
+        update.level = focus.level + 1
+
+        this.props.updateFocusDB(this.props.selection.id, update)
       }
     }
 
     this.props.updateFocus(this.props.selection.id, update)
+
+    if (this.state.saveTimer <= 0) {
+      this.setState({
+        saveTimer: FOCUS_SAVE_INTERVAL,
+      })
+
+      this.props.updateFocusDB(this.props.selection.id, update)
+    } else {
+      this.setState({
+        saveTimer: this.state.saveTimer - 1,
+      })
+    }
   }
 
 
-  _onGoalPress = () => {
-    this.props.updateFocus(this.props.selection.id, { periods: 0 })
+  _resetFocus = focus => {
+    const update = {}
+    this.state.sounds.done.play()
+
+    if (focus.working) {
+      update.working = false
+      update.periods = focus.periods + 1
+      update.time = 60 * focus.breakPeriod
+    } else {
+      update.working = true
+      update.time = 60 * focus.workPeriod
+    }
+
+    this.props.updateFocus(this.props.selection.id, update)
+    this.props.updateFocusDB(this.props.selection.id, update)
+  }
+
+
+  _updateTimer = () => {
+    const focus = this.props.focuses[this.props.selection.id]
+
+    if (focus.time > 0) {
+      this._tickFocus(focus)
+    } else {
+      this._resetFocus(focus)
+    }
   }
 
 
@@ -181,8 +214,8 @@ const mapStateToProps = state => ({
 
 
 const mapDispatchToProps = dispatch => ({
-  updateUser: update => updateUser(dispatch, update),
   updateFocus: (id, update) => updateFocus(dispatch, id, update),
+  updateFocusDB: (id, update) => updateFocusDB(id, update),
 })
 
 
