@@ -4,6 +4,8 @@ import { signUp } from '../../../handlers/AuthHandlers'
 import { Alert, Button, View, TextInput } from 'react-native'
 import createStyles, { FontSize } from '../../../styles'
 
+import LTSpacer from '../../../components/LT/LTSpacer';
+
 const styles = createStyles({
   container: {
     flex: 1,
@@ -41,7 +43,7 @@ const styles = createStyles({
 class SignUpScreen extends React.Component 
 {
   static navigationOptions = ({ navigation }) => ({
-    title: 'Sign Up',
+    title: 'Register',
   })
 
 
@@ -58,9 +60,19 @@ class SignUpScreen extends React.Component
 
   _onPressSignUp = async () => {
     if (this.state.password === this.state.confirm) {
-      await this.props.signUp(this.state.email, this.state.password)
+      try {
+        await this.props.signUp(this.state.email, this.state.password)
 
-      this.props.navigation.navigate('App')
+        this.props.navigation.navigate('App')
+      } catch (error) {
+        Alert.alert(
+          error.message,
+          '',
+          [
+            { text: 'Confirm', onPress: null },
+          ],
+        )
+      }
     } else {
       Alert.alert(
         'Password confirmation \ndoes not match.',
@@ -69,12 +81,12 @@ class SignUpScreen extends React.Component
           { text: 'Confirm', onPress: null },
         ],
       )
-
-      this.setState({
-        password: '',
-        confirm: '',
-      })
     }
+
+    this.setState({
+      password: '',
+      confirm: '',
+    })
   }
 
 
@@ -114,9 +126,11 @@ class SignUpScreen extends React.Component
           onChangeText={confirm => this.setState({confirm})}
         />
 
+        <LTSpacer />
+
         <Button
           onPress={this._onPressSignUp}
-          title="Sign Up"
+          title='Confirm Registration'
           color="#841584"
         />
       </View>

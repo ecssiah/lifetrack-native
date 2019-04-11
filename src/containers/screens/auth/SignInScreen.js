@@ -4,6 +4,9 @@ import { Alert, Button, View, TextInput } from 'react-native'
 import createStyles, { FontSize } from '../../../styles'
 import { signIn } from '../../../handlers/AuthHandlers'
 
+import LTSpacer from '../../../components/LT/LTSpacer'
+import GoogleSignInButton from '../../../components/auth/GoogleSignInButton';
+
 const styles = createStyles({
   container: {
     flex: 1,
@@ -32,7 +35,7 @@ const styles = createStyles({
 class SignInScreen extends React.Component 
 {
   static navigationOptions = ({ navigation }) => ({
-    title: 'Sign In',
+    title: 'LifeTrack',
   })
 
 
@@ -42,6 +45,7 @@ class SignInScreen extends React.Component
     this.state = {
       email: '',
       password: '',
+      signinInProgress: false,
     }
   }
 
@@ -63,6 +67,11 @@ class SignInScreen extends React.Component
         password: '',
       })
     }
+  }
+
+
+  _onGoogleSignin = async () => {
+    console.warn('touchdown!')
   }
 
 
@@ -91,17 +100,27 @@ class SignInScreen extends React.Component
           onChangeText={password => this.setState({password})}
         />
 
+        <LTSpacer />
+
         <Button
           title="Sign In"
           color="#841584"
           onPress={this._onPressSignIn}
         />
 
+        <GoogleSignInButton
+          onGoogleSignIn={this._onGoogleSignin} 
+        />
+
+        <LTSpacer large />
+        <LTSpacer large />
+
         <Button
-          title="Sign Up"
+          title="Register New Account"
           color="#841584"
           onPress={() => this.props.navigation.navigate('SignUp')} 
         />
+
       </View>
     )
   }
