@@ -1,11 +1,11 @@
 import React from 'react'
+import firebase, { auth } from 'firebase';
 import { connect } from 'react-redux'
 import { Alert, Button, View, TextInput } from 'react-native'
-import createStyles, { FontSize } from '../../../styles'
 import { signIn } from '../../../handlers/AuthHandlers'
+import createStyles, { FontSize } from '../../../styles'
 
 import LTSpacer from '../../../components/LT/LTSpacer'
-import GoogleSignInButton from '../../../components/auth/GoogleSignInButton';
 
 const styles = createStyles({
   container: {
@@ -71,7 +71,6 @@ class SignInScreen extends React.Component
 
 
   _onGoogleSignin = async () => {
-    console.warn('touchdown!')
   }
 
 
@@ -106,10 +105,6 @@ class SignInScreen extends React.Component
           title="Sign In"
           color="#841584"
           onPress={this._onPressSignIn}
-        />
-
-        <GoogleSignInButton
-          onGoogleSignIn={this._onGoogleSignin} 
         />
 
         <LTSpacer large />
