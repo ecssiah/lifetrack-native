@@ -1,10 +1,8 @@
 import React from 'react'
-import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome'
-import { ScrollView, Switch, View } from 'react-native'
-import createStyles, { Color, FontSize } from '../../styles';
+import { ScrollView, View } from 'react-native'
+import createStyles from '../../styles';
 
 import LTSpacer from '../LT/LTSpacer';
-import LTText from '../LT/LTText';
 import LegendItem from './LegendItem';
 
 const styles = createStyles({

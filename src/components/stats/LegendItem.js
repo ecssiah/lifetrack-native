@@ -27,13 +27,12 @@ const styles = createStyles({
     flex: 1,
     marginTop: -5, 
     marginBottom: -6,
-    transform: [ { scaleX: .48 }, { scaleY: .48 } ]
+    transform: [ { scaleX: .62 }, { scaleY: .62 } ]
   },
 })
 
 class LegendItem extends React.Component
 {
-
   render() {
     return (
       <View style={styles.item}>

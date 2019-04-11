@@ -24,7 +24,7 @@ const styles = createStyles({
     marginRight: -6,
     marginTop: -5, 
     marginBottom: -6,
-    transform: [ { scaleX: .48 }, { scaleY: .48 } ],
+    transform: [ { scaleX: .56 }, { scaleY: .56 } ],
   },
   dateSelectors: {
     flex: 1,

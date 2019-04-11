@@ -3,7 +3,11 @@ import { getDay } from '../../../../lib/utils'
 import { connect } from 'react-redux'
 import { View } from 'react-native'
 import Sound from 'react-native-sound'
-import { EXP_PER_SECOND, FOCUS_SAVE_INTERVAL } from '../../../constants/Focuses'
+import { 
+  EXP_PER_SECOND, 
+  CLOCK_INTERVAL,
+  SAVE_INTERVAL, 
+} from '../../../constants/Focuses'
 import { updateFocus, updateFocusDB } from '../../../handlers/FocusesHandlers'
 import createStyles from '../../../styles'
 
@@ -45,7 +49,7 @@ class FocusScreen extends React.Component
     super(props)
 
     this.state = {
-      saveTimer: FOCUS_SAVE_INTERVAL,
+      saveTimer: SAVE_INTERVAL,
       sounds: undefined,
     }
   }
@@ -86,10 +90,10 @@ class FocusScreen extends React.Component
       } else {
         update.working = true
         update.time = focus.workPeriod * 60
-        update.timer = setInterval(this._updateTimer, 1000)
+        update.timer = setInterval(this._updateTimer, CLOCK_INTERVAL)
       }
     } else {
-      update.timer = setInterval(this._updateTimer, 1000)
+      update.timer = setInterval(this._updateTimer, CLOCK_INTERVAL)
 
       if (focus.working) {
         update.active = true
@@ -132,7 +136,7 @@ class FocusScreen extends React.Component
 
     if (this.state.saveTimer <= 0) {
       this.setState({
-        saveTimer: FOCUS_SAVE_INTERVAL,
+        saveTimer: SAVE_INTERVAL,
       })
 
       this.props.updateFocusDB(this.props.selection.id, update)
