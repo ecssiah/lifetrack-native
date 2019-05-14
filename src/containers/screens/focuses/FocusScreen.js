@@ -50,6 +50,7 @@ class FocusScreen extends React.Component
 
     this.state = {
       saveTimer: SAVE_INTERVAL,
+      intervalBegin: undefined,
       sounds: undefined,
     }
   }
@@ -88,11 +89,15 @@ class FocusScreen extends React.Component
       if (focus.working) {
         update.active = false
       } else {
+        this.setState({ intervalBegin: new Date().getTime() })
+
         update.working = true
         update.time = focus.workPeriod * 60
         update.timer = setInterval(this._updateTimer, CLOCK_INTERVAL)
       }
     } else {
+      this.setState({ intervalBegin: new Date().getTime() })
+
       update.timer = setInterval(this._updateTimer, CLOCK_INTERVAL)
 
       if (focus.working) {
@@ -105,10 +110,22 @@ class FocusScreen extends React.Component
   }
 
 
-  _tickFocus = focus => {
-    const update = {}
-    update.time = focus.time - 1
+  _getTimerInterval = () => {
+    const intervalEnd = new Date().getTime()
+    const elapsed = (intervalEnd - this.state.intervalBegin) / 1000
 
+    this.setState({ intervalBegin: intervalEnd })
+
+    return elapsed
+  }
+
+
+  _tickFocus = focus => {
+    const timerInterval = this._getTimerInterval()
+
+    const update = {}
+    update.time = focus.time - timerInterval
+    
     if (focus.working) {
       const today = getDay().toLocaleDateString(
         undefined, { 'month': 'numeric', 'day': 'numeric', 'year': 'numeric' }
@@ -117,12 +134,12 @@ class FocusScreen extends React.Component
       update.history = { ...focus.history }
 
       if (focus.history[today]) {
-        update.history[today] = focus.history[today] + 1
+        update.history[today] = focus.history[today] + timerInterval
       } else {
-        update.history[today] = 1
+        update.history[today] = timerInterval
       }
 
-      update.experience = focus.experience + EXP_PER_SECOND
+      update.experience = focus.experience + timerInterval * EXP_PER_SECOND
 
       if (update.experience >= 100) {
         update.experience -= 100
@@ -142,7 +159,7 @@ class FocusScreen extends React.Component
       this.props.updateFocusDB(this.props.selection.id, update)
     } else {
       this.setState({
-        saveTimer: this.state.saveTimer - 1,
+        saveTimer: this.state.saveTimer - timerInterval,
       })
     }
   }
