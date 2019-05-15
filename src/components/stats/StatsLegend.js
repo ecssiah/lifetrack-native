@@ -1,21 +1,12 @@
 import React from 'react'
 import { ScrollView, SectionList, View } from 'react-native'
+import { UNCATEGORIZED } from '../../constants/Categories';
 import createStyles from '../../styles';
 
-import LTSpacer from '../LT/LTSpacer';
 import LegendItem from './LegendItem';
-import { UNCATEGORIZED } from '../../constants/Categories';
 import FocusHeader from '../focuses/FocusHeader';
 
 const styles = createStyles({
-  legendContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-  },
-  list: {
-    flex: 1,
-    marginHorizontal: 24,
-  },
 })
 
 class StatsLegend extends React.Component
@@ -55,9 +46,9 @@ class StatsLegend extends React.Component
     return (
       <LegendItem
         focus={item}
-        color={this.props.colors[index]}
+        color={this.props.colors[item.chartColor]}
         onValueChange={value =>
-          this.props.onFocusVisibilityChange(this.props.keys[index], value)
+          this.props.onFocusVisibilityChange(item.id, value)
         }
       />
     )

@@ -20,6 +20,7 @@ export async function signUp(dispatch, email, password) {
     user: {
       email,
       startDate,
+      nextChartColor: 0,
     },
     settings: {
       workPeriod: DEFAULT_WORK_PERIOD,

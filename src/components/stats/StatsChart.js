@@ -3,7 +3,7 @@ import { View } from 'react-native'
 import { 
   VictoryChart, VictoryAxis, VictoryStack, VictoryArea, VictoryBar 
 } from 'victory-native'
-import { SECONDS_IN_DAY } from '../../constants/Stats';
+import { SECONDS_IN_DAY, GraphColors } from '../../constants/Stats';
 
 class StatsChart extends React.Component 
 {
@@ -27,9 +27,14 @@ class StatsChart extends React.Component
     const stack = []
 
     for (const key of this.props.keys) {
+      const color = GraphColors[this.props.focuses[key].chartColor]
+
       if (this.props.chartType === 'area') {
         stack.push(
           <VictoryArea
+            style={{
+              data: { fill: color }
+            }}
             key={key}
             data={this.props.data[key]}
             x='date'
@@ -40,6 +45,9 @@ class StatsChart extends React.Component
       } else {
         stack.push(
           <VictoryBar
+            style={{
+              data: { fill: color }
+            }}
             key={key}
             data={this.props.data[key]}
             x='date'
@@ -76,7 +84,6 @@ class StatsChart extends React.Component
           />
 
           <VictoryStack 
-            colorScale={this.props.colors} 
           >
             {this._getMainChartStack()}
           </VictoryStack>

@@ -29,8 +29,20 @@ export function updateCategory(dispatch, name, update) {
 
 
 export async function updateCategoryDB(name, update) {
-  const doc = db.collection('categories').doc(auth.currentUser.uid)
-  doc.update({ [name]: update })
+  const categoriesRef = db.collection('categories').doc(auth.currentUser.uid)
+
+  const transactionUpdateFunc = async transaction => {
+    const doc = await transaction.get(categoriesRef)
+    const category = doc.data()
+
+    const dbUpdate = {
+      [name]: Object.assign({}, category[name], update)
+    }
+
+    transaction.update(categoriesRef, dbUpdate)
+  }
+
+  await db.runTransaction(transactionUpdateFunc)
 }
 
 

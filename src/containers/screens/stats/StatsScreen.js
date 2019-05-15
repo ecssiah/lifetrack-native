@@ -191,7 +191,7 @@ class StatsScreen extends React.Component
       const focus = this.props.focuses[key]
 
       for (let i = 0; i < dates.length; i++) {
-        const focusData = { date: dates[i] } 
+        const focusData = { date: dates[i], chartColor: focus.chartColor } 
         const dateString = new Date(dates[i]).toLocaleDateString(
           undefined, 
           { 'month': 'numeric', 'day': 'numeric', 'year': 'numeric' }
@@ -245,6 +245,7 @@ class StatsScreen extends React.Component
         <StatsChart
           data={data}
           keys={keys}
+          focuses={this.props.focuses}
           colors={GraphColors}
           dates={this.state.dates}
           chartType={this.props.stats.chartType}
@@ -260,9 +261,9 @@ class StatsScreen extends React.Component
         />
 
         <StatsLegend
+          keys={keys}
           categories={this.props.categories}
           focuses={this.props.focuses}
-          keys={keys}
           colors={GraphColors}
           onCategoryVisibilityChange={this._onCategoryVisibilityChange}
           onFocusVisibilityChange={this._onFocusVisibilityChange}
