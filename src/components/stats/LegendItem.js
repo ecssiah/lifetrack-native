@@ -49,7 +49,7 @@ class LegendItem extends React.Component
 
         <Switch 
           style={styles.switch} 
-          value={this.props.focus.visible}
+          value={this.props.focus.statVisible}
           trackColor={{ true: Color.primary, false: Color.secondary }}
           onValueChange={value => this.props.onValueChange(value)}
         />

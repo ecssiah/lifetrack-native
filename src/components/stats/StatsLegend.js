@@ -1,9 +1,11 @@
 import React from 'react'
-import { ScrollView, View } from 'react-native'
+import { ScrollView, SectionList, View } from 'react-native'
 import createStyles from '../../styles';
 
 import LTSpacer from '../LT/LTSpacer';
 import LegendItem from './LegendItem';
+import { UNCATEGORIZED } from '../../constants/Categories';
+import FocusHeader from '../focuses/FocusHeader';
 
 const styles = createStyles({
   legendContainer: {
@@ -35,19 +37,114 @@ class StatsLegend extends React.Component
     })
   }
 
+
+  _findCategoryFocuses = name => {
+    const focuses = []
+
+    for (const id in this.props.focuses) {
+      if (this.props.focuses[id].category === name) {
+        focuses.push({ id, ...this.props.focuses[id] })
+      }
+    }
+
+    return focuses
+  }
+
+
+  _renderItem = (item, index) => {
+    return (
+      <LegendItem
+        focus={item}
+        color={this.props.colors[index]}
+        onValueChange={value =>
+          this.props.onFocusVisibilityChange(this.props.keys[index], value)
+        }
+      />
+    )
+  }
+
+
+  _renderSectionHeader = section => {
+    return (
+      <FocusHeader 
+        title={section.title} 
+        active={section.statVisible}
+        onCategorySelect={() => 
+          this.props.onCategoryVisibilityChange(section.title)
+        }
+      />
+    )
+  }
+
+
+  _sectionsReducer = (result, name) => {
+    const category = this.props.categories[name]
+    const section = { 
+      title: name, 
+      statVisible: category.statVisible, 
+      data: [] 
+    }
+
+    if (name === UNCATEGORIZED) {
+      const focuses = this._findCategoryFocuses(name)
+
+      if (focuses.length > 0) {
+        if (category.statVisible) {
+          focuses.sort((a, b) => a.name.localeCompare(
+            b.name, undefined, { numeric: true }
+          ))
+          result.push({ ...section, data: focuses })
+        } else {
+          result.push(section)
+        }
+      }
+    } else {
+      if (category.statVisible) {
+        const focuses = this._findCategoryFocuses(name)
+
+        focuses.sort((a, b) => a.name.localeCompare(
+          b.name, undefined, { numeric: true }
+        ))
+        result.push({ ...section, data: focuses })
+      } else {
+        result.push(section)
+      }
+    }
+
+    return result
+  }
+
+
+  _getSections = () => {
+    const categoryNames = Object.keys(this.props.categories)
+      .sort((a, b) => a.localeCompare(b, undefined, { numeric: true }))
+
+    const sections = categoryNames.reduce(this._sectionsReducer, [])
+
+    return sections
+  }
+
+
   render() {
     return (
       <ScrollView>
-        <LTSpacer small />
-
-        <View style={styles.legendContainer}>
-          <View style={styles.list} >
-            {this._getList()}
-          </View>
-        </View>
+        <SectionList
+          keyExtractor={(item, index) => index}
+          renderItem={({item, index}) => this._renderItem(item, index)} 
+          renderSectionHeader={({section}) => 
+            this._renderSectionHeader(section)
+          }
+          sections={this._getSections()}
+        />
       </ScrollView>
     )
   }
 }
 
 export default StatsLegend
+
+          // <View style={styles.legendContainer}>
+          //   <View style={styles.list} >
+          //     {this._getList()}
+          //   </View>
+          // </View>

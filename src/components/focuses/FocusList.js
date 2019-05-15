@@ -12,7 +12,7 @@ class FocusList extends React.Component
     return (
       <FocusHeader 
         title={section.title} 
-        active={section.show}
+        active={section.visible}
         onCategorySelect={this.props.onCategorySelect}
       />
     )
@@ -41,13 +41,17 @@ class FocusList extends React.Component
 
   _sectionsReducer = (result, name) => {
     const category = this.props.categories[name]
-    const section = { title: name, show: category.show, data: [] }
+    const section = { 
+      title: name, 
+      visible: category.focusVisible, 
+      data: [] 
+    }
 
     if (name === UNCATEGORIZED) {
       const focuses = this._findCategoryFocuses(name)
 
       if (focuses.length > 0) {
-        if (category.show) {
+        if (category.focusVisible) {
           focuses.sort((a, b) => a.name.localeCompare(
             b.name, undefined, { numeric: true }
           ))
@@ -57,7 +61,7 @@ class FocusList extends React.Component
         }
       }
     } else {
-      if (category.show) {
+      if (category.focusVisible) {
         const focuses = this._findCategoryFocuses(name)
 
         focuses.sort((a, b) => a.name.localeCompare(

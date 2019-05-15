@@ -197,7 +197,7 @@ class StatsScreen extends React.Component
           { 'month': 'numeric', 'day': 'numeric', 'year': 'numeric' }
         )
 
-        if (focus.visible && focus.history[dateString]) {
+        if (focus.statVisible && focus.history[dateString]) {
           focusData.seconds = focus.history[dateString]
         } else {
           focusData.seconds = 0
@@ -223,11 +223,16 @@ class StatsScreen extends React.Component
   }
 
 
-  _onFocusVisibilityChange = (key, value) => {
-    const update = { visible: value }
+  _onCategoryVisibilityChange = name => {
+    console.warn(name)
+  }
 
-    this.props.updateFocus(key, update)
-    this.props.updateFocusDB(key, update)
+
+  _onFocusVisibilityChange = (id, value) => {
+    const update = { focusVisible: value }
+
+    this.props.updateFocus(id, update)
+    this.props.updateFocusDB(id, update)
   }
   
 
@@ -259,6 +264,7 @@ class StatsScreen extends React.Component
           focuses={this.props.focuses}
           keys={keys}
           colors={GraphColors}
+          onCategoryVisibilityChange={this._onCategoryVisibilityChange}
           onFocusVisibilityChange={this._onFocusVisibilityChange}
         />
 
@@ -288,6 +294,7 @@ class StatsScreen extends React.Component
 const mapStateToProps = state => ({
   focuses: state.focuses,
   stats: state.stats,
+  categories: state.categories,
 })
 
 

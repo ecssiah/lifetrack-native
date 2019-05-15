@@ -13,7 +13,6 @@ import createStyles from '../../../styles'
 import LTIcon from '../../../components/LT/LTIcon'
 import FocusList from '../../../components/focuses/FocusList'
 import FocusAddModal from '../../../components/modals/FocusAddModal'
-import LTLoading from '../../../components/LT/LTLoading';
 
 const styles = createStyles({
   container: {
@@ -80,7 +79,7 @@ class FocusesScreen extends React.Component
       userId: auth.currentUser.uid,
       active: false,
       working: true,
-      visible: true,
+      statVisible: true,
       periods: 0,
       level: 0,
       experience: 0.0,
@@ -127,7 +126,7 @@ class FocusesScreen extends React.Component
 
   _onCategorySelect = categoryName => {
     const update = {
-      show: !this.props.categories[categoryName].show,
+      focusVisible: !this.props.categories[categoryName].focusVisible,
     }
 
     this.props.updateCategory(categoryName, update)

@@ -66,7 +66,8 @@ class CategoriesScreen extends React.Component
 
   _onCategoryAddConfirm = () => {
     const update = {
-      show: true,
+      focusVisible: true,
+      statVisible: true,
     }
 
     this.props.addCategory(this.state.newCategoryName, update)

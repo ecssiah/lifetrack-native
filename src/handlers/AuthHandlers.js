@@ -27,7 +27,10 @@ export async function signUp(dispatch, email, password) {
       breakPeriod: DEFAULT_BREAK_PERIOD,
     },
     categories: {
-      [UNCATEGORIZED]: { show: true },
+      [UNCATEGORIZED]: { 
+        focusVisible: true, 
+        statVisible: true,
+      },
     },
     stats: {
       startDate,

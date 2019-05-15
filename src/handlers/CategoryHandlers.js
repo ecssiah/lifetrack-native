@@ -8,7 +8,7 @@ import {
 import { updateFocusCategories } from './FocusesHandlers'
 
 
-export function addCategory(name, update) {
+export function addCategory(dispatch, name, update) {
   dispatch({ type: ADD_CATEGORY, name, update })
 }
 
@@ -23,7 +23,7 @@ export async function addCategoryDB(name, update) {
 }
 
 
-export function updateCategory(name, update) {
+export function updateCategory(dispatch, name, update) {
   dispatch({ type: UPDATE_CATEGORY, name, update })
 }
 
@@ -34,7 +34,7 @@ export async function updateCategoryDB(name, update) {
 }
 
 
-export function deleteCategory(name) {
+export function deleteCategory(dispatch, name) {
   dispatch({ type: DELETE_CATEGORY, name })
 }
 
