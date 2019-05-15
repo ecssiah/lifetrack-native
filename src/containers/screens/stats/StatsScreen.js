@@ -229,7 +229,7 @@ class StatsScreen extends React.Component
 
 
   _onFocusVisibilityChange = (id, value) => {
-    const update = { focusVisible: value }
+    const update = { statVisible: value }
 
     this.props.updateFocus(id, update)
     this.props.updateFocusDB(id, update)
