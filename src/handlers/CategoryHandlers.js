@@ -68,14 +68,14 @@ export async function updateCategoryName(dispatch, name, newName) {
 
   const transactionUpdateFunc = async transaction => {
     const doc = await transaction.get(categoriesRef)
-    const categoryName = doc.get(name)
+    const category = doc.get(name)
 
     const update = {
-      [newName]: categoryName,
+      [newName]: category,
       [name]: firebase.firestore.FieldValue.delete(),
     }
 
-    transaction.update(categoryRef, update)
+    transaction.update(categoriesRef, update)
   }
 
   await db.runTransaction(transactionUpdateFunc)
@@ -84,3 +84,4 @@ export async function updateCategoryName(dispatch, name, newName) {
 
   dispatch({ type: UPDATE_CATEGORY_NAME, name, newName })
 }
+

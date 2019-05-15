@@ -134,10 +134,10 @@ class CategoriesScreen extends React.Component
 
   _onCategoryNameEditConfirm = () => {
     if (this.state.categoryName === this.state.newCategoryName) {
-      return
-    }
-
-    if (this.props.categories.hasOwnProperty(this.state.newCategoryName)) {
+      this.setState({
+        editModalShow: false,
+      })
+    } else if (this.props.categories.hasOwnProperty(this.state.newCategoryName)) {
       Alert.alert(
         this.state.newCategoryName + ' already exists.',
         '',
@@ -154,6 +154,10 @@ class CategoriesScreen extends React.Component
         this.state.categoryName, 
         this.state.newCategoryName, 
       )
+
+      this.setState({
+        editModalShow: false,
+      })
     }
   }
 
@@ -177,7 +181,7 @@ class CategoriesScreen extends React.Component
           show={this.state.editModalShow} 
           newCategoryName={this.state.newCategoryName}
           onDelete={this._onCategoryDelete}
-          onConfirm={this._onCategoryConfirm}
+          onConfirm={this._onCategoryNameEditConfirm}
           onCancel={this._onCategoryCancel}
           onChangeText={text => this.setState({ newCategoryName: text })}
           onSubmitEditing={this._onCategoryNameEditConfirm}
