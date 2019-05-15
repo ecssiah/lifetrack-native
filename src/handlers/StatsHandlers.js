@@ -9,6 +9,6 @@ export function updateStats(dispatch, update) {
 }
 
 
-export async function updateStatsDB(update) {
+export function updateStatsDB(update) {
   db.collection('stats').doc(auth.currentUser.uid).update(update)
 }
