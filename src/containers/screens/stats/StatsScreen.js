@@ -2,6 +2,9 @@ import React from 'react'
 import { View } from 'react-native'
 import { connect } from 'react-redux'
 import { GraphColors } from '../../../constants/Stats';
+import { 
+  updateCategory, updateCategoryDB 
+} from '../../../handlers/CategoryHandlers'
 import { updateFocus, updateFocusDB } from '../../../handlers/FocusesHandlers'
 import { updateStats, updateStatsDB } from '../../../handlers/StatsHandlers'
 import createStyles from '../../../styles'
@@ -192,13 +195,24 @@ class StatsScreen extends React.Component
 
       for (let i = 0; i < dates.length; i++) {
         const focusData = { date: dates[i], chartColor: focus.chartColor } 
-        const dateString = new Date(dates[i]).toLocaleDateString(
-          undefined, 
-          { 'month': 'numeric', 'day': 'numeric', 'year': 'numeric' }
-        )
 
-        if (focus.statVisible && focus.history[dateString]) {
-          focusData.seconds = focus.history[dateString]
+        if (focus.statVisible) {
+          const category = this.props.categories[focus.category]
+
+          if (category.statVisible) {
+            const dateString = new Date(dates[i]).toLocaleDateString(
+              undefined, 
+              { 'month': 'numeric', 'day': 'numeric', 'year': 'numeric' }
+            )
+
+            if (focus.history[dateString]) {
+              focusData.seconds = focus.history[dateString]
+            } else {
+              focusData.seconds = 0
+            }
+          } else {
+            focusData.seconds = 0
+          }
         } else {
           focusData.seconds = 0
         }
@@ -223,8 +237,26 @@ class StatsScreen extends React.Component
   }
 
 
+  _findCategoryFocuses = name => {
+    const focuses = []
+
+    for (const id in this.props.focuses) {
+      if (this.props.focuses[id].category === name) {
+        focuses.push({ id, ...this.props.focuses[id] })
+      }
+    }
+
+    return focuses
+  }
+
+
   _onCategoryVisibilityChange = name => {
-    console.warn(name)
+    const update = {
+      statVisible: !this.props.categories[name].statVisible,
+    }
+
+    this.props.updateCategory(name, update)
+    this.props.updateCategoryDB(name, update)
   }
 
 
@@ -300,6 +332,8 @@ const mapStateToProps = state => ({
 
 
 const mapDispatchToProps = dispatch => ({
+  updateCategory: (name, update) => updateCategory(dispatch, name, update),
+  updateCategoryDB: (name, update) => updateCategoryDB(name, update),
   updateFocus: (id, update) => updateFocus(dispatch, id, update),
   updateFocusDB: (id, update) => updateFocusDB(id, update),
   updateStats: update => updateStats(dispatch, update),

@@ -7,14 +7,16 @@ import createStyles, { Color, FontSize } from '../../styles';
 import LTText from '../LT/LTText';
 
 const styles = createStyles({
-  icon: {
-    flex: 1,
-    marginTop: 2,
-  },
   item: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     marginTop: 2,
+  },
+  icon: {
+    flex: 1,
+    marginTop: 2,
+    marginLeft: 6,
+    marginRight: -20,
   },
   text: {
     flex: 6,
