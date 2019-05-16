@@ -117,11 +117,17 @@ class StatsScreen extends React.Component
     this.props.updateStats(update)
     this.props.updateStatsDB(update)
 
+    const chartDates = this._getDateRange(
+      startDate, new Date(this.props.state.endDate)
+    )
+    const chartData = this._getMainChartData(
+      this.state.chartKeys, chartDates
+    )
+
     this.setState({
       startDateModalShow: false,
-      chartDates: this._getDateRange(
-        startDate, new Date(this.props.stats.endDate)
-      ),
+      chartDates,
+      chartData,
     })
   }
 
@@ -166,11 +172,17 @@ class StatsScreen extends React.Component
     this.props.updateStats(update)
     this.props.updateStatsDB(update)
 
+    const chartDates = this._getDateRange(
+      startDate, new Date(this.props.state.endDate)
+    )
+    const chartData = this._getMainChartData(
+      this.state.chartKeys, chartDates
+    )
+
     this.setState({
       endDateModalShow: false,
-      chartDates: this._getDateRange(
-        new Date(this.props.stats.startDate), endDate
-      ),
+      chartDates,
+      chartData,
     })
   }
 
@@ -275,8 +287,12 @@ class StatsScreen extends React.Component
     this.props.updateCategory(name, update)
     this.props.updateCategoryDB(name, update)
 
+    const chartData = this._getMainChartData(
+      this.state.chartKeys, this.state.chartDates
+    )
+
     this.setState({
-      chartData: this._getMainChartData(this.state.chartKeys, this.state.chartDates)
+      chartData,
     })
   }
 
@@ -287,69 +303,65 @@ class StatsScreen extends React.Component
     this.props.updateFocus(id, update)
     this.props.updateFocusDB(id, update)
 
+    const chartData = this._getMainChartData(
+      this.state.chartKeys, this.state.chartDates
+    )
+
     this.setState({
-      chartData: this._getMainChartData(this.state.chartKeys, this.state.chartDates)
+      chartData,
     })
   }
   
 
   render() {
-    if (this.state.chartData) {
-      return (
-        <View style={styles.container}>
-          <StatsChart
-            keys={this.state.chartKeys}
-            dates={this.state.chartDates}
-            data={this.state.chartData}
-            colors={GraphColors}
-            focuses={this.props.focuses}
-            chartType={this.props.stats.chartType}
-          />
-
-          <StatsFilter
-            startDate={this.props.stats.startDate}
-            endDate={this.props.stats.endDate}
-            onStartDatePress={this._onStartDatePress}
-            onEndDatePress={this._onEndDatePress}
-            chartType={this.props.stats.chartType}
-            onChartTypeChange={this._onChartTypeChange}
-          />
-
-          <StatsLegend
-            keys={this.state.chartKeys}
-            categories={this.props.categories}
-            focuses={this.props.focuses}
-            colors={GraphColors}
-            onCategoryVisibilityChange={this._onCategoryVisibilityChange}
-            onFocusVisibilityChange={this._onFocusVisibilityChange}
-          />
-
-          <DateModal
-            title={'Start Date'}
-            show={this.state.startDateModalShow}
-            date={this.state.startDateSelection}
-            onChange={this._onStartDateChange}
-            onConfirm={this._onStartDateSubmit}
-            onCancel={this._onStartDateCancel}
-          />
-
-          <DateModal
-            title={'End Date'}
-            show={this.state.endDateModalShow}
-            date={this.state.endDateSelection}
-            onChange={this._onEndDateChange}
-            onConfirm={this._onEndDateSubmit}
-            onCancel={this._onEndDateCancel}
-          />
-        </View>
-      )
-    } else {
-      return (
-        <ActivityIndicator
-          size="large" color={Color.primary}
+    return (
+      <View style={styles.container}>
+        <StatsChart
+          keys={this.state.chartKeys}
+          dates={this.state.chartDates}
+          data={this.state.chartData}
+          colors={GraphColors}
+          focuses={this.props.focuses}
+          chartType={this.props.stats.chartType}
         />
-      )
-    }
+
+        <StatsFilter
+          startDate={this.props.stats.startDate}
+          endDate={this.props.stats.endDate}
+          onStartDatePress={this._onStartDatePress}
+          onEndDatePress={this._onEndDatePress}
+          chartType={this.props.stats.chartType}
+          onChartTypeChange={this._onChartTypeChange}
+        />
+
+        <StatsLegend
+          keys={this.state.chartKeys}
+          categories={this.props.categories}
+          focuses={this.props.focuses}
+          colors={GraphColors}
+          onCategoryVisibilityChange={this._onCategoryVisibilityChange}
+          onFocusVisibilityChange={this._onFocusVisibilityChange}
+        />
+
+        <DateModal
+          title={'Start Date'}
+          show={this.state.startDateModalShow}
+          date={this.state.startDateSelection}
+          onChange={this._onStartDateChange}
+          onConfirm={this._onStartDateSubmit}
+          onCancel={this._onStartDateCancel}
+        />
+
+        <DateModal
+          title={'End Date'}
+          show={this.state.endDateModalShow}
+          date={this.state.endDateSelection}
+          onChange={this._onEndDateChange}
+          onConfirm={this._onEndDateSubmit}
+          onCancel={this._onEndDateCancel}
+        />
+      </View>
+    )
   }
 }
 
