@@ -112,9 +112,7 @@ class StatsScreen extends React.Component
     const chartDates = this._getDateRange(
       startDate, new Date(this.props.state.endDate)
     )
-    const chartData = this._getMainChartData(
-      this.state.chartKeys, chartDates
-    )
+    const chartData = this._getMainChartData(this.state.chartKeys, chartDates)
 
     this.setState({
       startDateModalShow: false,
@@ -167,9 +165,7 @@ class StatsScreen extends React.Component
     const chartDates = this._getDateRange(
       startDate, new Date(this.props.state.endDate)
     )
-    const chartData = this._getMainChartData(
-      this.state.chartKeys, chartDates
-    )
+    const chartData = this._getMainChartData(this.state.chartKeys, chartDates)
 
     this.setState({
       endDateModalShow: false,
@@ -215,6 +211,7 @@ class StatsScreen extends React.Component
       const focus = this.props.focuses[key]
 
       for (let i = 0; i < dates.length; i++) {
+        let seconds = undefined
         const focusData = { date: dates[i], chartColor: focus.chartColor } 
 
         if (focus.statVisible) {
@@ -227,16 +224,12 @@ class StatsScreen extends React.Component
             )
 
             if (focus.history[dateString]) {
-              focusData.seconds = focus.history[dateString]
-            } else {
-              focusData.seconds = 0
+              seconds = focus.history[dateString]
             }
-          } else {
-            focusData.seconds = 0
           }
-        } else {
-          focusData.seconds = 0
         }
+
+        focusData.seconds = seconds ? seconds : 0 
 
         data[key].push(focusData)
       }
