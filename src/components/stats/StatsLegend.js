@@ -1,13 +1,11 @@
 import React from 'react'
 import { ScrollView, SectionList, View } from 'react-native'
 import { UNCATEGORIZED } from '../../constants/Categories';
-import createStyles from '../../styles';
+import { GraphColors } from '../../constants/Stats';
 
 import LegendItem from './LegendItem';
 import FocusHeader from '../focuses/FocusHeader';
 
-const styles = createStyles({
-})
 
 class StatsLegend extends React.Component
 {
@@ -19,7 +17,7 @@ class StatsLegend extends React.Component
         <LegendItem
           key={key}
           focus={focus}
-          color={this.props.colors[index]}
+          color={GraphColors[index]}
           onValueChange={value =>
             this.props.onFocusVisibilityChange(key, value)
           }
@@ -46,7 +44,7 @@ class StatsLegend extends React.Component
     return (
       <LegendItem
         focus={item}
-        color={this.props.colors[item.chartColor]}
+        color={GraphColors[item.chartColor]}
         onValueChange={value =>
           this.props.onFocusVisibilityChange(item.id, value)
         }

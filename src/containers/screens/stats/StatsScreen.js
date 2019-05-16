@@ -41,31 +41,23 @@ class StatsScreen extends React.Component
     const startDateSelection = new Date(props.stats.startDate)
     const endDateSelection = new Date(props.stats.endDate)
 
+    const chartDates = this._getDateRange(startDateSelection, endDateSelection)
+    const chartKeys = this._getMainChartKeys()
+    const chartData = this._getMainChartData(chartKeys, chartDates)
+
     this.state = {
       startDateModalShow: false,
       endDateModalShow: false,
       startDateSelection,
       endDateSelection,
-      chartDates: undefined,
-      chartKeys: undefined,
-      chartData: undefined,
+      chartDates,
+      chartKeys,
+      chartData,
     }
   }
 
 
   componentDidMount() {
-    const chartDates = this._getDateRange(
-      this.state.startDateSelection, this.state.endDateSelection
-    )
-    const chartKeys = this._getMainChartKeys()
-    const chartData = this._getMainChartData(chartKeys, chartDates)
-
-    this.setState({
-      chartDates,
-      chartKeys,
-      chartData,
-    })
-
     this.props.navigation.setParams({
       statsHelpSelect: this._statsHelpSelect,
     })
@@ -320,7 +312,6 @@ class StatsScreen extends React.Component
           keys={this.state.chartKeys}
           dates={this.state.chartDates}
           data={this.state.chartData}
-          colors={GraphColors}
           focuses={this.props.focuses}
           chartType={this.props.stats.chartType}
         />
@@ -338,7 +329,6 @@ class StatsScreen extends React.Component
           keys={this.state.chartKeys}
           categories={this.props.categories}
           focuses={this.props.focuses}
-          colors={GraphColors}
           onCategoryVisibilityChange={this._onCategoryVisibilityChange}
           onFocusVisibilityChange={this._onFocusVisibilityChange}
         />
