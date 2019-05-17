@@ -1555,9 +1555,9 @@
 				INFOPLIST_FILE = LifeTrack/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_LDFLAGS = (
-					"$(inherited)",
 					"-ObjC",
 					"-lc++",
+					"$(inherited)",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = gauge.structures.LifeTrack;
 				PRODUCT_NAME = LifeTrack;
@@ -1581,9 +1581,9 @@
 				INFOPLIST_FILE = LifeTrack/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_LDFLAGS = (
-					"$(inherited)",
 					"-ObjC",
 					"-lc++",
+					"$(inherited)",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = gauge.structures.LifeTrack;
 				PRODUCT_NAME = LifeTrack;

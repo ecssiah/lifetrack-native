@@ -1,13 +1,16 @@
 import React from 'react'
-import { ActivityIndicator, View } from 'react-native'
+import { View } from 'react-native'
 import { connect } from 'react-redux'
-import { GraphColors } from '../../../constants/Stats';
 import { 
   updateCategory, updateCategoryDB 
 } from '../../../handlers/CategoryHandlers'
-import { updateFocus, updateFocusDB } from '../../../handlers/FocusesHandlers'
-import { updateStats, updateStatsDB } from '../../../handlers/StatsHandlers'
-import createStyles, { Color } from '../../../styles'
+import { 
+  updateFocus, updateFocusDB 
+} from '../../../handlers/FocusesHandlers'
+import { 
+  updateStats, updateStatsDB, updateStatsLocal 
+} from '../../../handlers/StatsHandlers'
+import createStyles from '../../../styles'
 
 import LTIcon from '../../../components/LT/LTIcon';
 import DateModal from '../../../components/modals/DateModal';
@@ -108,6 +111,7 @@ class StatsScreen extends React.Component
 
     this.props.updateStats(update)
     this.props.updateStatsDB(update)
+    this.props.updateStatsLocal(update)
 
     const chartDates = this._getDateRange(
       startDate, new Date(this.props.state.endDate)
@@ -220,7 +224,11 @@ class StatsScreen extends React.Component
           if (category.statVisible) {
             const dateString = new Date(dates[i]).toLocaleDateString(
               undefined, 
-              { 'month': 'numeric', 'day': 'numeric', 'year': 'numeric' }
+              { 
+                'month': 'numeric', 
+                'day': 'numeric', 
+                'year': 'numeric' 
+              }
             )
 
             if (focus.history[dateString]) {
@@ -363,6 +371,7 @@ const mapDispatchToProps = dispatch => ({
   updateFocusDB: (id, update) => updateFocusDB(id, update),
   updateStats: update => updateStats(dispatch, update),
   updateStatsDB: update => updateStatsDB(update),
+  updateStatsLocal: update => updateStatsLocal(update),
 })
 
 

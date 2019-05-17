@@ -12,6 +12,8 @@ target 'LifeTrack' do
   pod 'Firebase/Core', '~> 5.15.0'
   pod 'RNSound', :path => '../node_modules/react-native-sound'
 
+  pod 'RNCAsyncStorage', :path => '../node_modules/@react-native-community/async-storage'
+
   target 'LifeTrackTests' do
     inherit! :search_paths
     # Pods for testing

@@ -1,5 +1,7 @@
 export const UNCATEGORIZED = 'Uncategorized'
 
+export const CATEGORIES_KEY = '@lt_categories'
+
 export const SET_CATEGORIES = 'categories:set-categories'
 export const UPDATE_CATEGORIES = 'categories:update-categories'
 export const ADD_CATEGORY = 'categories:add-category'

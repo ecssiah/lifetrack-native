@@ -2,7 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { auth } from '../../config/firebaseConfig'
 import { View, Text } from 'react-native'
-import { loadUser } from '../../handlers/AuthHandlers'
+import { loadUser, loadUserLocal } from '../../handlers/AuthHandlers'
 import createStyles, { Color, FontSize } from '../../styles'
 
 const styles = createStyles({
@@ -26,7 +26,7 @@ class SplashScreen extends React.Component
   componentDidMount() {
     auth.onAuthStateChanged(async user => {
       if (user) {
-        await this.props.loadUser()
+        await this.props.loadUserLocal()
 
         this.props.navigation.navigate('App')
       } else {
@@ -49,6 +49,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   loadUser: () => loadUser(dispatch),
+  loadUserLocal: () => loadUserLocal(dispatch),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(SplashScreen)
