@@ -200,7 +200,7 @@ const mapDispatchToProps = dispatch => ({
   addCategory: name => addCategory(dispatch, name),
   addCategoryLocal: name => addCategoryLocal(name),
   deleteCategory: name => deleteCategory(dispatch, name),
-  deleteCategoryLocal: name => deleteCategoryLocal(name),
+  deleteCategoryLocal: name => deleteCategoryLocal(dispatch, name),
   updateCategoryName: (name, newName) => {
     return updateCategoryName(dispatch, name, newName)
   },
