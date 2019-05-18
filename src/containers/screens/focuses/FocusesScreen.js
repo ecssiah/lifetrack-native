@@ -3,7 +3,6 @@ import { ActivityIndicator, View } from 'react-native'
 import { isEmpty } from 'lodash-es'
 import { connect } from 'react-redux'
 import { auth } from '../../../config/firebaseConfig'
-import { loadUserLocal } from '../../../handlers/AuthHandlers'
 import { updateUser } from '../../../handlers/UserHandlers';
 import { UNCATEGORIZED } from '../../../constants/Categories'
 import { UPDATE_SELECTION } from '../../../constants/Selection'
@@ -205,7 +204,6 @@ const mapDispatchToProps = dispatch => ({
   updateCategory: (name, update) => updateCategory(dispatch, name, update),
   updateCategoryLocal: (name, update) => updateCategoryLocal(name, update),
   updateUser: update => updateUser(dispatch, update),
-  loadUserLocal: () => loadUserLocal(dispatch),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(FocusesScreen)

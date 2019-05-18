@@ -42,7 +42,7 @@ export async function updateFocusesLocal(update) {
 
     AsyncStorage.setItem(FOCUSES_KEY, JSON.stringify(focusesCollection))
   } catch(e) {
-    console.warn(e)
+    console.error('updateFocusesLocal', e)
   }
 }
 
@@ -71,7 +71,7 @@ export async function addFocusLocal(focus) {
 
     return id
   } catch(e) {
-    console.warn(e)
+    console.error('addFocusLocal', e)
   }
 }
 
@@ -95,7 +95,7 @@ export async function deleteFocusLocal(id) {
 
     AsyncStorage.setItem(FOCUSES_KEY, JSON.stringify(focusesCollection))
   } catch(e) {
-    console.warn(e)
+    console.error('deleteFocusLocal', e)
   }
 }
 
@@ -121,7 +121,7 @@ export async function updateFocusLocal(id, update) {
 
     return id
   } catch(e) {
-    console.warn(e)
+    console.error('updateFocusLocal', e)
   }
 }
 
@@ -142,7 +142,7 @@ export async function updateFocusCategories(dispatch, name, newName) {
     await AsyncStorage.setItem(FOCUSES_KEY, JSON.stringify(focusesCollection))
     updateFocuses(dispatch, update)
   } catch(e) {
-    console.warn(e)
+    console.error('updateFocusCategories', e)
   }
 }
 
@@ -175,7 +175,7 @@ async function searchForWorkingFocuses() {
 
     return workingFocuses
   } catch(e) {
-    console.warn(e)
+    console.error('searchForWorkingFocuses', e)
   }
 }
 
@@ -197,7 +197,7 @@ async function deactivateFocuses(dispatch, workingFocuses) {
 
     await AsyncStorage.setItem(FOCUSES_KEY, JSON.stringify(focusesCollection))
   } catch(e) {
-    console.warn(e)
+    console.error('deactiveFocuses', e)
   }
 }
 
@@ -289,4 +289,19 @@ async function updateExperience(dispatch, workingFocuses, elapsed) {
   } catch(e) {
     console.error('updateExperience', e)
   }
+}
+
+
+export async function resetFocuses(dispatch, focuses) {
+  const focusUpdate = {} 
+  for (let [id, focus] of Object.entries(focuses)) {
+    focusUpdate[id] = {
+      active: false,
+      working: true,
+      time: 60 * focus.workPeriod,
+      timer: null,
+    }
+  }
+
+  await updateFocuses(dispatch, focusUpdate)
 }

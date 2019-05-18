@@ -2,7 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { auth } from '../../config/firebaseConfig'
 import { View, Text } from 'react-native'
-import { loadUser, loadUserLocal } from '../../handlers/AuthHandlers'
+import { loadUserLocal } from '../../handlers/DataHandlers'
 import createStyles, { Color, FontSize } from '../../styles'
 
 const styles = createStyles({
@@ -47,7 +47,6 @@ const mapStateToProps = state => ({
 })
 
 const mapDispatchToProps = dispatch => ({
-  loadUser: () => loadUser(dispatch),
   loadUserLocal: () => loadUserLocal(dispatch),
 })
 
