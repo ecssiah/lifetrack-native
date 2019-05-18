@@ -11,13 +11,14 @@ import {
   addFocus, addFocusDB, addFocusLocal 
 } from '../../../handlers/FocusesHandlers'
 import { 
-  updateCategory, updateCategoryDB 
+  updateCategory, updateCategoryLocal 
 } from '../../../handlers/CategoryHandlers'
 import createStyles, { Color } from '../../../styles'
 
 import LTIcon from '../../../components/LT/LTIcon'
 import FocusList from '../../../components/focuses/FocusList'
 import FocusAddModal from '../../../components/modals/FocusAddModal'
+
 
 const styles = createStyles({
   container: {
@@ -29,6 +30,7 @@ const styles = createStyles({
     alignItems: 'center',
   },
 })
+
 
 class FocusesScreen extends React.Component 
 {
@@ -145,7 +147,7 @@ class FocusesScreen extends React.Component
     }
 
     this.props.updateCategory(categoryName, update)
-    this.props.updateCategoryDB(categoryName, update)
+    this.props.updateCategoryLocal(categoryName, update)
   }
 
 
@@ -201,7 +203,7 @@ const mapDispatchToProps = dispatch => ({
   addFocusLocal: focus => addFocusLocal(focus),
   updateSelection: update => dispatch({ type: UPDATE_SELECTION, update }),
   updateCategory: (name, update) => updateCategory(dispatch, name, update),
-  updateCategoryDB: (name, update) => updateCategoryDB(name, update),
+  updateCategoryLocal: (name, update) => updateCategoryLocal(name, update),
   updateUser: update => updateUser(dispatch, update),
   loadUserLocal: () => loadUserLocal(dispatch),
 })

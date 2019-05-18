@@ -2,7 +2,7 @@ import React from 'react'
 import { View } from 'react-native'
 import { connect } from 'react-redux'
 import { 
-  updateCategory, updateCategoryDB 
+  updateCategory, updateCategoryLocal 
 } from '../../../handlers/CategoryHandlers'
 import { 
   updateFocus, updateFocusLocal 
@@ -278,7 +278,7 @@ class StatsScreen extends React.Component
     }
 
     this.props.updateCategory(name, update)
-    this.props.updateCategoryDB(name, update)
+    this.props.updateCategoryLocal(name, update)
 
     const chartData = this._getMainChartData(
       this.state.chartKeys, this.state.chartDates
@@ -366,7 +366,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   updateCategory: (name, update) => updateCategory(dispatch, name, update),
-  updateCategoryDB: (name, update) => updateCategoryDB(name, update),
+  updateCategoryLocal: (name, update) => updateCategoryLocal(name, update),
   updateFocus: (id, update) => updateFocus(dispatch, id, update),
   updateFocusLocal: (id, update) => updateFocusLocal(id, update),
   updateStats: update => updateStats(dispatch, update),

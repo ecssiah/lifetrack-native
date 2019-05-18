@@ -4,8 +4,8 @@ import {
   Alert, View 
 } from 'react-native'
 import { 
-  addCategory, addCategoryDB,
-  deleteCategory, deleteCategoryDB, 
+  addCategory, addCategoryLocal,
+  deleteCategory, deleteCategoryLocal, 
   updateCategoryName,
 } from '../../../handlers/CategoryHandlers'
 import createStyles from '../../../styles' 
@@ -64,14 +64,9 @@ class CategoriesScreen extends React.Component
   }
 
 
-  _onCategoryAddConfirm = () => {
-    const update = {
-      focusVisible: true,
-      statVisible: false,
-    }
-
-    this.props.addCategory(this.state.newCategoryName, update)
-    this.props.addCategoryDB(this.state.newCategoryName, update)
+  _onCategoryAddConfirm = async () => {
+    this.props.addCategoryLocal(this.state.newCategoryName)
+    this.props.addCategory(this.state.newCategoryName)
 
     this.setState({
       newCategoryName: '',
@@ -97,8 +92,8 @@ class CategoriesScreen extends React.Component
 
 
   _onCategoryDeleteConfirm = () => {
+    this.props.deleteCategoryLocal(this.state.categoryName)
     this.props.deleteCategory(this.state.categoryName)
-    this.props.deleteCategoryDB(this.state.categoryName)
 
     this.setState({
       editModalShow: false,
@@ -137,7 +132,9 @@ class CategoriesScreen extends React.Component
       this.setState({
         editModalShow: false,
       })
-    } else if (this.props.categories.hasOwnProperty(this.state.newCategoryName)) {
+    } else if (
+      this.props.categories.hasOwnProperty(this.state.newCategoryName)
+    ) {
       Alert.alert(
         this.state.newCategoryName + ' already exists.',
         '',
@@ -201,9 +198,9 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   addCategory: name => addCategory(dispatch, name),
-  addCategoryDB: name => addCategoryDB(name),
+  addCategoryLocal: name => addCategoryLocal(name),
   deleteCategory: name => deleteCategory(dispatch, name),
-  deleteCategoryDB: name => deleteCategoryDB(name),
+  deleteCategoryLocal: name => deleteCategoryLocal(name),
   updateCategoryName: (name, newName) => {
     return updateCategoryName(dispatch, name, newName)
   },
