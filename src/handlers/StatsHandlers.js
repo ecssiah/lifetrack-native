@@ -17,13 +17,13 @@ export function updateStatsDB(update) {
 
 export async function updateStatsLocal(update) {
   try {
-    const collection = AsyncStorage.getItem(STATS_KEY)
-    const stats = collection[auth.currentUser.uid]
+    const statsCollectionRaw = await AsyncStorage.getItem(STATS_KEY)
+    const statsCollection = JSON.parse(statsCollectionRaw)
 
-    updatedStats = Object.assign(stats, update)
+    extend(statsCollection[auth.currentUser.uid], update)
 
     await AsyncStorage.setItem(STATS_KEY, JSON.stringify(updateStats))
   } catch(e) {
-    console.warn(e)
+    console.error('updateStatsLocal', e)
   }
 }
