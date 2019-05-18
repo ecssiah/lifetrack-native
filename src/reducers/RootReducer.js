@@ -8,14 +8,15 @@ import settingsReducer from './SettingsReducer'
 import statsReducer from './StatsReducer'
 import userReducer from './UserReducer'
 
+
 const RootReducer = combineReducers({
-  status: statusReducer,
-  selection: selectionReducer,
-  focuses: focusesReducer,
-  categories: categoriesReducer,
+  user: userReducer,
   settings: settingsReducer,
   stats: statsReducer,
-  user: userReducer,
+  selection: selectionReducer,
+  categories: categoriesReducer,
+  focuses: focusesReducer,
+  status: statusReducer,
 })
 
 export default RootReducer

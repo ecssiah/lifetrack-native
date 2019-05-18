@@ -8,14 +8,12 @@ import {
   deleteCategory, deleteCategoryLocal, 
   updateCategoryName,
 } from '../../../handlers/CategoryHandlers'
-import createStyles from '../../../styles' 
 
 import LTIcon from '../../../components/LT/LTIcon'
 import CategoryAddModal from '../../../components/modals/CategoryAddModal'
 import CategoryEditModal from '../../../components/modals/CategoryEditModal'
 import CategoryList from '../../../components/setting/CategoryList'
 
-const styles = createStyles({ })
 
 class CategoriesScreen extends React.Component 
 {

@@ -1,55 +1,53 @@
-import { db, auth } from '../config/firebaseConfig'
+import { auth } from '../config/firebaseConfig'
 import { getDay } from '../../lib/utils';
 import { 
-  setUserDataLocal, loadUserLocal
+  setUserDataLocal, loadUserLocal, setUserData
 } from './DataHandlers'
 import { 
-  DEFAULT_WORK_PERIOD, DEFAULT_WORK_GOAL, DEFAULT_BREAK_PERIOD
+  DEFAULT_WORK_PERIOD, DEFAULT_WORK_GOAL, DEFAULT_BREAK_PERIOD, SETTINGS_KEY
 } from '../constants/Settings'
-import { UNCATEGORIZED } from '../constants/Categories'
-import { SET_CATEGORIES } from '../constants/Categories'
-import { SET_SETTINGS } from '../constants/Settings'
-import { SET_USER } from '../constants/User'
-import { SET_STATS } from '../constants/Stats'
-import { SET_FOCUSES } from '../constants/Focuses'
+import { UNCATEGORIZED, CATEGORIES_KEY } from '../constants/Categories'
+import { USER_KEY } from '../constants/User';
+import { STATS_KEY } from '../constants/Stats';
+import { FOCUSES_KEY } from '../constants/Focuses';
+import { UPDATE_STATUS } from '../constants/Status';
 
 
 export async function signUp(dispatch, email, password) {
-  const startDate = getDay().getTime()
+  dispatch({ type: UPDATE_STATUS, update: { userLoading: true } })
+
+  const startDate = getDay(0).getTime()
   const endDate = getDay(6).getTime()
 
   const userData = {
-    user: {
+    [USER_KEY]: {
       email,
       startDate,
       nextChartColor: 0,
     },
-    settings: {
+    [SETTINGS_KEY]: {
       workPeriod: DEFAULT_WORK_PERIOD,
       workGoal: DEFAULT_WORK_GOAL,
       breakPeriod: DEFAULT_BREAK_PERIOD,
     },
-    categories: {
+    [CATEGORIES_KEY]: {
       [UNCATEGORIZED]: { 
         focusVisible: true, 
         statVisible: true,
       },
     },
-    stats: {
+    [STATS_KEY]: {
       startDate,
       endDate,
     },
-    focuses: {},
+    [FOCUSES_KEY]: {},
   }
 
   await auth.createUserWithEmailAndPassword(email, password)
   await setUserDataLocal(userData)
+  await setUserData(dispatch, userData)
 
-  dispatch({ type: SET_USER, user: userData.user })
-  dispatch({ type: SET_SETTINGS, settings: userData.settings })
-  dispatch({ type: SET_CATEGORIES, categories: userData.categories })
-  dispatch({ type: SET_STATS, stats: userData.stats })
-  dispatch({ type: SET_FOCUSES, focuses: userData.focuses })
+  dispatch({ type: UPDATE_STATUS, update: { userLoading: false } })
 }
 
 
@@ -61,30 +59,30 @@ export async function signIn(dispatch, email, password) {
 
 // TODO
 export async function signOut() {
-  let query = db.collection('focuses')
-  query = query.where('userId', '==', auth.currentUser.uid)
-  query = query.where('active', '==', true)
+  // let query = db.collection('focuses')
+  // query = query.where('userId', '==', auth.currentUser.uid)
+  // query = query.where('active', '==', true)
 
-  const promises = []
-  const querySnapshot = await query.get()
+  // const promises = []
+  // const querySnapshot = await query.get()
 
-  querySnapshot.forEach(doc => {
-    const transactionUpdateFunc = async transaction => {
-      const docSnapshot = await transaction.get(doc.ref)
+  // querySnapshot.forEach(doc => {
+  //   const transactionUpdateFunc = async transaction => {
+  //     const docSnapshot = await transaction.get(doc.ref)
 
-      const update = {
-        active: false,
-        working: true,
-        time: docSnapshot.data().workPeriod * 60,
-      }
+  //     const update = {
+  //       active: false,
+  //       working: true,
+  //       time: docSnapshot.data().workPeriod * 60,
+  //     }
 
-      transaction.update(doc.ref, update)
-    }
+  //     transaction.update(doc.ref, update)
+  //   }
 
-    promises.push(db.runTransaction(transactionUpdateFunc))
-  })
+  //   promises.push(db.runTransaction(transactionUpdateFunc))
+  // })
 
-  await Promise.all(promises)
-  auth.signOut()
+  // await Promise.all(promises)
+  // auth.signOut()
 }
 

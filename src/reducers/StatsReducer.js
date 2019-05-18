@@ -1,7 +1,8 @@
 import { 
   SET_STATS,
-  UPDATE_STATS, 
+  UPDATE_STATS,
 } from "../constants/Stats"
+
 
 function statsReducer(state = {}, action) {
   const newState = { ...state }

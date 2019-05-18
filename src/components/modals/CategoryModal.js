@@ -1,9 +1,10 @@
 import React from 'react'
-import { Picker, TextInput } from 'react-native'
+import { Picker } from 'react-native'
 import createStyles, { FontSize, Font } from '../../styles'
 
 import LTModal from '../LT/LTModal'
 import LTConfirm from '../LT/LTConfirm'
+
 
 const styles = createStyles({
   container: {
@@ -24,6 +25,7 @@ const styles = createStyles({
   },
 })
 
+
 class CategoryModal extends React.Component 
 {
   _getCategoryItems = () => {
@@ -39,6 +41,7 @@ class CategoryModal extends React.Component
 
     return categoryItems
   }
+
 
   render() {
     return (

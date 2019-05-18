@@ -3,6 +3,7 @@ import {
   UPDATE_SETTINGS,
 } from "../constants/Settings"
 
+
 function settingsReducer(state = {}, action) {
   const newState = { ...state }
 

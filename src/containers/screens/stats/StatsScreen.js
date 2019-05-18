@@ -18,11 +18,13 @@ import StatsChart from '../../../components/stats/StatsChart';
 import StatsFilter from '../../../components/stats/StatsFilter';
 import StatsLegend from '../../../components/stats/StatsLegend';
 
+
 const styles = createStyles({
   container: {
     flex: 1,
   },
 })
+
 
 class StatsScreen extends React.Component 
 {

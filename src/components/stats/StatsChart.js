@@ -5,6 +5,7 @@ import {
 } from 'victory-native'
 import { SECONDS_IN_DAY, GraphColors } from '../../constants/Stats';
 
+
 class StatsChart extends React.Component 
 {
   _mainChartTickFormat = (value, index) => {

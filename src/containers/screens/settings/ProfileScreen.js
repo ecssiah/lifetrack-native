@@ -9,6 +9,7 @@ import LTText from '../../../components/LT/LTText'
 import LTIcon from '../../../components/LT/LTIcon'
 import AuthModal from '../../../components/modals/AuthModal'
 
+
 const styles = createStyles({
   container: {
     flex: 1,
@@ -29,6 +30,7 @@ const styles = createStyles({
     textAlign: 'right',
   },
 })
+
 
 class ProfileScreen extends React.Component 
 {

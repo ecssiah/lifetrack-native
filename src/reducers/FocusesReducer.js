@@ -1,8 +1,9 @@
 import { 
   SET_FOCUSES,
   UPDATE_FOCUSES, 
-  ADD_FOCUS, UPDATE_FOCUS, DELETE_FOCUS, 
+  ADD_FOCUS, UPDATE_FOCUS, DELETE_FOCUS,
 } from "../constants/Focuses"
+
 
 function focusesReducer(state = {}, action) {
   const newState = { ...state }

@@ -7,15 +7,27 @@ import { SETTINGS_KEY, SET_SETTINGS } from '../constants/Settings'
 import { CATEGORIES_KEY, SET_CATEGORIES } from '../constants/Categories'
 import { STATS_KEY, SET_STATS } from '../constants/Stats'
 import { FOCUSES_KEY, SET_FOCUSES } from '../constants/Focuses'
+import { UPDATE_STATUS } from '../constants/Status';
 
 
 export async function setUserData(dispatch, userData) {
-  dispatch({ type: SET_USER, user: userData[USER_KEY] })
-  dispatch({ type: SET_SETTINGS, settings: userData[SETTINGS_KEY] })
-  dispatch({ type: SET_CATEGORIES, categories: userData[CATEGORIES_KEY] })
-  dispatch({ type: SET_STATS, stats: userData[STATS_KEY] })
-  dispatch({ type: SET_FOCUSES, focuses: userData[FOCUSES_KEY] })
+  if (userData[USER_KEY]) {
+    dispatch({ type: SET_USER, user: userData[USER_KEY] })
+  }
+  if (userData[SETTINGS_KEY]) {
+    dispatch({ type: SET_SETTINGS, settings: userData[SETTINGS_KEY] })
+  }
+  if (userData[CATEGORIES_KEY]) {
+    dispatch({ type: SET_CATEGORIES, categories: userData[CATEGORIES_KEY] })
+  }
+  if (userData[STATS_KEY]) {
+    dispatch({ type: SET_STATS, stats: userData[STATS_KEY] })
+  }
+  if (userData[FOCUSES_KEY]) {
+    dispatch({ type: SET_FOCUSES, focuses: userData[FOCUSES_KEY] })
+  }
 }
+
 
 export async function setUserDataDB(userData) {
   const userDoc = db.collection('user').doc(auth.currentUser.uid)
@@ -24,10 +36,10 @@ export async function setUserDataDB(userData) {
   const statsDoc = db.collection('stats').doc(auth.currentUser.uid)
 
   return Promise.all([
-    userDoc.set(userData.user),
-    settingsDoc.set(userData.settings),
-    categoriesDoc.set(userData.categories),
-    statsDoc.set(userData.stats),
+    userDoc.set(userData[USER_KEY]),
+    settingsDoc.set(userData[SETTINGS_KEY]),
+    categoriesDoc.set(userData[CATEGORIES_KEY]),
+    statsDoc.set(userData[STATS_KEY]),
   ])
 }
 
@@ -48,14 +60,16 @@ export async function setUserDataLocal(userData) {
   const statsCollection = { ...values[STATS_KEY] }
   const focusesCollection = { ...values[FOCUSES_KEY] }
 
-  const user = { [auth.currentUser.uid]: userData.user }
-  const settings = { [auth.currentUser.uid]: userData.settings }
-  const categories = { [auth.currentUser.uid]: userData.categories }
-  const stats = { [auth.currentUser.uid]: userData.stats }
+  const user = { [auth.currentUser.uid]: userData[USER_KEY] }
+  const settings = { [auth.currentUser.uid]: userData[SETTINGS_KEY] }
+  const categories = { [auth.currentUser.uid]: userData[CATEGORIES_KEY] }
+  const stats = { [auth.currentUser.uid]: userData[STATS_KEY] }
 
   const focuses = {}
-  for (let [k, v] of Object.entries(userData.focuses)) {
-    focuses[k] = v
+  for (let [id, focus] of Object.entries(userData[FOCUSES_KEY])) {
+    if (focus.userId === auth.currentUser.uid) {
+      focuses[id] = focus
+    }
   }
 
   extend(userCollection, user)
@@ -81,16 +95,25 @@ export async function setUserDataLocal(userData) {
 
 
 export async function loadUser(dispatch) {
+  dispatch({ type: UPDATE_STATUS, update: { userLoading: true } })
+
   const userData = await loadUserData()
   await resetFocuses(dispatch, userData[FOCUSES_KEY])
   setUserData(dispatch, userData)
+
+  dispatch({ type: UPDATE_STATUS, update: { userLoading: false } })
 }
 
 
 export async function loadUserLocal(dispatch) {
+  dispatch({ type: UPDATE_STATUS, update: { userLoading: true } })
+
   const userData = await loadUserDataLocal()
   await resetFocuses(dispatch, userData[FOCUSES_KEY])
+  await setUserDataLocal(userData)
   setUserData(dispatch, userData)
+
+  dispatch({ type: UPDATE_STATUS, update: { userLoading: false } })
 }
 
 
@@ -133,21 +156,24 @@ export async function loadUserDataLocal() {
     console.error('loadUserDataLocal', e)
   }
 
-  const userCollection = values.find(pair => pair[0] === USER_KEY)
-  const user = JSON.parse(userCollection[1])[auth.currentUser.uid]
+  const userCollectionRaw = values.find(pair => pair[0] === USER_KEY)
+  const settingsCollectionRaw = values.find(pair => pair[0] === SETTINGS_KEY)
+  const categoriesCollectionRaw = values.find(pair => pair[0] === CATEGORIES_KEY)
+  const statsCollectionRaw = values.find(pair => pair[0] === STATS_KEY)
+  const focusesCollectionRaw = values.find(pair => pair[0] === FOCUSES_KEY)
 
-  const settingsCollection = values.find(pair => pair[0] === SETTINGS_KEY)
-  const settings = JSON.parse(settingsCollection[1])[auth.currentUser.uid]
+  const user = JSON.parse(userCollectionRaw[1])[auth.currentUser.uid]
+  const settings = JSON.parse(settingsCollectionRaw[1])[auth.currentUser.uid]
+  const categories = JSON.parse(categoriesCollectionRaw[1])[auth.currentUser.uid]
+  const stats = JSON.parse(statsCollectionRaw[1])[auth.currentUser.uid]
+  const focuses = JSON.parse(focusesCollectionRaw[1])
 
-  const categoriesCollection = values.find(pair => pair[0] === CATEGORIES_KEY)
-  const categories = JSON.parse(categoriesCollection[1])[auth.currentUser.uid]
+  for (const [id, focus] of Object.entries(focuses)) {
+    if (focus.userId !== auth.currentUser.uid) {
+      delete focuses[id]
+    }
+  }
 
-  const statsCollection = values.find(pair => pair[0] === STATS_KEY)
-  const stats = JSON.parse(statsCollection[1])[auth.currentUser.uid]
-
-  const focusesCollection = values.find(pair => pair[0] === FOCUSES_KEY)
-  const focuses = JSON.parse(focusesCollection[1])
-  
   const userData = {
     [USER_KEY]: user,
     [SETTINGS_KEY]: settings,

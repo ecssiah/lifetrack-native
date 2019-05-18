@@ -6,6 +6,7 @@ import createStyles, { FontSize } from '../../../styles'
 
 import LTSpacer from '../../../components/LT/LTSpacer';
 
+
 const styles = createStyles({
   container: {
     flex: 1,
@@ -64,7 +65,7 @@ class SignUpScreen extends React.Component
     if (this.state.password === this.state.confirm) {
       try {
         await this.props.signUp(this.state.email, this.state.password)
-        return
+        this.props.navigation.navigate('App')
       } catch (e) {
         error = e
       }
@@ -72,18 +73,20 @@ class SignUpScreen extends React.Component
       error = { message: 'Password confirmation \ndoes not match.' }
     }
 
-    Alert.alert(
-      error.message,
-      '',
-      [
-        { text: 'Confirm', onPress: null },
-      ],
-    )
+    if (error) {
+      Alert.alert(
+        error.message,
+        '',
+        [
+          { text: 'Confirm', onPress: null },
+        ],
+      )
 
-    this.setState({
-      password: '',
-      confirm: '',
-    })
+      this.setState({
+        password: '',
+        confirm: '',
+      })
+    }
   }
 
 

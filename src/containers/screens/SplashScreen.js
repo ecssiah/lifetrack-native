@@ -5,6 +5,7 @@ import { View, Text } from 'react-native'
 import { loadUserLocal } from '../../handlers/DataHandlers'
 import createStyles, { Color, FontSize } from '../../styles'
 
+
 const styles = createStyles({
   container: {
     flex: 1,
@@ -21,18 +22,18 @@ const styles = createStyles({
   },
 })
 
+
 class SplashScreen extends React.Component 
 {
   componentDidMount() {
-    auth.onAuthStateChanged(async user => {
-      if (user) {
-        await this.props.loadUserLocal()
-        this.props.navigation.navigate('App')
-      } else {
-        this.props.navigation.navigate('Auth')
-      }
-    })
+    if (auth.currentUser) {
+      this.props.loadUserLocal()
+      this.props.navigation.navigate('App')
+    } else {
+      this.props.navigation.navigate('Auth')
+    }
   }
+
 
   render() {
     return (
@@ -43,8 +44,10 @@ class SplashScreen extends React.Component
   }
 }
 
+
 const mapStateToProps = state => ({
 })
+
 
 const mapDispatchToProps = dispatch => ({
   loadUserLocal: () => loadUserLocal(dispatch),

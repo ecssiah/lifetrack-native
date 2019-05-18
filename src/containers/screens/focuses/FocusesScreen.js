@@ -1,6 +1,5 @@
 import React from 'react'
 import { ActivityIndicator, View } from 'react-native'
-import { isEmpty } from 'lodash-es'
 import { connect } from 'react-redux'
 import { auth } from '../../../config/firebaseConfig'
 import { updateUser } from '../../../handlers/UserHandlers';
@@ -151,7 +150,7 @@ class FocusesScreen extends React.Component
 
 
   render() {
-    if (isEmpty(this.props.categories)) {
+    if (this.props.status.userLoading) {
       return (
         <View style={styles.indicatorContainer}>
           <ActivityIndicator
@@ -191,6 +190,7 @@ const mapStateToProps = state => ({
   categories: state.categories,
   settings: state.settings,
   selection: state.selection,
+  status: state.status,
   focuses: state.focuses,
   user: state.user,
 })

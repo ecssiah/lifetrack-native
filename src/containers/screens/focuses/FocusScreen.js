@@ -6,7 +6,7 @@ import Sound from 'react-native-sound'
 import { 
   EXP_PER_SECOND, 
   CLOCK_INTERVAL,
-  SAVE_INTERVAL, 
+  SAVE_INTERVAL,
 } from '../../../constants/Focuses'
 import { updateFocus, updateFocusLocal } from '../../../handlers/FocusesHandlers'
 import createStyles from '../../../styles'
@@ -17,12 +17,14 @@ import FocusTimer from '../../../components/focuses/FocusTimer'
 import FocusGoal from '../../../components/focuses/FocusGoal'
 import FocusExperience from '../../../components/focuses/FocusExperience'
 
+
 const styles = createStyles({ 
   container: {
     flex: 1,
     alignItems: 'center',
   },
 })
+
 
 class FocusScreen extends React.Component 
 {
@@ -228,7 +230,7 @@ class FocusScreen extends React.Component
 const mapStateToProps = state => ({
   status: state.status,
   user: state.user,
-  settings: state.settings,
+  categories: state.settings,
   selection: state.selection,
   focuses: state.focuses,
 })

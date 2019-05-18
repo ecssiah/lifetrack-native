@@ -15,6 +15,7 @@ import CategoryModal from '../../../components/modals/CategoryModal'
 import SettingsModal from '../../../components/modals/SettingsModal'
 import FocusEditList from '../../../components/focuses/FocusEditList'
 
+
 const styles = createStyles({
   container: {
     flex: 1,

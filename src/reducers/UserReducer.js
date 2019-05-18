@@ -3,6 +3,7 @@ import {
   UPDATE_USER,
 } from "../constants/User"
 
+
 function userReducer(state = {}, action) {
   const newState = { ...state }
 

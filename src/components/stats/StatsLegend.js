@@ -1,5 +1,5 @@
 import React from 'react'
-import { ScrollView, SectionList, View } from 'react-native'
+import { ScrollView, SectionList } from 'react-native'
 import { UNCATEGORIZED } from '../../constants/Categories';
 import { GraphColors } from '../../constants/Stats';
 
@@ -131,9 +131,3 @@ class StatsLegend extends React.Component
 }
 
 export default StatsLegend
-
-          // <View style={styles.legendContainer}>
-          //   <View style={styles.list} >
-          //     {this._getList()}
-          //   </View>
-          // </View>

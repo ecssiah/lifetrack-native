@@ -1,5 +1,4 @@
 import React from 'react'
-import firebase, { auth } from 'firebase';
 import { connect } from 'react-redux'
 import { Alert, Button, View, TextInput } from 'react-native'
 import { signIn } from '../../../handlers/AuthHandlers'
@@ -53,6 +52,7 @@ class SignInScreen extends React.Component
   _onPressSignIn = async () => {
     try {
       await this.props.signIn(this.state.email, this.state.password)
+      this.props.navigation.navigate('App')
     }
     catch (error) {
       Alert.alert(

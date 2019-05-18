@@ -3,12 +3,13 @@ import { connect } from 'react-redux'
 import { auth } from '../../config/firebaseConfig'
 import firebase from 'firebase'
 import { Alert, TextInput } from 'react-native'
-import createStyles, { FontSize, Font } from '../../styles'
+import createStyles, { FontSize } from '../../styles'
 
 import LTText from '../LT/LTText'
 import LTModal from '../LT/LTModal'
 import LTSpacer from '../LT/LTSpacer'
 import LTConfirm from '../LT/LTConfirm'
+
 
 const styles = createStyles({
   container: {
@@ -30,6 +31,7 @@ const styles = createStyles({
   },
 })
 
+
 class AuthModal extends React.Component 
 {
   constructor(props) {
@@ -39,6 +41,7 @@ class AuthModal extends React.Component
       password: ''
     }
   }
+
 
   _onReauthorizationAttempt = async () => {
     try {
@@ -67,6 +70,7 @@ class AuthModal extends React.Component
       )
     }
   }
+
 
   render() {
     return (
@@ -103,9 +107,11 @@ class AuthModal extends React.Component
   }
 }
 
+
 const mapStateToProps = state => ({
   user: state.user,
 })
+
 
 const mapDispatchToProps = dispatch => ({
 

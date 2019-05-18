@@ -5,6 +5,7 @@ import { UNCATEGORIZED } from '../../constants/Categories'
 import LTSeparator from '../LT/LTSeparator'
 import SettingItem from './SettingItem'
 
+
 class CategoryList extends React.Component 
 {
   _renderItem = item => (
@@ -13,6 +14,7 @@ class CategoryList extends React.Component
       onSettingSelect={this.props.onCategorySelect} 
     />
   )
+
 
   _getCategoryData = () => {
     const categoryNames = Object.keys(this.props.categories)
@@ -24,6 +26,7 @@ class CategoryList extends React.Component
 
     return data
   }
+
 
   render() {
     return (

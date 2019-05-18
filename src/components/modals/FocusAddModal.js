@@ -6,6 +6,7 @@ import LTModal from '../LT/LTModal'
 import LTSpacer from '../LT/LTSpacer'
 import LTConfirm from '../LT/LTConfirm'
 
+
 const styles = createStyles({
   container: {
     height: 346,
@@ -28,6 +29,7 @@ const styles = createStyles({
   },
 })
 
+
 class FocusAddModal extends React.Component 
 {
   _getCategoryItems = () => {
@@ -43,6 +45,7 @@ class FocusAddModal extends React.Component
 
     return categoryItems
   }
+
 
   render() {
     return (

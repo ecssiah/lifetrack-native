@@ -4,7 +4,6 @@ import { db, auth } from "../config/firebaseConfig"
 import AsyncStorage from '@react-native-community/async-storage';
 import { displayTime, getElapsed, getDay } from '../../lib/utils'
 import { 
-  EXP_PER_SECOND,
   UPDATE_FOCUSES,
   ADD_FOCUS, UPDATE_FOCUS, DELETE_FOCUS, FOCUSES_KEY, 
 } from "../constants/Focuses"

@@ -6,6 +6,7 @@ import FocusHeader from './FocusHeader'
 import FocusItem from './FocusItem'
 import LTSeparator from '../LT/LTSeparator'
 
+
 class FocusList extends React.Component 
 {
   _renderHeader = section => {
@@ -18,6 +19,7 @@ class FocusList extends React.Component
     )
   } 
 
+
   _renderItem = item => {
     return (
       <FocusItem 
@@ -26,6 +28,7 @@ class FocusList extends React.Component
       />
     )
   }
+
 
   _findCategoryFocuses = name => {
     const focuses = []
@@ -38,6 +41,7 @@ class FocusList extends React.Component
 
     return focuses
   }
+
 
   _sectionsReducer = (result, name) => {
     const category = this.props.categories[name]
@@ -75,6 +79,7 @@ class FocusList extends React.Component
 
     return result
   }
+
 
   _getSections = () => {
     const categoryNames = Object.keys(this.props.categories)
