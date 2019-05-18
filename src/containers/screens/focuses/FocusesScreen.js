@@ -4,7 +4,9 @@ import { connect } from 'react-redux'
 import { auth } from '../../../config/firebaseConfig'
 import { UNCATEGORIZED } from '../../../constants/Categories'
 import { UPDATE_SELECTION } from '../../../constants/Selection'
-import { addFocus, addFocusDB } from '../../../handlers/FocusesHandlers'
+import { 
+  addFocus, addFocusDB, addFocusLocal 
+} from '../../../handlers/FocusesHandlers'
 import { 
   updateCategory, updateCategoryDB 
 } from '../../../handlers/CategoryHandlers'
@@ -97,7 +99,10 @@ class FocusesScreen extends React.Component
       nextChartColor: this.props.user.nextChartColor + 1 
     })
 
-    const id = await this.props.addFocusDB(focus)
+    // const id = await this.props.addFocusDB(focus)
+    // this.props.addFocus(id, focus)
+
+    const id = await this.props.addFocusLocal(focus)
     this.props.addFocus(id, focus)
 
     this.setState({
@@ -178,6 +183,7 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
   addFocus: (id, focus) => addFocus(dispatch, id, focus), 
   addFocusDB: focus => addFocusDB(focus), 
+  addFocusLocal: focus => addFocusLocal(focus),
   updateSelection: update => dispatch({ type: UPDATE_SELECTION, update }),
   updateCategory: (name, update) => updateCategory(dispatch, name, update),
   updateCategoryDB: (name, update) => updateCategoryDB(name, update),

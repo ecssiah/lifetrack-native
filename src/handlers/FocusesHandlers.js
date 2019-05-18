@@ -1,12 +1,14 @@
 import { Alert } from 'react-native'
+import { extend } from 'lodash-es'
 import { db, auth } from "../config/firebaseConfig"
 import { displayTime, getElapsed, getDay } from '../../lib/utils'
 import { 
   EXP_PER_SECOND,
   UPDATE_FOCUSES,
-  ADD_FOCUS, UPDATE_FOCUS, DELETE_FOCUS, 
+  ADD_FOCUS, UPDATE_FOCUS, DELETE_FOCUS, FOCUSES_KEY, 
 } from "../constants/Focuses"
 import { UPDATE_STATUS } from "../constants/Status"
+import AsyncStorage from '@react-native-community/async-storage';
 
 
 export function updateFocuses(dispatch, update) {
@@ -26,6 +28,25 @@ export async function updateFocusesDB(update) {
 }
 
 
+export async function updateFocusesLocal(update) {
+  try {
+    const focusesCollection = await JSON.parse(
+      AsyncStorage.getItem(FOCUSES_KEY)
+    )
+
+    for (const id in update) {
+      const focusDoc = focusesCollection[id]
+
+      extend(focusDoc, update[id])
+    }
+
+    AsyncStorage.setItem(FOCUSES_KEY, JSON.stringify(focusesCollection))
+  } catch(e) {
+    console.warn(e)
+  }
+}
+
+
 export function addFocus(dispatch, id, focus) {
   dispatch({ type: ADD_FOCUS, id, focus })
 }
@@ -35,6 +56,23 @@ export async function addFocusDB(focus) {
   const doc = await db.collection('focuses').add(focus)
 
   return doc.id
+}
+
+
+export async function addFocusLocal(focus) {
+  try {
+    const focusesCollectionRaw = await AsyncStorage.getItem(FOCUSES_KEY)
+    const focusesCollection = JSON.parse(focusesCollectionRaw)
+
+    const id = new Date().getTime()
+    focusesCollection[id] = focus
+
+    AsyncStorage.setItem(FOCUSES_KEY, JSON.stringify(focusesCollection))
+
+    return id
+  } catch(e) {
+    console.warn(e)
+  }
 }
 
 

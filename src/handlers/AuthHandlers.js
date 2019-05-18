@@ -40,17 +40,7 @@ export async function signUp(dispatch, email, password) {
       startDate,
       endDate,
     },
-    // TESTING
-    focuses: {
-      "123": {
-        name: "Walking",
-        experience: 36,
-      },
-      "246": {
-        name: "Running",
-        experience: 12,
-      },
-    }
+    focuses: {},
   }
 
   setUserDataLocal(userData)
@@ -100,18 +90,10 @@ async function setUserDataLocal(userData) {
   const statsCollection = { ...values[STATS_KEY] }
   const focusesCollection = { ...values[FOCUSES_KEY] }
 
-  const user = { 
-    [auth.currentUser.uid]: userData.user 
-  }
-  const settings = { 
-    [auth.currentUser.uid]: userData.settings 
-  }
-  const categories = { 
-    [auth.currentUser.uid]: userData.categories 
-  }
-  const stats = { 
-    [auth.currentUser.uid]: userData.stats 
-  }
+  const user = { [auth.currentUser.uid]: userData.user }
+  const settings = { [auth.currentUser.uid]: userData.settings }
+  const categories = { [auth.currentUser.uid]: userData.categories }
+  const stats = { [auth.currentUser.uid]: userData.stats }
 
   const focuses = {}
   for (let [k, v] of Object.entries(userData.focuses)) {
@@ -133,14 +115,6 @@ async function setUserDataLocal(userData) {
   try {
     await AsyncStorage.multiSet([
       userPair, settingsPair, categoriesPair, statsPair, focusesPair
-    ])
-  } catch(e) {
-    console.warn(e)
-  }
-
-  try {
-    values = await AsyncStorage.multiGet([
-      USER_KEY, SETTINGS_KEY, CATEGORIES_KEY, STATS_KEY, FOCUSES_KEY
     ])
   } catch(e) {
     console.warn(e)
@@ -263,10 +237,10 @@ async function loadUserDataLocal() {
   const statsDoc = JSON.parse(statsCollection[1])[auth.currentUser.uid]
 
   const focusesCollection = values.find(pair => pair[0] === FOCUSES_KEY)
-  const focusesDocs = JSON.parse(focusesCollection[1])
-
-  for (let [k, v] of Object.entries(focusesDocs)) {
-    const focusDoc = focusesDocs[k]  
+  const focusesDoc = JSON.parse(focusesCollection[1])
+  
+  for (const key of Object.keys(focusesDoc)) {
+    const focusDoc = focusesDoc[key]  
 
     focusDoc.active = false
     focusDoc.working = true
@@ -279,7 +253,7 @@ async function loadUserDataLocal() {
     [SETTINGS_KEY]: settingsDoc,
     [CATEGORIES_KEY]: categoriesDoc,
     [STATS_KEY]: statsDoc,
-    [FOCUSES_KEY]: focusesDocs,
+    [FOCUSES_KEY]: focusesDoc,
   }
 
   return userData
