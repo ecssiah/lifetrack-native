@@ -5,7 +5,7 @@ import {
   updateCategory, updateCategoryDB 
 } from '../../../handlers/CategoryHandlers'
 import { 
-  updateFocus, updateFocusDB 
+  updateFocus, updateFocusLocal 
 } from '../../../handlers/FocusesHandlers'
 import { 
   updateStats, updateStatsDB, updateStatsLocal 
@@ -294,7 +294,7 @@ class StatsScreen extends React.Component
     const update = { statVisible: value }
 
     this.props.updateFocus(id, update)
-    this.props.updateFocusDB(id, update)
+    this.props.updateFocusLocal(id, update)
 
     const chartData = this._getMainChartData(
       this.state.chartKeys, this.state.chartDates
@@ -368,7 +368,7 @@ const mapDispatchToProps = dispatch => ({
   updateCategory: (name, update) => updateCategory(dispatch, name, update),
   updateCategoryDB: (name, update) => updateCategoryDB(name, update),
   updateFocus: (id, update) => updateFocus(dispatch, id, update),
-  updateFocusDB: (id, update) => updateFocusDB(id, update),
+  updateFocusLocal: (id, update) => updateFocusLocal(id, update),
   updateStats: update => updateStats(dispatch, update),
   updateStatsDB: update => updateStatsDB(update),
   updateStatsLocal: update => updateStatsLocal(update),

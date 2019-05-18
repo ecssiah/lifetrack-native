@@ -27,7 +27,6 @@ class SplashScreen extends React.Component
     auth.onAuthStateChanged(async user => {
       if (user) {
         await this.props.loadUserLocal()
-
         this.props.navigation.navigate('App')
       } else {
         this.props.navigation.navigate('Auth')

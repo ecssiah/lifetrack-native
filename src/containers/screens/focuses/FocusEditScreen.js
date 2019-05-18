@@ -5,7 +5,7 @@ import {
   WORK_PERIOD, WORK_GOAL, BREAK_PERIOD,
 } from '../../../constants/Focuses'
 import { 
-  updateFocus, updateFocusDB,
+  updateFocus, updateFocusLocal,
   deleteFocus, deleteFocusDB, deleteFocusLocal, 
 } from '../../../handlers/FocusesHandlers'
 import createStyles from '../../../styles'
@@ -62,7 +62,7 @@ class FocusEditScreen extends React.Component
     const update = { name: this.state.name }
     
     this.props.updateFocus(this.props.selection.id, update)
-    this.props.updateFocusDB(this.props.selection.id, update)
+    this.props.updateFocusLocal(this.props.selection.id, update)
   }
 
 
@@ -144,7 +144,7 @@ class FocusEditScreen extends React.Component
     }
 
     this.props.updateFocus(this.props.selection.id, update)
-    this.props.updateFocusDB(this.props.selection.id, update)
+    this.props.updateFocusLocal(this.props.selection.id, update)
 
     this.setState({
       settingsModalShow: false,
@@ -177,7 +177,7 @@ class FocusEditScreen extends React.Component
     const update = { category: this.state.categoryName }
 
     this.props.updateFocus(this.props.selection.id, update)
-    this.props.updateFocusDB(this.props.selection.id, update)
+    this.props.updateFocusLocal(this.props.selection.id, update)
 
     this.setState({
       categoryName: this.state.categoryName,
@@ -275,7 +275,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   updateFocus: (id, update) => updateFocus(dispatch, id, update),
-  updateFocusDB: (id, update) => updateFocusDB(id, update),
+  updateFocusLocal: (id, update) => updateFocusLocal(id, update),
   deleteFocus: id => deleteFocus(dispatch, id),
   deleteFocusDB: id => deleteFocusDB(id),
   deleteFocusLocal: id => deleteFocusLocal(id),

@@ -1,6 +1,7 @@
 import { Alert } from 'react-native'
-import { extend } from 'lodash-es'
+import { extend, isEmpty } from 'lodash-es'
 import { db, auth } from "../config/firebaseConfig"
+import AsyncStorage from '@react-native-community/async-storage';
 import { displayTime, getElapsed, getDay } from '../../lib/utils'
 import { 
   EXP_PER_SECOND,
@@ -8,7 +9,6 @@ import {
   ADD_FOCUS, UPDATE_FOCUS, DELETE_FOCUS, FOCUSES_KEY, 
 } from "../constants/Focuses"
 import { UPDATE_STATUS } from "../constants/Status"
-import AsyncStorage from '@react-native-community/async-storage';
 
 
 export function updateFocuses(dispatch, update) {
@@ -110,68 +110,99 @@ export async function updateFocusDB(id, update) {
 }
 
 
+export async function updateFocusLocal(id, update) {
+  try {
+    const focusesCollectionRaw = await AsyncStorage.getItem(FOCUSES_KEY)
+    const focusesCollection = JSON.parse(focusesCollectionRaw)
+
+    extend(focusesCollection[id], update)
+
+    AsyncStorage.setItem(FOCUSES_KEY, JSON.stringify(focusesCollection))
+
+    return id
+  } catch(e) {
+    console.warn(e)
+  }
+}
+
+
 export async function updateFocusCategories(dispatch, name, newName) {
-  let query = db.collection('focuses')
-  query = query.where('userId', '==', auth.currentUser.uid)
-  query = query.where('category', '==', name)
+  try {
+    const focusesCollectionRaw = await AsyncStorage.getItem(FOCUSES_KEY)
+    const focusesCollection = JSON.parse(focusesCollectionRaw)
 
-  const update = {}
-  const batch = db.batch()
+    const update = {}
+    for (let [id, focus] of Object.entries(focusesCollection)) {
+      if (focus.userId === auth.currentUser.uid && focus.category === name) {
+        update[id] = { category: newName }
+        extend(focusesCollection[id], update[id])
+      }
+    }
 
-  const querySnapshot = await query.get()
-
-  querySnapshot.forEach(doc => {
-    update[doc.id] = { category: newName } 
-    batch.update(doc.ref, update[doc.id])
-  })
-
-  await batch.commit()
-  
-  updateFocuses(dispatch, update)
+    await AsyncStorage.setItem(FOCUSES_KEY, JSON.stringify(focusesCollection))
+    updateFocuses(dispatch, update)
+  } catch(e) {
+    console.warn(e)
+  }
 }
 
 
 export async function updateActiveFocuses(dispatch, activeStart) {
-  const querySnapshot = await searchForWorkingFocuses()
+  const workingFocuses = await searchForWorkingFocuses()
 
-  if (!querySnapshot.empty) {
+  if (isEmpty(workingFocuses)) {
     const elapsed = getElapsed(activeStart)
 
-    requestFocusUpdate(dispatch, querySnapshot, elapsed)
-
-    deactivateFocuses(dispatch, querySnapshot)
+    requestFocusUpdate(dispatch, workingFocuses, elapsed)
+    deactivateFocuses(dispatch, workingFocuses)
   }
 }
 
 
 async function searchForWorkingFocuses() {
-  let query = db.collection('focuses')
-  query = query.where('userId', '==', auth.currentUser.uid)
-  query = query.where('active', '==', true)
-  query = query.where('working', '==', true)
+  try {
+    const focusesCollectionRaw = await AsyncStorage.getItem(FOCUSES_KEY)
+    const focusesCollection = JSON.parse(focusesCollectionRaw)
 
-  return await query.get()
+    const workingFocuses = {}
+    for (let [id, focus] of focusesCollection) {
+      const userActive = focus.userId === auth.currentUser.uid
+
+      if (userActive && focus.active && focus.working) {
+        workingFocuses[id] = focus
+      }
+    }
+
+    return workingFocuses
+  } catch(e) {
+    console.warn(e)
+  }
 }
 
 
-async function deactivateFocuses(dispatch, querySnapshot) { 
-  dispatch({ type: UPDATE_STATUS, update: { tracked: 0 } })
+async function deactivateFocuses(dispatch, workingFocuses) { 
+  try {
+    const focusesCollectionRaw = await AsyncStorage.getItem(FOCUSES_KEY)
+    const focusesCollection = JSON.parse(focusesCollectionRaw)
 
-  const batch = db.batch()
-  const update = { active: false }
+    dispatch({ type: UPDATE_STATUS, update: { tracked: 0 } })
 
-  querySnapshot.forEach(doc => batch.update(doc.ref, update))
+    const update = { active: false }
 
-  batch.commit()
+    for (let [id, focus] of Object.entries(workingFocuses)) {
+      extend(focusesCollection[id], update)
+      clearInterval(focus.timer)
+      updateFocus(id, update)
+    }
 
-  querySnapshot.forEach(doc => {
-    clearInterval(doc.data().timer)
-    updateFocus(doc.id, update)
-  })
+    await AsyncStorage.setItem(FOCUSES_KEY, JSON.stringify(focusesCollection))
+  } catch(e) {
+    console.warn(e)
+  }
 }
 
 
-function requestFocusUpdate(dispatch, querySnapshot, elapsed) {
+function requestFocusUpdate(dispatch, workingFocuses, elapsed) {
   const title = 'Update Experience?'
 
   let message = ''
@@ -179,7 +210,9 @@ function requestFocusUpdate(dispatch, querySnapshot, elapsed) {
   message += `for ${displayTime(elapsed)} in the background.\n` 
   message += '\n'
 
-  querySnapshot.forEach(doc => message += doc.data().name + '\n')
+  for (const focus of workingFocuses) {
+    message += focus.name + '\n'
+  }
 
   message += '\n'
   message += 'Is this correct?'
@@ -190,15 +223,15 @@ function requestFocusUpdate(dispatch, querySnapshot, elapsed) {
       { text: 'Cancel', onPress: null },
       { 
         text: 'Confirm', 
-        onPress: () => updateExperience(dispatch, querySnapshot, elapsed),
+        onPress: () => updateExperience(dispatch, workingFocuses, elapsed),
       },
     ],
   )
 }
 
 
-function getUpdatedHistory(doc, elapsed) {
-  const history = { ...doc.data().history }
+function getUpdatedHistory(curHistory, elapsed) {
+  const history = { ...curHistory }
   const elapsedTime = Date.now() + elapsed * 1000
   const today = getDay().toLocaleDateString(
     undefined, { 'month': 'numeric', 'day': 'numeric', 'year': 'numeric' }
@@ -229,32 +262,31 @@ function getUpdatedHistory(doc, elapsed) {
 }
 
 
-async function updateExperience(dispatch, querySnapshot, elapsed) {
-  const update = {}
-  const promises = []
-  
-  querySnapshot.forEach(doc => {
-    const transactionUpdateFunc = async transaction => {
-      const docSnapshot = await transaction.get(doc.ref)
+async function updateExperience(dispatch, workingFocuses, elapsed) {
+  try {
+    const focusesCollectionRaw = await AsyncStorage.getItem(FOCUSES_KEY)
+    const focusesCollection = JSON.parse(focusesCollectionRaw)
 
-      update[docSnapshot.id] = {
-        level: docSnapshot.data().level,
-        experience: docSnapshot.data().experience + EXP_PER_SECOND * elapsed,
-        history: getUpdatedHistory(docSnapshot, elapsed),
+    const update = {}
+
+    for (let [id, focus] of workingFocuses) {
+      update[id] = {
+        level: focus.level,
+        experience: focus.experience,
+        history: getUpdatedHistory(focus.history, elapsed)
       }
 
-      while (update[docSnapshot.id].experience >= 100) {
-        update[docSnapshot.id].level++
-        update[docSnapshot.id].experience -= 100
+      while (update[id].experience >= 100) {
+        update[id].level++
+        update[id].experience -= 100
       }
 
-      transaction.update(doc.ref, update[docSnapshot.id])
+      extend(focusesCollection[id], update[id])
     }
 
-    promises.push(db.runTransaction(transactionUpdateFunc))
-  })
-
-  await Promise.all(promises)
-
-  updateFocuses(dispatch, update)
+    await AsyncStorage.setItem(FOCUSES_KEY, JSON.stringify(focusesCollection))
+    updateFocuses(dispatch, update)
+  } catch(e) {
+    console.error('updateExperience', e)
+  }
 }

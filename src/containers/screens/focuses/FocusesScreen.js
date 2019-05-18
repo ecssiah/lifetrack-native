@@ -63,7 +63,6 @@ class FocusesScreen extends React.Component
 
 
   componentDidMount() {
-
     this.props.navigation.setParams({
       focusesHelpSelect: this._focusesHelpSelect,
       addFocusSelect: this._onAddFocusSelect,

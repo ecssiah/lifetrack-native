@@ -8,7 +8,7 @@ import {
   CLOCK_INTERVAL,
   SAVE_INTERVAL, 
 } from '../../../constants/Focuses'
-import { updateFocus, updateFocusDB } from '../../../handlers/FocusesHandlers'
+import { updateFocus, updateFocusLocal } from '../../../handlers/FocusesHandlers'
 import createStyles from '../../../styles'
 
 import LTIcon from '../../../components/LT/LTIcon'
@@ -75,7 +75,7 @@ class FocusScreen extends React.Component
     const update = { periods: 0 }
 
     this.props.updateFocus(this.props.selection.id, update)
-    this.props.updateFocusDB(this.props.selection.id, update)
+    this.props.updateFocusLocal(this.props.selection.id, update)
   }
 
 
@@ -106,7 +106,7 @@ class FocusScreen extends React.Component
     }
 
     this.props.updateFocus(this.props.selection.id, update) 
-    this.props.updateFocusDB(this.props.selection.id, update)
+    this.props.updateFocusLocal(this.props.selection.id, update)
   }
 
 
@@ -145,7 +145,7 @@ class FocusScreen extends React.Component
         update.experience -= 100
         update.level = focus.level + 1
 
-        this.props.updateFocusDB(this.props.selection.id, update)
+        this.props.updateFocusLocal(this.props.selection.id, update)
       }
     }
 
@@ -156,7 +156,7 @@ class FocusScreen extends React.Component
         saveTimer: SAVE_INTERVAL,
       })
 
-      this.props.updateFocusDB(this.props.selection.id, update)
+      this.props.updateFocusLocal(this.props.selection.id, update)
     } else {
       this.setState({
         saveTimer: this.state.saveTimer - timerInterval,
@@ -179,7 +179,7 @@ class FocusScreen extends React.Component
     }
 
     this.props.updateFocus(this.props.selection.id, update)
-    this.props.updateFocusDB(this.props.selection.id, update)
+    this.props.updateFocusLocal(this.props.selection.id, update)
   }
 
 
@@ -236,7 +236,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   updateFocus: (id, update) => updateFocus(dispatch, id, update),
-  updateFocusDB: (id, update) => updateFocusDB(id, update),
+  updateFocusLocal: (id, update) => updateFocusLocal(id, update),
 })
 
 
