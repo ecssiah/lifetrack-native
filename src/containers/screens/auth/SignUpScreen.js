@@ -59,29 +59,26 @@ class SignUpScreen extends React.Component
 
 
   _onPressSignUp = async () => {
+    let error
+
     if (this.state.password === this.state.confirm) {
       try {
         await this.props.signUp(this.state.email, this.state.password)
-
-        this.props.navigation.navigate('App')
-      } catch (error) {
-        Alert.alert(
-          error.message,
-          '',
-          [
-            { text: 'Confirm', onPress: null },
-          ],
-        )
+        return
+      } catch (e) {
+        error = e
       }
     } else {
-      Alert.alert(
-        'Password confirmation \ndoes not match.',
-        '',
-        [
-          { text: 'Confirm', onPress: null },
-        ],
-      )
+      error = { message: 'Password confirmation \ndoes not match.' }
     }
+
+    Alert.alert(
+      error.message,
+      '',
+      [
+        { text: 'Confirm', onPress: null },
+      ],
+    )
 
     this.setState({
       password: '',

@@ -14,8 +14,6 @@ import { SET_FOCUSES, FOCUSES_KEY } from '../constants/Focuses';
 
 
 export async function signUp(dispatch, email, password) {
-  await auth.createUserWithEmailAndPassword(email, password)
-
   const startDate = getDay().getTime()
   const endDate = getDay(6).getTime()
 
@@ -43,7 +41,8 @@ export async function signUp(dispatch, email, password) {
     focuses: {},
   }
 
-  setUserDataLocal(userData)
+  await auth.createUserWithEmailAndPassword(email, password)
+  await setUserDataLocal(userData)
 
   dispatch({ type: SET_USER, user: userData.user })
   dispatch({ type: SET_SETTINGS, settings: userData.settings })
@@ -249,11 +248,11 @@ async function loadUserDataLocal() {
   }
 
   const userData = {
-    [USER_KEY]: userDoc,
-    [SETTINGS_KEY]: settingsDoc,
-    [CATEGORIES_KEY]: categoriesDoc,
-    [STATS_KEY]: statsDoc,
-    [FOCUSES_KEY]: focusesDoc,
+    [USER_KEY]: userDoc ? userDoc : {},
+    [SETTINGS_KEY]: settingsDoc ? settingsDoc : {},
+    [CATEGORIES_KEY]: categoriesDoc ? categoriesDoc : {},
+    [STATS_KEY]: statsDoc ? statsDoc : {},
+    [FOCUSES_KEY]: focusesDoc ? focusesDoc : {},
   }
 
   return userData

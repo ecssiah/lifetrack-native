@@ -1,7 +1,10 @@
 import React from 'react'
 import { ActivityIndicator, View } from 'react-native'
+import { isEmpty } from 'lodash-es'
 import { connect } from 'react-redux'
 import { auth } from '../../../config/firebaseConfig'
+import { loadUserLocal } from '../../../handlers/AuthHandlers'
+import { updateUser } from '../../../handlers/UserHandlers';
 import { UNCATEGORIZED } from '../../../constants/Categories'
 import { UPDATE_SELECTION } from '../../../constants/Selection'
 import { 
@@ -10,16 +13,20 @@ import {
 import { 
   updateCategory, updateCategoryDB 
 } from '../../../handlers/CategoryHandlers'
-import createStyles from '../../../styles'
+import createStyles, { Color } from '../../../styles'
 
 import LTIcon from '../../../components/LT/LTIcon'
 import FocusList from '../../../components/focuses/FocusList'
 import FocusAddModal from '../../../components/modals/FocusAddModal'
-import { updateUser } from '../../../handlers/UserHandlers';
 
 const styles = createStyles({
   container: {
     flex: 1,
+  },
+  indicatorContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 })
 
@@ -56,6 +63,7 @@ class FocusesScreen extends React.Component
 
 
   componentDidMount() {
+
     this.props.navigation.setParams({
       focusesHelpSelect: this._focusesHelpSelect,
       addFocusSelect: this._onAddFocusSelect,
@@ -98,9 +106,6 @@ class FocusesScreen extends React.Component
     this.props.updateUser({ 
       nextChartColor: this.props.user.nextChartColor + 1 
     })
-
-    // const id = await this.props.addFocusDB(focus)
-    // this.props.addFocus(id, focus)
 
     const id = await this.props.addFocusLocal(focus)
     this.props.addFocus(id, focus)
@@ -146,27 +151,38 @@ class FocusesScreen extends React.Component
 
 
   render() {
-    return (
-      <View style={styles.container}>
-        <FocusList
-          focuses={this.props.focuses}
-          categories={this.props.categories}
-          onFocusSelect={this._onFocusSelect}
-          onCategorySelect={this._onCategorySelect}
-        />
+    if (isEmpty(this.props.categories)) {
+      return (
+        <View style={styles.indicatorContainer}>
+          <ActivityIndicator
+            size="large"
+            color={Color.primary}
+          />
+        </View>
+      )
+    } else {
+      return (
+        <View style={styles.container}>
+          <FocusList
+            focuses={this.props.focuses}
+            categories={this.props.categories}
+            onFocusSelect={this._onFocusSelect}
+            onCategorySelect={this._onCategorySelect}
+          />
 
-        <FocusAddModal
-          categories={this.props.categories}
-          show={this.state.addModalShow}
-          categoryName={this.state.categoryName}
-          focusName={this.state.focusName}
-          onConfirm={this._onAddFocusConfirm}
-          onCancel={this._onAddFocusCancel}
-          onFocusNameChange={text => this.setState({ focusName: text })}
-          onCategoryValueChange={value => this._onCategoryValueChange(value)}
-        />
-      </View>
-    )
+          <FocusAddModal
+            categories={this.props.categories}
+            show={this.state.addModalShow}
+            categoryName={this.state.categoryName}
+            focusName={this.state.focusName}
+            onConfirm={this._onAddFocusConfirm}
+            onCancel={this._onAddFocusCancel}
+            onFocusNameChange={text => this.setState({ focusName: text })}
+            onCategoryValueChange={value => this._onCategoryValueChange(value)}
+          />
+        </View>
+      )
+    }
   }
 }
 
@@ -188,6 +204,7 @@ const mapDispatchToProps = dispatch => ({
   updateCategory: (name, update) => updateCategory(dispatch, name, update),
   updateCategoryDB: (name, update) => updateCategoryDB(name, update),
   updateUser: update => updateUser(dispatch, update),
+  loadUserLocal: () => loadUserLocal(dispatch),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(FocusesScreen)

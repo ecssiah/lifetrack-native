@@ -6,7 +6,7 @@ import {
 } from '../../../constants/Focuses'
 import { 
   updateFocus, updateFocusDB,
-  deleteFocus, deleteFocusDB, 
+  deleteFocus, deleteFocusDB, deleteFocusLocal, 
 } from '../../../handlers/FocusesHandlers'
 import createStyles from '../../../styles'
 
@@ -212,7 +212,8 @@ class FocusEditScreen extends React.Component
     clearInterval(this.props.focuses[this.props.selection.id].timer)
 
     this.props.deleteFocus(this.props.selection.id)
-    await this.props.deleteFocusDB(this.props.selection.id)
+    // await this.props.deleteFocusDB(this.props.selection.id)
+    await this.props.deleteFocusLocal(this.props.selection.id)
 
     this.props.navigation.navigate('Focuses')
   }
@@ -277,6 +278,7 @@ const mapDispatchToProps = dispatch => ({
   updateFocusDB: (id, update) => updateFocusDB(id, update),
   deleteFocus: id => deleteFocus(dispatch, id),
   deleteFocusDB: id => deleteFocusDB(id),
+  deleteFocusLocal: id => deleteFocusLocal(id),
 })
 
 

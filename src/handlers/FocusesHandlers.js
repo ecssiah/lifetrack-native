@@ -86,6 +86,20 @@ export async function deleteFocusDB(id) {
 }
 
 
+export async function deleteFocusLocal(id) {
+  try {
+    const focusesCollectionRaw = await AsyncStorage.getItem(FOCUSES_KEY)
+    const focusesCollection = JSON.parse(focusesCollectionRaw)
+
+    delete focusesCollection[id]
+
+    AsyncStorage.setItem(FOCUSES_KEY, JSON.stringify(focusesCollection))
+  } catch(e) {
+    console.warn(e)
+  }
+}
+
+
 export function updateFocus(dispatch, id, update) {
   dispatch({ type: UPDATE_FOCUS, id, update }) 
 }
