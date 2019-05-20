@@ -65,7 +65,7 @@ class FocusesScreen extends React.Component
 
 
   componentDidMount() {
-    this.props.loadUserLocal()
+    // this.props.loadUserLocal()
 
     this.props.navigation.setParams({
       focusesHelpSelect: this._focusesHelpSelect,
@@ -154,7 +154,7 @@ class FocusesScreen extends React.Component
 
 
   render() {
-    if (isEmpty(this.props.categories)) {
+    if (this.props.status.userLoading) {
       return (
         <View style={styles.indicatorContainer}>
           <ActivityIndicator

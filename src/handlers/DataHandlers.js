@@ -1,29 +1,39 @@
 import { db, auth } from '../config/firebaseConfig'
-import { extend } from 'lodash-es'
 import AsyncStorage from '@react-native-community/async-storage'
+import { extend } from 'lodash-es'
 import { USER_KEY, SET_USER } from '../constants/User'
 import { SETTINGS_KEY, SET_SETTINGS } from '../constants/Settings'
 import { CATEGORIES_KEY, SET_CATEGORIES } from '../constants/Categories'
 import { STATS_KEY, SET_STATS } from '../constants/Stats'
 import { FOCUSES_KEY, SET_FOCUSES } from '../constants/Focuses'
+import { UPDATE_STATUS } from '../constants/Status';
 
 
 export async function setUserData(dispatch, userData) {
-  if (userData[USER_KEY]) {
-    dispatch({ type: SET_USER, user: userData[USER_KEY] })
-  }
-  if (userData[SETTINGS_KEY]) {
-    dispatch({ type: SET_SETTINGS, settings: userData[SETTINGS_KEY] })
-  }
-  if (userData[CATEGORIES_KEY]) {
-    dispatch({ type: SET_CATEGORIES, categories: userData[CATEGORIES_KEY] })
-  }
-  if (userData[STATS_KEY]) {
-    dispatch({ type: SET_STATS, stats: userData[STATS_KEY] })
-  }
-  if (userData[FOCUSES_KEY]) {
-    dispatch({ type: SET_FOCUSES, focuses: userData[FOCUSES_KEY] })
-  }
+  console.log('setUserData: \n')
+
+  dispatch({ 
+    type: SET_USER, 
+    user: userData[USER_KEY]
+  })
+  dispatch({ 
+    type: SET_SETTINGS, 
+    settings: userData[SETTINGS_KEY]
+  })
+  dispatch({ 
+    type: SET_CATEGORIES, 
+    categories: userData[CATEGORIES_KEY]
+  })
+  dispatch({ 
+    type: SET_STATS, 
+    stats: userData[STATS_KEY]
+  })
+  dispatch({ 
+    type: SET_FOCUSES, 
+    focuses: userData[FOCUSES_KEY] 
+  })
+
+  console.log(userData)
 }
 
 
@@ -43,6 +53,8 @@ export async function saveUserDB(userData) {
 
 
 export async function saveUserLocal(userData) {
+  console.log('saveUserLocal: \n')
+
   const values = await AsyncStorage.multiGet(
     [USER_KEY, SETTINGS_KEY, CATEGORIES_KEY, STATS_KEY, FOCUSES_KEY]
   )
@@ -71,27 +83,37 @@ export async function saveUserLocal(userData) {
   extend(statsCollection, stats)
   extend(focusesCollection, focuses)
 
-  const userPair = [USER_KEY, JSON.stringify(userCollection)]
-  const settingsPair = [SETTINGS_KEY, JSON.stringify(settingsCollection)]
-  const categoriesPair = [CATEGORIES_KEY, JSON.stringify(categoriesCollection)]
-  const statsPair = [STATS_KEY, JSON.stringify(statsCollection)]
-  const focusesPair = [FOCUSES_KEY, JSON.stringify(focusesCollection)]
+  const dataPairs = [
+    [USER_KEY, JSON.stringify(userCollection)],
+    [SETTINGS_KEY, JSON.stringify(settingsCollection)],
+    [CATEGORIES_KEY, JSON.stringify(categoriesCollection)],
+    [STATS_KEY, JSON.stringify(statsCollection)],
+    [FOCUSES_KEY, JSON.stringify(focusesCollection)],
+  ]
 
-  await AsyncStorage.multiSet([
-    userPair, settingsPair, categoriesPair, statsPair, focusesPair
-  ])
+  await AsyncStorage.multiSet(dataPairs)
+
+  console.log(dataPairs)
 }
 
 
 export async function loadUserDB(dispatch) {
+  dispatch({ type: UPDATE_STATUS, update: { userLoading: true } })
   const userData = await loadUserDataDB()
   setUserData(dispatch, userData)
+  dispatch({ type: UPDATE_STATUS, update: { userLoading: false } })
 }
 
 
 export async function loadUserLocal(dispatch) {
+  console.log('loadUserLocal: \n')
+
+  dispatch({ type: UPDATE_STATUS, update: { userLoading: true } })
   const userData = await loadUserDataLocal()
   setUserData(dispatch, userData)
+  dispatch({ type: UPDATE_STATUS, update: { userLoading: false } })
+
+  console.log(userData)
 }
 
 

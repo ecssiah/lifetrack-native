@@ -16,6 +16,8 @@ import {
 
 
 export async function signUp(dispatch, email, password) {
+  console.log('signUp: \n')
+
   const startDate = getDay(0).getTime()
   const endDate = getDay(6).getTime()
 
@@ -43,15 +45,16 @@ export async function signUp(dispatch, email, password) {
     [FOCUSES_KEY]: {},
   }
 
+
   await auth.createUserWithEmailAndPassword(email, password)
   await saveUserLocal(userData)
-  setUserData(dispatch, userData)
+
+  console.log(userData)
 }
 
 
 export async function signIn(dispatch, email, password) {
   await auth.signInWithEmailAndPassword(email, password)
-  await loadUserLocal(dispatch)
 }
 
 
