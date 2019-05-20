@@ -28,21 +28,14 @@ export async function updateFocusesDB(update) {
 
 
 export async function updateFocusesLocal(update) {
-  try {
-    const focusesCollection = await JSON.parse(
-      AsyncStorage.getItem(FOCUSES_KEY)
-    )
+  const focusesCollection = await AsyncStorage.getItem(FOCUSES_KEY)
 
-    for (const id in update) {
-      const focusDoc = focusesCollection[id]
-
-      extend(focusDoc, update[id])
-    }
-
-    AsyncStorage.setItem(FOCUSES_KEY, JSON.stringify(focusesCollection))
-  } catch(e) {
-    console.error('updateFocusesLocal', e)
+  for (const id in update) {
+    const focusDoc = focusesCollection[id]
+    extend(focusDoc, update[id])
   }
+
+  AsyncStorage.setItem(FOCUSES_KEY, JSON.stringify(focusesCollection))
 }
 
 
@@ -59,19 +52,15 @@ export async function addFocusDB(focus) {
 
 
 export async function addFocusLocal(focus) {
-  try {
-    const focusesCollectionRaw = await AsyncStorage.getItem(FOCUSES_KEY)
-    const focusesCollection = JSON.parse(focusesCollectionRaw)
+  const focusesCollectionRaw = await AsyncStorage.getItem(FOCUSES_KEY)
+  const focusesCollection = JSON.parse(focusesCollectionRaw)
 
-    const id = new Date().getTime()
-    focusesCollection[id] = focus
+  const id = new Date().getTime()
+  focusesCollection[id] = focus
 
-    AsyncStorage.setItem(FOCUSES_KEY, JSON.stringify(focusesCollection))
+  AsyncStorage.setItem(FOCUSES_KEY, JSON.stringify(focusesCollection))
 
-    return id
-  } catch(e) {
-    console.error('addFocusLocal', e)
-  }
+  return id
 }
 
 
@@ -86,16 +75,12 @@ export async function deleteFocusDB(id) {
 
 
 export async function deleteFocusLocal(id) {
-  try {
-    const focusesCollectionRaw = await AsyncStorage.getItem(FOCUSES_KEY)
-    const focusesCollection = JSON.parse(focusesCollectionRaw)
+  const focusesCollectionRaw = await AsyncStorage.getItem(FOCUSES_KEY)
+  const focusesCollection = JSON.parse(focusesCollectionRaw)
 
-    delete focusesCollection[id]
+  delete focusesCollection[id]
 
-    AsyncStorage.setItem(FOCUSES_KEY, JSON.stringify(focusesCollection))
-  } catch(e) {
-    console.error('deleteFocusLocal', e)
-  }
+  AsyncStorage.setItem(FOCUSES_KEY, JSON.stringify(focusesCollection))
 }
 
 
@@ -110,39 +95,31 @@ export async function updateFocusDB(id, update) {
 
 
 export async function updateFocusLocal(id, update) {
-  try {
-    const focusesCollectionRaw = await AsyncStorage.getItem(FOCUSES_KEY)
-    const focusesCollection = JSON.parse(focusesCollectionRaw)
+  const focusesCollectionRaw = await AsyncStorage.getItem(FOCUSES_KEY)
+  const focusesCollection = JSON.parse(focusesCollectionRaw)
 
-    extend(focusesCollection[id], update)
+  extend(focusesCollection[id], update)
 
-    AsyncStorage.setItem(FOCUSES_KEY, JSON.stringify(focusesCollection))
+  AsyncStorage.setItem(FOCUSES_KEY, JSON.stringify(focusesCollection))
 
-    return id
-  } catch(e) {
-    console.error('updateFocusLocal', e)
-  }
+  return id
 }
 
 
 export async function updateFocusCategories(dispatch, name, newName) {
-  try {
-    const focusesCollectionRaw = await AsyncStorage.getItem(FOCUSES_KEY)
-    const focusesCollection = JSON.parse(focusesCollectionRaw)
+  const focusesCollectionRaw = await AsyncStorage.getItem(FOCUSES_KEY)
+  const focusesCollection = JSON.parse(focusesCollectionRaw)
 
-    const update = {}
-    for (let [id, focus] of Object.entries(focusesCollection)) {
-      if (focus.userId === auth.currentUser.uid && focus.category === name) {
-        update[id] = { category: newName }
-        extend(focusesCollection[id], update[id])
-      }
+  const update = {}
+  for (let [id, focus] of Object.entries(focusesCollection)) {
+    if (focus.userId === auth.currentUser.uid && focus.category === name) {
+      update[id] = { category: newName }
+      extend(focusesCollection[id], update[id])
     }
-
-    await AsyncStorage.setItem(FOCUSES_KEY, JSON.stringify(focusesCollection))
-    updateFocuses(dispatch, update)
-  } catch(e) {
-    console.error('updateFocusCategories', e)
   }
+
+  await AsyncStorage.setItem(FOCUSES_KEY, JSON.stringify(focusesCollection))
+  updateFocuses(dispatch, update)
 }
 
 
@@ -159,45 +136,37 @@ export async function updateActiveFocuses(dispatch, activeStart) {
 
 
 async function searchForWorkingFocuses() {
-  try {
-    const focusesCollectionRaw = await AsyncStorage.getItem(FOCUSES_KEY)
-    const focusesCollection = JSON.parse(focusesCollectionRaw)
+  const focusesCollectionRaw = await AsyncStorage.getItem(FOCUSES_KEY)
+  const focusesCollection = JSON.parse(focusesCollectionRaw)
 
-    const workingFocuses = {}
-    for (let [id, focus] of focusesCollection) {
-      const userActive = focus.userId === auth.currentUser.uid
+  const workingFocuses = {}
+  for (let [id, focus] of focusesCollection) {
+    const userActive = focus.userId === auth.currentUser.uid
 
-      if (userActive && focus.active && focus.working) {
-        workingFocuses[id] = focus
-      }
+    if (userActive && focus.active && focus.working) {
+      workingFocuses[id] = focus
     }
-
-    return workingFocuses
-  } catch(e) {
-    console.error('searchForWorkingFocuses', e)
   }
+
+  return workingFocuses
 }
 
 
 async function deactivateFocuses(dispatch, workingFocuses) { 
-  try {
-    const focusesCollectionRaw = await AsyncStorage.getItem(FOCUSES_KEY)
-    const focusesCollection = JSON.parse(focusesCollectionRaw)
+  const focusesCollectionRaw = await AsyncStorage.getItem(FOCUSES_KEY)
+  const focusesCollection = JSON.parse(focusesCollectionRaw)
 
-    dispatch({ type: UPDATE_STATUS, update: { tracked: 0 } })
+  dispatch({ type: UPDATE_STATUS, update: { tracked: 0 } })
 
-    const update = { active: false }
+  const update = { active: false }
 
-    for (let [id, focus] of Object.entries(workingFocuses)) {
-      extend(focusesCollection[id], update)
-      clearInterval(focus.timer)
-      updateFocus(id, update)
-    }
-
-    await AsyncStorage.setItem(FOCUSES_KEY, JSON.stringify(focusesCollection))
-  } catch(e) {
-    console.error('deactiveFocuses', e)
+  for (let [id, focus] of Object.entries(workingFocuses)) {
+    extend(focusesCollection[id], update)
+    clearInterval(focus.timer)
+    updateFocus(id, update)
   }
+
+  await AsyncStorage.setItem(FOCUSES_KEY, JSON.stringify(focusesCollection))
 }
 
 
@@ -262,32 +231,28 @@ function getUpdatedHistory(curHistory, elapsed) {
 
 
 async function updateExperience(dispatch, workingFocuses, elapsed) {
-  try {
-    const focusesCollectionRaw = await AsyncStorage.getItem(FOCUSES_KEY)
-    const focusesCollection = JSON.parse(focusesCollectionRaw)
+  const focusesCollectionRaw = await AsyncStorage.getItem(FOCUSES_KEY)
+  const focusesCollection = JSON.parse(focusesCollectionRaw)
 
-    const update = {}
+  const update = {}
 
-    for (let [id, focus] of workingFocuses) {
-      update[id] = {
-        level: focus.level,
-        experience: focus.experience,
-        history: getUpdatedHistory(focus.history, elapsed)
-      }
-
-      while (update[id].experience >= 100) {
-        update[id].level++
-        update[id].experience -= 100
-      }
-
-      extend(focusesCollection[id], update[id])
+  for (let [id, focus] of workingFocuses) {
+    update[id] = {
+      level: focus.level,
+      experience: focus.experience,
+      history: getUpdatedHistory(focus.history, elapsed)
     }
 
-    await AsyncStorage.setItem(FOCUSES_KEY, JSON.stringify(focusesCollection))
-    updateFocuses(dispatch, update)
-  } catch(e) {
-    console.error('updateExperience', e)
+    while (update[id].experience >= 100) {
+      update[id].level++
+      update[id].experience -= 100
+    }
+
+    extend(focusesCollection[id], update[id])
   }
+
+  await AsyncStorage.setItem(FOCUSES_KEY, JSON.stringify(focusesCollection))
+  updateFocuses(dispatch, update)
 }
 
 
@@ -303,4 +268,5 @@ export async function resetFocuses(dispatch, focuses) {
   }
 
   await updateFocuses(dispatch, focusUpdate)
+  await updateFocusesLocal(focusUpdate)
 }

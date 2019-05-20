@@ -1,6 +1,7 @@
 import React from 'react'
 import { ActivityIndicator, View } from 'react-native'
 import { connect } from 'react-redux'
+import { isEmpty } from 'lodash-es'
 import { auth } from '../../../config/firebaseConfig'
 import { updateUser } from '../../../handlers/UserHandlers';
 import { UNCATEGORIZED } from '../../../constants/Categories'
@@ -11,6 +12,7 @@ import {
 import { 
   updateCategory, updateCategoryLocal 
 } from '../../../handlers/CategoryHandlers'
+import { loadUserLocal } from '../../../handlers/DataHandlers'
 import createStyles, { Color } from '../../../styles'
 
 import LTIcon from '../../../components/LT/LTIcon'
@@ -63,6 +65,8 @@ class FocusesScreen extends React.Component
 
 
   componentDidMount() {
+    this.props.loadUserLocal()
+
     this.props.navigation.setParams({
       focusesHelpSelect: this._focusesHelpSelect,
       addFocusSelect: this._onAddFocusSelect,
@@ -150,7 +154,7 @@ class FocusesScreen extends React.Component
 
 
   render() {
-    if (this.props.status.userLoading) {
+    if (isEmpty(this.props.categories)) {
       return (
         <View style={styles.indicatorContainer}>
           <ActivityIndicator
@@ -204,6 +208,7 @@ const mapDispatchToProps = dispatch => ({
   updateCategory: (name, update) => updateCategory(dispatch, name, update),
   updateCategoryLocal: (name, update) => updateCategoryLocal(name, update),
   updateUser: update => updateUser(dispatch, update),
+  loadUserLocal: () => loadUserLocal(dispatch),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(FocusesScreen)

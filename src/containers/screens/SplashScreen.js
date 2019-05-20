@@ -2,7 +2,6 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { auth } from '../../config/firebaseConfig'
 import { View, Text } from 'react-native'
-import { loadUserLocal } from '../../handlers/DataHandlers'
 import createStyles, { Color, FontSize } from '../../styles'
 
 
@@ -26,12 +25,13 @@ const styles = createStyles({
 class SplashScreen extends React.Component 
 {
   componentDidMount() {
-    if (auth.currentUser) {
-      this.props.loadUserLocal()
-      this.props.navigation.navigate('App')
-    } else {
-      this.props.navigation.navigate('Auth')
-    }
+    auth.onAuthStateChanged(async user => {
+      if (user) {
+        this.props.navigation.navigate('App')
+      } else {
+        this.props.navigation.navigate('Auth')
+      }
+    })
   }
 
 
@@ -50,7 +50,6 @@ const mapStateToProps = state => ({
 
 
 const mapDispatchToProps = dispatch => ({
-  loadUserLocal: () => loadUserLocal(dispatch),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(SplashScreen)

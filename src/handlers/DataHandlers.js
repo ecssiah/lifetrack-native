@@ -1,13 +1,11 @@
 import { db, auth } from '../config/firebaseConfig'
 import { extend } from 'lodash-es'
 import AsyncStorage from '@react-native-community/async-storage'
-import { resetFocuses } from './FocusesHandlers';
 import { USER_KEY, SET_USER } from '../constants/User'
 import { SETTINGS_KEY, SET_SETTINGS } from '../constants/Settings'
 import { CATEGORIES_KEY, SET_CATEGORIES } from '../constants/Categories'
 import { STATS_KEY, SET_STATS } from '../constants/Stats'
 import { FOCUSES_KEY, SET_FOCUSES } from '../constants/Focuses'
-import { UPDATE_STATUS } from '../constants/Status';
 
 
 export async function setUserData(dispatch, userData) {
@@ -29,7 +27,7 @@ export async function setUserData(dispatch, userData) {
 }
 
 
-export async function setUserDataDB(userData) {
+export async function saveUserDB(userData) {
   const userDoc = db.collection('user').doc(auth.currentUser.uid)
   const settingsDoc = db.collection('settings').doc(auth.currentUser.uid) 
   const categoriesDoc = db.collection('categories').doc(auth.currentUser.uid)
@@ -44,15 +42,10 @@ export async function setUserDataDB(userData) {
 }
 
 
-export async function setUserDataLocal(userData) {
-  let values
-  try {
-    values = await AsyncStorage.multiGet(
-      [USER_KEY, SETTINGS_KEY, CATEGORIES_KEY, STATS_KEY, FOCUSES_KEY]
-    )
-  } catch(e) {
-    console.error('setUserDataLocal: multiGet', e)
-  }
+export async function saveUserLocal(userData) {
+  const values = await AsyncStorage.multiGet(
+    [USER_KEY, SETTINGS_KEY, CATEGORIES_KEY, STATS_KEY, FOCUSES_KEY]
+  )
 
   const userCollection = { ...values[USER_KEY] }
   const settingsCollection = { ...values[SETTINGS_KEY] }
@@ -64,8 +57,8 @@ export async function setUserDataLocal(userData) {
   const settings = { [auth.currentUser.uid]: userData[SETTINGS_KEY] }
   const categories = { [auth.currentUser.uid]: userData[CATEGORIES_KEY] }
   const stats = { [auth.currentUser.uid]: userData[STATS_KEY] }
-
   const focuses = {}
+
   for (let [id, focus] of Object.entries(userData[FOCUSES_KEY])) {
     if (focus.userId === auth.currentUser.uid) {
       focuses[id] = focus
@@ -84,40 +77,25 @@ export async function setUserDataLocal(userData) {
   const statsPair = [STATS_KEY, JSON.stringify(statsCollection)]
   const focusesPair = [FOCUSES_KEY, JSON.stringify(focusesCollection)]
 
-  try {
-    await AsyncStorage.multiSet([
-      userPair, settingsPair, categoriesPair, statsPair, focusesPair
-    ])
-  } catch(e) {
-    console.error('setUserDataLocal: multiSet', e)
-  }
+  await AsyncStorage.multiSet([
+    userPair, settingsPair, categoriesPair, statsPair, focusesPair
+  ])
 }
 
 
-export async function loadUser(dispatch) {
-  dispatch({ type: UPDATE_STATUS, update: { userLoading: true } })
-
-  const userData = await loadUserData()
-  await resetFocuses(dispatch, userData[FOCUSES_KEY])
+export async function loadUserDB(dispatch) {
+  const userData = await loadUserDataDB()
   setUserData(dispatch, userData)
-
-  dispatch({ type: UPDATE_STATUS, update: { userLoading: false } })
 }
 
 
 export async function loadUserLocal(dispatch) {
-  dispatch({ type: UPDATE_STATUS, update: { userLoading: true } })
-
   const userData = await loadUserDataLocal()
-  await resetFocuses(dispatch, userData[FOCUSES_KEY])
-  await setUserDataLocal(userData)
   setUserData(dispatch, userData)
-
-  dispatch({ type: UPDATE_STATUS, update: { userLoading: false } })
 }
 
 
-export async function loadUserData() {
+export async function loadUserDataDB() {
   const userDoc = db.collection('user').doc(auth.currentUser.uid)
   const settingsDoc = db.collection('settings').doc(auth.currentUser.uid)
   const categoriesDoc = db.collection('categories').doc(auth.currentUser.uid)
@@ -147,14 +125,9 @@ export async function loadUserData() {
 
 
 export async function loadUserDataLocal() {
-  let values
-  try {
-    values = await AsyncStorage.multiGet(
-      [USER_KEY, SETTINGS_KEY, CATEGORIES_KEY, STATS_KEY, FOCUSES_KEY]
-    )
-  } catch(e) {
-    console.error('loadUserDataLocal', e)
-  }
+  const values = await AsyncStorage.multiGet(
+    [USER_KEY, SETTINGS_KEY, CATEGORIES_KEY, STATS_KEY, FOCUSES_KEY]
+  )
 
   const userCollectionRaw = values.find(pair => pair[0] === USER_KEY)
   const settingsCollectionRaw = values.find(pair => pair[0] === SETTINGS_KEY)

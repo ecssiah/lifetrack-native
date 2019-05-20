@@ -6,6 +6,7 @@ import { UPDATE_STATUS } from '../../constants/Status'
 import { updateActiveFocuses } from '../../handlers/FocusesHandlers'
 import createStyles, { Color, Screen } from '../../styles'
 
+
 const styles = createStyles({
   statusBar: {
     height: 20,
@@ -13,6 +14,7 @@ const styles = createStyles({
     backgroundColor: Color.primary,
   },
 })
+
 
 class LTStatus extends React.Component 
 {

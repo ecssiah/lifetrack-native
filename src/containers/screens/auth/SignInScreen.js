@@ -44,7 +44,6 @@ class SignInScreen extends React.Component
     this.state = {
       email: '',
       password: '',
-      signinInProgress: false,
     }
   }
 
@@ -52,11 +51,9 @@ class SignInScreen extends React.Component
   _onPressSignIn = async () => {
     try {
       await this.props.signIn(this.state.email, this.state.password)
-      this.props.navigation.navigate('App')
-    }
-    catch (error) {
+    } catch (e) {
       Alert.alert(
-        'Password is incorrect. Try again.',
+        e.message,
         '',
         [
           { text: 'Confirm', onPress: null },
@@ -67,10 +64,6 @@ class SignInScreen extends React.Component
         password: '',
       })
     }
-  }
-
-
-  _onGoogleSignin = async () => {
   }
 
 

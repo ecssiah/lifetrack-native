@@ -13,6 +13,14 @@ import LTIcon from '../../../components/LT/LTIcon'
 import CategoryAddModal from '../../../components/modals/CategoryAddModal'
 import CategoryEditModal from '../../../components/modals/CategoryEditModal'
 import CategoryList from '../../../components/setting/CategoryList'
+import createStyles from '../../../styles';
+
+
+const styles = createStyles({
+  container: {
+    flex: 1,
+  },
+})
 
 
 class CategoriesScreen extends React.Component 

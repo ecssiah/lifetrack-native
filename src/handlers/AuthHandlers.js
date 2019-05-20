@@ -1,21 +1,21 @@
 import { auth } from '../config/firebaseConfig'
 import { getDay } from '../../lib/utils';
-import { 
-  setUserDataLocal, loadUserLocal, setUserData
-} from './DataHandlers'
-import { 
-  DEFAULT_WORK_PERIOD, DEFAULT_WORK_GOAL, DEFAULT_BREAK_PERIOD, SETTINGS_KEY
-} from '../constants/Settings'
+import AsyncStorage from '@react-native-community/async-storage';
+import { saveUserLocal, setUserData, loadUserLocal } from './DataHandlers'
+import { resetFocuses } from './FocusesHandlers';
 import { UNCATEGORIZED, CATEGORIES_KEY } from '../constants/Categories'
 import { USER_KEY } from '../constants/User';
 import { STATS_KEY } from '../constants/Stats';
 import { FOCUSES_KEY } from '../constants/Focuses';
-import { UPDATE_STATUS } from '../constants/Status';
+import { 
+  DEFAULT_WORK_PERIOD, 
+  DEFAULT_WORK_GOAL, 
+  DEFAULT_BREAK_PERIOD, 
+  SETTINGS_KEY
+} from '../constants/Settings'
 
 
 export async function signUp(dispatch, email, password) {
-  dispatch({ type: UPDATE_STATUS, update: { userLoading: true } })
-
   const startDate = getDay(0).getTime()
   const endDate = getDay(6).getTime()
 
@@ -44,45 +44,30 @@ export async function signUp(dispatch, email, password) {
   }
 
   await auth.createUserWithEmailAndPassword(email, password)
-  await setUserDataLocal(userData)
-  await setUserData(dispatch, userData)
-
-  dispatch({ type: UPDATE_STATUS, update: { userLoading: false } })
+  await saveUserLocal(userData)
+  setUserData(dispatch, userData)
 }
 
 
 export async function signIn(dispatch, email, password) {
   await auth.signInWithEmailAndPassword(email, password)
-  loadUserLocal(dispatch)
+  await loadUserLocal(dispatch)
 }
 
 
-// TODO
-export async function signOut() {
-  // let query = db.collection('focuses')
-  // query = query.where('userId', '==', auth.currentUser.uid)
-  // query = query.where('active', '==', true)
+export async function signOut(dispatch) {
+  const focusesCollectionRaw = await AsyncStorage.getItem(FOCUSES_KEY)
+  const focusesCollection = JSON.parse(focusesCollectionRaw)
 
-  // const promises = []
-  // const querySnapshot = await query.get()
+  const userFocusesCollection = {}
+  for (let [id, focus] of Object.entries(focusesCollection)) {
+    if (focus.userId === auth.currentUser.uid) {
+      userFocusesCollection[id] = focus
+    }
+  }
 
-  // querySnapshot.forEach(doc => {
-  //   const transactionUpdateFunc = async transaction => {
-  //     const docSnapshot = await transaction.get(doc.ref)
+  await resetFocuses(dispatch, userFocusesCollection)
 
-  //     const update = {
-  //       active: false,
-  //       working: true,
-  //       time: docSnapshot.data().workPeriod * 60,
-  //     }
-
-  //     transaction.update(doc.ref, update)
-  //   }
-
-  //   promises.push(db.runTransaction(transactionUpdateFunc))
-  // })
-
-  // await Promise.all(promises)
-  // auth.signOut()
+  auth.signOut()
 }
 

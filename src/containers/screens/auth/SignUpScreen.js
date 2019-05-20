@@ -65,7 +65,6 @@ class SignUpScreen extends React.Component
     if (this.state.password === this.state.confirm) {
       try {
         await this.props.signUp(this.state.email, this.state.password)
-        this.props.navigation.navigate('App')
       } catch (e) {
         error = e
       }
