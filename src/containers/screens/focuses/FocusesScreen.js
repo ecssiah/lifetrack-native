@@ -4,15 +4,15 @@ import { connect } from 'react-redux'
 import { isEmpty } from 'lodash-es'
 import { auth } from '../../../config/firebaseConfig'
 import { updateUser } from '../../../handlers/UserHandlers';
-import { UNCATEGORIZED } from '../../../constants/Categories'
-import { UPDATE_SELECTION } from '../../../constants/Selection'
 import { 
-  addFocus, addFocusDB, addFocusLocal 
+  addFocus, addFocusLocal 
 } from '../../../handlers/FocusesHandlers'
 import { 
   updateCategory, updateCategoryLocal 
 } from '../../../handlers/CategoryHandlers'
 import { loadUserLocal } from '../../../handlers/DataHandlers'
+import { UNCATEGORIZED } from '../../../constants/Categories'
+import { UPDATE_SELECTION } from '../../../constants/Selection'
 import createStyles, { Color } from '../../../styles'
 
 import LTIcon from '../../../components/LT/LTIcon'
@@ -65,7 +65,7 @@ class FocusesScreen extends React.Component
 
 
   componentDidMount() {
-    // this.props.loadUserLocal()
+    this.props.loadUserLocal()
 
     this.props.navigation.setParams({
       focusesHelpSelect: this._focusesHelpSelect,
@@ -154,7 +154,7 @@ class FocusesScreen extends React.Component
 
 
   render() {
-    if (this.props.status.userLoading) {
+    if (isEmpty(this.props.categories)) {
       return (
         <View style={styles.indicatorContainer}>
           <ActivityIndicator
@@ -201,6 +201,7 @@ const mapStateToProps = state => ({
 
 
 const mapDispatchToProps = dispatch => ({
+  loadUserLocal: () => loadUserLocal(dispatch),
   addFocus: (id, focus) => addFocus(dispatch, id, focus), 
   addFocusDB: focus => addFocusDB(focus), 
   addFocusLocal: focus => addFocusLocal(focus),
@@ -208,7 +209,6 @@ const mapDispatchToProps = dispatch => ({
   updateCategory: (name, update) => updateCategory(dispatch, name, update),
   updateCategoryLocal: (name, update) => updateCategoryLocal(name, update),
   updateUser: update => updateUser(dispatch, update),
-  loadUserLocal: () => loadUserLocal(dispatch),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(FocusesScreen)

@@ -41,6 +41,7 @@ const styles = createStyles({
   },
 })
 
+
 class SignUpScreen extends React.Component 
 {
   static navigationOptions = ({ navigation }) => ({

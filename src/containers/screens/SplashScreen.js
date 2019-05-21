@@ -1,7 +1,7 @@
 import React from 'react'
+import { View, Text } from 'react-native'
 import { connect } from 'react-redux'
 import { auth } from '../../config/firebaseConfig'
-import { View, Text } from 'react-native'
 import { loadUserLocal } from '../../handlers/DataHandlers';
 import createStyles, { Color, FontSize } from '../../styles'
 
@@ -28,8 +28,6 @@ class SplashScreen extends React.Component
   componentDidMount() {
     auth.onAuthStateChanged(async user => {
       if (user) {
-        console.log('authStateChanged: \n')
-        await this.props.loadUserLocal()
         this.props.navigation.navigate('App')
       } else {
         this.props.navigation.navigate('Auth')

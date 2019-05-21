@@ -213,7 +213,6 @@ class FocusEditScreen extends React.Component
     clearInterval(this.props.focuses[this.props.selection.id].timer)
 
     this.props.deleteFocus(this.props.selection.id)
-    // await this.props.deleteFocusDB(this.props.selection.id)
     await this.props.deleteFocusLocal(this.props.selection.id)
 
     this.props.navigation.navigate('Focuses')

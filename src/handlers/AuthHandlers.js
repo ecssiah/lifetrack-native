@@ -1,8 +1,8 @@
-import { auth } from '../config/firebaseConfig'
+import { auth, admin } from '../config/firebaseConfig'
 import { getDay } from '../../lib/utils';
-import AsyncStorage from '@react-native-community/async-storage';
 import { saveUserLocal, setUserData, loadUserLocal } from './DataHandlers'
 import { resetFocuses } from './FocusesHandlers';
+import AsyncStorage from '@react-native-community/async-storage';
 import { UNCATEGORIZED, CATEGORIES_KEY } from '../constants/Categories'
 import { USER_KEY } from '../constants/User';
 import { STATS_KEY } from '../constants/Stats';
@@ -16,8 +16,6 @@ import {
 
 
 export async function signUp(dispatch, email, password) {
-  console.log('signUp: \n')
-
   const startDate = getDay(0).getTime()
   const endDate = getDay(6).getTime()
 
@@ -45,16 +43,17 @@ export async function signUp(dispatch, email, password) {
     [FOCUSES_KEY]: {},
   }
 
-
-  await auth.createUserWithEmailAndPassword(email, password)
-  await saveUserLocal(userData)
-
-  console.log(userData)
+  await admin.createUserWithEmailAndPassword(email, password)
+  await saveUserLocal(admin.currentUser.uid, userData)
+  admin.signOut()
+  setUserData(dispatch, userData)
+  auth.signInWithEmailAndPassword(email, password)
 }
 
 
 export async function signIn(dispatch, email, password) {
   await auth.signInWithEmailAndPassword(email, password)
+  await loadUserLocal(dispatch)
 }
 
 
@@ -70,7 +69,6 @@ export async function signOut(dispatch) {
   }
 
   await resetFocuses(dispatch, userFocusesCollection)
-
-  auth.signOut()
+  await auth.signOut()
 }
 

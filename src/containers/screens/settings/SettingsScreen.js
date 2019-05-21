@@ -164,7 +164,8 @@ class SettingsScreen extends React.Component
       clearInterval(this.props.focuses[key].timer)
     }
 
-    this.props.signOut()
+    await this.props.signOut()
+    this.props.navigation.navigate('Auth')
   }
 
 

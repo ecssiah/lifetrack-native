@@ -1,7 +1,8 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { Alert, Button, View, TextInput } from 'react-native'
 import { signIn } from '../../../handlers/AuthHandlers'
+import { UPDATE_STATUS } from '../../../constants/Status';
+import { Alert, Button, View, TextInput } from 'react-native'
 import createStyles, { FontSize } from '../../../styles'
 
 import LTSpacer from '../../../components/LT/LTSpacer'
@@ -30,6 +31,7 @@ const styles = createStyles({
     marginTop: 14,
   },
 })
+
 
 class SignInScreen extends React.Component 
 {
