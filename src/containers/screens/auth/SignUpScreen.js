@@ -65,7 +65,7 @@ class SignUpScreen extends React.Component
 
     if (this.state.password === this.state.confirm) {
       try {
-        await this.props.signUp(this.state.email, this.state.password)
+        await signUp(this.state.email, this.state.password)
       } catch (e) {
         error = e
       }
@@ -144,7 +144,6 @@ const mapStateToProps = state => ({
 
 
 const mapDispatchToProps = dispatch => ({
-  signUp: (email, password) => signUp(dispatch, email, password),
 })
 
 

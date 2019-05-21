@@ -1,4 +1,3 @@
-import { extend } from 'lodash-es'
 import { db, auth } from '../config/firebaseConfig'
 import AsyncStorage from '@react-native-community/async-storage'
 import { USER_KEY, SET_USER } from '../constants/User'
@@ -53,7 +52,7 @@ export async function setUserData(dispatch, userData) {
 }
 
 
-export async function saveUserLocal(dispatch, uid, userData) {
+export async function saveUserLocal(uid, userData) {
   console.log(`saveUserLocal: \n`)
   console.log(userData)
 

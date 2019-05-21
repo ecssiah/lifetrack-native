@@ -1,7 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { signIn } from '../../../handlers/AuthHandlers'
-import { UPDATE_STATUS } from '../../../constants/Status';
 import { Alert, Button, View, TextInput } from 'react-native'
 import createStyles, { FontSize } from '../../../styles'
 
@@ -52,7 +51,7 @@ class SignInScreen extends React.Component
 
   _onPressSignIn = async () => {
     try {
-      await this.props.signIn(this.state.email, this.state.password)
+      await signIn(this.state.email, this.state.password)
     } catch (e) {
       Alert.alert(
         e.message,
@@ -122,7 +121,6 @@ const mapStateToProps = state => ({
 
 
 const mapDispatchToProps = dispatch => ({
-  signIn: (email, password) => signIn(dispatch, email, password),
 })
 
 

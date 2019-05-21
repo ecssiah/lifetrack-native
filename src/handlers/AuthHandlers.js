@@ -1,6 +1,6 @@
 import { auth, admin } from '../config/firebaseConfig'
 import { getDay } from '../../lib/utils';
-import { saveUserLocal, loadUserLocal } from './DataHandlers'
+import { saveUserLocal } from './DataHandlers'
 import { resetFocuses } from './FocusesHandlers';
 import AsyncStorage from '@react-native-community/async-storage';
 import { UNCATEGORIZED, CATEGORIES_KEY } from '../constants/Categories'
@@ -15,7 +15,7 @@ import {
 } from '../constants/Settings'
 
 
-export async function signUp(dispatch, email, password) {
+export async function signUp(email, password) {
   const startDate = getDay(0).getTime()
   const endDate = getDay(6).getTime()
 
@@ -47,13 +47,13 @@ export async function signUp(dispatch, email, password) {
 
   console.log(`created user: ${admin.currentUser.uid}`)
 
-  await saveUserLocal(dispatch, admin.currentUser.uid, userData)
+  await saveUserLocal(admin.currentUser.uid, userData)
   await admin.signOut()
   await auth.signInWithEmailAndPassword(email, password)
 }
 
 
-export async function signIn(dispatch, email, password) {
+export async function signIn(email, password) {
   await auth.signInWithEmailAndPassword(email, password)
 }
 
