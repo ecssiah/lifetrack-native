@@ -8,7 +8,30 @@ import { STATS_KEY, SET_STATS } from '../constants/Stats'
 import { FOCUSES_KEY, SET_FOCUSES } from '../constants/Focuses'
 
 
+export async function initLocal() {
+  // Delete AsyncStorage database
+  // await AsyncStorage.multiRemove(
+  //   [USER_KEY, SETTINGS_KEY, CATEGORIES_KEY, STATS_KEY, FOCUSES_KEY]
+  // )
+
+  if (await AsyncStorage.getItem(USER_KEY) === null) {
+    const initData = [ 
+      [ USER_KEY, JSON.stringify({}) ],
+      [ SETTINGS_KEY, JSON.stringify({}) ],
+      [ CATEGORIES_KEY, JSON.stringify({}) ],
+      [ STATS_KEY, JSON.stringify({}) ],
+      [ FOCUSES_KEY, JSON.stringify({}) ],
+    ]
+
+    AsyncStorage.multiSet(initData)
+  }
+}
+
+
 export async function setUserData(dispatch, userData) {
+  console.log('setUserData: \n')
+  console.log(userData)
+
   if (userData[USER_KEY]) {
     dispatch({ type: SET_USER, user: userData[USER_KEY] })
   }
@@ -28,43 +51,30 @@ export async function setUserData(dispatch, userData) {
 
 
 export async function saveUserLocal(dispatch, uid, userData) {
-  const values = await AsyncStorage.multiGet(
-    [USER_KEY, SETTINGS_KEY, CATEGORIES_KEY, STATS_KEY, FOCUSES_KEY]
+  await AsyncStorage.mergeItem(
+    USER_KEY, 
+    JSON.stringify({ [uid]: userData[USER_KEY] })
   )
+  await AsyncStorage.mergeItem(
+    SETTINGS_KEY, 
+    JSON.stringify({ [uid]: userData[SETTINGS_KEY] })
+  )
+  await AsyncStorage.mergeItem(
+    CATEGORIES_KEY, 
+    JSON.stringify({ [uid]: userData[CATEGORIES_KEY] })
+  )
+  await AsyncStorage.mergeItem(
+    STATS_KEY, 
+    JSON.stringify({ [uid]: userData[STATS_KEY] })
+  )
+  await AsyncStorage.mergeItem(
+    FOCUSES_KEY,
+    JSON.stringify(userData[FOCUSES_KEY])
+  )
+  
+  const userCollection = JSON.parse(await AsyncStorage.getItem(USER_KEY))
 
-  const userCollection = { ...values[USER_KEY] }
-  const settingsCollection = { ...values[SETTINGS_KEY] }
-  const categoriesCollection = { ...values[CATEGORIES_KEY] }
-  const statsCollection = { ...values[STATS_KEY] }
-  const focusesCollection = { ...values[FOCUSES_KEY] }
-
-  const user = { [uid]: userData[USER_KEY] }
-  const settings = { [uid]: userData[SETTINGS_KEY] }
-  const categories = { [uid]: userData[CATEGORIES_KEY] }
-  const stats = { [uid]: userData[STATS_KEY] }
-
-  const focuses = {}
-  for (let [id, focus] of Object.entries(userData[FOCUSES_KEY])) {
-    if (focus.userId === uid) {
-      focuses[id] = focus
-    }
-  }
-
-  extend(userCollection, user)
-  extend(settingsCollection, settings)
-  extend(categoriesCollection, categories)
-  extend(statsCollection, stats)
-  extend(focusesCollection, focuses)
-
-  const dataPairs = [
-    [USER_KEY, JSON.stringify(userCollection)],
-    [SETTINGS_KEY, JSON.stringify(settingsCollection)],
-    [CATEGORIES_KEY, JSON.stringify(categoriesCollection)],
-    [STATS_KEY, JSON.stringify(statsCollection)],
-    [FOCUSES_KEY, JSON.stringify(focusesCollection)],
-  ]
-
-  await AsyncStorage.multiSet(dataPairs)
+  console.log(userCollection)
 
   setUserData(dispatch, userData)
 }
@@ -86,6 +96,8 @@ export async function saveUserDB(userData) {
 
 
 export async function loadUserLocal(dispatch) {
+  console.log('loading user: ', auth.currentUser.uid)
+
   const values = await AsyncStorage.multiGet(
     [USER_KEY, SETTINGS_KEY, CATEGORIES_KEY, STATS_KEY]
   )
@@ -115,6 +127,8 @@ export async function loadUserLocal(dispatch) {
     [STATS_KEY]: statsCollection[auth.currentUser.uid],
     [FOCUSES_KEY]: focusesCollection,
   }
+
+  console.log(userCollection)
 
   setUserData(dispatch, userData)
 }

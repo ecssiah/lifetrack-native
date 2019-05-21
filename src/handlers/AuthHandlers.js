@@ -1,6 +1,6 @@
 import { auth, admin } from '../config/firebaseConfig'
 import { getDay } from '../../lib/utils';
-import { saveUserLocal, setUserData, loadUserLocal } from './DataHandlers'
+import { saveUserLocal, loadUserLocal } from './DataHandlers'
 import { resetFocuses } from './FocusesHandlers';
 import AsyncStorage from '@react-native-community/async-storage';
 import { UNCATEGORIZED, CATEGORIES_KEY } from '../constants/Categories'

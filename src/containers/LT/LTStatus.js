@@ -5,6 +5,7 @@ import { StatusBar, View } from 'react-native'
 import { UPDATE_STATUS } from '../../constants/Status'
 import { updateActiveFocuses } from '../../handlers/FocusesHandlers'
 import createStyles, { Color, Screen } from '../../styles'
+import { initLocal } from '../../handlers/DataHandlers';
 
 
 const styles = createStyles({
@@ -19,6 +20,7 @@ const styles = createStyles({
 class LTStatus extends React.Component 
 {
   componentDidMount() {
+    initLocal()
     AppState.addEventListener('change', this._onAppStateChange)
   }
 
