@@ -11,10 +11,10 @@ export const firebaseConfig = {
   messagingSenderId: "396651915566",
 }
 
-const primaryApp = firebase.initializeApp(firebaseConfig)
+const app = firebase.initializeApp(firebaseConfig)
 const adminApp = firebase.initializeApp(firebaseConfig, "Admin")
 
-export const auth = primaryApp.auth()
+export const auth = app.auth()
 export const admin = adminApp.auth()
 
 export const db = firebase.firestore()

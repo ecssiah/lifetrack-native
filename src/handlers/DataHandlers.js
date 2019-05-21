@@ -27,7 +27,7 @@ export async function setUserData(dispatch, userData) {
 }
 
 
-export async function saveUserLocal(uid, userData) {
+export async function saveUserLocal(dispatch, uid, userData) {
   const values = await AsyncStorage.multiGet(
     [USER_KEY, SETTINGS_KEY, CATEGORIES_KEY, STATS_KEY, FOCUSES_KEY]
   )
@@ -65,6 +65,8 @@ export async function saveUserLocal(uid, userData) {
   ]
 
   await AsyncStorage.multiSet(dataPairs)
+
+  setUserData(dispatch, userData)
 }
 
 
@@ -84,12 +86,6 @@ export async function saveUserDB(userData) {
 
 
 export async function loadUserLocal(dispatch) {
-  const userData = await loadUserDataLocal()
-  setUserData(dispatch, userData)
-}
-
-
-export async function loadUserDataLocal() {
   const values = await AsyncStorage.multiGet(
     [USER_KEY, SETTINGS_KEY, CATEGORIES_KEY, STATS_KEY]
   )
@@ -120,17 +116,11 @@ export async function loadUserDataLocal() {
     [FOCUSES_KEY]: focusesCollection,
   }
 
-  return userData
-}
-
-
-export async function loadUserDB(dispatch) {
-  const userData = await loadUserDataDB()
   setUserData(dispatch, userData)
 }
 
 
-export async function loadUserDataDB() {
+export async function loadUserDB(dispatch) {
   const userDoc = db.collection('user').doc(auth.currentUser.uid)
   const settingsDoc = db.collection('settings').doc(auth.currentUser.uid)
   const categoriesDoc = db.collection('categories').doc(auth.currentUser.uid)
@@ -154,7 +144,7 @@ export async function loadUserDataDB() {
     [STATS_KEY]: userDataRaw[3].data(),
     [FOCUSES_KEY]: userDataRaw[4].data(),
   }
-  
-  return userData
+
+  setUserData(dispatch, userData)
 }
 

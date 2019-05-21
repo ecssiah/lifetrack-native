@@ -44,9 +44,9 @@ export async function signUp(dispatch, email, password) {
   }
 
   await admin.createUserWithEmailAndPassword(email, password)
-  await saveUserLocal(admin.currentUser.uid, userData)
+  await saveUserLocal(dispatch, admin.currentUser.uid, userData)
   admin.signOut()
-  setUserData(dispatch, userData)
+
   auth.signInWithEmailAndPassword(email, password)
 }
 
