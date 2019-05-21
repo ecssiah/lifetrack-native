@@ -9,12 +9,15 @@ import { FOCUSES_KEY, SET_FOCUSES } from '../constants/Focuses'
 
 
 export async function initLocal() {
-  // Delete AsyncStorage database
+  // // Delete AsyncStorage database
   // await AsyncStorage.multiRemove(
   //   [USER_KEY, SETTINGS_KEY, CATEGORIES_KEY, STATS_KEY, FOCUSES_KEY]
   // )
 
-  if (await AsyncStorage.getItem(USER_KEY) === null) {
+  const userCollection = await AsyncStorage.getItem(USER_KEY)
+  const userDoesNotExist = userCollection === null
+
+  if (userDoesNotExist) {
     const initData = [ 
       [ USER_KEY, JSON.stringify({}) ],
       [ SETTINGS_KEY, JSON.stringify({}) ],
@@ -51,6 +54,9 @@ export async function setUserData(dispatch, userData) {
 
 
 export async function saveUserLocal(dispatch, uid, userData) {
+  console.log(`saveUserLocal: \n`)
+  console.log(userData)
+
   await AsyncStorage.mergeItem(
     USER_KEY, 
     JSON.stringify({ [uid]: userData[USER_KEY] })
@@ -71,12 +77,6 @@ export async function saveUserLocal(dispatch, uid, userData) {
     FOCUSES_KEY,
     JSON.stringify(userData[FOCUSES_KEY])
   )
-  
-  const userCollection = JSON.parse(await AsyncStorage.getItem(USER_KEY))
-
-  console.log(userCollection)
-
-  setUserData(dispatch, userData)
 }
 
 
@@ -96,7 +96,7 @@ export async function saveUserDB(userData) {
 
 
 export async function loadUserLocal(dispatch) {
-  console.log('loading user: ', auth.currentUser.uid)
+  console.log(`loading user: ${auth.currentUser.uid}`)
 
   const values = await AsyncStorage.multiGet(
     [USER_KEY, SETTINGS_KEY, CATEGORIES_KEY, STATS_KEY]
@@ -127,8 +127,6 @@ export async function loadUserLocal(dispatch) {
     [STATS_KEY]: statsCollection[auth.currentUser.uid],
     [FOCUSES_KEY]: focusesCollection,
   }
-
-  console.log(userCollection)
 
   setUserData(dispatch, userData)
 }

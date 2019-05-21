@@ -44,16 +44,17 @@ export async function signUp(dispatch, email, password) {
   }
 
   await admin.createUserWithEmailAndPassword(email, password)
-  await saveUserLocal(dispatch, admin.currentUser.uid, userData)
-  admin.signOut()
 
-  auth.signInWithEmailAndPassword(email, password)
+  console.log(`created user: ${admin.currentUser.uid}`)
+
+  await saveUserLocal(dispatch, admin.currentUser.uid, userData)
+  await admin.signOut()
+  await auth.signInWithEmailAndPassword(email, password)
 }
 
 
 export async function signIn(dispatch, email, password) {
   await auth.signInWithEmailAndPassword(email, password)
-  await loadUserLocal(dispatch)
 }
 
 
