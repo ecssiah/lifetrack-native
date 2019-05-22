@@ -8,6 +8,7 @@ import {
   ADD_FOCUS, UPDATE_FOCUS, DELETE_FOCUS, FOCUSES_KEY, 
 } from "../constants/Focuses"
 import { UPDATE_STATUS } from "../constants/Status"
+import { USER_KEY } from '../constants/User';
 
 
 export function updateFocuses(dispatch, update) {
@@ -52,13 +53,13 @@ export async function addFocusDB(focus) {
 
 
 export async function addFocusLocal(focus) {
-  const focusesCollectionRaw = await AsyncStorage.getItem(FOCUSES_KEY)
-  const focusesCollection = JSON.parse(focusesCollectionRaw)
-
   const id = new Date().getTime()
-  focusesCollection[id] = focus
+  await AsyncStorage.mergeItem(FOCUSES_KEY, JSON.stringify({ [id]: focus }))
 
-  AsyncStorage.setItem(FOCUSES_KEY, JSON.stringify(focusesCollection))
+  const focusesRaw = await AsyncStorage.getItem(FOCUSES_KEY)
+  const focuses = JSON.parse(focusesRaw)
+
+  console.log(focuses)
 
   return id
 }
@@ -95,14 +96,7 @@ export async function updateFocusDB(id, update) {
 
 
 export async function updateFocusLocal(id, update) {
-  const focusesCollectionRaw = await AsyncStorage.getItem(FOCUSES_KEY)
-  const focusesCollection = JSON.parse(focusesCollectionRaw)
-
-  extend(focusesCollection[id], update)
-
-  AsyncStorage.setItem(FOCUSES_KEY, JSON.stringify(focusesCollection))
-
-  return id
+  await AsyncStorage.mergeItem(USER_KEY, { [id]: update })
 }
 
 
@@ -270,3 +264,4 @@ export async function resetFocuses(dispatch, focuses) {
   await updateFocuses(dispatch, focusUpdate)
   await updateFocusesLocal(focusUpdate)
 }
+
