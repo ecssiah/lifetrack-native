@@ -9,6 +9,7 @@ import {
 } from "../constants/Focuses"
 import { UPDATE_STATUS } from "../constants/Status"
 import { USER_KEY } from '../constants/User';
+import { displayAsyncStorage } from './DataHandlers';
 
 
 export function updateFocuses(dispatch, update) {
@@ -29,14 +30,18 @@ export async function updateFocusesDB(update) {
 
 
 export async function updateFocusesLocal(update) {
-  const focusesCollection = await AsyncStorage.getItem(FOCUSES_KEY)
+  console.log('updateFocusesLocal: \n')
+  console.log(update)
+  AsyncStorage.mergeItem(FOCUSES_KEY, JSON.stringify(update))
 
-  for (const id in update) {
-    const focusDoc = focusesCollection[id]
-    extend(focusDoc, update[id])
-  }
+  // const focusesCollection = await AsyncStorage.getItem(FOCUSES_KEY)
 
-  AsyncStorage.setItem(FOCUSES_KEY, JSON.stringify(focusesCollection))
+  // for (const id in update) {
+  //   const focusDoc = focusesCollection[id]
+  //   extend(focusDoc, update[id])
+  // }
+
+  // AsyncStorage.setItem(FOCUSES_KEY, JSON.stringify(focusesCollection))
 }
 
 
@@ -53,13 +58,11 @@ export async function addFocusDB(focus) {
 
 
 export async function addFocusLocal(focus) {
+  console.log('addFocusLocal: \n')
+  console.log(focus)
+
   const id = new Date().getTime()
   await AsyncStorage.mergeItem(FOCUSES_KEY, JSON.stringify({ [id]: focus }))
-
-  const focusesRaw = await AsyncStorage.getItem(FOCUSES_KEY)
-  const focuses = JSON.parse(focusesRaw)
-
-  console.log(focuses)
 
   return id
 }
@@ -96,11 +99,18 @@ export async function updateFocusDB(id, update) {
 
 
 export async function updateFocusLocal(id, update) {
-  await AsyncStorage.mergeItem(USER_KEY, { [id]: update })
+  console.log('updateFocusLocal: \n')
+  console.log(update)
+
+  await AsyncStorage.mergeItem(
+    USER_KEY, JSON.stringify({ [id]: update })
+  )
 }
 
 
 export async function updateFocusCategories(dispatch, name, newName) {
+  console.log('updateFocusCategories: \n')
+
   const focusesCollectionRaw = await AsyncStorage.getItem(FOCUSES_KEY)
   const focusesCollection = JSON.parse(focusesCollectionRaw)
 
@@ -108,12 +118,13 @@ export async function updateFocusCategories(dispatch, name, newName) {
   for (let [id, focus] of Object.entries(focusesCollection)) {
     if (focus.userId === auth.currentUser.uid && focus.category === name) {
       update[id] = { category: newName }
-      extend(focusesCollection[id], update[id])
     }
   }
 
-  await AsyncStorage.setItem(FOCUSES_KEY, JSON.stringify(focusesCollection))
+  await AsyncStorage.mergeItem(FOCUSES_KEY, JSON.stringify(update))
   updateFocuses(dispatch, update)
+
+  displayAsyncStorage()
 }
 
 
@@ -147,20 +158,16 @@ async function searchForWorkingFocuses() {
 
 
 async function deactivateFocuses(dispatch, workingFocuses) { 
-  const focusesCollectionRaw = await AsyncStorage.getItem(FOCUSES_KEY)
-  const focusesCollection = JSON.parse(focusesCollectionRaw)
-
-  dispatch({ type: UPDATE_STATUS, update: { tracked: 0 } })
-
-  const update = { active: false }
-
+  const update = { }
   for (let [id, focus] of Object.entries(workingFocuses)) {
-    extend(focusesCollection[id], update)
     clearInterval(focus.timer)
+    update[id] = { active: false }
     updateFocus(id, update)
   }
 
-  await AsyncStorage.setItem(FOCUSES_KEY, JSON.stringify(focusesCollection))
+  dispatch({ type: UPDATE_STATUS, update: { tracked: 0 } })
+
+  await AsyncStorage.mergeItem(FOCUSES_KEY, JSON.stringify(update))
 }
 
 
@@ -225,11 +232,7 @@ function getUpdatedHistory(curHistory, elapsed) {
 
 
 async function updateExperience(dispatch, workingFocuses, elapsed) {
-  const focusesCollectionRaw = await AsyncStorage.getItem(FOCUSES_KEY)
-  const focusesCollection = JSON.parse(focusesCollectionRaw)
-
   const update = {}
-
   for (let [id, focus] of workingFocuses) {
     update[id] = {
       level: focus.level,
@@ -241,11 +244,9 @@ async function updateExperience(dispatch, workingFocuses, elapsed) {
       update[id].level++
       update[id].experience -= 100
     }
-
-    extend(focusesCollection[id], update[id])
   }
 
-  await AsyncStorage.setItem(FOCUSES_KEY, JSON.stringify(focusesCollection))
+  await AsyncStorage.mergeItem(FOCUSES_KEY, JSON.stringify(update))
   updateFocuses(dispatch, update)
 }
 

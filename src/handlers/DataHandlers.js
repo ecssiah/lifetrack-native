@@ -7,11 +7,31 @@ import { STATS_KEY, SET_STATS } from '../constants/Stats'
 import { FOCUSES_KEY, SET_FOCUSES } from '../constants/Focuses'
 
 
+export async function clearAsyncStorage() {
+  console.log('CLEAR ASYNC STORAGE')
+  await AsyncStorage.multiRemove(
+    [USER_KEY, SETTINGS_KEY, CATEGORIES_KEY, STATS_KEY, FOCUSES_KEY]
+  )
+}
+
+
+export async function displayAsyncStorage() {
+  console.log('DISPLAY ASYNC STORAGE')
+  const keys = await AsyncStorage.getAllKeys()
+  const values = (await AsyncStorage.multiGet(keys)).filter(value => 
+    value[0] !== 'firebase:authUser:AIzaSyBtklAJ3LniqGDapAvQ5NoPUN58TwNpjYQ:[DEFAULT]'
+  )
+
+  for (const value of values) {
+    console.log(value[0])
+    console.log(JSON.parse(value[1]))
+  }
+}
+
+
 export async function initLocal() {
-  // // Delete AsyncStorage database
-  // await AsyncStorage.multiRemove(
-  //   [USER_KEY, SETTINGS_KEY, CATEGORIES_KEY, STATS_KEY, FOCUSES_KEY]
-  // )
+  // clearAsyncStorage()
+  displayAsyncStorage()
 
   const userCollection = await AsyncStorage.getItem(USER_KEY)
   const userDoesNotExist = userCollection === null

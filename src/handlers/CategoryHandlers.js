@@ -1,5 +1,6 @@
 import { db, auth } from '../config/firebaseConfig'
 import { extend } from 'lodash-es'
+import AsyncStorage from '@react-native-community/async-storage';
 import firebase from 'firebase'
 import { 
   UNCATEGORIZED,
@@ -8,7 +9,7 @@ import {
   CATEGORIES_KEY,
 } from "../constants/Categories"
 import { updateFocusCategories } from './FocusesHandlers'
-import AsyncStorage from '@react-native-community/async-storage';
+import { displayAsyncStorage } from './DataHandlers';
 
 
 export function addCategory(dispatch, name) {
@@ -35,29 +36,25 @@ export async function addCategoryDB(name) {
 
 
 export async function addCategoryLocal(name) {
-  try {
-    const categoryCollectionRaw = await AsyncStorage.getItem(CATEGORIES_KEY)
-    const categoryCollection = JSON.parse(categoryCollectionRaw)
+  console.log('addCategoryLocal: \n')
 
-    const category = {
-      [name]: {
-        focusVisible: true,
-        statVisible: false,
-      }
+  const category = {
+    [name]: {
+      focusVisible: true,
+      statVisible: false,
     }
-
-    extend(categoryCollection[auth.currentUser.uid], category)
-
-    await AsyncStorage.setItem(
-      CATEGORIES_KEY, JSON.stringify(categoryCollection)
-    )
-  } catch(e) {
-    console.error('addCategoryLocal: ', e)
   }
+
+  await AsyncStorage.mergeItem(
+    CATEGORIES_KEY, JSON.stringify({ [auth.currentUser.uid]: category })
+  )
 }
 
 
 export function updateCategory(dispatch, name, update) {
+  console.log('updateCategory: \n')
+  console.log(name, update)
+
   dispatch({ type: UPDATE_CATEGORY, name, update })
 }
 
@@ -81,18 +78,18 @@ export async function updateCategoryDB(name, update) {
 
 
 export async function updateCategoryLocal(name, update) {
-  try {
-    const categoryCollectionRaw = await AsyncStorage.getItem(CATEGORIES_KEY)
-    const categoryCollection = JSON.parse(categoryCollectionRaw)
+  console.log('updateCategoryLocal: \n')
+  console.log(name, update) 
 
-    extend(categoryCollection[auth.currentUser.uid][name], update)
-
-    await AsyncStorage.setItem(
-      CATEGORIES_KEY, JSON.stringify(categoryCollection)
-    )
-  } catch(e) {
-    console.error('updateCategoryLocal: ', e)
+  const category = {
+    [name]: update,
   }
+
+  await AsyncStorage.mergeItem(
+    CATEGORIES_KEY, JSON.stringify({ [auth.currentUser.uid]: category })
+  )
+
+  displayAsyncStorage()
 }
 
 
@@ -114,40 +111,33 @@ export async function deleteCategoryDB(dispatch, name) {
 
 
 export async function deleteCategoryLocal(dispatch, name) {
-  try {
-    const categoryCollectionRaw = await AsyncStorage.getItem(CATEGORIES_KEY)
-    const categoryCollection = JSON.parse(categoryCollectionRaw)
+  console.log('deleteCategoryLocal: \n')
+  console.log(name)
 
-    delete categoryCollection[auth.currentUser.uid][name]
+  const categoryCollectionRaw = await AsyncStorage.getItem(CATEGORIES_KEY)
+  const categoryCollection = JSON.parse(categoryCollectionRaw)
 
-    await AsyncStorage.setItem(
-      CATEGORIES_KEY, JSON.stringify(categoryCollection)
-    )
+  delete categoryCollection[auth.currentUser.uid][name]
 
-    updateFocusCategories(dispatch, name, UNCATEGORIZED)
-  } catch(e) {
-    console.error('deleteCategoryLocal: ', e)
-  }
+  await AsyncStorage.setItem(
+    CATEGORIES_KEY, JSON.stringify(categoryCollection)
+  )
+
+  updateFocusCategories(dispatch, name, UNCATEGORIZED)
 }
 
 
 export async function updateCategoryName(dispatch, name, newName) {
-  try {
-    const categoryCollectionRaw = await AsyncStorage.getItem(CATEGORIES_KEY)
-    const categoryCollection = JSON.parse(categoryCollectionRaw)
-    const category = { ...categoryCollection[auth.currentUser.uid][name] }
+  const categoryCollectionRaw = await AsyncStorage.getItem(CATEGORIES_KEY)
+  const categoryCollection = JSON.parse(categoryCollectionRaw)
+  const category = { ...categoryCollection[auth.currentUser.uid][name] }
 
-    categoryCollection[auth.currentUser.uid][newName] = category
-    delete categoryCollection[auth.currentUser.uid][name]
+  categoryCollection[auth.currentUser.uid][newName] = category
+  delete categoryCollection[auth.currentUser.uid][name]
 
-    await AsyncStorage.setItem(
-      CATEGORIES_KEY, JSON.stringify(categoryCollection)
-    )
-    await updateFocusCategories(dispatch, name, newName)
+  await AsyncStorage.setItem(CATEGORIES_KEY, JSON.stringify(categoryCollection))
+  await updateFocusCategories(dispatch, name, newName)
 
-    dispatch({ type: UPDATE_CATEGORY_NAME, name, newName })
-  } catch(e) {
-    console.error('updateCategoryName: ', e)
-  }
+  dispatch({ type: UPDATE_CATEGORY_NAME, name, newName })
 }
 

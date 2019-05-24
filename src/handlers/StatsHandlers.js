@@ -16,14 +16,7 @@ export function updateStatsDB(update) {
 
 
 export async function updateStatsLocal(update) {
-  try {
-    const statsCollectionRaw = await AsyncStorage.getItem(STATS_KEY)
-    const statsCollection = JSON.parse(statsCollectionRaw)
-
-    extend(statsCollection[auth.currentUser.uid], update)
-
-    await AsyncStorage.setItem(STATS_KEY, JSON.stringify(updateStats))
-  } catch(e) {
-    console.error('updateStatsLocal', e)
-  }
+  await AsyncStorage.mergeItem(
+    STATS_KEY, JSON.stringify({ [auth.currentUser.uid]: update })
+  )
 }

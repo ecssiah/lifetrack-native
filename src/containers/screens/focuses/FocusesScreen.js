@@ -203,12 +203,11 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
   loadUserLocal: () => loadUserLocal(dispatch),
   addFocus: (id, focus) => addFocus(dispatch, id, focus), 
-  addFocusDB: focus => addFocusDB(focus), 
   addFocusLocal: focus => addFocusLocal(focus),
+  updateUser: update => updateUser(dispatch, update),
   updateSelection: update => dispatch({ type: UPDATE_SELECTION, update }),
   updateCategory: (name, update) => updateCategory(dispatch, name, update),
   updateCategoryLocal: (name, update) => updateCategoryLocal(name, update),
-  updateUser: update => updateUser(dispatch, update),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(FocusesScreen)
