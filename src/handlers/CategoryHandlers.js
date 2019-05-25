@@ -1,5 +1,4 @@
 import { db, auth } from '../config/firebaseConfig'
-import { extend } from 'lodash-es'
 import AsyncStorage from '@react-native-community/async-storage';
 import firebase from 'firebase'
 import { 
@@ -9,7 +8,6 @@ import {
   CATEGORIES_KEY,
 } from "../constants/Categories"
 import { updateFocusCategories } from './FocusesHandlers'
-import { displayAsyncStorage } from './DataHandlers';
 
 
 export function addCategory(dispatch, name) {
@@ -88,8 +86,6 @@ export async function updateCategoryLocal(name, update) {
   await AsyncStorage.mergeItem(
     CATEGORIES_KEY, JSON.stringify({ [auth.currentUser.uid]: category })
   )
-
-  displayAsyncStorage()
 }
 
 
@@ -112,7 +108,6 @@ export async function deleteCategoryDB(dispatch, name) {
 
 export async function deleteCategoryLocal(dispatch, name) {
   console.log('deleteCategoryLocal: \n')
-  console.log(name)
 
   const categoryCollectionRaw = await AsyncStorage.getItem(CATEGORIES_KEY)
   const categoryCollection = JSON.parse(categoryCollectionRaw)
@@ -130,6 +125,7 @@ export async function deleteCategoryLocal(dispatch, name) {
 export async function updateCategoryName(dispatch, name, newName) {
   const categoryCollectionRaw = await AsyncStorage.getItem(CATEGORIES_KEY)
   const categoryCollection = JSON.parse(categoryCollectionRaw)
+
   const category = { ...categoryCollection[auth.currentUser.uid][name] }
 
   categoryCollection[auth.currentUser.uid][newName] = category

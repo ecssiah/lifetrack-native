@@ -16,15 +16,18 @@ export async function clearAsyncStorage() {
 
 
 export async function displayAsyncStorage() {
-  console.log('DISPLAY ASYNC STORAGE')
+  console.log('=========================')
+  console.log('| DISPLAY ASYNC STORAGE |')
+  console.log('=========================')
+
   const keys = await AsyncStorage.getAllKeys()
-  const values = (await AsyncStorage.multiGet(keys)).filter(value => 
-    value[0] !== 'firebase:authUser:AIzaSyBtklAJ3LniqGDapAvQ5NoPUN58TwNpjYQ:[DEFAULT]'
-  )
+  const values = await AsyncStorage.multiGet(keys)
 
   for (const value of values) {
+    const obj = JSON.parse(value[1])
+
     console.log(value[0])
-    console.log(JSON.parse(value[1]))
+    console.log(JSON.stringify(obj, null, 2))
   }
 }
 

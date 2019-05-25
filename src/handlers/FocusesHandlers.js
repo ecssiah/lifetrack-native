@@ -1,5 +1,5 @@
 import { Alert } from 'react-native'
-import { extend, isEmpty } from 'lodash-es'
+import { isEmpty } from 'lodash-es'
 import { db, auth } from "../config/firebaseConfig"
 import AsyncStorage from '@react-native-community/async-storage';
 import { displayTime, getElapsed, getDay } from '../../lib/utils'
@@ -9,7 +9,6 @@ import {
 } from "../constants/Focuses"
 import { UPDATE_STATUS } from "../constants/Status"
 import { USER_KEY } from '../constants/User';
-import { displayAsyncStorage } from './DataHandlers';
 
 
 export function updateFocuses(dispatch, update) {
@@ -32,16 +31,8 @@ export async function updateFocusesDB(update) {
 export async function updateFocusesLocal(update) {
   console.log('updateFocusesLocal: \n')
   console.log(update)
+
   AsyncStorage.mergeItem(FOCUSES_KEY, JSON.stringify(update))
-
-  // const focusesCollection = await AsyncStorage.getItem(FOCUSES_KEY)
-
-  // for (const id in update) {
-  //   const focusDoc = focusesCollection[id]
-  //   extend(focusDoc, update[id])
-  // }
-
-  // AsyncStorage.setItem(FOCUSES_KEY, JSON.stringify(focusesCollection))
 }
 
 
@@ -123,8 +114,6 @@ export async function updateFocusCategories(dispatch, name, newName) {
 
   await AsyncStorage.mergeItem(FOCUSES_KEY, JSON.stringify(update))
   updateFocuses(dispatch, update)
-
-  displayAsyncStorage()
 }
 
 
