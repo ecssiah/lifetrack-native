@@ -29,8 +29,8 @@ export async function updateFocusesDB(update) {
 
 
 export async function updateFocusesLocal(update) {
-  console.log('updateFocusesLocal: \n')
-  console.log(update)
+  console.log('METHOD: updateFocusesLocal \n')
+  console.log(JSON.stringify(update, null, 2))
 
   AsyncStorage.mergeItem(FOCUSES_KEY, JSON.stringify(update))
 }
@@ -49,8 +49,8 @@ export async function addFocusDB(focus) {
 
 
 export async function addFocusLocal(focus) {
-  console.log('addFocusLocal: \n')
-  console.log(focus)
+  console.log('METHOD: addFocusLocal \n')
+  console.log(JSON.stringify(focus, null, 2))
 
   const id = new Date().getTime()
   await AsyncStorage.mergeItem(FOCUSES_KEY, JSON.stringify({ [id]: focus }))
@@ -70,6 +70,8 @@ export async function deleteFocusDB(id) {
 
 
 export async function deleteFocusLocal(id) {
+  console.log('METHOD: deleteFocusLocal \n')
+
   const focusesCollectionRaw = await AsyncStorage.getItem(FOCUSES_KEY)
   const focusesCollection = JSON.parse(focusesCollectionRaw)
 
@@ -90,8 +92,8 @@ export async function updateFocusDB(id, update) {
 
 
 export async function updateFocusLocal(id, update) {
-  console.log('updateFocusLocal: \n')
-  console.log(update)
+  console.log('METHOD: updateFocusLocal \n')
+  console.log(JSON.stringify(update, null, 2))
 
   await AsyncStorage.mergeItem(
     USER_KEY, JSON.stringify({ [id]: update })
@@ -100,7 +102,7 @@ export async function updateFocusLocal(id, update) {
 
 
 export async function updateFocusCategories(dispatch, name, newName) {
-  console.log('updateFocusCategories: \n')
+  console.log('METHOD: updateFocusCategories \n')
 
   const focusesCollectionRaw = await AsyncStorage.getItem(FOCUSES_KEY)
   const focusesCollection = JSON.parse(focusesCollectionRaw)

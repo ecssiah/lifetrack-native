@@ -8,7 +8,10 @@ import { FOCUSES_KEY, SET_FOCUSES } from '../constants/Focuses'
 
 
 export async function clearAsyncStorage() {
-  console.log('CLEAR ASYNC STORAGE')
+  console.log('=======================')
+  console.log('| CLEAR ASYNC STORAGE |')
+  console.log('=======================')
+
   await AsyncStorage.multiRemove(
     [USER_KEY, SETTINGS_KEY, CATEGORIES_KEY, STATS_KEY, FOCUSES_KEY]
   )
@@ -54,8 +57,8 @@ export async function initLocal() {
 
 
 export async function setUserData(dispatch, userData) {
-  console.log('setUserData: \n')
-  console.log(userData)
+  console.log('METHOD: setUserData \n')
+  console.log(JSON.stringify(userData, null, 2))
 
   if (userData[USER_KEY]) {
     dispatch({ type: SET_USER, user: userData[USER_KEY] })
@@ -76,8 +79,8 @@ export async function setUserData(dispatch, userData) {
 
 
 export async function saveUserLocal(uid, userData) {
-  console.log(`saveUserLocal: \n`)
-  console.log(userData)
+  console.log(`METHOD: saveUserLocal \n`)
+  console.log(JSON.stringify(userData, null, 2))
 
   await AsyncStorage.mergeItem(
     USER_KEY, 
@@ -118,7 +121,7 @@ export async function saveUserDB(userData) {
 
 
 export async function loadUserLocal(dispatch) {
-  console.log(`loading user: ${auth.currentUser.uid}`)
+  console.log(`METHOD: loadUserLocal ${auth.currentUser.uid}`)
 
   const values = await AsyncStorage.multiGet(
     [USER_KEY, SETTINGS_KEY, CATEGORIES_KEY, STATS_KEY]
